@@ -34,7 +34,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      test: {
+      categories: {
         Row: {
           created_at: string
           id: number
