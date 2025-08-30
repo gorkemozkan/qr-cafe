@@ -7,7 +7,9 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "supabase:generate": "supabase gen types typescript --local > types/db.ts",
+    "supabase:migration:create": "supabase db diff > supabase/migrations/$(date +%Y%m%d%H%M%S)_$1.sql"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.16",
