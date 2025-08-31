@@ -5,54 +5,50 @@ interface SupabaseConfig {
 }
 
 function getSupabaseConfig(): SupabaseConfig {
-  const branch = process.env.GITHUB_REF_NAME;
+  // Determine environment based on available variables
+  const branch =
+    process.env.GITHUB_REF_NAME || // GitHub Actions
+    process.env.VERCEL_GIT_COMMIT_REF || // Vercel
+    (process.env.NODE_ENV === "production" ? "main" : "development"); // Fallback
 
   console.log("BRANCH =>", branch);
 
-  const envMap = {
-    main: {
-      environment: "production" as const,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL_PROD,
-      supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD,
-    },
-    staging: {
-      environment: "staging" as const,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING,
-      supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_STAGING,
-    },
-    development: {
-      environment: "development" as const,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    },
-  };
+  // Simple environment mapping
+  let environment: string;
+  let supabaseUrl: string | undefined;
+  let supabaseAnonKey: string | undefined;
 
-  console.log("ENV MAP =>", envMap);
+  if (branch === "main") {
+    environment = "production";
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL_PROD;
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD;
+  } else if (branch === "staging") {
+    environment = "staging";
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING;
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_STAGING;
+  } else {
+    environment = "development";
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  }
 
-  const config =
-    branch === "main"
-      ? envMap.main
-      : branch === "staging"
-        ? envMap.staging
-        : envMap.development;
+  console.log("ENVIRONMENT =>", environment);
 
-  console.log("CONFIG =>", config);
-
-  // Check for missing environment variables before creating the config
-  if (!config.supabaseUrl || !config.supabaseAnonKey) {
+  // Validate required environment variables
+  if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
-      `${config.environment} Supabase configuration is missing. Please check your environment variables.`,
+      `${environment} Supabase configuration is missing. Please check your environment variables.`,
     );
   }
 
-  const finalConfig: SupabaseConfig = {
-    supabaseUrl: config.supabaseUrl,
-    environment: config.environment,
-    supabaseAnonKey: config.supabaseAnonKey,
+  const config: SupabaseConfig = {
+    supabaseUrl,
+    supabaseAnonKey,
+    environment,
   };
-  console.log("FINAL CONFIG =>", finalConfig);
 
-  return finalConfig;
+  console.log("FINAL CONFIG =>", config);
+  return config;
 }
 
 export const supabaseConfig = getSupabaseConfig();
