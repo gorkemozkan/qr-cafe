@@ -1,15 +1,6 @@
 # QR Cafe
 
-A modern web application built with Next.js, TypeScript, and Supabase.
-
-## Tech Stack
-
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Supabase
-- **UI Components**: Radix UI
-- **Code Quality**: Biome
+Manageable, multi-use QR Menu SaaS platform for cafes & restaurants.
 
 ## Getting Started
 
