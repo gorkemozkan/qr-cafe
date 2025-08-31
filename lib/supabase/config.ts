@@ -44,8 +44,6 @@ function getSupabaseConfig(): SupabaseConfig {
     supabaseAnonKey: config.supabaseAnonKey,
   };
 
-  console.log("SupabaseEnvironment Variables =>", finalConfig);
-
   return finalConfig;
 }
 
