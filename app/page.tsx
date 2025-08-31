@@ -1,22 +1,9 @@
-"use client";
-
 import { createClient } from "@/lib/supabase/client";
-import { useState, useEffect } from "react";
 
-const page = () => {
-  const [data, setData] = useState<any>(null);
-  const [error, setError] = useState<any>(null);
+const page = async () => {
+  const client = createClient();
 
-  useEffect(() => {
-    const client = createClient();
-    client
-      .from("cafes")
-      .select("*")
-      .then(({ data, error }) => {
-        setData(data);
-        setError(error);
-      });
-  }, []);
+  const { data, error } = await client.from("cafes").select("*");
 
   if (error) {
     console.error(error);
@@ -24,6 +11,7 @@ const page = () => {
 
   return (
     <div>
+      {process.env.NEXT_PUBLIC_ENV}
       <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
