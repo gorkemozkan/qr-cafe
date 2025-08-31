@@ -7,6 +7,8 @@ interface SupabaseConfig {
 function getSupabaseConfig(): SupabaseConfig {
   const branch = process.env.GITHUB_REF_NAME;
 
+  console.log("BRANCH =>", branch);
+
   const envMap = {
     main: {
       environment: "production" as const,
@@ -25,12 +27,16 @@ function getSupabaseConfig(): SupabaseConfig {
     },
   };
 
+  console.log("ENV MAP =>", envMap);
+
   const config =
     branch === "main"
       ? envMap.main
       : branch === "staging"
         ? envMap.staging
         : envMap.development;
+
+  console.log("CONFIG =>", config);
 
   // Check for missing environment variables before creating the config
   if (!config.supabaseUrl || !config.supabaseAnonKey) {
@@ -44,6 +50,7 @@ function getSupabaseConfig(): SupabaseConfig {
     environment: config.environment,
     supabaseAnonKey: config.supabaseAnonKey,
   };
+  console.log("FINAL CONFIG =>", finalConfig);
 
   return finalConfig;
 }
