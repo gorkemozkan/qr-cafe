@@ -1,0 +1,114 @@
+name: Release Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  release-main:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current version
+        id: current-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Determine version increment
+        id: version-increment
+        run: |
+          # Get the last production tag (not staging)
+          LAST_PROD_TAG=$(git tag --list "v*" --sort=-version:refname | grep -v staging | head -1 || echo "v0.0.0")
+          echo "last_prod_tag=$LAST_PROD_TAG" >> $GITHUB_OUTPUT
+          
+          # Extract version numbers from current package.json
+          CURRENT_MAJOR=$(echo ${{ steps.current-version.outputs.version }} | cut -d. -f1)
+          CURRENT_MINOR=$(echo ${{ steps.current-version.outputs.version }} | cut -d. -f2)
+          CURRENT_PATCH=$(echo ${{ steps.current-version.outputs.version }} | cut -d. -f3)
+          
+          # Remove staging suffix if present
+          CURRENT_PATCH=$(echo $CURRENT_PATCH | sed 's/-staging//')
+          
+          # For main release, increment minor version (new feature release)
+          NEW_MINOR=$((CURRENT_MINOR + 1))
+          NEW_VERSION="${CURRENT_MAJOR}.${NEW_MINOR}.0"
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "version_type=production" >> $GITHUB_OUTPUT
+
+      - name: Update package.json version
+        run: |
+          npm version ${{ steps.version-increment.outputs.new_version }} --no-git-tag-version
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get commits since last production release
+          LAST_PROD_TAG=${{ steps.version-increment.outputs.last_prod_tag }}
+          CHANGELOG=$(git log --oneline "$LAST_PROD_TAG..HEAD" | head -20)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version-increment.outputs.new_version }}
+          release_name: Production Release v${{ steps.version-increment.outputs.new_version }}
+          body: |
+            ## Production Release v${{ steps.version-increment.outputs.new_version }}
+            
+            🎉 New production release with features and improvements!
+            
+            ### Changes since ${{ steps.version-increment.outputs.last_prod_tag }}:
+            ```
+            ${{ steps.changelog.outputs.changelog }}
+            ```
+            
+            ### Installation
+            ```bash
+            git checkout v${{ steps.version-increment.outputs.new_version }}
+            npm install
+            npm run build
+            ```
+            
+            ### What's New
+            - New features and improvements
+            - Bug fixes and optimizations
+            - Enhanced user experience
+            
+            ### Breaking Changes
+            None in this release.
+          draft: false
+          prerelease: false
+
+      - name: Commit version bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json package-lock.json
+          git commit -m "Bump version to ${{ steps.version-increment.outputs.new_version }} [skip ci]"
+          git push origin main
