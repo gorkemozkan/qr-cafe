@@ -37,19 +37,31 @@ export type Database = {
       cafes: {
         Row: {
           created_at: string
+          currency: Database["public"]["Enums"]["Currency"] | null
+          description: string | null
           id: number
+          is_active: boolean
+          logo_url: string | null
           slug: string
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          currency?: Database["public"]["Enums"]["Currency"] | null
+          description?: string | null
           id?: number
+          is_active?: boolean
+          logo_url?: string | null
           slug: string
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          currency?: Database["public"]["Enums"]["Currency"] | null
+          description?: string | null
           id?: number
+          is_active?: boolean
+          logo_url?: string | null
           slug?: string
           user_id?: string | null
         }
@@ -57,33 +69,98 @@ export type Database = {
       }
       categories: {
         Row: {
+          cafe_id: number
           created_at: string
+          description: string
           id: number
+          is_active: boolean
+          name: string
+          sort_order: number | null
+          user_id: string
         }
         Insert: {
+          cafe_id: number
           created_at?: string
+          description: string
           id?: number
+          is_active?: boolean
+          name: string
+          sort_order?: number | null
+          user_id: string
         }
         Update: {
+          cafe_id?: number
           created_at?: string
+          description?: string
           id?: number
+          is_active?: boolean
+          name?: string
+          sort_order?: number | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_cafe_id_fkey"
+            columns: ["cafe_id"]
+            isOneToOne: false
+            referencedRelation: "cafes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
+          cafe_id: number
+          category_id: number
           created_at: string
+          description: string | null
           id: number
+          image_url: string | null
+          is_available: boolean
+          name: string
+          price: number | null
+          user_id: string
         }
         Insert: {
+          cafe_id: number
+          category_id: number
           created_at?: string
+          description?: string | null
           id?: number
+          image_url?: string | null
+          is_available?: boolean
+          name: string
+          price?: number | null
+          user_id: string
         }
         Update: {
+          cafe_id?: number
+          category_id?: number
           created_at?: string
+          description?: string | null
           id?: number
+          image_url?: string | null
+          is_available?: boolean
+          name?: string
+          price?: number | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_cafe_id_fkey"
+            columns: ["cafe_id"]
+            isOneToOne: false
+            referencedRelation: "cafes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -93,7 +170,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      Currency: "TRY" | "USD" | "EUR"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -223,7 +300,9 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      Currency: ["TRY", "USD", "EUR"],
+    },
   },
 } as const
 
