@@ -4,7 +4,6 @@ create table "public"."cafes" (
     "user_id" uuid,
     "slug" text not null,
     "description" text,
-    "currency" "Currency" default 'TRY'::"Currency",
     "is_active" boolean not null default true,
     "logo_url" text
 );
