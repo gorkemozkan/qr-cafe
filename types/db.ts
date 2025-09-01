@@ -38,14 +38,20 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          slug: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: number
+          slug: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: number
+          slug?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -65,21 +71,6 @@ export type Database = {
         Relationships: []
       }
       products: {
-        Row: {
-          created_at: string
-          id: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-        }
-        Relationships: []
-      }
-      testo: {
         Row: {
           created_at: string
           id: number
