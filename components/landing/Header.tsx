@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Coffee } from "lucide-react";
+import { Coffee, QrCode } from "lucide-react";
 import NextLink from "next/link";
 
 export function Header() {
@@ -12,7 +12,7 @@ export function Header() {
           aria-label="Main navigation"
         >
           <div className="flex items-center space-x-2">
-            <Coffee className="h-8 w-8 text-primary" aria-hidden="true" />
+            <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
             <span className="text-2xl font-bold">QR Cafe</span>
           </div>
           <div className="flex items-center space-x-4">

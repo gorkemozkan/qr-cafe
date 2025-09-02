@@ -81,7 +81,7 @@ export function Features() {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <IconComponent
-                      className="h-12 w-12 text-orange-500 mb-4"
+                      className="h-12 w-12 text-orange-600 mb-4 "
                       aria-hidden="true"
                     />
                     {feature.comingSoon && (

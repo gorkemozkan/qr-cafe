@@ -5,7 +5,7 @@ import NextLink from "next/link";
 export function Hero() {
   return (
     <section
-      className="py-20 px-4 relative overflow-hidden"
+      className="py-32 px-4 relative overflow-hidden"
       aria-labelledby="hero-heading"
     >
       {/* Background Grid Overlay */}
@@ -15,7 +15,7 @@ export function Hero() {
         <div className="max-w-3xl mx-auto">
           <h1
             id="hero-heading"
-            className="text-4xl md:text-6xl font-bold tracking-tight mb-6"
+            className="text-4xl md:text-6xl font-black  leading-tight mb-6"
           >
             <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">
               Transform Your Cafe
@@ -30,19 +30,15 @@ export function Hero() {
             enhance customer experience with our innovative QR code solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="text-lg px-8 py-6">
+            <Button
+              asChild
+              size="lg"
+              className="text-lg px-8 py-6 bg-primary text-primary-foreground"
+            >
               <NextLink href="/admin/auth">
                 <QrCode className="mr-2 h-5 w-5" aria-hidden="true" />
-                Create Your Menu
+                Let's Create QR Menu!
               </NextLink>
-            </Button>
-            <Button
-              disabled
-              size="lg"
-              variant="outline"
-              className="text-lg px-8 py-6"
-            >
-              Watch Demo
             </Button>
           </div>
         </div>

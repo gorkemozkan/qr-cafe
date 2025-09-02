@@ -1,7 +1,5 @@
-export { Header } from "./Header";
-export { Hero } from "./Hero";
-export { Features } from "./Features";
-export { Pricing } from "./Pricing";
-export { CTA } from "./CTA";
-export { Contact } from "./Contact";
-export { Footer } from "./Footer";
+export { Header } from "@/components/landing/Header";
+export { Hero } from "@/components/landing/Hero";
+export { Features } from "@/components/landing/Features";
+export { CTA } from "@/components/landing/CTA";
+export { Footer } from "@/components/landing/Footer";
