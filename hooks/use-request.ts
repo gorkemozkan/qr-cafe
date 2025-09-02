@@ -3,7 +3,7 @@ import { ApiRouteResponse } from "@/lib/models";
 import { useState, useCallback } from "react";
 
 interface UseRequestOptions<TData> {
-  fn: (...args: any[]) => Promise<ApiRouteResponse<TData>>;
+  fn: (...args: any[]) => Promise<ApiRouteResponse<TData>> | Promise<{ success: boolean; data?: TData; error?: string }>;
   onSuccess?: (data: TData) => void;
   successMessage?: string;
   autoExecute?: boolean;
@@ -13,7 +13,7 @@ interface UseRequestReturn<TData, TError> {
   isLoading: boolean;
   error: TError | null;
   data: TData | null;
-  execute: () => Promise<void>;
+  execute: (...args: any[]) => Promise<void>;
   reset: () => void;
 }
 

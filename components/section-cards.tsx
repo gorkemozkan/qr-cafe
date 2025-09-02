@@ -3,6 +3,7 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 interface Item {
   title: string;
   value: string;
+  percentage?: string;
   description: string;
 }
 

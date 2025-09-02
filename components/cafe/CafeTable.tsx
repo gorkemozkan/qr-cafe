@@ -1,116 +1,122 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CafeEditModal from "@/components/cafe/CafeEditModal";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
+import { Tables } from "@/types/db";
 
-interface MenuItem {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  available: boolean;
-  description: string;
-}
-
-const dummyMenuItems: MenuItem[] = [
-  {
-    id: "MENU-001",
-    name: "Cappuccino",
-    category: "Coffee",
-    price: 4.5,
-    available: true,
-    description: "Classic Italian coffee with steamed milk foam",
-  },
-  {
-    id: "MENU-002",
-    name: "Latte",
-    category: "Coffee",
-    price: 4.0,
-    available: true,
-    description: "Smooth espresso with steamed milk",
-  },
-  {
-    id: "MENU-003",
-    name: "Croissant",
-    category: "Pastries",
-    price: 3.5,
-    available: true,
-    description: "Buttery French pastry",
-  },
-  {
-    id: "MENU-004",
-    name: "Blueberry Muffin",
-    category: "Pastries",
-    price: 3.25,
-    available: false,
-    description: "Fresh blueberry muffin",
-  },
-  {
-    id: "MENU-005",
-    name: "Orange Juice",
-    category: "Beverages",
-    price: 3.0,
-    available: true,
-    description: "Fresh squeezed orange juice",
-  },
-];
+type Cafe = Tables<"cafes">;
 
 const CafeTable = () => {
+  const [cafes, setCafes] = useState<Cafe[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null);
 
-  const filteredMenuItems = dummyMenuItems.filter(
-    (item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase()),
+  const fetchCafes = useCallback(async () => {
+    try {
+      const result = await cafeRepository.list();
+
+      if (result.success && result.data) {
+        setCafes(result.data);
+      }
+    } catch (error) {
+      console.error("Error fetching cafes:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCafes();
+  }, [fetchCafes]);
+
+  const filteredCafes = cafes.filter(
+    (cafe) => cafe.slug.toLowerCase().includes(searchTerm.toLowerCase()) || cafe.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false,
   );
+
+  const handleCafeSelect = (cafe: Cafe) => {
+    setSelectedCafe(cafe);
+  };
+
+  const formatCurrency = (amount: number, currency: string) => {
+    const symbols = { USD: "$", EUR: "€", TRY: "₺" };
+    const symbol = symbols[currency as keyof typeof symbols] || "$";
+    return `${symbol}${amount.toFixed(2)}`;
+  };
+
+  const getDisplayName = (slug: string) => {
+    return slug
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-lg">Loading cafes...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Cafe List</span>
+            <span>Cafes ({cafes.length})</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-4">
-            <Input placeholder="Search orders or menu items..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
+            <Input placeholder="Search cafes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="max-w-sm" />
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Item ID</TableHead>
+                <TableHead>ID</TableHead>
+                <TableHead>Logo</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Price</TableHead>
+                <TableHead>Slug</TableHead>
+                <TableHead>Currency</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Description</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredMenuItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-mono font-medium">{item.id}</TableCell>
-                  <TableCell className="font-medium">{item.name}</TableCell>
+              {filteredCafes.map((cafe) => (
+                <TableRow key={cafe.id}>
+                  <TableCell className="font-mono font-medium">{cafe.id}</TableCell>
+                  <TableCell>{cafe.logo_url && <img src={cafe.logo_url} alt={getDisplayName(cafe.slug)} className="w-10 h-10 rounded-full object-cover" />}</TableCell>
+                  <TableCell className="font-medium">{getDisplayName(cafe.slug)}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{item.category}</Badge>
+                    <Badge variant="outline">{cafe.slug}</Badge>
                   </TableCell>
-                  <TableCell className="font-medium">${item.price.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Badge variant={item.available ? "default" : "destructive"}>{item.available ? "Available" : "Unavailable"}</Badge>
+                    <Badge variant="secondary">{cafe.currency || "N/A"}</Badge>
                   </TableCell>
-                  <TableCell className="max-w-xs">{item.description}</TableCell>
+                  <TableCell>
+                    <Badge variant={cafe.is_active ? "default" : "destructive"}>{cafe.is_active ? "Active" : "Inactive"}</Badge>
+                  </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        Edit
+                      <Button size="sm" variant="outline" onClick={() => handleCafeSelect(cafe)}>
+                        View Details
                       </Button>
-                      <Button size="sm" variant="outline">
-                        {item.available ? "Disable" : "Enable"}
-                      </Button>
+                      <CafeEditModal
+                        cafe={cafe}
+                        trigger={
+                          <Button size="sm" variant="outline">
+                            Edit
+                          </Button>
+                        }
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -119,6 +125,41 @@ const CafeTable = () => {
           </Table>
         </CardContent>
       </Card>
+
+      {selectedCafe && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>{getDisplayName(selectedCafe.slug)} - Details</span>
+              <Button variant="outline" size="sm" onClick={() => setSelectedCafe(null)}>
+                Close
+              </Button>
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">{selectedCafe.description || "No description available"}</p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <strong>Currency:</strong> {selectedCafe.currency || "N/A"}
+                </div>
+                <div>
+                  <strong>Status:</strong>
+                  <Badge variant={selectedCafe.is_active ? "default" : "destructive"} className="ml-2">
+                    {selectedCafe.is_active ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+                <div>
+                  <strong>Created:</strong> {new Date(selectedCafe.created_at).toLocaleDateString()}
+                </div>
+                <div>
+                  <strong>ID:</strong> {selectedCafe.id}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

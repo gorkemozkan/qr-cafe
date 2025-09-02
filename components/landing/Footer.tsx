@@ -1,4 +1,4 @@
-import { Coffee, QrCode } from "lucide-react";
+import { QrCode } from "lucide-react";
 
 export function Footer() {
   return (
@@ -11,15 +11,11 @@ export function Footer() {
 
               <span className="text-xl font-bold">QR Cafe</span>
             </div>
-            <p className="text-muted-foreground">
-              Transforming cafes with smart QR menu solutions.
-            </p>
+            <p className="text-muted-foreground">Transforming cafes with smart QR menu solutions.</p>
           </div>
         </div>
         <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} QR Cafe | developer@ozgorkem.com
-          </p>
+          <p>&copy; {new Date().getFullYear()} QR Cafe | developer@ozgorkem.com</p>
         </div>
       </div>
     </footer>

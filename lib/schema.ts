@@ -16,5 +16,14 @@ export const signupSchema = z
     path: ["confirmPassword"],
   });
 
+export const cafeSchema = z.object({
+  slug: z.string().min(1, "Slug is required").min(3, "Slug must be at least 3 characters"),
+  description: z.string().optional(),
+  logo_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
+  currency: z.enum(["TRY", "USD", "EUR"]),
+  is_active: z.boolean(),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type SignupSchema = z.infer<typeof signupSchema>;
+export type CafeSchema = z.infer<typeof cafeSchema>;
