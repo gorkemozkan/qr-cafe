@@ -9,16 +9,17 @@ import { useRequest } from "@/hooks/use-request";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import { authRepository } from "@/lib/repositories";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginSchema } from "@/lib/schema";
+import { signupSchema, type SignupSchema } from "@/lib/schema";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import SkipLink from "./SkipLink";
 
-const defaultValues: LoginSchema = {
+const defaultValues: SignupSchema = {
   email: "",
   password: "",
+  confirmPassword: "",
 };
 
-const LoginForm = () => {
+const SignupForm = () => {
   //#region Hooks
 
   const router = useRouter();
@@ -27,8 +28,8 @@ const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupSchema>({
+    resolver: zodResolver(signupSchema),
     defaultValues,
   });
   //#endregion
@@ -36,9 +37,9 @@ const LoginForm = () => {
   //#region Requests
 
   const { isLoading, execute } = useRequest({
-    successMessage: "Login successful!",
-    onSuccess: () => router.replace("/admin/dashboard"),
-    fn: (payload: LoginSchema) => authRepository.login(payload),
+    successMessage: "Account created successfully!",
+    onSuccess: () => router.push("/admin/auth/login"),
+    fn: (payload: SignupSchema) => authRepository.signup(payload),
   });
 
   //#endregion
@@ -47,18 +48,18 @@ const LoginForm = () => {
 
   return (
     <div>
-      <SkipLink targetId="login-form">Skip to login form</SkipLink>
+      <SkipLink targetId="signup-form">Skip to signup form</SkipLink>
       <Button variant="ghost" size="sm" onClick={() => router.push("/")} className="self-start -ml-2 mb-2" disabled={isLoading} aria-label="Go back to home page">
         <ChevronLeft className="h-4 w-4 mr-1" aria-hidden="true" />
         Back
       </Button>
       <Card className="bg-background">
         <CardHeader>
-          <CardTitle id="login-title">Login to your account</CardTitle>
-          <CardDescription id="login-description">Enter your email below to login to your account</CardDescription>
+          <CardTitle id="signup-title">Create your account</CardTitle>
+          <CardDescription id="signup-description">Enter your details below to create your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form id="login-form" onSubmit={handleSubmit(execute)} aria-labelledby="login-title" aria-describedby="login-description" noValidate>
+          <form id="signup-form" onSubmit={handleSubmit(execute)} aria-labelledby="signup-title" aria-describedby="signup-description" noValidate>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -81,9 +82,7 @@ const LoginForm = () => {
                 )}
               </div>
               <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   {...register("password")}
                   id="password"
@@ -102,34 +101,54 @@ const LoginForm = () => {
                   </p>
                 )}
               </div>
+              <div className="grid gap-3">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  {...register("confirmPassword")}
+                  id="confirmPassword"
+                  type="password"
+                  disabled={isLoading}
+                  placeholder="*********"
+                  className={errors.confirmPassword ? "border-red-500" : ""}
+                  aria-required="true"
+                  aria-invalid={!!errors.confirmPassword}
+                  aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
+                  aria-label="Confirm password"
+                />
+                {errors.confirmPassword && (
+                  <p id="confirmPassword-error" className="text-sm text-red-500" role="alert" aria-live="polite">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
               <Button type="submit" className="w-full" size="sm" disabled={isLoading} aria-describedby={isLoading ? "loading-status" : undefined}>
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
-                    Logging in...
+                    Creating account...
                   </>
                 ) : (
-                  "Login"
+                  "Create Account"
                 )}
               </Button>
               {isLoading && (
                 <div id="loading-status" className="sr-only" aria-live="polite">
-                  Processing login request
+                  Processing account creation request
                 </div>
               )}
               <div className="text-center text-sm">
-                <span className="text-muted-foreground">Don't have an account? </span>
+                <span className="text-muted-foreground">Already have an account? </span>
                 <Button
                   variant="link"
                   size="sm"
                   className="p-0 h-auto font-normal"
                   onClick={(event) => {
                     event.preventDefault();
-                    router.push("/admin/auth/signup");
+                    router.push("/admin/auth/login");
                   }}
-                  aria-label="Navigate to sign up page"
+                  aria-label="Navigate to login page"
                 >
-                  Sign up
+                  Log in
                 </Button>
               </div>
             </div>
@@ -142,4 +161,4 @@ const LoginForm = () => {
   //#endregion
 };
 
-export default LoginForm;
+export default SignupForm;
