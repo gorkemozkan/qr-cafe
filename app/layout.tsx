@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QR Cafe",
+  title: {
+    template: "%s | QR Cafe",
+    default: "QR Cafe",
+  },
   description: "QR Cafe",
 };
 
@@ -26,15 +29,8 @@ interface RootLayoutProps {
 export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {props.children}
           <Toaster />
         </ThemeProvider>
