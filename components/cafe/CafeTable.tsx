@@ -1,26 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { dummyCafes, getCafeWithData } from "@/lib/dummy-data";
+import CafeEditModal from "@/components/cafe/CafeEditModal";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
+import { Tables } from "@/types/db";
 
-type CafeWithData = ReturnType<typeof getCafeWithData>;
+type Cafe = Tables<"cafes">;
 
 const CafeTable = () => {
+  const [cafes, setCafes] = useState<Cafe[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCafe, setSelectedCafe] = useState<CafeWithData | null>(null);
+  const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null);
 
-  const filteredCafes = dummyCafes.filter(
-    (cafe) => cafe.slug.toLowerCase().includes(searchTerm.toLowerCase()) || cafe.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+  const fetchCafes = useCallback(async () => {
+    try {
+      const result = await cafeRepository.list();
+
+      if (result.success && result.data) {
+        setCafes(result.data);
+      }
+    } catch (error) {
+      console.error("Error fetching cafes:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCafes();
+  }, [fetchCafes]);
+
+  const filteredCafes = cafes.filter(
+    (cafe) => cafe.slug.toLowerCase().includes(searchTerm.toLowerCase()) || cafe.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false,
   );
 
-  const handleCafeSelect = (cafeId: number) => {
-    const cafeData = getCafeWithData(cafeId);
-    setSelectedCafe(cafeData);
+  const handleCafeSelect = (cafe: Cafe) => {
+    setSelectedCafe(cafe);
   };
 
   const formatCurrency = (amount: number, currency: string) => {
@@ -29,7 +50,6 @@ const CafeTable = () => {
     return `${symbol}${amount.toFixed(2)}`;
   };
 
-  // Helper function to get display name from slug
   const getDisplayName = (slug: string) => {
     return slug
       .split("-")
@@ -37,13 +57,20 @@ const CafeTable = () => {
       .join(" ");
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-lg">Loading cafes...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Cafes List */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Cafes</span>
+            <span>Cafes ({cafes.length})</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -79,12 +106,17 @@ const CafeTable = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => handleCafeSelect(cafe.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handleCafeSelect(cafe)}>
                         View Details
                       </Button>
-                      <Button size="sm" variant="outline">
-                        Edit
-                      </Button>
+                      <CafeEditModal
+                        cafe={cafe}
+                        trigger={
+                          <Button size="sm" variant="outline">
+                            Edit
+                          </Button>
+                        }
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -94,66 +126,36 @@ const CafeTable = () => {
         </CardContent>
       </Card>
 
-      {/* Selected Cafe Details */}
       {selectedCafe && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>{getDisplayName(selectedCafe.slug)} - Menu Details</span>
+              <span>{getDisplayName(selectedCafe.slug)} - Details</span>
               <Button variant="outline" size="sm" onClick={() => setSelectedCafe(null)}>
                 Close
               </Button>
             </CardTitle>
-            <p className="text-sm text-muted-foreground">{selectedCafe.description}</p>
+            <p className="text-sm text-muted-foreground">{selectedCafe.description || "No description available"}</p>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {selectedCafe.categories.map((category) => (
-                <div key={category.id} className="space-y-3">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    {category.name}
-                    <Badge variant="outline">{category.sort_order}</Badge>
-                  </h3>
-                  <p className="text-sm text-muted-foreground">{category.description}</p>
-
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {category.products.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell className="font-medium flex items-center gap-2">
-                            {product.image_url && <img src={product.image_url} alt={product.name} className="w-8 h-8 rounded object-cover" />}
-                            {product.name}
-                          </TableCell>
-                          <TableCell className="max-w-xs">{product.description}</TableCell>
-                          <TableCell className="font-medium">{product.price ? formatCurrency(product.price, selectedCafe.currency || "USD") : "N/A"}</TableCell>
-                          <TableCell>
-                            <Badge variant={product.is_available ? "default" : "destructive"}>{product.is_available ? "Available" : "Unavailable"}</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button size="sm" variant="outline">
-                                Edit
-                              </Button>
-                              <Button size="sm" variant="outline">
-                                {product.is_available ? "Disable" : "Enable"}
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <strong>Currency:</strong> {selectedCafe.currency || "N/A"}
                 </div>
-              ))}
+                <div>
+                  <strong>Status:</strong>
+                  <Badge variant={selectedCafe.is_active ? "default" : "destructive"} className="ml-2">
+                    {selectedCafe.is_active ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+                <div>
+                  <strong>Created:</strong> {new Date(selectedCafe.created_at).toLocaleDateString()}
+                </div>
+                <div>
+                  <strong>ID:</strong> {selectedCafe.id}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
