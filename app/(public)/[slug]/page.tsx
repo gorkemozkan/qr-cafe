@@ -1,22 +1,7 @@
-import { NextPage } from "next";
-import { createClient } from "@/lib/supabase/server";
+import React from "react";
 
-interface Props {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-const Page: NextPage<Props> = async (props) => {
-  const { slug } = await props.params;
-  console.log(slug);
-
-  const supabase = await createClient();
-
-  const cafe = await supabase.from("cafes").select("*");
-  console.log("cafe", cafe);
-
-  return null;
+const Page = () => {
+  return <div>page</div>;
 };
 
 export default Page;
