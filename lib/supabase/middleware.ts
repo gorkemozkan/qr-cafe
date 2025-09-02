@@ -41,13 +41,13 @@ export async function updateSession(request: NextRequest) {
 
   if (request.nextUrl.pathname === "/admin/auth/login" && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/dashboard";
+    url.pathname = "/admin/app/dashboard";
     return NextResponse.redirect(url);
   }
 
   if (request.nextUrl.pathname === "/admin/auth/signup" && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/dashboard";
+    url.pathname = "/admin/app/dashboard";
     return NextResponse.redirect(url);
   }
 
