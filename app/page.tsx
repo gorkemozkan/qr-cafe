@@ -3,16 +3,8 @@ import { Header, Hero, Features, Footer } from "@/components/landing";
 
 export const metadata: Metadata = {
   title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
-  description:
-    "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution for cafes and restaurants.",
-  keywords: [
-    "QR menu",
-    "digital menu",
-    "cafe technology",
-    "restaurant menu",
-    "QR code",
-    "cafe management",
-  ],
+  description: "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution for cafes and restaurants.",
+  keywords: ["QR menu", "digital menu", "cafe technology", "restaurant menu", "QR code", "cafe management"],
   authors: [{ name: "QR Cafe Team" }],
   creator: "QR Cafe",
   publisher: "QR Cafe",
@@ -27,8 +19,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
-    description:
-      "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
+    description: "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
     // url: "https://qrcafe.com",
     siteName: "QR Cafe",
     locale: "en_US",
@@ -37,8 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
-    description:
-      "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
+    description: "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
   },
   robots: {
     index: true,
