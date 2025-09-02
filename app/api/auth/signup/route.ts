@@ -26,7 +26,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     if (error) {
-      console.error("Signup error:", error);
       return NextResponse.json({ error: error.message, success: false }, { status: 400 });
     }
 

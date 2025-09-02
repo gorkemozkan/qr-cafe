@@ -50,7 +50,6 @@ class ApiClient {
         data,
       };
     } catch (error) {
-      console.error("API request failed:", error);
       return {
         success: false,
         error: "Network error occurred",

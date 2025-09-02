@@ -119,7 +119,7 @@
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Accessibility: Respect user's motion preferences */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -131,13 +131,13 @@
       scroll-behavior: auto !important;
     }
   }
-  
+
   /* Accessibility: Ensure focus is always visible */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
-  
+
   /* Accessibility: High contrast mode support */
   @media (prefers-contrast: high) {
     :root {
@@ -165,7 +165,7 @@
   .animate-shine-delayed {
     animation: shine 2s ease-in-out infinite 1s;
   }
-  
+
   /* Accessibility: Screen reader only content */
   .sr-only {
     position: absolute !important;
@@ -178,12 +178,12 @@
     white-space: nowrap !important;
     border: 0 !important;
   }
-  
+
   /* Accessibility: Focus management */
   .focus-visible:not(:focus-visible) {
     outline: none;
   }
-  
+
   /* Accessibility: Skip link positioning */
   .skip-link {
     position: absolute;
@@ -198,7 +198,7 @@
     z-index: 1000;
     transition: top 0.3s;
   }
-  
+
   .skip-link:focus {
     top: 6px;
   }
