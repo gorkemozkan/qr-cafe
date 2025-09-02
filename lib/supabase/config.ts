@@ -25,17 +25,10 @@ function getSupabaseConfig(): SupabaseConfig {
     },
   };
 
-  const config =
-    environment === "production"
-      ? envMap.main
-      : environment === "staging"
-        ? envMap.staging
-        : envMap.development;
+  const config = environment === "production" ? envMap.main : environment === "staging" ? envMap.staging : envMap.development;
 
   if (!config.supabaseUrl || !config.supabaseAnonKey) {
-    throw new Error(
-      `${config.environment} Supabase configuration is missing. Please check your environment variables.`,
-    );
+    throw new Error(`${config.environment} Supabase configuration is missing. Please check your environment variables.`);
   }
 
   const finalConfig: SupabaseConfig = {

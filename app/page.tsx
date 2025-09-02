@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Header, Hero, Features, CTA, Footer } from "@/components/landing";
+import { Header, Hero, Features, Footer } from "@/components/landing";
 
 export const metadata: Metadata = {
   title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://qrcafe.com"),
+  // metadataBase: new URL("https://qrcafe.com"),
   alternates: {
     canonical: "/",
   },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
     description:
       "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
-    url: "https://qrcafe.com",
+    // url: "https://qrcafe.com",
     siteName: "QR Cafe",
     locale: "en_US",
     type: "website",

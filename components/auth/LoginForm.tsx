@@ -1,77 +1,84 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/app/(manage)/admin/auth/actions";
-import { useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRequest } from "@/hooks/use-request";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import { authRepository } from "@/lib/repositories";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginSchema } from "@/lib/schema";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const LoginForm = ({ className, ...props }: React.ComponentProps<"div">) => {
+const defaultValues: LoginSchema = {
+  email: "",
+  password: "",
+};
+
+const LoginForm = () => {
+  //#region Hooks
+
   const router = useRouter();
 
-  const handleBack = () => {
-    router.back();
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues,
+  });
+  //#endregion
+
+  //#region Requests
+
+  const { isLoading, execute } = useRequest({
+    successMessage: "Login successful!",
+    onSuccess: () => router.push("/admin/dashboard"),
+    fn: (payload: LoginSchema) => authRepository.login(payload),
+  });
+
+  //#endregion
+
+  //#region Render
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleBack}
-        className="self-start -ml-2 mb-2"
-      >
+    <div>
+      <Button variant="ghost" size="sm" onClick={() => router.push("/")} className="self-start -ml-2 mb-2" disabled={isLoading}>
         <ChevronLeft className="h-4 w-4 mr-1" />
         Back
       </Button>
       <Card className="bg-background">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
+          <CardDescription>Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit(execute)}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  name="email"
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
+                <Input {...register("email")} id="email" type="email" placeholder="m@example.com" disabled={isLoading} className={errors.email ? "border-red-500" : ""} />
+                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input
-                  name="password"
-                  id="password"
-                  type="password"
-                  required
-                  placeholder="*********"
-                />
+                <Input {...register("password")} id="password" type="password" disabled={isLoading} placeholder="*********" className={errors.password ? "border-red-500" : ""} />
+                {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
               </div>
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                formAction={login}
-              >
-                Login
+              <Button type="submit" className="w-full" size="sm" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </div>
           </form>
@@ -79,6 +86,8 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"div">) => {
       </Card>
     </div>
   );
+
+  //#endregion
 };
 
 export default LoginForm;
