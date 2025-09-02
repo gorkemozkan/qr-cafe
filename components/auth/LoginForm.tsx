@@ -11,6 +11,7 @@ import { authRepository } from "@/lib/repositories";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginSchema } from "@/lib/schema";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import SkipLink from "./SkipLink";
 
 const defaultValues: LoginSchema = {
   email: "",
@@ -36,7 +37,7 @@ const LoginForm = () => {
 
   const { isLoading, execute } = useRequest({
     successMessage: "Login successful!",
-    onSuccess: () => router.push("/admin/dashboard"),
+    onSuccess: () => router.replace("/admin/dashboard"),
     fn: (payload: LoginSchema) => authRepository.login(payload),
   });
 
@@ -46,40 +47,76 @@ const LoginForm = () => {
 
   return (
     <div>
-      <Button variant="ghost" size="sm" onClick={() => router.push("/")} className="self-start -ml-2 mb-2" disabled={isLoading}>
-        <ChevronLeft className="h-4 w-4 mr-1" />
+      <SkipLink targetId="login-form">Skip to login form</SkipLink>
+      <Button variant="ghost" size="sm" onClick={() => router.push("/")} className="self-start -ml-2 mb-2" disabled={isLoading} aria-label="Go back to home page">
+        <ChevronLeft className="h-4 w-4 mr-1" aria-hidden="true" />
         Back
       </Button>
       <Card className="bg-background">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
+          <CardTitle id="login-title">Login to your account</CardTitle>
+          <CardDescription id="login-description">Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(execute)}>
+          <form id="login-form" onSubmit={handleSubmit(execute)} aria-labelledby="login-title" aria-describedby="login-description" noValidate>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
-                <Input {...register("email")} id="email" type="email" placeholder="m@example.com" disabled={isLoading} className={errors.email ? "border-red-500" : ""} />
-                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+                <Input
+                  {...register("email")}
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  disabled={isLoading}
+                  className={errors.email ? "border-red-500" : ""}
+                  aria-required="true"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  aria-label="Email address"
+                />
+                {errors.email && (
+                  <p id="email-error" className="text-sm text-red-500" role="alert" aria-live="polite">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input {...register("password")} id="password" type="password" disabled={isLoading} placeholder="*********" className={errors.password ? "border-red-500" : ""} />
-                {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+                <Input
+                  {...register("password")}
+                  id="password"
+                  type="password"
+                  disabled={isLoading}
+                  placeholder="*********"
+                  className={errors.password ? "border-red-500" : ""}
+                  aria-required="true"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? "password-error" : undefined}
+                  aria-label="Password"
+                />
+                {errors.password && (
+                  <p id="password-error" className="text-sm text-red-500" role="alert" aria-live="polite">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
-              <Button type="submit" className="w-full" size="sm" disabled={isLoading}>
+              <Button type="submit" className="w-full" size="sm" disabled={isLoading} aria-describedby={isLoading ? "loading-status" : undefined}>
                 {isLoading ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
                     Logging in...
                   </>
                 ) : (
                   "Login"
                 )}
               </Button>
+              {isLoading && (
+                <div id="loading-status" className="sr-only" aria-live="polite">
+                  Processing login request
+                </div>
+              )}
               <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
                 <Button
@@ -90,6 +127,7 @@ const LoginForm = () => {
                     event.preventDefault();
                     router.push("/admin/auth/signup");
                   }}
+                  aria-label="Navigate to sign up page"
                 >
                   Sign up
                 </Button>
