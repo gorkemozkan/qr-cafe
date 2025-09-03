@@ -15,8 +15,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const { email, password, captchaToken } = validationResult.data;
 
-    // Verify CAPTCHA token
     const isCaptchaValid = await verifyTurnstileToken(captchaToken);
+
     if (!isCaptchaValid) {
       return NextResponse.json({ error: "CAPTCHA verification failed. Please try again.", success: false }, { status: 400 });
     }
