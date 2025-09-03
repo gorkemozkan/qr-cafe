@@ -20,13 +20,3 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run linting
-- `npm run format` - Format code
-- `npm run supabase:migration:create` - Create new migration
-- `npm run release` - Create release
