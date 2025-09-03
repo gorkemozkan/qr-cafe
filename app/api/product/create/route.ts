@@ -14,6 +14,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { cafe_id, ...productData } = body;
 
+    if (!cafe_id) {
+      return NextResponse.json({ error: "Cafe ID is required" }, { status: 400 });
+    }
+
+    // Verify user owns the cafe
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("id", cafe_id)
+      .eq("user_id", user.id)
+      .single();
+
+    if (cafeError || !cafe) {
+      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+    }
+
     const validationResult = productSchema.safeParse(productData);
     if (!validationResult.success) {
       return NextResponse.json(

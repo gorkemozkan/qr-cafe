@@ -12,21 +12,16 @@ interface TurnstileVerificationResponse {
 export async function verifyTurnstileToken(token: string, maxRetries = 3): Promise<boolean> {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
-  console.log("secretKey", secretKey);
-
   if (!secretKey) {
+    console.error("TURNSTILE_SECRET_KEY not configured");
     return false;
   }
-
-  console.log("token", token);
 
   if (!token) {
     return false;
   }
 
   const idempotencyKey = randomUUID();
-
-  console.log("idempotencyKey", idempotencyKey);
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -40,22 +35,19 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
         body: formData,
       });
 
-      console.log("response", response);
-
       const data: TurnstileVerificationResponse = await response.json();
 
       if (response.ok) {
         if (data.success) {
-          console.log("data", data);
           return true;
         } else {
-          console.log("data", data);
+          console.error("Turnstile verification failed:", data["error-codes"]);
           return false;
         }
       }
 
       if (attempt === maxRetries) {
-        console.log("data", data);
+        console.error("Turnstile verification failed after max retries:", data["error-codes"]);
         return false;
       }
 

@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { uploadRateLimit, validateFileType, validateBucketName, verifyCsrfToken } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    if (!uploadRateLimit(request)) {
+      return NextResponse.json({ error: "Too many upload attempts. Please try again later." }, { status: 429 });
+    }
+    
+    // CSRF protection
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
 
     const {
@@ -19,33 +30,34 @@ export async function POST(request: NextRequest) {
     const cafeSlug = formData.get("cafeSlug") as string;
     const bucketName = formData.get("bucketName") as string;
 
-    if (!file || !cafeSlug) {
-      return NextResponse.json({ error: "File and cafe slug are required" }, { status: 400 });
+    if (!file || !cafeSlug || !bucketName) {
+      return NextResponse.json({ error: "File, cafe slug, and bucket name are required" }, { status: 400 });
+    }
+
+    // Validate bucket name
+    if (!validateBucketName(bucketName)) {
+      return NextResponse.json({ error: "Invalid bucket name" }, { status: 400 });
+    }
+
+    // Validate file type and security
+    const fileValidation = validateFileType(file);
+    if (!fileValidation.isValid) {
+      return NextResponse.json({ error: fileValidation.error }, { status: 400 });
+    }
+
+    // Verify user owns the cafe slug
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("slug", cafeSlug)
+      .eq("user_id", user.id)
+      .single();
+
+    if (cafeError || !cafe) {
+      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
     }
 
     const fileExt = file.name.split(".").pop()?.toLowerCase();
-    const allowedTypes = ["png", "jpeg", "jpg", "gif", "webp"];
-
-    if (!fileExt || !allowedTypes.includes(fileExt)) {
-      return NextResponse.json(
-        {
-          error: "Invalid file type",
-          details: `Allowed: ${allowedTypes.join(", ")}`,
-        },
-        { status: 400 },
-      );
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        {
-          error: "File too large",
-          details: "Maximum size is 5MB",
-        },
-        { status: 400 },
-      );
-    }
-
     const fileName = `${cafeSlug}-${Date.now()}.${fileExt}`;
     const filePath = `${user.id}/${fileName}`;
 
