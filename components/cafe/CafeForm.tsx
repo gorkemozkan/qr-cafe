@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import FilePicker from "@/components/ui/file-picker";
 import { CurrencySelect } from "@/components/ui/currency-select";
+import { OptimizedImage } from "@/components/ui";
 import { Tables } from "@/types/db";
 import { CafeSchema, cafeSchema } from "@/lib/schema";
 import { uploadCafeLogo } from "@/lib/supabase/storage";
@@ -29,49 +29,40 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-    setValue,
-    watch,
-  } = useForm<CafeSchema>({
-    resolver: zodResolver(cafeSchema),
-    defaultValues: {
+  // Function to get default values based on mode and cafe data
+  const getDefaultValues = (): CafeSchema => {
+    if (mode === "edit" && cafe) {
+      return {
+        slug: cafe.slug,
+        description: cafe.description || "",
+        logo_url: cafe.logo_url || "",
+        currency: cafe.currency || "TRY",
+        is_active: cafe.is_active,
+      };
+    }
+
+    return {
       slug: "",
       description: "",
       logo_url: "",
       currency: "TRY",
       is_active: true,
-    },
+    };
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<CafeSchema>({
+    resolver: zodResolver(cafeSchema),
+    defaultValues: getDefaultValues(),
   });
 
   const isActive = watch("is_active");
   const selectedCurrency = watch("currency");
-
-  // Single useEffect to handle form initialization
-  useEffect(() => {
-    const defaultValues: CafeSchema =
-      mode === "edit" && cafe
-        ? {
-            slug: cafe.slug,
-            description: cafe.description || "",
-            logo_url: cafe.logo_url || "",
-            currency: cafe.currency || "TRY",
-            is_active: cafe.is_active,
-          }
-        : {
-            slug: "",
-            description: "",
-            logo_url: "",
-            currency: "TRY",
-            is_active: true,
-          };
-
-    reset(defaultValues);
-    setSelectedFile(null);
-  }, [mode, cafe, reset]);
 
   const onSubmitForm = async (data: CafeSchema) => {
     try {
@@ -137,7 +128,15 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
         {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
         {cafe?.logo_url && !selectedFile && (
           <div className="flex items-center space-x-2">
-            <Image src={cafe.logo_url} alt="Current logo" width={48} height={48} className="h-12 w-12 rounded object-cover" />
+            <OptimizedImage
+              src={cafe.logo_url}
+              alt="Current logo"
+              width={48}
+              height={48}
+              className="h-12 w-12 rounded object-cover"
+              fallbackSrc="/placeholder-logo.svg"
+              showSkeleton={false}
+            />
             <p className="text-sm text-muted-foreground">Current logo will be replaced if you select a new file</p>
           </div>
         )}
@@ -169,9 +168,9 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
               {mode === "create" ? "Creating..." : "Updating..."}
             </>
           ) : mode === "create" ? (
-            "Create Cafe"
+            "Create"
           ) : (
-            "Update Cafe"
+            "Update"
           )}
         </Button>
       </div>

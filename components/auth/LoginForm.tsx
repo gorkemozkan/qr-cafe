@@ -38,7 +38,7 @@ const LoginForm = () => {
   const { isLoading, execute } = useRequest({
     successMessage: "Login successful!",
     onSuccess: () => router.replace("/admin/app/dashboard"),
-    fn: (payload: LoginSchema) => authRepository.login(payload),
+    mutationFn: (payload: LoginSchema) => authRepository.login(payload),
   });
 
   //#endregion

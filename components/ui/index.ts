@@ -10,6 +10,13 @@ export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 export { Badge } from "./badge";
 export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./dropdown-menu";
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
+export { default as DataTable } from "./data-table";
+export { default as QuestionDialog } from "./question-dialog";
+export { default as TableActions } from "./table-actions";
+export { default as DateView } from "./date-view";
 export { Toaster } from "./sonner";
 export { CopyButton } from "./copy-button";
 export { CurrencySelect, type SupportedCurrency } from "./currency-select";
+export { OptimizedImage } from "./optimized-image";
+export { Skeleton } from "./skeleton";
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./tooltip";

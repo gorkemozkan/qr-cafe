@@ -1,62 +1,118 @@
 import { toast } from "sonner";
-import { useState, useCallback } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
-interface UseRequestOptions<TData> {
-  fn: (...args: any[]) => Promise<TData>;
-  onSuccess?: (data: TData) => void;
+interface UseRequestOptions<TData, TVariables> {
+  mutationFn: (variables: TVariables) => Promise<TData>;
+  onSuccess?: (data: TData, variables: TVariables) => void;
+  onError?: (error: Error, variables: TVariables) => void;
   successMessage?: string;
-  autoExecute?: boolean;
+  errorMessage?: string;
+  invalidateQueries?: string[];
+  optimisticUpdate?: {
+    queryKey: string[];
+    updateFn: (oldData: any, variables: TVariables) => any;
+  };
 }
 
-interface UseRequestReturn<TData, TError> {
+interface UseRequestReturn<TData, TVariables, TError> {
   isLoading: boolean;
+  isError: boolean;
   error: TError | null;
-  data: TData | null;
-  execute: (...args: any[]) => Promise<void>;
+  data: TData | undefined;
+  execute: (variables: TVariables) => Promise<TData | undefined>;
   reset: () => void;
 }
 
-export function useRequest<TData, TError = string>({ fn, onSuccess, successMessage }: UseRequestOptions<TData>): UseRequestReturn<TData, TError> {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<TError | null>(null);
-  const [data, setData] = useState<TData | null>(null);
+export function useRequest<TData, TVariables = void, TError = Error>({
+  mutationFn,
+  onSuccess,
+  onError,
+  successMessage,
+  errorMessage,
+  invalidateQueries = [],
+  optimisticUpdate,
+}: UseRequestOptions<TData, TVariables>): UseRequestReturn<TData, TVariables, TError> {
+  const queryClient = useQueryClient();
 
-  const execute = useCallback(
-    async (...args: any[]) => {
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await fn(...args);
-
-        if (successMessage) {
-          toast.success(successMessage);
-        }
-
-        setData(response);
-        onSuccess?.(response);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        toast.error(errorMessage);
-        setError(errorMessage as TError);
-      } finally {
-        setIsLoading(false);
+  const mutation = useMutation({
+    mutationFn,
+    onSuccess: (data, variables) => {
+      if (successMessage) {
+        toast.success(successMessage);
       }
-    },
-    [fn, onSuccess, successMessage],
-  );
 
-  const reset = useCallback(() => {
-    setError(null);
-    setData(null);
-    setIsLoading(false);
-  }, []);
+      if (invalidateQueries.length > 0) {
+        invalidateQueries.forEach((queryKey) => {
+          queryClient.invalidateQueries({ queryKey: [queryKey] });
+        });
+      }
+
+      onSuccess?.(data, variables);
+    },
+    onError: (error: Error, variables) => {
+      const message = errorMessage || error.message || "An error occurred";
+      toast.error(message);
+      onError?.(error, variables);
+    },
+  });
+
+  const execute = async (variables: TVariables): Promise<TData | undefined> => {
+    try {
+      if (optimisticUpdate) {
+        queryClient.setQueryData(optimisticUpdate.queryKey, (oldData: any) => optimisticUpdate.updateFn(oldData, variables));
+      }
+
+      const result = await mutation.mutateAsync(variables);
+      return result;
+    } catch (error) {
+      if (optimisticUpdate) {
+        queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey });
+      }
+      throw error;
+    }
+  };
+
+  const reset = () => {
+    mutation.reset();
+  };
 
   return {
-    isLoading,
-    error,
-    data,
+    isLoading: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error as TError | null,
+    data: mutation.data,
     execute,
     reset,
+  };
+}
+
+export function useQueryRequest<TData, TVariables = void>({
+  queryKey,
+  queryFn,
+  enabled = true,
+  staleTime = 5 * 60 * 1000,
+  gcTime = 10 * 60 * 1000,
+}: {
+  queryKey: string[];
+  queryFn: (variables: TVariables) => Promise<TData>;
+  enabled?: boolean;
+  staleTime?: number;
+  gcTime?: number;
+}) {
+  const { data, isLoading, isError, error, refetch, isRefetching } = useQuery({
+    queryKey,
+    queryFn: () => queryFn({} as TVariables),
+    enabled,
+    staleTime,
+    gcTime,
+  });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
   };
 }
