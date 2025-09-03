@@ -1,4 +1,12 @@
-interface ApiResponse<T = any> {
+// API Route Response (what the actual API endpoints return)
+export interface ApiRouteResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  details?: unknown;
+}
+
+export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
@@ -45,10 +53,7 @@ class ApiClient {
         };
       }
 
-      return {
-        success: true,
-        data,
-      };
+      return data; // Return the API response directly, don't wrap it
     } catch (error) {
       return {
         success: false,
@@ -94,4 +99,4 @@ export const apiClient = new ApiClient();
 
 export { ApiClient };
 
-export type { ApiResponse, ApiClientOptions };
+export type { ApiClientOptions };

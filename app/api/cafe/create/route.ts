@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
+
     if (authError || !user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
@@ -44,13 +45,11 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.from("cafes").insert([cafeData]).select().single();
 
     if (error) {
-      console.error("Supabase error:", error);
       return NextResponse.json({ success: false, error: "Failed to create cafe" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
-    console.error("Unexpected error:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

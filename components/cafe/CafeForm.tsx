@@ -5,18 +5,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { FilePicker } from "@/components/ui/file-picker";
+import FilePicker from "@/components/ui/file-picker";
 import { CurrencySelect } from "@/components/ui/currency-select";
-
 import { Tables } from "@/types/db";
 import { CafeSchema, cafeSchema } from "@/lib/schema";
-import { uploadCafeLogo, createBucketIfNotExists, CAFE_LOGOS_BUCKET_NAME } from "@/lib/supabase/storage";
+import { uploadCafeLogo } from "@/lib/supabase/storage";
 
 interface CafeFormProps {
   mode: "create" | "edit";
@@ -26,10 +24,17 @@ interface CafeFormProps {
   isLoading?: boolean;
 }
 
-export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: CafeFormProps) {
+const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
+  //#region States
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [uploadError, setUploadError] = useState<string | null>(null);
+
   const [isUploading, setIsUploading] = useState(false);
+
+  //#endregion
+
+  //#region Form
 
   const {
     register,
@@ -50,7 +55,12 @@ export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: 
   });
 
   const isActive = watch("is_active");
+
   const selectedCurrency = watch("currency");
+
+  //#endregion
+
+  //#region Effects
 
   useEffect(() => {
     if (mode === "edit" && cafe) {
@@ -74,22 +84,24 @@ export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: 
     }
   }, [mode, cafe, reset]);
 
+  //#endregion
+
+  //#region Handlers
+
   const onSubmitForm = async (data: CafeSchema) => {
     try {
-      await createBucketIfNotExists(CAFE_LOGOS_BUCKET_NAME);
-
       if (selectedFile) {
         setIsUploading(true);
         setUploadError(null);
 
         const uploadResult = await uploadCafeLogo(selectedFile, data.slug);
 
-        if (uploadResult.error) {
-          setUploadError(uploadResult.error);
+        if (!uploadResult.success) {
+          setUploadError(uploadResult.error.message);
           return;
         }
 
-        data.logo_url = uploadResult.url;
+        data.logo_url = uploadResult.data.url;
       }
 
       await onSubmit(data);
@@ -109,6 +121,8 @@ export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: 
     setUploadError(error);
   };
 
+  //#endregion
+
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       {/* Slug Field */}
@@ -116,7 +130,7 @@ export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: 
         <Label htmlFor="slug">Slug *</Label>
         <Input id="slug" placeholder="my-cafe" {...register("slug")} className={errors.slug ? "border-red-500" : ""} />
         {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
-        <p className="text-xs text-muted-foreground">This will be used in the URL: yourdomain.com/my-cafe</p>
+        <p className="text-xs text-muted-foreground">This will be used in the URL: /my-cafe</p>
       </div>
 
       {/* Description Field */}
@@ -178,4 +192,6 @@ export function CafeForm({ mode, cafe, onSubmit, onCancel, isLoading = false }: 
       </div>
     </form>
   );
-}
+};
+
+export default CafeForm;

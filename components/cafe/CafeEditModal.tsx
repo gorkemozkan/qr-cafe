@@ -7,7 +7,7 @@ import { CafeSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
-import { CafeForm } from "@/components/cafe/CafeForm";
+import CafeForm from "@/components/cafe/CafeForm";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface CafeEditModalProps {
@@ -26,9 +26,12 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
   //#region Requests
 
   const { isLoading, execute } = useRequest({
-    fn: (payload: CafeSchema) => cafeRepository.update(props.cafe.id, payload),
-    onSuccess: (data) => {
-      props.onSuccess?.(data);
+    fn: async (payload: CafeSchema) => {
+      const response = await cafeRepository.update(props.cafe.id, payload);
+      return response;
+    },
+    onSuccess: (cafe) => {
+      props.onSuccess?.(cafe);
       setOpen(false);
     },
     successMessage: "Cafe updated successfully!",

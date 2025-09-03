@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface FilePickerProps {
   id?: string;
@@ -18,7 +19,7 @@ interface FilePickerProps {
   disabled?: boolean;
 }
 
-export function FilePicker({
+const FilePicker = ({
   id,
   label = "Choose file",
   accept = "image/*",
@@ -28,7 +29,7 @@ export function FilePicker({
   onError,
   className,
   disabled = false,
-}: FilePickerProps) {
+}: FilePickerProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = React.useState(false);
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -102,22 +103,32 @@ export function FilePicker({
   };
 
   return (
-    <div suppressHydrationWarning className={cn("space-y-2", className)}>
+    <div className={cn("space-y-2", className)}>
       {label && <Label htmlFor={id}>{label}</Label>}
 
-      <button
-        type="button"
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: <explanation> */}
+      <div
         className={cn(
           "relative border-2 border-dashed rounded-lg p-6 transition-colors w-full text-left",
           dragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25 hover:border-muted-foreground/50",
-          disabled && "opacity-50 cursor-not-allowed",
+          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         )}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={handleClick}
-        disabled={disabled}
-        aria-label="File drop zone"
+        onDrop={disabled ? undefined : handleDrop}
+        onDragOver={disabled ? undefined : handleDragOver}
+        onDragLeave={disabled ? undefined : handleDragLeave}
+        onClick={disabled ? undefined : handleClick}
+        onKeyDown={
+          disabled
+            ? undefined
+            : (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleClick();
+                }
+              }
+        }
+        tabIndex={disabled ? -1 : 0}
+        aria-disabled={disabled}
       >
         <input
           ref={inputRef}
@@ -149,7 +160,7 @@ export function FilePicker({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {preview && accept === "image/*" ? (
-                <img src={preview} alt="Preview" className="h-12 w-12 rounded object-cover" />
+                <Image width={48} height={48} src={preview} alt="Preview" className="h-12 w-12 rounded object-cover" />
               ) : (
                 <div className="h-12 w-12 rounded bg-muted flex items-center justify-center">
                   <ImageIcon className="h-6 w-6 text-muted-foreground" />
@@ -165,7 +176,9 @@ export function FilePicker({
             </Button>
           </div>
         )}
-      </button>
+      </div>
     </div>
   );
-}
+};
+
+export default FilePicker;
