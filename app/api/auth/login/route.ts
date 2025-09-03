@@ -1,5 +1,4 @@
 import { loginSchema } from "@/lib/schema";
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,16 +19,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      // Log the actual error for debugging (server-side only)
-      console.error("Login authentication error:", error.message);
-      
-      // Return generic error message to client
       return NextResponse.json({ error: "Invalid email or password", success: false }, { status: 401 });
     }
 
     if (data.user) {
-      revalidatePath("/", "layout");
-
       return NextResponse.json(
         {
           success: true,
@@ -43,10 +36,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ error: "Authentication failed", success: false }, { status: 401 });
-  } catch (error) {
-    return NextResponse.json({ 
-      error: error instanceof Error ? error.message : "Internal server error", 
-      success: false 
-    }, { status: 500 });
+  } catch (_error) {
+    return NextResponse.json({ error: "Internal server error", success: false }, { status: 500 });
   }
 }

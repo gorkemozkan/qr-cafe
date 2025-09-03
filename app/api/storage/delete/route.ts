@@ -30,19 +30,16 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Delete failed",
-          details: error.message,
         },
         { status: 500 },
       );
     }
 
     return NextResponse.json(null);
-  } catch (error) {
-    console.error("Delete error:", error);
+  } catch (_error) {
     return NextResponse.json(
       {
         error: "Delete failed",
-        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );

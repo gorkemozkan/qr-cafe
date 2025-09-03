@@ -1,5 +1,4 @@
 import { signupSchema } from "@/lib/schema";
-import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,12 +25,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message, success: false }, { status: 400 });
+      return NextResponse.json({ error: "Failed to create account", success: false }, { status: 400 });
     }
 
     if (data.user) {
-      revalidatePath("/", "layout");
-
       return NextResponse.json(
         {
           success: true,
@@ -46,10 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ error: "Account creation failed", success: false }, { status: 400 });
-  } catch (error) {
-    return NextResponse.json({ 
-      error: error instanceof Error ? error.message : "Internal server error", 
-      success: false 
-    }, { status: 500 });
+  } catch (_error) {
+    return NextResponse.json({ error: "Internal server error", success: false }, { status: 500 });
   }
 }

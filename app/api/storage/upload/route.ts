@@ -55,7 +55,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Upload failed",
-          details: uploadError.message,
         },
         { status: 500 },
       );
@@ -67,12 +66,10 @@ export async function POST(request: NextRequest) {
       url: urlData.publicUrl,
       path: filePath,
     });
-  } catch (error) {
-    console.error("Upload error:", error);
+  } catch (_error) {
     return NextResponse.json(
       {
         error: "Upload failed",
-        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 },
     );
