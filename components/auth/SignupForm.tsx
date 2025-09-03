@@ -39,7 +39,7 @@ const SignupForm = () => {
   const { isLoading, execute } = useRequest({
     successMessage: "Account created successfully!",
     onSuccess: () => router.push("/admin/auth/login"),
-    fn: (payload: SignupSchema) => authRepository.signup(payload),
+    mutationFn: (payload: SignupSchema) => authRepository.signup(payload),
   });
 
   //#endregion

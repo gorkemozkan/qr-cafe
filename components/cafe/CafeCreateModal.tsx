@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
 import CafeForm from "@/components/cafe/CafeForm";
+import QueryKeys from "@/constants/query-keys";
 import QRPreviewDialog from "@/components/cafe/QRPreviewDialog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -16,12 +17,19 @@ interface CafeCreateModalProps {
 }
 
 const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
+  //#region States
   const [open, setOpen] = useState(false);
+
   const [showQRDialog, setShowQRDialog] = useState(false);
+
   const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
 
+  //#endregion
+
+  //#region Request
+
   const { isLoading, execute } = useRequest({
-    fn: (payload: CafeSchema) => cafeRepository.create(payload),
+    mutationFn: (payload: CafeSchema) => cafeRepository.create(payload),
     onSuccess: (data) => {
       props.onSuccess?.(data);
       setCreatedCafe(data);
@@ -29,7 +37,9 @@ const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
       setOpen(false);
     },
     successMessage: "Cafe created successfully!",
+    invalidateQueries: QueryKeys.cafes,
   });
+  //#endregion
 
   return (
     <>

@@ -20,7 +20,7 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
   const [open, setOpen] = useState(false);
 
   const { isLoading, execute } = useRequest({
-    fn: async (payload: CafeSchema) => {
+    mutationFn: async (payload: CafeSchema) => {
       return await cafeRepository.update(props.cafe.id, payload);
     },
     onSuccess: (cafe) => {
@@ -28,6 +28,7 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
       setOpen(false);
     },
     successMessage: "Cafe updated successfully!",
+    invalidateQueries: ["cafes"],
   });
 
   return (
