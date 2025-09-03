@@ -8,7 +8,7 @@ export { default as FilePicker } from "./file-picker";
 export { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./dialog";
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
 export { Badge } from "./badge";
-export { Captcha } from "./captcha";
+export { default as Captcha } from "./captcha";
 export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./dropdown-menu";
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 export { default as DataTable } from "./data-table";
