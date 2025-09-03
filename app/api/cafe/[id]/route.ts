@@ -11,7 +11,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
     }
 
-    // Get the current user
     const {
       data: { user },
       error: authError,
@@ -21,7 +20,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get cafe data
     const { data: cafe, error: fetchError } = await supabase.from("cafes").select("*").eq("id", cafeId).eq("user_id", user.id).single();
 
     if (fetchError || !cafe) {

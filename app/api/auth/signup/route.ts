@@ -1,10 +1,21 @@
 import { signupSchema } from "@/lib/schema";
 import { createClient } from "@/lib/supabase/server";
 import { verifyTurnstileToken } from "@/lib/captcha";
+import { authRateLimit, verifyCsrfToken } from "@/lib/security";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // Rate limiting
+    if (!authRateLimit(request)) {
+      return NextResponse.json({ error: "Too many signup attempts. Please try again later.", success: false }, { status: 429 });
+    }
+    
+    // CSRF protection
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin", success: false }, { status: 403 });
+    }
+
     const body = await request.json();
 
     const validationResult = signupSchema.safeParse(body);
@@ -16,6 +27,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { email, password, captchaToken } = validationResult.data;
 
     const isCaptchaValid = await verifyTurnstileToken(captchaToken);
+
     if (!isCaptchaValid) {
       return NextResponse.json({ error: "CAPTCHA verification failed. Please try again.", success: false }, { status: 400 });
     }

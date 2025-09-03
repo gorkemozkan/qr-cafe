@@ -3,36 +3,25 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    console.log("Category GET request started");
     const { id } = await params;
-    console.log("Category ID from params:", id);
-
     const supabase = await createClient();
-    console.log("Supabase client created");
 
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
-    console.log("Auth result:", { user: !!user, error: authError });
 
     if (authError || !user) {
-      console.log("Auth failed, returning 401");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const categoryId = parseInt(id, 10);
-    console.log("Parsed category ID:", categoryId);
 
     if (isNaN(categoryId)) {
-      console.log("Invalid category ID, returning 400");
       return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
     }
 
-    console.log("Querying Supabase for category:", categoryId);
     const { data: category, error: fetchError } = await supabase.from("categories").select("*").eq("id", categoryId).eq("user_id", user.id).single();
-
-    console.log("Supabase query result:", { category: !!category, error: fetchError });
 
     if (fetchError) {
       console.error("Error fetching category:", fetchError);
@@ -43,11 +32,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     if (!category) {
-      console.log("No category found, returning 404");
       return NextResponse.json({ error: "Category not found" }, { status: 404 });
     }
 
-    console.log("Returning category data:", category);
     return NextResponse.json(category);
   } catch (error) {
     console.error("Error in category get route:", error);
