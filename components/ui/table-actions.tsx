@@ -4,6 +4,7 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, MoreHorizontal, Eye } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TableActionsProps {
   onEdit?: () => void;
@@ -47,11 +48,18 @@ const TableActions: FC<TableActionsProps> = (props) => {
   if (actionCount > 1) {
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="font-mono">Actions</p>
+          </TooltipContent>
+        </Tooltip>
         <DropdownMenuContent align="end">
           {hasEdit && (
             <DropdownMenuItem onClick={props.onEdit}>

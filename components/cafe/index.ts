@@ -6,3 +6,7 @@ export { default as CategoryCreateModal } from "./CategoryCreateModal";
 export { default as CategoryEditModal } from "./CategoryEditModal";
 export { default as CategoryForm } from "./CategoryForm";
 export { default as CategoryList } from "./CategoryList";
+export { default as ProductCreateModal } from "./ProductCreateModal";
+export { default as ProductEditModal } from "./ProductEditModal";
+export { default as ProductForm } from "./ProductForm";
+export { default as ProductList } from "./ProductList";

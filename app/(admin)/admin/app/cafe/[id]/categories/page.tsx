@@ -1,15 +1,17 @@
-"use client";
-
 import { FC } from "react";
-import { useParams } from "next/navigation";
 import CategoryList from "@/components/cafe/CategoryList";
 import CategoryCreateModal from "@/components/cafe/CategoryCreateModal";
 
-const CategoriesPage: FC = () => {
-  const params = useParams();
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+const CategoriesPage: FC<Props> = async (props) => {
+  const params = await props.params;
+
   const cafeId = parseInt(params.id as string, 10);
 
-  if (isNaN(cafeId)) {
+  if (Number.isNaN(cafeId)) {
     return <div>Invalid cafe ID</div>;
   }
 
@@ -20,13 +22,7 @@ const CategoriesPage: FC = () => {
           <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
           <p className="text-muted-foreground">Manage categories for your cafe</p>
         </div>
-        <CategoryCreateModal 
-          cafeId={cafeId} 
-          onSuccess={() => {
-            // This will trigger a refetch of the categories list
-            // The DataTable will automatically refetch due to query invalidation
-          }}
-        />
+        <CategoryCreateModal cafeId={cafeId} />
       </div>
       <CategoryList cafeId={cafeId} />
     </div>
