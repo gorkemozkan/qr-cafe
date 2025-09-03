@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
     const { cafe_id, ...categoryData } = body;
 
     if (!cafe_id) {
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const validationResult = categorySchema.safeParse(categoryData);
+
     if (!validationResult.success) {
       return NextResponse.json({ error: "Invalid data", details: validationResult.error.issues }, { status: 400 });
     }
@@ -54,13 +56,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      console.error("Error inserting category:", insertError);
       return NextResponse.json({ error: "Failed to create category" }, { status: 500 });
     }
 
     return NextResponse.json(category);
-  } catch (error) {
-    console.error("Error in category create route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

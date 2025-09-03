@@ -20,7 +20,6 @@ const CategoryEditModal: FC<CategoryEditModalProps> = ({ category, onClose, onSu
 
   const { isLoading, execute } = useRequest({
     mutationFn: (payload: CategorySchema) => {
-      console.log("CategoryEditModal - Sending payload:", payload);
       return categoryRepository.update(category.id, payload);
     },
     onSuccess: () => {

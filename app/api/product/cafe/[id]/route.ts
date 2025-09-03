@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { id } = await params;
     const cafeId = parseInt(id, 10);
-    if (isNaN(cafeId)) {
+    if (Number.isNaN(cafeId)) {
       return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
     }
 
@@ -27,13 +27,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .order("created_at", { ascending: false });
 
     if (fetchError) {
-      console.error("Error fetching products by cafe:", fetchError);
       return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
     }
 
     return NextResponse.json(products || []);
-  } catch (error) {
-    console.error("Error in products by cafe route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

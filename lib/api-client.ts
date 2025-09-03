@@ -33,11 +33,10 @@ class ApiClient {
       const contentType = response.headers.get("content-type");
       let data: any;
 
-      if (contentType && contentType.includes("application/json")) {
+      if (contentType?.includes("application/json")) {
         try {
           data = await response.json();
         } catch (jsonError) {
-          console.error("JSON parsing error:", jsonError);
           throw new Error(`Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error"}`);
         }
       } else {

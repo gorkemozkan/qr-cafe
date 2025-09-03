@@ -123,7 +123,6 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
       };
       img.src = qrCodeDataUrl;
     } catch (error) {
-      console.error("Failed to export QR code:", error);
       toast.error("Failed to export QR code");
     } finally {
       setIsExporting(false);
@@ -174,7 +173,6 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
                 <div className="w-[300px] h-[300px] flex items-center justify-center text-muted-foreground">
                   <div className="text-center space-y-2">
                     <p className="text-sm font-medium text-red-500">Failed to generate QR code</p>
-                    <p className="text-xs">Please try again or check the console for errors</p>
                   </div>
                 </div>
               )}

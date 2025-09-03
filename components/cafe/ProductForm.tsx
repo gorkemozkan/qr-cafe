@@ -71,9 +71,7 @@ const ProductForm: FC<ProductFormProps> = ({ cafeId, cafeSlug, categories, produ
         ...data,
         image_url: imageUrl,
       });
-    } catch (error) {
-      console.error("Error submitting product:", error);
-    }
+    } catch (_error) {}
   };
 
   return (

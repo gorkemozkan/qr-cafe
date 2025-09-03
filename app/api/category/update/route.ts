@@ -21,11 +21,8 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Category ID is required" }, { status: 400 });
     }
 
-    console.log("Update data received:", updateData);
-
     const validationResult = categorySchema.partial().safeParse(updateData);
     if (!validationResult.success) {
-      console.error("Validation failed:", validationResult.error.format());
       return NextResponse.json({ error: "Invalid data", details: validationResult.error.format() }, { status: 400 });
     }
 
@@ -40,28 +37,20 @@ export async function PUT(request: NextRequest) {
             : validationResult.data.sort_order,
     };
 
-    console.log("Processed data:", processedData);
-
     const { data: existingCategory, error: fetchError } = await supabase.from("categories").select("id, cafe_id").eq("id", id).eq("user_id", user.id).single();
 
     if (fetchError || !existingCategory) {
-      console.error("Category fetch error:", fetchError);
       return NextResponse.json({ error: "Category not found or access denied" }, { status: 404 });
     }
-
-    console.log("Existing category:", existingCategory);
 
     const { data: category, error: updateError } = await supabase.from("categories").update(processedData).eq("id", id).eq("user_id", user.id).select().single();
 
     if (updateError) {
-      console.error("Error updating category:", updateError);
       return NextResponse.json({ error: "Failed to update category" }, { status: 500 });
     }
 
-    console.log("Category updated successfully:", category);
     return NextResponse.json(category);
-  } catch (error) {
-    console.error("Error in category update route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

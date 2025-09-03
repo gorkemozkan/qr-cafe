@@ -13,7 +13,6 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secretKey) {
-    console.error("TURNSTILE_SECRET_KEY not configured");
     return false;
   }
 
@@ -41,13 +40,11 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
         if (data.success) {
           return true;
         } else {
-          console.error("Turnstile verification failed:", data["error-codes"]);
           return false;
         }
       }
 
       if (attempt === maxRetries) {
-        console.error("Turnstile verification failed after max retries:", data["error-codes"]);
         return false;
       }
 

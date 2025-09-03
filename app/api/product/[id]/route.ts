@@ -15,14 +15,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { id } = await params;
     const productId = parseInt(id, 10);
-    if (isNaN(productId)) {
+    if (Number.isNaN(productId)) {
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
     const { data: product, error: fetchError } = await supabase.from("products").select("*").eq("id", productId).eq("user_id", user.id).single();
 
     if (fetchError) {
-      console.error("Error fetching product:", fetchError);
       return NextResponse.json({ error: "Failed to fetch product" }, { status: 500 });
     }
 
@@ -31,8 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     return NextResponse.json(product);
-  } catch (error) {
-    console.error("Error in product get route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -58,13 +56,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const { error: deleteError } = await supabase.from("products").delete().eq("id", productId).eq("user_id", user.id);
 
     if (deleteError) {
-      console.error("Error deleting product:", deleteError);
       return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error in product delete route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
