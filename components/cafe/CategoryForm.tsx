@@ -52,13 +52,11 @@ const CategoryForm = ({ mode, category, onSubmit, onCancel }: CategoryFormProps)
   const isActive = watch("is_active");
 
   const onSubmitForm = async (data: CategorySchema) => {
-    console.log("CategoryForm - Raw form data:", data);
     // Convert empty string to undefined for sort_order and ensure it's a number
     const processedData = {
       ...data,
       sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
     };
-    console.log("CategoryForm - Processed data:", processedData);
     await onSubmit(processedData);
   };
 

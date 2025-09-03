@@ -5,8 +5,11 @@ import { productSchema } from "@/lib/schema";
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -18,13 +21,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Cafe ID is required" }, { status: 400 });
     }
 
-    // Verify user owns the cafe
-    const { data: cafe, error: cafeError } = await supabase
-      .from("cafes")
-      .select("id")
-      .eq("id", cafe_id)
-      .eq("user_id", user.id)
-      .single();
+    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
@@ -32,10 +29,7 @@ export async function POST(request: NextRequest) {
 
     const validationResult = productSchema.safeParse(productData);
     if (!validationResult.success) {
-      return NextResponse.json(
-        { error: "Invalid product data", details: validationResult.error.issues },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid product data", details: validationResult.error.issues }, { status: 400 });
     }
 
     const validatedData = validationResult.data;
@@ -51,19 +45,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      console.error("Error inserting product:", insertError);
-      return NextResponse.json(
-        { error: "Failed to create product" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
     }
 
     return NextResponse.json(product);
-  } catch (error) {
-    console.error("Error in product create route:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+  } catch (_error) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

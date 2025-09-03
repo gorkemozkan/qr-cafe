@@ -12,8 +12,7 @@ export async function GET() {
     }
 
     return NextResponse.json(cafes || []);
-  } catch (error) {
-    console.error("Unexpected error:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

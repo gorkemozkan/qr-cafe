@@ -17,14 +17,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const categoryId = parseInt(id, 10);
 
-    if (isNaN(categoryId)) {
+    if (Number.isNaN(categoryId)) {
       return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
     }
 
     const { data: category, error: fetchError } = await supabase.from("categories").select("*").eq("id", categoryId).eq("user_id", user.id).single();
 
     if (fetchError) {
-      console.error("Error fetching category:", fetchError);
       if (fetchError.code === "PGRST116") {
         return NextResponse.json({ error: "Category not found" }, { status: 404 });
       }
@@ -36,8 +35,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     return NextResponse.json(category);
-  } catch (error) {
-    console.error("Error in category get route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -56,7 +54,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     }
 
     const categoryId = parseInt(id, 10);
-    if (isNaN(categoryId)) {
+    if (Number.isNaN(categoryId)) {
       return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
     }
 
@@ -69,13 +67,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const { error: deleteError } = await supabase.from("categories").delete().eq("id", categoryId).eq("user_id", user.id);
 
     if (deleteError) {
-      console.error("Error deleting category:", deleteError);
       return NextResponse.json({ error: "Failed to delete category" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error in category delete route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

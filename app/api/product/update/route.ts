@@ -5,8 +5,11 @@ import { productSchema } from "@/lib/schema";
 export async function PUT(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -20,10 +23,7 @@ export async function PUT(request: NextRequest) {
 
     const validationResult = productSchema.partial().safeParse(updateData);
     if (!validationResult.success) {
-      return NextResponse.json(
-        { error: "Invalid product data", details: validationResult.error.issues },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid product data", details: validationResult.error.issues }, { status: 400 });
     }
 
     const validatedData = validationResult.data;
@@ -40,26 +40,15 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (updateError) {
-      console.error("Error updating product:", updateError);
-      return NextResponse.json(
-        { error: "Failed to update product" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
     }
 
     if (!product) {
-      return NextResponse.json(
-        { error: "Product not found or access denied" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Product not found or access denied" }, { status: 404 });
     }
 
     return NextResponse.json(product);
-  } catch (error) {
-    console.error("Error in product update route:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+  } catch (_error) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

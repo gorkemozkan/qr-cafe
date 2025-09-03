@@ -14,6 +14,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
+
     const { cafe_id, category_ids } = body;
 
     if (!cafe_id || !Array.isArray(category_ids)) {
@@ -29,7 +30,6 @@ export async function PUT(request: NextRequest) {
     const { data: existingCategories, error: fetchError } = await supabase.from("categories").select("id").eq("cafe_id", cafe_id).eq("user_id", user.id).in("id", category_ids);
 
     if (fetchError) {
-      console.error("Error fetching categories:", fetchError);
       return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 });
     }
 
@@ -46,14 +46,12 @@ export async function PUT(request: NextRequest) {
       const { error: updateError } = await supabase.from("categories").update({ sort_order: update.sort_order }).eq("id", update.id).eq("user_id", user.id);
 
       if (updateError) {
-        console.error("Error updating sort order:", updateError);
         return NextResponse.json({ error: "Failed to update sort order" }, { status: 500 });
       }
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error in category sort order route:", error);
+  } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
