@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
 
@@ -13,7 +13,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const cafeId = parseInt(params.id, 10);
+    const { id } = await params;
+    const cafeId = parseInt(id, 10);
     if (isNaN(cafeId)) {
       return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
     }

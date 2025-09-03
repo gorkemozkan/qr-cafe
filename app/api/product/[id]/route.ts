@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
 
@@ -13,12 +13,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const id = parseInt(params.id, 10);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const productId = parseInt(id, 10);
+    if (isNaN(productId)) {
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
-    const { data: product, error: fetchError } = await supabase.from("products").select("*").eq("id", id).eq("user_id", user.id).single();
+    const { data: product, error: fetchError } = await supabase.from("products").select("*").eq("id", productId).eq("user_id", user.id).single();
 
     if (fetchError) {
       console.error("Error fetching product:", fetchError);
@@ -36,7 +37,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
 
@@ -48,12 +49,13 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const id = parseInt(params.id, 10);
-    if (Number.isNaN(id)) {
+    const { id } = await params;
+    const productId = parseInt(id, 10);
+    if (Number.isNaN(productId)) {
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
-    const { error: deleteError } = await supabase.from("products").delete().eq("id", id).eq("user_id", user.id);
+    const { error: deleteError } = await supabase.from("products").delete().eq("id", productId).eq("user_id", user.id);
 
     if (deleteError) {
       console.error("Error deleting product:", deleteError);

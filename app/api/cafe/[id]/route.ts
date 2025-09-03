@@ -1,6 +1,40 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const supabase = await createClient();
+    const cafeId = parseInt(id, 10);
+
+    if (Number.isNaN(cafeId)) {
+      return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
+    }
+
+    // Get the current user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get cafe data
+    const { data: cafe, error: fetchError } = await supabase.from("cafes").select("*").eq("id", cafeId).eq("user_id", user.id).single();
+
+    if (fetchError || !cafe) {
+      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+    }
+
+    return NextResponse.json(cafe);
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
