@@ -24,6 +24,14 @@ export const cafeSchema = z.object({
   is_active: z.boolean(),
 });
 
+export const categorySchema = z.object({
+  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
+  description: z.string().min(1, "Description is required"),
+  is_active: z.boolean(),
+  sort_order: z.union([z.string(), z.number().int().min(0)]).optional(),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type SignupSchema = z.infer<typeof signupSchema>;
 export type CafeSchema = z.infer<typeof cafeSchema>;
+export type CategorySchema = z.infer<typeof categorySchema>;

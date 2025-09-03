@@ -7,7 +7,7 @@ interface UseRequestOptions<TData, TVariables> {
   onError?: (error: Error, variables: TVariables) => void;
   successMessage?: string;
   errorMessage?: string;
-  invalidateQueries?: string[];
+  invalidateQueries?: (string | string[])[];
   optimisticUpdate?: {
     queryKey: string[];
     updateFn: (oldData: any, variables: TVariables) => any;
@@ -43,7 +43,9 @@ export function useRequest<TData, TVariables = void, TError = Error>({
 
       if (invalidateQueries.length > 0) {
         invalidateQueries.forEach((queryKey) => {
-          queryClient.invalidateQueries({ queryKey: [queryKey] });
+          // Handle both string and string[] query keys
+          const key = Array.isArray(queryKey) ? queryKey : [queryKey];
+          queryClient.invalidateQueries({ queryKey: key });
         });
       }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Tables } from "@/types/db";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
@@ -14,6 +15,7 @@ import { OptimizedImage } from "@/components/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const CafeList: FC = () => {
+  const router = useRouter();
   //#region States
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -50,6 +52,10 @@ const CafeList: FC = () => {
     if (cafeToDelete) {
       await deleteCafe(cafeToDelete.id);
     }
+  };
+
+  const handleCategoriesClick = (cafe: Tables<"cafes">) => {
+    router.push(`/admin/app/cafe/${cafe.id}/categories`);
   };
 
   //#endregion
@@ -120,7 +126,13 @@ const CafeList: FC = () => {
     {
       key: "actions",
       header: "Actions",
-      cell: (_: any, row: Tables<"cafes">) => <TableActions onEdit={() => setCafeToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
+      cell: (_: any, row: Tables<"cafes">) => (
+        <TableActions 
+          onEdit={() => setCafeToEdit(row)} 
+          onDelete={() => handleDeleteClick(row)}
+          onInspect={() => handleCategoriesClick(row)}
+        />
+      ),
     },
   ];
 
