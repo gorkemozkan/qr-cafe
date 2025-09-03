@@ -1,5 +1,6 @@
 import { signupSchema } from "@/lib/schema";
 import { createClient } from "@/lib/supabase/server";
+import { verifyTurnstileToken } from "@/lib/captcha";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -12,7 +13,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: "Validation failed", details: validationResult.error.issues }, { status: 400 });
     }
 
-    const { email, password } = validationResult.data;
+    const { email, password, captchaToken } = validationResult.data;
+
+    // Verify CAPTCHA token
+    const isCaptchaValid = await verifyTurnstileToken(captchaToken);
+    if (!isCaptchaValid) {
+      return NextResponse.json({ error: "CAPTCHA verification failed. Please try again.", success: false }, { status: 400 });
+    }
 
     const supabase = await createClient();
 
