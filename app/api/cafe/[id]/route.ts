@@ -1,12 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const supabase = await createClient();
-    const id = parseInt(params.id);
+    const cafeId = parseInt(id, 10);
 
-    if (isNaN(id)) {
+    if (Number.isNaN(cafeId)) {
       return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
     }
 
@@ -21,7 +22,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     // Check if cafe exists and user owns it
-    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, slug, user_id").eq("id", id).single();
+    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, slug, user_id").eq("id", cafeId).single();
 
     if (fetchError || !existingCafe) {
       return NextResponse.json({ error: "Cafe not found" }, { status: 404 });
@@ -33,22 +34,14 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     // Check if there are related categories or products
-    const { data: relatedCategories, error: categoriesError } = await supabase
-      .from("categories")
-      .select("id")
-      .eq("cafe_id", id)
-      .limit(1);
+    const { data: relatedCategories, error: categoriesError } = await supabase.from("categories").select("id").eq("cafe_id", cafeId).limit(1);
 
     if (categoriesError) {
       console.error("Categories check error:", categoriesError);
       return NextResponse.json({ error: "Failed to check related data" }, { status: 500 });
     }
 
-    const { data: relatedProducts, error: productsError } = await supabase
-      .from("products")
-      .select("id")
-      .eq("cafe_id", id)
-      .limit(1);
+    const { data: relatedProducts, error: productsError } = await supabase.from("products").select("id").eq("cafe_id", cafeId).limit(1);
 
     if (productsError) {
       console.error("Products check error:", productsError);
@@ -56,19 +49,25 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     if (relatedCategories && relatedCategories.length > 0) {
-      return NextResponse.json({ 
-        error: "Cannot delete cafe: It has related categories. Please delete all categories first." 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Cannot delete cafe: It has related categories. Please delete all categories first.",
+        },
+        { status: 400 },
+      );
     }
 
     if (relatedProducts && relatedProducts.length > 0) {
-      return NextResponse.json({ 
-        error: "Cannot delete cafe: It has related products. Please delete all products first." 
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Cannot delete cafe: It has related products. Please delete all products first.",
+        },
+        { status: 400 },
+      );
     }
 
     // Delete the cafe
-    const { error: deleteError } = await supabase.from("cafes").delete().eq("id", id);
+    const { error: deleteError } = await supabase.from("cafes").delete().eq("id", cafeId);
 
     if (deleteError) {
       console.error("Delete error:", deleteError);
