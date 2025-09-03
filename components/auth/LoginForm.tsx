@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Captcha } from "@/components/ui/captcha";
+import Captcha from "@/components/ui/captcha";
 import { useRequest } from "@/hooks/use-request";
 import SkipLink from "@/components/auth/SkipLink";
 import { ChevronLeft, Loader2 } from "lucide-react";
@@ -107,12 +107,7 @@ const LoginForm = () => {
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="captcha">Security Verification</Label>
-                <Captcha
-                  onVerify={(token) => setValue("captchaToken", token)}
-                  onError={() => setValue("captchaToken", "")}
-                  onExpire={() => setValue("captchaToken", "")}
-                  disabled={isLoading}
-                />
+                <Captcha onVerify={(token) => setValue("captchaToken", token)} onError={() => setValue("captchaToken", "")} onExpire={() => setValue("captchaToken", "")} />
                 {errors.captchaToken && (
                   <p id="captcha-error" className="text-sm text-red-500" role="alert" aria-live="polite">
                     {errors.captchaToken.message}
