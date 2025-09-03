@@ -9,7 +9,7 @@ interface TurnstileVerificationResponse {
   cdata?: string;
 }
 
-export async function verifyTurnstileToken(token: string, remoteip?: string, maxRetries = 3): Promise<boolean> {
+export async function verifyTurnstileToken(token: string, maxRetries = 3): Promise<boolean> {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secretKey) {
@@ -28,10 +28,6 @@ export async function verifyTurnstileToken(token: string, remoteip?: string, max
       formData.append("secret", secretKey);
       formData.append("response", token);
       formData.append("idempotency_key", idempotencyKey);
-
-      if (remoteip) {
-        formData.append("remoteip", remoteip);
-      }
 
       const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST",
