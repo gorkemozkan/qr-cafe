@@ -1,5 +1,6 @@
 import DashboardStatCards from "@/components/dashboard/DashboardStatCards";
 import CafeCreateModal from "@/components/cafe/CafeCreateModal";
+import CafeList from "@/components/cafe/CafeList";
 
 const Page = () => {
   return (
@@ -9,6 +10,7 @@ const Page = () => {
         <CafeCreateModal />
       </div>
       <DashboardStatCards />
+      <CafeList />
     </div>
   );
 };
