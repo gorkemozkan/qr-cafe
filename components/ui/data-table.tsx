@@ -38,7 +38,7 @@ function DataTable<T extends { id?: number | string }>({
     gcTime,
   });
 
-  if (!data || data.length === 0) {
+  if (!isLoading && !isRefetching && (!data || data.length === 0)) {
     return (
       <div className="flex items-center justify-center h-32">
         <div className="text-muted-foreground">{emptyMessage}</div>
@@ -56,7 +56,9 @@ function DataTable<T extends { id?: number | string }>({
 
       {isLoading || isRefetching ? (
         <div className="flex items-center justify-center h-32">
-          <div className="text-muted-foreground">Loading...</div>
+          <div className="flex items-center space-x-2">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
         </div>
       ) : (
         <Table>
@@ -70,7 +72,7 @@ function DataTable<T extends { id?: number | string }>({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((row, index) => (
+            {data?.map((row, index) => (
               <TableRow key={String(row.id || index)}>
                 {columns.map((column) => (
                   <TableCell key={String(column.key)} className={column.className}>

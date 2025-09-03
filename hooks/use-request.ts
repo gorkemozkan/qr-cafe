@@ -107,6 +107,8 @@ export function useQueryRequest<TData, TVariables = void>({
     enabled,
     staleTime,
     gcTime,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   return {

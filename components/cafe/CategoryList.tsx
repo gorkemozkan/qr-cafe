@@ -11,6 +11,9 @@ import CategoryEditModal from "@/components/cafe/CategoryEditModal";
 import TableActions from "@/components/ui/table-actions";
 import DateView from "@/components/ui/date-view";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Eye, Package } from "lucide-react";
+import Link from "next/link";
 
 interface CategoryListProps {
   cafeId: number;
@@ -86,7 +89,23 @@ const CategoryList: FC<CategoryListProps> = ({ cafeId }) => {
     {
       key: "actions",
       header: "Actions",
-      cell: (_: any, row: Tables<"categories">) => <TableActions onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
+      cell: (_: any, row: Tables<"categories">) => (
+        <div className="flex items-center space-x-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href={`/admin/app/cafe/${cafeId}/categories/${row.id}`}>
+                <Button variant="outline" size="sm">
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="font-mono">View {row.name} details</p>
+            </TooltipContent>
+          </Tooltip>
+          <TableActions onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />
+        </div>
+      ),
     },
   ];
 

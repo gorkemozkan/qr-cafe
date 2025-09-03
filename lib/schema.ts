@@ -31,7 +31,17 @@ export const categorySchema = z.object({
   sort_order: z.union([z.string(), z.number().int().min(0)]).optional(),
 });
 
+export const productSchema = z.object({
+  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
+  description: z.string().optional(),
+  price: z.number().min(0, "Price must be non-negative").optional(),
+  image_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
+  is_available: z.boolean(),
+  category_id: z.number().min(1, "Category is required"),
+});
+
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type SignupSchema = z.infer<typeof signupSchema>;
 export type CafeSchema = z.infer<typeof cafeSchema>;
 export type CategorySchema = z.infer<typeof categorySchema>;
+export type ProductSchema = z.infer<typeof productSchema>;
