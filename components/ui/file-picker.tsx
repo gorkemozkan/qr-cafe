@@ -31,7 +31,6 @@ const FilePicker = ({
   disabled = false,
 }: FilePickerProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [dragActive, setDragActive] = React.useState(false);
   const [preview, setPreview] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -62,26 +61,6 @@ const FilePicker = ({
     onChange?.(file);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-
-    const files = e.dataTransfer.files;
-    if (files?.[0]) {
-      handleFile(files[0]);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files?.[0]) {
@@ -106,16 +85,12 @@ const FilePicker = ({
     <div className={cn("space-y-2", className)}>
       {label && <Label htmlFor={id}>{label}</Label>}
 
-      {/** biome-ignore lint/a11y/noStaticElementInteractions: <explanation> */}
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: File picker needs to be clickable */}
       <div
         className={cn(
-          "relative border-2 border-dashed rounded-lg p-6 transition-colors w-full text-left",
-          dragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25 hover:border-muted-foreground/50",
-          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+          "relative border-2 border-dashed rounded-lg p-6 transition-colors w-full text-left cursor-pointer hover:border-muted-foreground/50",
+          disabled ? "opacity-50 cursor-not-allowed" : "",
         )}
-        onDrop={disabled ? undefined : handleDrop}
-        onDragOver={disabled ? undefined : handleDragOver}
-        onDragLeave={disabled ? undefined : handleDragLeave}
         onClick={disabled ? undefined : handleClick}
         onKeyDown={
           disabled
@@ -147,9 +122,7 @@ const FilePicker = ({
                 <Upload className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">
-                  Drop your file here, or <span className="text-primary underline-offset-4 hover:underline">browse</span>
-                </p>
+                <p className="text-sm font-medium">Click to browse files</p>
                 <p className="text-xs text-muted-foreground">
                   {accept === "image/*" ? "PNG, JPG, GIF up to" : "File up to"} {Math.round(maxSize / 1024 / 1024)}MB
                 </p>

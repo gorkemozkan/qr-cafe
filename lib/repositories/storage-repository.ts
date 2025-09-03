@@ -1,5 +1,3 @@
-import { BaseRepository } from "@/lib/repositories/base-repository";
-
 export interface UploadResult {
   url: string;
   path: string;
@@ -10,22 +8,14 @@ export interface StorageError {
   details?: string;
 }
 
-export interface BucketStatus {
-  exists: boolean;
-  accessible: boolean;
-}
-
-export class StorageRepository extends BaseRepository {
-  protected readonly baseUrl = "/api/storage";
+export class StorageRepository {
+  private baseUrl = "/api/storage";
 
   async uploadFile(file: File, cafeSlug: string, bucketName: string): Promise<{ success: true; data: UploadResult } | { success: false; error: StorageError }> {
     try {
       const formData = new FormData();
-
       formData.append("file", file);
-
       formData.append("cafeSlug", cafeSlug);
-
       formData.append("bucketName", bucketName);
 
       const response = await fetch(`${this.baseUrl}/upload`, {
@@ -33,9 +23,8 @@ export class StorageRepository extends BaseRepository {
         body: formData,
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
+        const result = await response.json();
         return {
           success: false,
           error: {
@@ -45,9 +34,11 @@ export class StorageRepository extends BaseRepository {
         };
       }
 
+      // The API now returns the data directly without the success wrapper
+      const data = await response.json();
       return {
         success: true,
-        data: result.data,
+        data: data as UploadResult,
       };
     } catch (error) {
       return {
@@ -70,9 +61,8 @@ export class StorageRepository extends BaseRepository {
         body: JSON.stringify({ filePath, bucketName }),
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
+        const result = await response.json();
         return {
           success: false,
           error: {

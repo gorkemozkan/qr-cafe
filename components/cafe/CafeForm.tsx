@@ -25,16 +25,9 @@ interface CafeFormProps {
 }
 
 const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
-  //#region States
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
   const [uploadError, setUploadError] = useState<string | null>(null);
-
   const [isUploading, setIsUploading] = useState(false);
-
-  //#endregion
-
-  //#region Form
 
   const {
     register,
@@ -55,38 +48,30 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
   });
 
   const isActive = watch("is_active");
-
   const selectedCurrency = watch("currency");
 
-  //#endregion
-
-  //#region Effects
-
+  // Single useEffect to handle form initialization
   useEffect(() => {
-    if (mode === "edit" && cafe) {
-      reset({
-        slug: cafe.slug,
-        description: cafe.description || "",
-        logo_url: cafe.logo_url || "",
-        currency: cafe.currency || "TRY",
-        is_active: cafe.is_active,
-      });
-      setSelectedFile(null);
-    } else {
-      reset({
-        slug: "",
-        description: "",
-        logo_url: "",
-        currency: "TRY",
-        is_active: true,
-      });
-      setSelectedFile(null);
-    }
+    const defaultValues: CafeSchema =
+      mode === "edit" && cafe
+        ? {
+            slug: cafe.slug,
+            description: cafe.description || "",
+            logo_url: cafe.logo_url || "",
+            currency: cafe.currency || "TRY",
+            is_active: cafe.is_active,
+          }
+        : {
+            slug: "",
+            description: "",
+            logo_url: "",
+            currency: "TRY",
+            is_active: true,
+          };
+
+    reset(defaultValues);
+    setSelectedFile(null);
   }, [mode, cafe, reset]);
-
-  //#endregion
-
-  //#region Handlers
 
   const onSubmitForm = async (data: CafeSchema) => {
     try {
@@ -121,12 +106,10 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
     setUploadError(error);
   };
 
-  //#endregion
-
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       {/* Slug Field */}
-      <div className="space-y-2">
+      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-100">
         <Label htmlFor="slug">Slug *</Label>
         <Input id="slug" placeholder="my-cafe" {...register("slug")} className={errors.slug ? "border-red-500" : ""} />
         {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
@@ -134,13 +117,13 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
       </div>
 
       {/* Description Field */}
-      <div className="space-y-2">
+      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-150">
         <Label htmlFor="description">Description</Label>
         <Textarea id="description" placeholder="Describe your cafe..." {...register("description")} rows={3} />
       </div>
 
       {/* Logo Upload Field */}
-      <div className="space-y-2">
+      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-200">
         <FilePicker
           id="logo"
           label="Cafe Logo"
@@ -161,23 +144,25 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
       </div>
 
       {/* Currency Field */}
-      <CurrencySelect id="currency" label="Currency" value={selectedCurrency} onValueChange={(value) => setValue("currency", value)} error={errors.currency?.message} />
+      <div className="animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-250">
+        <CurrencySelect id="currency" label="Currency" value={selectedCurrency} onValueChange={(value) => setValue("currency", value)} error={errors.currency?.message} />
+      </div>
 
       {/* Active Status Field */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-300">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
         <Label htmlFor="is_active">Active</Label>
         <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
       </div>
 
       {/* Form Actions */}
-      <div className="flex justify-end space-x-2 pt-4">
+      <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-350">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
             Cancel
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px]">
+        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px] transition-all duration-200 hover:scale-105">
           {isSubmitting || isUploading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

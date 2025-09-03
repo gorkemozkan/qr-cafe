@@ -1,9 +1,8 @@
 import { toast } from "sonner";
 import { useState, useCallback } from "react";
-import type { ApiResponse } from "@/lib/api-client";
 
 interface UseRequestOptions<TData> {
-  fn: (...args: any[]) => Promise<ApiResponse<TData>>;
+  fn: (...args: any[]) => Promise<TData>;
   onSuccess?: (data: TData) => void;
   successMessage?: string;
   autoExecute?: boolean;
@@ -29,23 +28,17 @@ export function useRequest<TData, TError = string>({ fn, onSuccess, successMessa
 
       try {
         const response = await fn(...args);
-        console.log("response", response);
-        if (response.success) {
-          if (successMessage) {
-            toast.success(successMessage);
-          }
 
-          if (response.data) {
-            setData(response.data);
-            onSuccess?.(response.data);
-          }
-        } else {
-          toast.error(response.error || "An error occurred");
+        if (successMessage) {
+          toast.success(successMessage);
         }
+
+        setData(response);
+        onSuccess?.(response);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
-        const finalErrorMessage = errorMessage || "An unexpected error occurred";
-        toast.error(finalErrorMessage);
+        toast.error(errorMessage);
+        setError(errorMessage as TError);
       } finally {
         setIsLoading(false);
       }

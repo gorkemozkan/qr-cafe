@@ -17,18 +17,11 @@ interface CafeEditModalProps {
 }
 
 const CafeEditModal: FC<CafeEditModalProps> = (props) => {
-  //#region States
-
   const [open, setOpen] = useState(false);
-
-  //#endregion
-
-  //#region Requests
 
   const { isLoading, execute } = useRequest({
     fn: async (payload: CafeSchema) => {
-      const response = await cafeRepository.update(props.cafe.id, payload);
-      return response;
+      return await cafeRepository.update(props.cafe.id, payload);
     },
     onSuccess: (cafe) => {
       props.onSuccess?.(cafe);
@@ -37,32 +30,32 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
     successMessage: "Cafe updated successfully!",
   });
 
-  //#endregion
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {props.trigger || (
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="transition-all duration-200 hover:scale-105">
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
         <DialogHeader>
-          <DialogTitle>Edit Cafe</DialogTitle>
-          <DialogDescription>Update the cafe information below.</DialogDescription>
+          <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Edit Cafe</DialogTitle>
+          <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Update the cafe information below.</DialogDescription>
         </DialogHeader>
-        <CafeForm
-          mode="edit"
-          isLoading={isLoading}
-          cafe={props.cafe}
-          onSubmit={async (data) => {
-            await execute(data);
-          }}
-          onCancel={() => setOpen(false)}
-        />
+        <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
+          <CafeForm
+            mode="edit"
+            isLoading={isLoading}
+            cafe={props.cafe}
+            onSubmit={async (data) => {
+              await execute(data);
+            }}
+            onCancel={() => setOpen(false)}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );

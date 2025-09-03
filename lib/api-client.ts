@@ -1,17 +1,4 @@
-// API Route Response (what the actual API endpoints return)
-export interface ApiRouteResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  details?: unknown;
-}
-
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
-
+// Simplified API client without unnecessary type wrapping
 interface ApiClientOptions {
   baseUrl?: string;
   headers?: Record<string, string>;
@@ -23,16 +10,14 @@ class ApiClient {
 
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl = options.baseUrl || "";
-
     this.defaultHeaders = {
       "Content-Type": "application/json",
       ...options.headers,
     };
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-
     const config: RequestInit = {
       headers: {
         ...this.defaultHeaders,
@@ -43,30 +28,23 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-
       const data = await response.json();
 
       if (!response.ok) {
-        return {
-          success: false,
-          error: data.error || `HTTP ${response.status}`,
-        };
+        throw new Error(data.error || `HTTP ${response.status}`);
       }
 
-      return data; // Return the API response directly, don't wrap it
+      return data;
     } catch (error) {
-      return {
-        success: false,
-        error: "Network error occurred",
-      };
+      throw new Error(error instanceof Error ? error.message : "Network error occurred");
     }
   }
 
-  async get<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  async get<T>(endpoint: string, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: "GET" });
   }
 
-  async post<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<ApiResponse<T>> {
+  async post<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "POST",
@@ -74,7 +52,7 @@ class ApiClient {
     });
   }
 
-  async put<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<ApiResponse<T>> {
+  async put<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "PUT",
@@ -82,11 +60,11 @@ class ApiClient {
     });
   }
 
-  async delete<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  async delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: "DELETE" });
   }
 
-  async patch<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<ApiResponse<T>> {
+  async patch<T>(endpoint: string, body?: Record<string, unknown>, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "PATCH",
@@ -96,7 +74,5 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient();
-
 export { ApiClient };
-
 export type { ApiClientOptions };

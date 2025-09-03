@@ -16,17 +16,9 @@ interface CafeCreateModalProps {
 }
 
 const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
-  //#region States
-
   const [open, setOpen] = useState(false);
-
   const [showQRDialog, setShowQRDialog] = useState(false);
-
   const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
-
-  //#endregion
-
-  //#region Requests
 
   const { isLoading, execute } = useRequest({
     fn: (payload: CafeSchema) => cafeRepository.create(payload),
@@ -39,30 +31,30 @@ const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
     successMessage: "Cafe created successfully!",
   });
 
-  //#endregion
-
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="secondary" size="sm">
+          <Button variant="secondary" size="sm" className="transition-all duration-200 hover:scale-105">
             <Plus className="h-4 w-4" />
             Create Cafe
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
           <DialogHeader>
-            <DialogTitle>Create New Cafe</DialogTitle>
-            <DialogDescription>Fill in the details below to create a new cafe.</DialogDescription>
+            <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Create New Cafe</DialogTitle>
+            <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Fill in the details below to create a new cafe.</DialogDescription>
           </DialogHeader>
-          <CafeForm
-            mode="create"
-            onSubmit={async (data) => {
-              await execute(data);
-            }}
-            onCancel={() => setOpen(false)}
-            isLoading={isLoading}
-          />
+          <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
+            <CafeForm
+              mode="create"
+              onSubmit={async (data) => {
+                await execute(data);
+              }}
+              onCancel={() => setOpen(false)}
+              isLoading={isLoading}
+            />
+          </div>
         </DialogContent>
       </Dialog>
       {createdCafe && <QRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />}

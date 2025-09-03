@@ -11,17 +11,17 @@ export async function DELETE(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json({ success: false, error: "Please log in to delete files" }, { status: 401 });
+      return NextResponse.json({ error: "Please log in to delete files" }, { status: 401 });
     }
 
     const { filePath, bucketName } = await request.json();
 
     if (!filePath) {
-      return NextResponse.json({ success: false, error: "File path is required" }, { status: 400 });
+      return NextResponse.json({ error: "File path is required" }, { status: 400 });
     }
 
     if (!filePath.startsWith(`${user.id}/`)) {
-      return NextResponse.json({ success: false, error: "Unauthorized to delete this file" }, { status: 403 });
+      return NextResponse.json({ error: "Unauthorized to delete this file" }, { status: 403 });
     }
 
     const { error } = await supabase.storage.from(bucketName).remove([filePath]);
@@ -29,7 +29,6 @@ export async function DELETE(request: NextRequest) {
     if (error) {
       return NextResponse.json(
         {
-          success: false,
           error: "Delete failed",
           details: error.message,
         },
@@ -37,15 +36,11 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: null,
-    });
+    return NextResponse.json(null);
   } catch (error) {
     console.error("Delete error:", error);
     return NextResponse.json(
       {
-        success: false,
         error: "Delete failed",
         details: error instanceof Error ? error.message : "Unknown error",
       },
