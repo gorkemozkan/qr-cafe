@@ -1,35 +1,36 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { parseNumericId, handleApiRequest } from "@/lib/api-response";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
+  return handleApiRequest(async () => {
     const { id } = await params;
+    const cafeId = parseNumericId(id, "cafe ID");
+    
     const supabase = await createClient();
-    const cafeId = parseInt(id, 10);
-
-    if (Number.isNaN(cafeId)) {
-      return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
-    }
-
+    
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      throw new Error("Unauthorized");
     }
 
-    const { data: cafe, error: fetchError } = await supabase.from("cafes").select("*").eq("id", cafeId).eq("user_id", user.id).single();
+    const { data: cafe, error: fetchError } = await supabase
+      .from("cafes")
+      .select("*")
+      .eq("id", cafeId)
+      .eq("user_id", user.id)
+      .single();
 
     if (fetchError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+      throw new Error("Cafe not found or access denied");
     }
 
-    return NextResponse.json(cafe);
-  } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
+    return cafe;
+  });
 }
 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {

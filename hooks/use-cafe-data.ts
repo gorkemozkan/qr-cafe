@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { cafeRepository } from "@/lib/repositories";
 import { useRequest } from "@/hooks/use-request";
 
@@ -15,11 +15,16 @@ export function useCafeData(cafeId: number, shouldFetch: boolean) {
     },
   });
 
+  // Memoize the fetch function to prevent infinite re-renders
+  const memoizedFetchCafe = useCallback(() => {
+    fetchCafe();
+  }, [fetchCafe]);
+
   useEffect(() => {
     if (shouldFetch && cafeId && !cafeSlug) {
-      fetchCafe();
+      memoizedFetchCafe();
     }
-  }, [shouldFetch, cafeId, cafeSlug, fetchCafe]);
+  }, [shouldFetch, cafeId, cafeSlug, memoizedFetchCafe]);
 
-  return { cafeSlug, isLoading, fetchCafe };
+  return { cafeSlug, isLoading, fetchCafe: memoizedFetchCafe };
 }

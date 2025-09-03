@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Tables } from "@/types/db";
 import { categoryRepository } from "@/lib/repositories";
@@ -22,17 +22,13 @@ const ProductsPage: FC = () => {
     },
   });
 
-  const fetchCategoriesCallback = useCallback(() => {
-    fetchCategories();
-  }, [fetchCategories]);
-
   useEffect(() => {
     if (cafeId) {
-      fetchCategoriesCallback();
+      fetchCategories();
     }
-  }, [cafeId, fetchCategoriesCallback]);
+  }, [cafeId, fetchCategories]);
 
-  if (isNaN(cafeId)) {
+  if (Number.isNaN(cafeId)) {
     return <div>Invalid cafe ID</div>;
   }
 

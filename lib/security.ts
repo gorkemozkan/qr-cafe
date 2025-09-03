@@ -1,43 +1,7 @@
 import { NextRequest } from "next/server";
 
-// Simple in-memory rate limiter for development
-// For production, consider Redis-based rate limiting
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-interface RateLimitConfig {
-  maxRequests: number;
-  windowMs: number;
-}
-
-export function rateLimit(config: RateLimitConfig) {
-  return function checkRateLimit(request: NextRequest): boolean {
-    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
-    const now = Date.now();
-
-    // Clean expired entries
-    for (const [key, value] of rateLimitMap.entries()) {
-      if (value.resetTime < now) {
-        rateLimitMap.delete(key);
-      }
-    }
-
-    const current = rateLimitMap.get(ip) || { count: 0, resetTime: now + config.windowMs };
-
-    if (current.resetTime < now) {
-      current.count = 1;
-      current.resetTime = now + config.windowMs;
-    } else {
-      current.count++;
-    }
-
-    rateLimitMap.set(ip, current);
-    return current.count <= config.maxRequests;
-  };
-}
-
-// Rate limiters for different endpoints
-export const authRateLimit = rateLimit({ maxRequests: 5, windowMs: 15 * 60 * 1000 }); // 5 attempts per 15 minutes
-export const uploadRateLimit = rateLimit({ maxRequests: 10, windowMs: 60 * 1000 }); // 10 uploads per minute
+// Re-export from the new rate limiter module for backward compatibility
+export { authRateLimit, uploadRateLimit } from "@/lib/rate-limiter";
 
 // CSRF protection
 export function verifyCsrfToken(request: NextRequest): boolean {

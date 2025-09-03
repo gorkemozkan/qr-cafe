@@ -37,11 +37,24 @@ const FilePicker = ({
     if (value) {
       const url = URL.createObjectURL(value);
       setPreview(url);
-      return () => URL.revokeObjectURL(url);
+      // Cleanup function to prevent memory leaks
+      return () => {
+        URL.revokeObjectURL(url);
+      };
     } else {
       setPreview(null);
+      return undefined;
     }
   }, [value]);
+
+  // Cleanup on component unmount
+  React.useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   const handleFile = (file: File) => {
     if (file.size > maxSize) {

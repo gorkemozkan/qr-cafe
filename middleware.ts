@@ -2,7 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.split("/")[1].startsWith("admin")) {
+  // More secure admin route protection
+  const pathname = request.nextUrl.pathname;
+  if (pathname.startsWith("/admin/") || pathname === "/admin") {
     return await updateSession(request);
   }
 

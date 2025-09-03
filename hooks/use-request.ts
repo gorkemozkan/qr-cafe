@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 interface UseRequestOptions<TData, TVariables> {
   mutationFn: (variables: TVariables) => Promise<TData>;
@@ -58,21 +59,24 @@ export function useRequest<TData, TVariables = void, TError = Error>({
     },
   });
 
-  const execute = async (variables: TVariables): Promise<TData | undefined> => {
-    try {
-      if (optimisticUpdate) {
-        queryClient.setQueryData(optimisticUpdate.queryKey, (oldData: any) => optimisticUpdate.updateFn(oldData, variables));
-      }
+  const execute = useCallback(
+    async (variables: TVariables): Promise<TData | undefined> => {
+      try {
+        if (optimisticUpdate) {
+          queryClient.setQueryData(optimisticUpdate.queryKey, (oldData: any) => optimisticUpdate.updateFn(oldData, variables));
+        }
 
-      const result = await mutation.mutateAsync(variables);
-      return result;
-    } catch (error) {
-      if (optimisticUpdate) {
-        queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey });
+        const result = await mutation.mutateAsync(variables);
+        return result;
+      } catch (error) {
+        if (optimisticUpdate) {
+          queryClient.invalidateQueries({ queryKey: optimisticUpdate.queryKey });
+        }
+        throw error;
       }
-      throw error;
-    }
-  };
+    },
+    [mutation.mutateAsync, optimisticUpdate, queryClient],
+  );
 
   const reset = () => {
     mutation.reset();
