@@ -141,6 +141,67 @@
     animation: shine 2s ease-in-out infinite 1s;
   }
 
+  /* Custom modal fade animations */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes modalFadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+  }
+
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes modalSlideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  .modal-fade-in {
+    animation: modalFadeIn 0.3s ease-out forwards;
+  }
+
+  .modal-fade-out {
+    animation: modalFadeOut 0.3s ease-in forwards;
+  }
+
+  .modal-slide-in {
+    animation: modalSlideIn 0.3s ease-out forwards;
+  }
+
+  .modal-slide-out {
+    animation: modalSlideOut 0.3s ease-in forwards;
+  }
+
   /* Accessibility: Screen reader only content */
   .sr-only {
     position: absolute !important;

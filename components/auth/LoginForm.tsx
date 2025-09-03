@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
+import SkipLink from "@/components/auth/SkipLink";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import { authRepository } from "@/lib/repositories";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginSchema } from "@/lib/schema";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import SkipLink from "./SkipLink";
 
 const defaultValues: LoginSchema = {
   email: "",

@@ -4,15 +4,15 @@ import { BaseRepository } from "@/lib/repositories/base-repository";
 export class AuthRepository extends BaseRepository {
   protected readonly baseUrl = "/api/auth";
 
-  async login(payload: LoginSchema) {
+  async login(payload: LoginSchema): Promise<any> {
     return await this.post("/login", payload);
   }
 
-  async signup(payload: SignupSchema) {
+  async signup(payload: SignupSchema): Promise<any> {
     return await this.post("/signup", payload);
   }
 
-  async logout() {
+  async logout(): Promise<any> {
     return await this.post("/logout");
   }
 }

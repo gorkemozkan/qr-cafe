@@ -1,4 +1,4 @@
-import SectionCards from "@/components/section-cards";
+import SectionCards from "@/components/SectionCards";
 
 const DashboardStatCards = () => {
   const items = [
