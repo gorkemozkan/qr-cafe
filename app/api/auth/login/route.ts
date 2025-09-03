@@ -40,10 +40,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ error: "Authentication failed", success: false }, { status: 401 });
   } catch (error) {
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ error: "Internal server error", success: false }, { status: 500 });
+    return NextResponse.json({ 
+      error: error instanceof Error ? error.message : "Internal server error", 
+      success: false 
+    }, { status: 500 });
   }
 }
