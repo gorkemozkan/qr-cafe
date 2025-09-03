@@ -15,7 +15,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const { email, password, captchaToken } = validationResult.data;
 
-    const isCaptchaValid = await verifyTurnstileToken(captchaToken);
+    const remoteip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || request.headers.get("cf-connecting-ip") || "unknown";
+
+    const isCaptchaValid = await verifyTurnstileToken(captchaToken, remoteip);
 
     if (!isCaptchaValid) {
       return NextResponse.json({ error: "CAPTCHA verification failed. Please try again.", success: false }, { status: 400 });
