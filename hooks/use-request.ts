@@ -99,7 +99,7 @@ export function useQueryRequest<TData, TVariables = void>({
   staleTime?: number;
   gcTime?: number;
 }) {
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError, error, refetch, isRefetching } = useQuery({
     queryKey,
     queryFn: () => queryFn({} as TVariables),
     enabled,
@@ -113,5 +113,6 @@ export function useQueryRequest<TData, TVariables = void>({
     isError,
     error,
     refetch,
+    isRefetching,
   };
 }

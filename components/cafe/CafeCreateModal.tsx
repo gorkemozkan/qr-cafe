@@ -50,12 +50,12 @@ const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
             Create Cafe
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
           <DialogHeader>
             <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Create New Cafe</DialogTitle>
             <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Fill in the details below to create a new cafe.</DialogDescription>
           </DialogHeader>
-          <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
+          <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
             <CafeForm
               mode="create"
               onSubmit={async (data) => {

@@ -5,11 +5,7 @@ export async function GET() {
   try {
     const supabase = await createClient();
 
-    const { data: cafes, error } = await supabase
-      .from("cafes")
-      .select("*")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
+    const { data: cafes, error } = await supabase.from("cafes").select("*").order("created_at", { ascending: false });
 
     if (error) {
       return NextResponse.json({ error: "Failed to fetch cafes" }, { status: 500 });
