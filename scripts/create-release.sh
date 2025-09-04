@@ -11,7 +11,6 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Get version from arguments or package.json
 VERSION=${1:-$(node -p "require('./package.json').version")}
 MESSAGE=${2:-"Release v$VERSION"}
 
@@ -19,13 +18,11 @@ echo -e "${GREEN}Creating release v$VERSION${NC}"
 echo "Message: $MESSAGE"
 echo ""
 
-# Check if tag exists
 if git rev-parse "v$VERSION" >/dev/null 2>&1; then
     echo -e "${RED}Error: Tag v$VERSION already exists${NC}"
     exit 1
 fi
 
-# Check for uncommitted changes
 if [ -n "$(git status --porcelain)" ]; then
     echo -e "${YELLOW}Warning: You have uncommitted changes${NC}"
     git status --short
@@ -37,7 +34,6 @@ if [ -n "$(git status --porcelain)" ]; then
     fi
 fi
 
-# Create and push tag
 echo "Creating tag..."
 git tag -a "v$VERSION" -m "$MESSAGE"
 echo "Pushing to remote..."

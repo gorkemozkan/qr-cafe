@@ -68,7 +68,9 @@ const FilePicker = ({
     }
   };
 
-  const handleRemove = () => {
+  const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     onChange?.(null);
     if (inputRef.current) {
       inputRef.current.value = "";

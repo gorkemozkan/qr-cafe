@@ -15,14 +15,24 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 
-interface CategoryListProps {
+interface Props {
   cafeId: number;
 }
 
-const CategoryList: FC<CategoryListProps> = ({ cafeId }) => {
+const CategoryList: FC<Props> = (props) => {
+  //#region States
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   const [categoryToDelete, setCategoryToDelete] = useState<Tables<"categories"> | null>(null);
+
   const [categoryToEdit, setCategoryToEdit] = useState<Tables<"categories"> | null>(null);
+
+  //#endregion
+
+  //#region Hooks
+
+  //#region Request
 
   const { isLoading: isDeleting, execute: deleteCategory } = useRequest({
     mutationFn: async (id: number) => {
@@ -33,7 +43,7 @@ const CategoryList: FC<CategoryListProps> = ({ cafeId }) => {
       setCategoryToDelete(null);
     },
     successMessage: "Category deleted successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(cafeId.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
   });
 
   const handleDeleteClick = (category: Tables<"categories">) => {
@@ -93,7 +103,7 @@ const CategoryList: FC<CategoryListProps> = ({ cafeId }) => {
         <div className="flex items-center space-x-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href={`/admin/app/cafe/${cafeId}/categories/${row.id}`}>
+              <Link href={`/admin/app/cafe/${props.cafeId}/categories/${row.id}`}>
                 <Button variant="outline" size="sm">
                   <Eye className="h-4 w-4" />
                 </Button>
@@ -113,8 +123,8 @@ const CategoryList: FC<CategoryListProps> = ({ cafeId }) => {
     <div className="space-y-4">
       <DataTable
         columns={columns}
-        queryKey={QueryKeys.categoriesByCafe(cafeId.toString())}
-        queryFn={async () => await categoryRepository.listByCafe(cafeId)}
+        queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
+        queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}
         emptyMessage="No categories found"
       />
       {categoryToEdit && <CategoryEditModal onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />}

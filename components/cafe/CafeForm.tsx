@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -16,7 +16,7 @@ import { Tables } from "@/types/db";
 import { CafeSchema, cafeSchema } from "@/lib/schema";
 import { uploadCafeLogo } from "@/lib/supabase/storage";
 
-interface CafeFormProps {
+interface Props {
   mode: "create" | "edit";
   cafe?: Tables<"cafes">;
   onSubmit: (data: CafeSchema, logoFile?: File) => Promise<void>;
@@ -24,7 +24,7 @@ interface CafeFormProps {
   isLoading?: boolean;
 }
 
-const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
+const CafeForm: FC<Props> = (props) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -32,13 +32,13 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const getDefaultValues = (): CafeSchema => {
-    if (mode === "edit" && cafe) {
+    if (props.mode === "edit" && props.cafe) {
       return {
-        slug: cafe.slug,
-        description: cafe.description || "",
-        logo_url: cafe.logo_url || "",
-        currency: cafe.currency || "TRY",
-        is_active: cafe.is_active,
+        slug: props.cafe.slug,
+        description: props.cafe.description || "",
+        logo_url: props.cafe.logo_url || "",
+        currency: props.cafe.currency || "TRY",
+        is_active: props.cafe.is_active,
       };
     }
 
@@ -67,11 +67,9 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
 
   const onSubmitForm = async (data: CafeSchema) => {
     try {
-      if (mode === "create") {
-        // For create mode, just pass the file to parent and let it handle upload after cafe creation
-        await onSubmit(data, selectedFile || undefined);
+      if (props.mode === "create") {
+        await props.onSubmit(data, selectedFile || undefined);
       } else {
-        // For edit mode, upload the logo first if there's a new file
         if (selectedFile) {
           setIsUploading(true);
           setUploadError(null);
@@ -87,7 +85,7 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
           data.logo_url = uploadResult.data.url;
         }
 
-        await onSubmit(data);
+        await props.onSubmit(data);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Operation failed";
@@ -113,7 +111,9 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
         <Label htmlFor="slug">Slug *</Label>
         <Input id="slug" placeholder="my-cafe" {...register("slug")} className={errors.slug ? "border-red-500" : ""} />
         {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
-        <p className="text-xs text-muted-foreground">This will be used in the URL: /my-cafe</p>
+        <p className="text-xs text-muted-foreground">
+          This will be used in the URL: {window.location.origin}/{watch("slug")}
+        </p>
       </div>
 
       {/* Description Field */}
@@ -135,10 +135,10 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
           disabled={isUploading}
         />
         {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
-        {cafe?.logo_url && !selectedFile && (
+        {props.cafe?.logo_url && !selectedFile && (
           <div className="flex items-center space-x-2">
             <OptimizedImage
-              src={cafe.logo_url}
+              src={props.cafe.logo_url}
               alt="Current logo"
               width={48}
               height={48}
@@ -159,14 +159,14 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
       {/* Active Status Field */}
       <div className="flex items-center space-x-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-300">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">Active</Label>
+        <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
         <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
       </div>
 
       {/* Form Actions */}
       <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-350">
-        {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
+        {props.onCancel && (
+          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
             Cancel
           </Button>
         )}
@@ -174,9 +174,9 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
           {isSubmitting || isUploading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {mode === "create" ? "Creating..." : "Updating..."}
+              {props.mode === "create" ? "Creating..." : "Updating..."}
             </>
-          ) : mode === "create" ? (
+          ) : props.mode === "create" ? (
             "Create"
           ) : (
             "Update"

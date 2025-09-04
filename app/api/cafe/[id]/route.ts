@@ -1,6 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { parseNumericId } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 interface Params {
   id: string;

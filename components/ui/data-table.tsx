@@ -6,6 +6,7 @@ import { useQueryRequest } from "@/hooks/use-request";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import RefreshButton from "@/components/RefreshButton";
 
 interface Column<T> {
   key: keyof T | string;
@@ -49,9 +50,7 @@ function DataTable<T extends { id?: number | string }>({
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button variant="outline" onClick={() => refetch()} className="text-sm text-muted-foreground hover:text-foreground transition-colors" disabled={isRefetching}>
-          <RefreshCcw className={cn("h-4 w-4", isRefetching && "animate-spin")} />
-        </Button>
+        <RefreshButton loading={isRefetching} refetch={refetch} maxAttempt={3} />
       </div>
 
       {isLoading || isRefetching ? (

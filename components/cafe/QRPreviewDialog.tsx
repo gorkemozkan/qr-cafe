@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useEffect, useState, useRef, useCallback } from "react";
-import { Download, X, QrCode } from "lucide-react";
+import { Download, QrCode, MessageCircle, Mail } from "lucide-react";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -40,7 +40,7 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
       });
 
       setQrCodeDataUrl(qrDataUrl);
-    } catch (error) {
+    } catch (_error) {
       setQrCodeDataUrl("");
     } finally {
       setIsGenerating(false);
@@ -122,11 +122,21 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
         }, "image/png");
       };
       img.src = qrCodeDataUrl;
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to export QR code");
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleShareWhatsApp = () => {
+    if (!cafeUrl) return;
+
+    const message = `Check out this cafe menu: ${cafeUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank");
+    toast.success("Opening WhatsApp...");
   };
 
   return (
@@ -142,11 +152,11 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
 
         <div className="space-y-6">
           {/* Cafe URL Display */}
-          <div className="bg-gray-50 p-4 rounded-lg border">
+          <div className="bg-background p-4 rounded-lg border">
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-700 mb-1">Menu URL:</p>
-                <p className="text-sm text-gray-600 truncate">{cafeUrl}</p>
+                <p className="text-sm font-medium mb-1">Menu URL:</p>
+                <p className="text-sm  truncate">{cafeUrl}</p>
               </div>
               <CopyButton text={cafeUrl} variant="outline" size="sm" className="ml-2 flex-shrink-0" />
             </div>
@@ -154,7 +164,7 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
 
           {/* QR Code Display */}
           <div className="flex justify-center">
-            <div ref={qrContainerRef} className="bg-white p-6 rounded-lg border-2 border-dashed border-gray-300">
+            <div ref={qrContainerRef} className="bg-background p-6 rounded-lg">
               {isGenerating ? (
                 <div className="w-[300px] h-[300px] flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -180,16 +190,18 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
           </div>
 
           {/* Actions */}
-          <div className="flex justify-between items-center">
-            <Button variant="outline" onClick={() => onOpenChange(false)} className="flex items-center gap-2">
-              <X className="h-4 w-4" />
-              Close
-            </Button>
-
-            <Button onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting} className="flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              {isExporting ? "Exporting..." : "Export QR Code"}
-            </Button>
+          <div className="space-y-4">
+            {/* Main Actions Row */}
+            <div className="flex w-max space-x-2">
+              <Button variant="outline" onClick={handleShareWhatsApp} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
+              </Button>
+              <Button variant="outline" onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting} className="flex items-center gap-2 w-full">
+                <Download className="h-4 w-4" />
+                {isExporting ? "Exporting..." : "Export"}
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>

@@ -1,12 +1,12 @@
 "use client";
 
-import { FC, ReactNode } from "react";
 import { Tables } from "@/types/db";
+import { FC, ReactNode } from "react";
 import { ProductSchema } from "@/lib/schema";
-import ProductForm from "@/components/cafe/ProductForm";
+import ProductForm from "@/components/product/ProductForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-interface BaseProductModalProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   trigger: ReactNode;
@@ -20,7 +20,7 @@ interface BaseProductModalProps {
   isLoading: boolean;
 }
 
-const BaseProductModal: FC<BaseProductModalProps> = (props) => {
+const ProductModal: FC<Props> = (props) => {
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogTrigger asChild>{props.trigger}</DialogTrigger>
@@ -42,4 +42,4 @@ const BaseProductModal: FC<BaseProductModalProps> = (props) => {
   );
 };
 
-export default BaseProductModal;
+export default ProductModal;

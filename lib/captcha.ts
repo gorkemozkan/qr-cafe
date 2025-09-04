@@ -54,6 +54,7 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
       }
 
       const delay = 2 ** attempt * 1000;
+
       await new Promise((resolve) => setTimeout(resolve, delay));
     } catch (_error) {
       if (attempt === maxRetries) {
@@ -61,6 +62,7 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
       }
 
       const delay = 2 ** attempt * 1000;
+
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
