@@ -1,7 +1,6 @@
 import { FC } from "react";
 import CategoryList from "@/components/category/CategoryList";
-import CategoryCreateModal from "@/components/category/CategoryCreateModal";
-
+import PageTitle from "@/components/PageTitle";
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -17,6 +16,7 @@ const CategoriesPage: FC<Props> = async (props) => {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
+      <PageTitle showBackButton title="Categories" subtitle="Manage categories for your cafe" />
       <CategoryList cafeId={cafeId} />
     </div>
   );

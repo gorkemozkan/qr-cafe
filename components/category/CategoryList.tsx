@@ -123,7 +123,6 @@ const CategoryList: FC<Props> = (props) => {
   return (
     <div className="space-y-4">
       <DataTable
-        title="Categories"
         actions={<CategoryCreateModal cafeId={props.cafeId} />}
         columns={columns}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
