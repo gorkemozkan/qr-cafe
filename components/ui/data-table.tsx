@@ -99,9 +99,9 @@ function DataTable<T extends { id?: number | string }>({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        {title && <h2 className="text-xl font-semibold">{title}</h2>}
+        {title ? <h2 className="text-xl font-semibold">{title}</h2> : <div />}
         <div className="flex justify-end gap-2">
-          <RefreshButton loading={isRefetching} refetch={refetch} maxAttempt={3} cookieKey={queryKey.join("_")} />
+          <RefreshButton loading={isRefetching} refetch={refetch} maxAttempt={3} />
           {actions}
         </div>
       </div>

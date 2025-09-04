@@ -50,7 +50,7 @@ const CafeList: FC = () => {
       setCafeToDelete(null);
     },
     successMessage: "Cafe deleted successfully!",
-    invalidateQueries: QueryKeys.cafes,
+    invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
   });
 
   //#endregion

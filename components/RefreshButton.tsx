@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FC, useState, useEffect, useCallback } from "react";
+import { FC, useState } from "react";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -8,35 +8,10 @@ interface Props {
   loading: boolean;
   refetch: () => void;
   maxAttempt: number;
-  cookieKey?: string; // Optional unique key for cookie storage
 }
 
 const RefreshButton: FC<Props> = (props) => {
   //#region Cookie Helpers
-
-  const getCookieKey = useCallback(() => {
-    return `refresh_attempt_${props.cookieKey || "default"}`;
-  }, [props.cookieKey]);
-
-  const getAttemptFromCookie = useCallback((): number => {
-    if (typeof document === "undefined") return 0;
-    const value = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith(`${getCookieKey()}=`))
-      ?.split("=")[1];
-    return value ? parseInt(value, 10) : 0;
-  }, [getCookieKey]);
-
-  const setAttemptToCookie = useCallback(
-    (value: number) => {
-      if (typeof document === "undefined") return;
-      const expires = new Date();
-      expires.setTime(expires.getTime() + 5 * 60 * 1000); // 5 minutes
-      // biome-ignore lint/suspicious/noDocumentCookie: Direct assignment to document.cookie is intentional for simple cookie management
-      document.cookie = `${getCookieKey()}=${value}; expires=${expires.toUTCString()}; path=/`;
-    },
-    [getCookieKey],
-  );
 
   //#endregion
 
@@ -48,12 +23,6 @@ const RefreshButton: FC<Props> = (props) => {
 
   //#region Effects
 
-  useEffect(() => {
-    // Load attempt count from cookie on mount
-    const savedAttempt = getAttemptFromCookie();
-    setAttempt(savedAttempt);
-  }, [getAttemptFromCookie]);
-
   //#endregion
 
   //#region Handlers
@@ -63,7 +32,6 @@ const RefreshButton: FC<Props> = (props) => {
       props.refetch();
       const newAttempt = attempt + 1;
       setAttempt(newAttempt);
-      setAttemptToCookie(newAttempt);
     }
   };
 

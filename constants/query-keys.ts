@@ -1,4 +1,5 @@
 const QueryKeys = {
+  stats: ["stats"],
   cafes: ["cafes"],
   cafe: (id: string) => [...QueryKeys.cafes, id],
   categories: ["categories"],

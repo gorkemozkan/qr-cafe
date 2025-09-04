@@ -49,7 +49,7 @@ const CafeCreateModal: FC = () => {
     },
     successMessage: "Cafe created successfully!",
     errorMessage: "Failed to create cafe",
-    invalidateQueries: [QueryKeys.cafes],
+    invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
   });
 
   //#endregion

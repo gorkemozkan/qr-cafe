@@ -63,32 +63,32 @@ const CategoryForm: FC<Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-100">
+      <div className="space-y-2">
         <Label htmlFor="name">Name *</Label>
         <Input id="name" placeholder="Category name" {...register("name")} className={errors.name ? "border-red-500" : ""} />
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
       </div>
 
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-150">
+      <div className="space-y-2">
         <Label htmlFor="description">Description *</Label>
         <Textarea id="description" placeholder="Describe this category..." {...register("description")} rows={3} className={errors.description ? "border-red-500" : ""} />
         {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
       </div>
 
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-175">
+      <div className="space-y-2">
         <Label htmlFor="sort_order">Sort Order</Label>
         <Input id="sort_order" type="number" placeholder="0" {...register("sort_order")} className={errors.sort_order ? "border-red-500" : ""} />
         {errors.sort_order && <p className="text-sm text-red-500">{errors.sort_order.message}</p>}
         <p className="text-xs text-muted-foreground">Lower numbers appear first. Leave empty for default ordering.</p>
       </div>
 
-      <div className="flex items-center space-x-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-200">
+      <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
         <Label htmlFor="is_active">Active</Label>
         <p className="text-xs text-muted-foreground ml-2">{isActive ? "Category is active and visible" : "Category is inactive and hidden"}</p>
       </div>
 
-      <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-250">
+      <div className="flex justify-end space-x-2 pt-4">
         {props.onCancel && (
           <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
             Cancel

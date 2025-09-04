@@ -32,7 +32,7 @@ const CategoryCreateModal: FC<Props> = (props) => {
       setOpen(false);
     },
     successMessage: "Category created successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
   //#endregion
@@ -40,26 +40,23 @@ const CategoryCreateModal: FC<Props> = (props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="sm" className="transition-all duration-200 hover:scale-105">
+        <Button variant="outline" className="transition-all duration-200 hover:scale-105">
           <Plus className="h-4 w-4" />
-          Create Category
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Create New Category</DialogTitle>
-          <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Fill in the details below to create a new category.</DialogDescription>
+          <DialogTitle>Create New Category</DialogTitle>
+          <DialogDescription>Fill in the details below to create a new category.</DialogDescription>
         </DialogHeader>
-        <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
-          <CategoryForm
-            mode="create"
-            onSubmit={async (data) => {
-              await execute(data);
-            }}
-            onCancel={() => setOpen(false)}
-            isLoading={isLoading}
-          />
-        </div>
+        <CategoryForm
+          mode="create"
+          onSubmit={async (data) => {
+            await execute(data);
+          }}
+          onCancel={() => setOpen(false)}
+          isLoading={isLoading}
+        />
       </DialogContent>
     </Dialog>
   );

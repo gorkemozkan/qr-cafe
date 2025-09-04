@@ -42,7 +42,7 @@ const ProductList: FC<Props> = (props) => {
       setProductToDelete(null);
     },
     successMessage: "Product deleted successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), ...(props.categoryId ? [QueryKeys.productsByCategory(props.categoryId.toString())] : [])],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.stats, ...(props.categoryId ? [QueryKeys.productsByCategory(props.categoryId.toString())] : [])],
   });
 
   const handleDeleteClick = (product: Tables<"products">) => {

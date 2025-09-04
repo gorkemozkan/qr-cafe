@@ -34,7 +34,7 @@ const CategoryEditModal: FC<Props> = (props) => {
       props.onClose();
     },
     successMessage: "Category updated successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(props.category.cafe_id.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.category.cafe_id.toString()), QueryKeys.stats],
   });
 
   //#endregion

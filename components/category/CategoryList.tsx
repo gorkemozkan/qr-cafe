@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import Link from "next/link";
+import CategoryCreateModal from "./CategoryCreateModal";
 
 interface Props {
   cafeId: number;
@@ -43,7 +44,7 @@ const CategoryList: FC<Props> = (props) => {
       setCategoryToDelete(null);
     },
     successMessage: "Category deleted successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
   const handleDeleteClick = (category: Tables<"categories">) => {
@@ -122,6 +123,7 @@ const CategoryList: FC<Props> = (props) => {
   return (
     <div className="space-y-4">
       <DataTable
+        actions={<CategoryCreateModal cafeId={props.cafeId} />}
         columns={columns}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
         queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}

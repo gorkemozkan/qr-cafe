@@ -152,7 +152,7 @@ const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChang
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">
             <QrCode className="h-5 w-5" />
@@ -187,7 +187,7 @@ const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChang
                 </div>
               ) : qrCodeDataUrl ? (
                 <div className="space-y-4">
-                  <div className="relative w-[300px] h-[300px] mx-auto">
+                  <div className="relative h-[300px] mx-auto">
                     <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <div>
@@ -230,7 +230,7 @@ const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChang
             </div>
           </div>
           <div className="space-y-4">
-            <div className="flex w-max space-x-2">
+            <div className="grid grid-cols-2 gap-2">
               <Button variant="outline" onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
                 <MessageCircle className="h-4 w-4" />
                 WhatsApp
