@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,7 @@ const defaultValues: SignupSchema = {
 };
 
 const SignupForm = () => {
+  
   //#region Hooks
 
   const router = useRouter();
@@ -48,6 +49,7 @@ const SignupForm = () => {
   //#endregion
 
   //#region Render
+  
 
   return (
     <div>
@@ -171,6 +173,13 @@ const SignupForm = () => {
   );
 
   //#endregion
+};
+
+export default SignupForm;
+ */
+
+const SignupForm = () => {
+  return <div>SignupForm</div>;
 };
 
 export default SignupForm;
