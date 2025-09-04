@@ -56,8 +56,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const fileExt = file.name.split(".").pop()?.toLowerCase();
+    const sanitizedName = fileValidation.sanitizedName || file.name;
+
+    const fileExt = sanitizedName.split(".").pop()?.toLowerCase();
+
     const fileName = `${cafeSlug}-${Date.now()}.${fileExt}`;
+
     const filePath = `${user.id}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
