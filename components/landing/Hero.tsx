@@ -1,13 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { QrCode } from "lucide-react";
+import { FC } from "react";
 import NextLink from "next/link";
+import { QrCode } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export function Hero() {
+const Hero: FC = () => {
   return (
     <section className="py-32 px-4 relative overflow-hidden" aria-labelledby="hero-heading">
-      {/* Background Grid Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-
       <div className="container mx-auto text-center relative z-10">
         <div className="max-w-3xl mx-auto">
           <h1 id="hero-heading" className="text-4xl md:text-6xl font-black  leading-tight mb-6">
@@ -29,4 +28,6 @@ export function Hero() {
       </div>
     </section>
   );
-}
+};
+
+export default Hero;

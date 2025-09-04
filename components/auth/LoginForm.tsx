@@ -34,6 +34,7 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
     defaultValues,
   });
+
   //#endregion
 
   //#region Requests
@@ -135,11 +136,11 @@ const LoginForm = () => {
                   variant="link"
                   size="sm"
                   className="p-0 h-auto font-normal"
+                  aria-label="Navigate to sign up page"
                   onClick={(event) => {
                     event.preventDefault();
                     router.push("/admin/auth/signup");
                   }}
-                  aria-label="Navigate to sign up page"
                 >
                   Sign up
                 </Button>

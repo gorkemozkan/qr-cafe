@@ -1,6 +1,7 @@
+import { FC } from "react";
 import { QrCode } from "lucide-react";
 
-export function Footer() {
+const Footer: FC = () => {
   return (
     <footer className="border-t py-12 px-4">
       <div className="container mx-auto">
@@ -8,7 +9,6 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
-
               <span className="text-xl font-bold">QR Cafe</span>
             </div>
             <p className="text-muted-foreground">Transforming cafes with smart QR menu solutions.</p>
@@ -20,4 +20,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

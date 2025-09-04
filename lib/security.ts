@@ -3,17 +3,16 @@ import { BUCKET_NAMES } from "../config";
 
 export function verifyCsrfToken(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
+
   const host = request.headers.get("host");
 
   if (!origin || !host) {
     return false;
   }
 
-  // Allow both HTTP and HTTPS for development
   const allowedOrigins = [`https://${host}`, `http://${host}`];
 
-  // Also allow localhost with different ports for development
-  if (host.includes("localhost") || host.includes("127.0.0.1")) {
+  if (host.includes("localhost")) {
     allowedOrigins.push(`http://localhost:3000`, `https://localhost:3000`);
   }
 
@@ -22,15 +21,14 @@ export function verifyCsrfToken(request: NextRequest): boolean {
 
 export function validateFileType(file: File): { isValid: boolean; error?: string } {
   const allowedTypes = ["png", "jpeg", "jpg", "gif", "webp"];
+
   const maxSize = 5 * 1024 * 1024; // 5MB
 
-  // Check file extension
   const fileExt = file.name.split(".").pop()?.toLowerCase();
   if (!fileExt || !allowedTypes.includes(fileExt)) {
     return { isValid: false, error: `Invalid file type. Allowed: ${allowedTypes.join(", ")}` };
   }
 
-  // Check MIME type matches extension
   const expectedMimeTypes: Record<string, string[]> = {
     png: ["image/png"],
     jpeg: ["image/jpeg"],
@@ -40,16 +38,15 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
   };
 
   const expectedMimes = expectedMimeTypes[fileExt] || [];
+
   if (!expectedMimes.includes(file.type)) {
     return { isValid: false, error: "File type and MIME type mismatch" };
   }
 
-  // Check file size
   if (file.size > maxSize) {
     return { isValid: false, error: "File too large. Maximum size is 5MB" };
   }
 
-  // Basic file name validation
   if (!/^[a-zA-Z0-9._-]+$/.test(file.name)) {
     return { isValid: false, error: "Invalid file name. Use only letters, numbers, dots, dashes, and underscores" };
   }

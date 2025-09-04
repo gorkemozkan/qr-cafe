@@ -2,38 +2,45 @@
 
 import { FC, useState } from "react";
 import { Tables } from "@/types/db";
-import { type ProductSchema as ProductSchemaType } from "@/lib/schema";
-import { productRepository } from "@/lib/repositories";
-import { useRequest } from "@/hooks/use-request";
-import { useCafeData } from "@/hooks/use-cafe-data";
+import { Plus } from "lucide-react";
 import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import BaseProductModal from "@/components/cafe/BaseProductModal";
+import { type ProductSchema } from "@/lib/schema";
+import { useRequest } from "@/hooks/use-request";
+import { useCafeData } from "@/hooks/use-cafe-data";
+import { productRepository } from "@/lib/repositories";
+import ProductModal from "@/components/product/ProductModal";
 
-interface ProductCreateModalProps {
+interface Props {
   cafeId: number;
   categories: Tables<"categories">[];
   onSuccess?: () => void;
 }
 
-const ProductCreateModal: FC<ProductCreateModalProps> = ({ cafeId, categories, onSuccess }) => {
+const ProductCreateModal: FC<Props> = (props) => {
+  //#region States
+
   const [open, setOpen] = useState(false);
-  const { cafeSlug, isLoading: isLoadingCafe } = useCafeData(cafeId, open);
+
+  const { cafeSlug, isLoading: isLoadingCafe } = useCafeData(props.cafeId, open);
+
+  //#endregion
+
+  //#region Hooks
 
   const { isLoading, execute: createProduct } = useRequest({
-    mutationFn: async (data: ProductSchemaType) => {
-      return await productRepository.create(cafeId, data);
+    mutationFn: async (data: ProductSchema) => {
+      return await productRepository.create(props.cafeId, data);
     },
     onSuccess: () => {
       setOpen(false);
-      onSuccess?.();
+      props.onSuccess?.();
     },
     successMessage: "Product created successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(cafeId.toString())],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString())],
   });
 
-  const handleSubmit = async (data: ProductSchemaType) => {
+  const handleSubmit = async (data: ProductSchema) => {
     await createProduct(data);
   };
 
@@ -41,8 +48,10 @@ const ProductCreateModal: FC<ProductCreateModalProps> = ({ cafeId, categories, o
     setOpen(false);
   };
 
+  //#endregion
+
   return (
-    <BaseProductModal
+    <ProductModal
       open={open}
       onOpenChange={setOpen}
       trigger={
@@ -52,9 +61,9 @@ const ProductCreateModal: FC<ProductCreateModalProps> = ({ cafeId, categories, o
         </Button>
       }
       title="Create New Product"
-      cafeId={cafeId}
+      cafeId={props.cafeId}
       cafeSlug={cafeSlug}
-      categories={categories}
+      categories={props.categories}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
       isLoading={isLoading || isLoadingCafe}

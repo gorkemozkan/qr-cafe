@@ -3,17 +3,17 @@ import { cn } from "@/lib/utils";
 
 interface DateViewProps {
   date: string | Date | number;
-  format?: "short" | "long" | "relative" | "time" | "datetime";
+  format?: "short" | "long" | "relative" | "time" | "datetime" | "detailed";
   className?: string;
   showTime?: boolean;
   timezone?: string;
 }
 
-const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTime = false, timezone }) => {
+const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTime = false }) => {
   const formatDate = (dateValue: string | Date | number) => {
     const dateObj = new Date(dateValue);
 
-    if (isNaN(dateObj.getTime())) {
+    if (Number.isNaN(dateObj.getTime())) {
       return "Invalid Date";
     }
 
@@ -47,6 +47,18 @@ const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTi
       case "datetime":
         return dateObj.toLocaleString();
 
+      case "detailed": {
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleDateString(undefined, { month: "long" });
+        const weekday = dateObj.toLocaleDateString(undefined, { weekday: "long" });
+        const time = dateObj.toLocaleTimeString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+        return `${day} ${month} ${weekday} ${time}`;
+      }
+
       default:
         return dateObj.toLocaleDateString();
     }
@@ -55,7 +67,7 @@ const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTi
   const formatTime = (dateValue: string | Date | number) => {
     const dateObj = new Date(dateValue);
 
-    if (isNaN(dateObj.getTime())) {
+    if (Number.isNaN(dateObj.getTime())) {
       return "";
     }
 

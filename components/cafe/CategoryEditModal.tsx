@@ -3,38 +3,46 @@
 import { FC, useState } from "react";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
+import QueryKeys from "@/constants/query-keys";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
 import CategoryForm from "@/components/cafe/CategoryForm";
-import QueryKeys from "@/constants/query-keys";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-interface CategoryEditModalProps {
+interface Props {
   category: Tables<"categories">;
   onClose: () => void;
   onSuccess?: () => void;
 }
 
-const CategoryEditModal: FC<CategoryEditModalProps> = ({ category, onClose, onSuccess }) => {
+const CategoryEditModal: FC<Props> = (props) => {
+  //#region States
+
   const [open, setOpen] = useState(true);
+
+  //#endregion
+
+  //#region Hooks
 
   const { isLoading, execute } = useRequest({
     mutationFn: (payload: CategorySchema) => {
-      return categoryRepository.update(category.id, payload);
+      return categoryRepository.update(props.category.id, payload);
     },
     onSuccess: () => {
-      onSuccess?.();
+      props.onSuccess?.();
       setOpen(false);
-      onClose();
+      props.onClose();
     },
     successMessage: "Category updated successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(category.cafe_id.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.category.cafe_id.toString())],
   });
+
+  //#endregion
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
     if (!newOpen) {
-      onClose();
+      props.onClose();
     }
   };
 
@@ -48,7 +56,7 @@ const CategoryEditModal: FC<CategoryEditModalProps> = ({ category, onClose, onSu
         <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
           <CategoryForm
             mode="edit"
-            category={category}
+            category={props.category}
             onSubmit={async (data) => {
               await execute(data);
             }}

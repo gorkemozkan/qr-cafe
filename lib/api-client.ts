@@ -1,5 +1,4 @@
-// Simplified API client without unnecessary type wrapping
-interface ApiClientOptions {
+export interface ApiClientOptions {
   baseUrl?: string;
   headers?: Record<string, string>;
 }
@@ -10,6 +9,7 @@ class ApiClient {
 
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl = options.baseUrl || "";
+
     this.defaultHeaders = {
       "Content-Type": "application/json",
       ...options.headers,
@@ -41,7 +41,6 @@ class ApiClient {
           throw new Error(`Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error"}`);
         }
       } else {
-        // Handle non-JSON responses
         const text = await response.text();
         if (text) {
           data = { error: text };
@@ -97,5 +96,5 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient();
+
 export { ApiClient };
-export type { ApiClientOptions };
