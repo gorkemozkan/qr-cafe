@@ -13,6 +13,7 @@ import DateView from "@/components/ui/date-view";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import CategoryCreateModal from "./CategoryCreateModal";
 
@@ -88,14 +89,12 @@ const CategoryList: FC<Props> = (props) => {
     {
       key: "is_active",
       header: "Status",
-      cell: (value: any) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{value ? "Active" : "Inactive"}</span>
-      ),
+      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
     },
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="short" />,
+      cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",

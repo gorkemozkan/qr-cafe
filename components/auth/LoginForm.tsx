@@ -115,7 +115,7 @@ const LoginForm = () => {
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full" size="sm" disabled={isLoading} aria-describedby={isLoading ? "loading-status" : undefined}>
+              <Button type="submit" className="w-full" disabled={isLoading} aria-describedby={isLoading ? "loading-status" : undefined}>
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
@@ -136,11 +136,11 @@ const LoginForm = () => {
                   variant="link"
                   size="sm"
                   className="p-0 h-auto font-normal"
-                  aria-label="Navigate to sign up page"
                   onClick={(event) => {
                     event.preventDefault();
                     router.push("/admin/auth/signup");
                   }}
+                  aria-label="Navigate to sign up page"
                 >
                   Sign up
                 </Button>
