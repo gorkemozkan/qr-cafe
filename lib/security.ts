@@ -53,7 +53,7 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
 
 // Sanitize bucket name
 export function validateBucketName(bucketName: string): boolean {
-  const allowedBuckets = ["cafe-images", "product-images", "category-images"];
+  const allowedBuckets = ["cafe-logos", "product-image", "category-image"];
   return allowedBuckets.includes(bucketName);
 }
 
