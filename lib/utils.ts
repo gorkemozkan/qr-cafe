@@ -15,5 +15,11 @@ export function parseNumericId(id: string, resourceName = "ID"): number {
   return numericId;
 }
 
+export const shareWhatsApp = (text: string) => {
+  const message = `Check out this cafe menu: ${text}`;
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, "_blank");
+};
+
 export const isDevelopment = process.env.NODE_ENV === "development";
 export const isProduction = process.env.NODE_ENV === "production";

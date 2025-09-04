@@ -6,7 +6,7 @@ import { CategorySchema } from "@/lib/schema";
 import QueryKeys from "@/constants/query-keys";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
-import CategoryForm from "@/components/cafe/CategoryForm";
+import CategoryForm from "@/components/category/CategoryForm";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Props {

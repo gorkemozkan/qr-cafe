@@ -12,9 +12,10 @@ interface CopyButtonProps {
   children?: ReactNode;
   showIcon?: boolean;
   autoResetDelay?: number;
+  noText?: boolean;
 }
 
-export const CopyButton: FC<CopyButtonProps> = ({ text, variant = "outline", size = "default", className, children, showIcon = true, autoResetDelay = 2000 }) => {
+export const CopyButton: FC<CopyButtonProps> = ({ text, variant = "outline", size = "default", className, children, showIcon = true, autoResetDelay = 2000, noText = false }) => {
   const { copied, copyToClipboard } = useCopyToClipboard(autoResetDelay);
 
   const handleCopy = () => {
@@ -24,7 +25,7 @@ export const CopyButton: FC<CopyButtonProps> = ({ text, variant = "outline", siz
   return (
     <Button variant={variant} size={size} onClick={handleCopy} className={cn("flex items-center gap-2", className)}>
       {showIcon && (copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />)}
-      {children || (copied ? "Copied!" : "Copy")}
+      {children || (noText ? "" : copied ? "Copied!" : "Copy")}
     </Button>
   );
 };

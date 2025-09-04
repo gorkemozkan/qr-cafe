@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 import CafeForm from "@/components/cafe/CafeForm";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
-import QRPreviewDialog from "@/components/cafe/QRPreviewDialog";
+import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 const CafeCreateModal: FC = () => {
   //#region States
@@ -56,12 +57,18 @@ const CafeCreateModal: FC = () => {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="sm">
-            <Plus className="h-4 w-4" />
-            New Cafe
-          </Button>
-        </DialogTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Create a new cafe</p>
+          </TooltipContent>
+        </Tooltip>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Create New Cafe</DialogTitle>
@@ -77,7 +84,7 @@ const CafeCreateModal: FC = () => {
           />
         </DialogContent>
       </Dialog>
-      {createdCafe && <QRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />}
+      {createdCafe && <CafeQRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />}
     </>
   );
 };

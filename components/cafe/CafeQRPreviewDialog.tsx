@@ -1,13 +1,16 @@
 "use client";
 
 import { FC, useEffect, useState, useRef, useCallback } from "react";
-import { Download, QrCode, MessageCircle, Mail } from "lucide-react";
+import { Download, QrCode, MessageCircle, ExternalLink, Copy } from "lucide-react";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CopyButton } from "@/components/ui";
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
 import Image from "next/image";
 import { toast } from "sonner";
+import Link from "next/link";
+import { shareWhatsApp } from "@/lib/utils";
 
 interface QRPreviewDialogProps {
   open: boolean;
@@ -15,15 +18,16 @@ interface QRPreviewDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange }) => {
+const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange }) => {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+
   const [isGenerating, setIsGenerating] = useState(false);
+
   const [isExporting, setIsExporting] = useState(false);
+
   const qrContainerRef = useRef<HTMLDivElement>(null);
 
   const generateQRCode = useCallback(async () => {
-    if (!slug || typeof window === "undefined") return;
-
     try {
       setIsGenerating(true);
 
@@ -55,6 +59,23 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
   }, [slug, open, generateQRCode]);
 
   const cafeUrl = slug ? (typeof window !== "undefined" ? `${window.location.origin}/${slug}` : `/${slug}`) : "";
+
+  const handleCopyLink = useCallback(async () => {
+    if (!cafeUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(cafeUrl);
+      toast.success("Link copied to clipboard!");
+    } catch (_error) {
+      toast.error("Failed to copy link");
+    }
+  }, [cafeUrl]);
+
+  const handleGoToMenu = useCallback(() => {
+    if (cafeUrl && typeof window !== "undefined") {
+      window.open(cafeUrl, "_blank");
+    }
+  }, [cafeUrl]);
 
   const handleExportPDF = async () => {
     if (!qrCodeDataUrl) return;
@@ -129,36 +150,31 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
     }
   };
 
-  const handleShareWhatsApp = () => {
-    if (!cafeUrl) return;
-
-    const message = `Check out this cafe menu: ${cafeUrl}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-
-    window.open(whatsappUrl, "_blank");
-    toast.success("Opening WhatsApp...");
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className="flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">
             <QrCode className="h-5 w-5" />
             QR Code Preview
           </DialogTitle>
           <DialogDescription>QR code for {slug} - Scan to visit the cafe page</DialogDescription>
         </DialogHeader>
-
-        <div className="space-y-6">
-          {/* Cafe URL Display */}
+        <div className="space-y-0 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
           <div className="bg-background p-4 rounded-lg border">
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium mb-1">Menu URL:</p>
-                <p className="text-sm  truncate">{cafeUrl}</p>
+                <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 transition-all duration-300   ">
+                  {cafeUrl}
+                </a>
               </div>
-              <CopyButton text={cafeUrl} variant="outline" size="sm" className="ml-2 flex-shrink-0" />
+              <CopyButton noText text={cafeUrl} variant="outline" size="sm" className="ml-2 flex-shrink-0" />
+              <Button asChild variant="outline" size="sm" className="ml-2 flex-shrink-0">
+                <Link href={cafeUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
 
@@ -172,7 +188,32 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
               ) : qrCodeDataUrl ? (
                 <div className="space-y-4">
                   <div className="relative w-[300px] h-[300px] mx-auto">
-                    <Image src={qrCodeDataUrl} alt={`QR Code for ${slug}`} fill className="object-contain" unoptimized />
+                    <ContextMenu>
+                      <ContextMenuTrigger asChild>
+                        <div>
+                          <Image src={qrCodeDataUrl} alt={`QR Code for ${slug}`} fill className="object-contain" unoptimized />
+                        </div>
+                      </ContextMenuTrigger>
+                      <ContextMenuContent>
+                        <ContextMenuItem onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl}>
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Send to WhatsApp
+                        </ContextMenuItem>
+                        <ContextMenuItem onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting}>
+                          <Download className="mr-2 h-4 w-4" />
+                          Export
+                        </ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem onClick={handleGoToMenu} disabled={!cafeUrl}>
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Go to Menu
+                        </ContextMenuItem>
+                        <ContextMenuItem onClick={handleCopyLink} disabled={!cafeUrl}>
+                          <Copy className="mr-2 h-4 w-4" />
+                          Copy Link
+                        </ContextMenuItem>
+                      </ContextMenuContent>
+                    </ContextMenu>
                   </div>
                   <div className="text-center space-y-2">
                     <p className="text-sm font-medium">Scan this QR code</p>
@@ -188,12 +229,9 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
               )}
             </div>
           </div>
-
-          {/* Actions */}
           <div className="space-y-4">
-            {/* Main Actions Row */}
             <div className="flex w-max space-x-2">
-              <Button variant="outline" onClick={handleShareWhatsApp} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
+              <Button variant="outline" onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
                 <MessageCircle className="h-4 w-4" />
                 WhatsApp
               </Button>
@@ -209,4 +247,4 @@ const QRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChange })
   );
 };
 
-export default QRPreviewDialog;
+export default CafeQRPreviewDialog;

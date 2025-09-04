@@ -33,16 +33,15 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
           <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Edit Cafe</DialogTitle>
           <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Update the cafe information below.</DialogDescription>
         </DialogHeader>
-        <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
-          <CafeForm
-            mode="edit"
-            isLoading={isLoading}
-            cafe={props.cafe}
-            onSubmit={async (data) => {
-              await execute(data);
-            }}
-          />
-        </div>
+
+        <CafeForm
+          mode="edit"
+          isLoading={isLoading}
+          cafe={props.cafe}
+          onSubmit={async (data) => {
+            await execute(data);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

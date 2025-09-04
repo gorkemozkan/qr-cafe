@@ -15,7 +15,7 @@ export function useCopyToClipboard(autoResetDelay: number = 2000): UseCopyToClip
       try {
         await navigator.clipboard.writeText(text);
         setCopied(true);
-        toast.success("Copied to clipboard!");
+        toast.success("Copied to clipboard.");
 
         if (autoResetDelay > 0) {
           setTimeout(() => setCopied(false), autoResetDelay);

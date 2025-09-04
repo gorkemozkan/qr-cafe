@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface OptimizedImageProps {
-  src: string;
+  src: string | null;
   alt: string;
   width?: number;
   height?: number;
@@ -34,9 +34,13 @@ export function OptimizedImage({
   fill = false,
   objectFit = "cover",
 }: OptimizedImageProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  // Check if src is valid (not empty string, null, or undefined)
+  const isValidSrc = src && src.trim().length > 0;
+  const initialSrc = isValidSrc ? src : fallbackSrc;
+
+  const [isLoading, setIsLoading] = useState(!!initialSrc);
   const [hasError, setHasError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(src);
+  const [currentSrc, setCurrentSrc] = useState(initialSrc);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -54,6 +58,15 @@ export function OptimizedImage({
 
   const imageClasses = cn("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100", className);
 
+  // If no valid src is provided and no fallback, render fallback UI
+  if (!currentSrc || currentSrc.trim().length === 0) {
+    return (
+      <div className={cn("flex items-center justify-center bg-muted text-muted-foreground", className)} style={{ width: width || 100, height: height || 100 }}>
+        <span className="text-xs">Image unavailable</span>
+      </div>
+    );
+  }
+
   if (hasError && !fallbackSrc) {
     return (
       <div className={cn("flex items-center justify-center bg-muted text-muted-foreground", className)} style={{ width: width || 100, height: height || 100 }}>
@@ -67,7 +80,7 @@ export function OptimizedImage({
       {showSkeleton && isLoading && <Skeleton className={cn("absolute inset-0", className)} style={{ width: width || 100, height: height || 100 }} />}
 
       <Image
-        src={currentSrc}
+        src={currentSrc} // We've already validated currentSrc is not empty
         alt={alt}
         width={width}
         height={height}

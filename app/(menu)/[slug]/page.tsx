@@ -15,19 +15,17 @@ const Page: NextPage<Params> = async (props) => {
     notFound();
   }
 
-  const data = await publicMenuRepository.getMenuBySlug(slug);
+  const menu = await publicMenuRepository.getMenuBySlug(slug);
 
-  if (!data) {
+  if (!menu) {
     notFound();
   }
-
-  const { cafe, categories } = data;
 
   return (
     <div className="min-h-screen  bg-[#FAF9F2]">
       <div className="max-w-5xl mx-auto px-5 py-6">
-        <MenuHeader cafe={cafe} />
-        <MenuSections categories={categories} />
+        <MenuHeader cafe={menu.cafe} />
+        <MenuSections categories={menu.categories} />
       </div>
     </div>
   );
