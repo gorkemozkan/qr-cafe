@@ -25,6 +25,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
     }
 
+    console.log(cafe);
+
     const { data: categories, error: fetchError } = await supabase
       .from("categories")
       .select("*")
