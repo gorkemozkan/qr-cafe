@@ -11,13 +11,11 @@ export function useUser() {
   useEffect(() => {
     const supabase = createClient();
 
-    // Get initial user
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       setIsLoading(false);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

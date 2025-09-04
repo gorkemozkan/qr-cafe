@@ -31,46 +31,38 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    // Environment detection from environment variables
     const customEnvironment = (process.env.NEXT_PUBLIC_ENV || "development") as "development" | "staging" | "production";
 
-    // Supabase configuration for database connections
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING || process.env.NEXT_PUBLIC_SUPABASE_URL_PROD;
 
-    // Additional origins allowed for CORS (development defaults included)
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000", "https://localhost:3000", "http://localhost:3001", "https://localhost:3001"];
 
     const isProduction = customEnvironment === "production";
 
     const isDevelopment = customEnvironment === "development";
 
-    // DEVELOPMENT: Minimal headers to avoid conflicts with Next.js dev server
     if (isDevelopment) {
       return [
         {
-          // API routes: Prevent caching of API responses in development
           source: "/api/(.*)",
           headers: [{ key: "Cache-Control", value: "no-store, no-cache, must-revalidate" }],
         },
       ];
     }
 
-    // PRODUCTION/STAGING: Full security headers
     const csp = createCSP(customEnvironment, supabaseUrl, allowedOrigins);
 
     return [
       {
-        // All routes: Apply CSP and common security headers
         source: "/(.*)",
         headers: [{ key: "Content-Security-Policy", value: csp }, ...commonHeaders, ...(isProduction ? productionOnlyHeaders : [])],
       },
       {
-        // API routes: Additional security headers for API endpoints
         source: "/api/(.*)",
         headers: [
-          { key: "Cache-Control", value: "no-store, no-cache, must-revalidate" }, // Prevent API response caching
-          { key: "X-Content-Type-Options", value: "nosniff" }, // Prevent MIME sniffing
-          { key: "X-Frame-Options", value: "DENY" }, // Prevent embedding in frames
+          { key: "Cache-Control", value: "no-store, no-cache, must-revalidate" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
         ],
       },
     ];
