@@ -118,7 +118,7 @@ const ProductList: FC<Props> = (props) => {
     {
       key: "price",
       header: "Price",
-      cell: (value: any) => <span className="font-mono">{value ? `$${parseFloat(value).toFixed(2)}` : "-"}</span>,
+      cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
       key: "is_available",
@@ -128,7 +128,7 @@ const ProductList: FC<Props> = (props) => {
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="short" />,
+      cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
