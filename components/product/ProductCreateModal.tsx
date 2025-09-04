@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Tables } from "@/types/db";
 import { Plus } from "lucide-react";
 import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
@@ -39,11 +38,7 @@ const ProductCreateModal: FC<Props> = (props) => {
       props.onSuccess?.();
     },
     successMessage: "Product created successfully!",
-    invalidateQueries: [
-      QueryKeys.productsByCafe(props.cafeId.toString()), 
-      QueryKeys.productsByCategory(props.categoryId.toString()),
-      QueryKeys.stats
-    ],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.productsByCategory(props.categoryId.toString()), QueryKeys.stats],
   });
 
   const handleSubmit = async (data: ProductSchema) => {
@@ -75,7 +70,7 @@ const ProductCreateModal: FC<Props> = (props) => {
           <DialogTitle>Create New Product</DialogTitle>
           <DialogDescription>Fill in the details below to create a new product.</DialogDescription>
         </DialogHeader>
-        <ProductForm cafeSlug={cafeSlug} onSubmit={handleSubmit} onCancel={handleCancel} categoryId={props.categoryId} />
+        <ProductForm mode="create" cafeSlug={cafeSlug} onSubmit={handleSubmit} onCancel={handleCancel} categoryId={props.categoryId} />
       </DialogContent>
     </Dialog>
   );
