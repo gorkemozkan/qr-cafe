@@ -16,12 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
+    /*     {
       url: `${baseUrl}/admin/auth/signup`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
-    },
+    }, */
     {
       url: `${baseUrl}/admin/app/dashboard`,
       lastModified: new Date(),

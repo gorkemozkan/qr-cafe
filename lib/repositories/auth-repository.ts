@@ -8,9 +8,9 @@ export class AuthRepository extends BaseRepository {
     return await this.post("/login", payload);
   }
 
-  async signup(payload: SignupSchema): Promise<any> {
+  /*   async signup(payload: SignupSchema): Promise<any> {
     return await this.post("/signup", payload);
-  }
+  } */
 
   async logout(): Promise<any> {
     return await this.post("/logout");

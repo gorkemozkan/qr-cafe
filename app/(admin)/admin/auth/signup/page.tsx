@@ -1,25 +1,16 @@
-import SignupForm from "@/components/auth/SignupForm";
+import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "Signup",
-  description: "Signup to your account",
+  title: "Page Not Found",
+  description: "The requested page was not found",
   robots: {
     index: false,
     follow: false,
   },
-  openGraph: {
-    title: "Signup",
-    description: "Signup to your account",
-  },
-  twitter: {
-    title: "Signup",
-    description: "Signup to your account",
-  },
-  alternates: {
-    canonical: "/admin/auth/signup",
-  },
 };
 
-const Page = () => <SignupForm />;
+const Page = () => {
+  notFound();
+};
 
 export default Page;
