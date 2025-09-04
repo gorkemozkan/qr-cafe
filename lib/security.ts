@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { BUCKET_NAMES } from "@/config";
 
 export function verifyCsrfToken(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
@@ -51,10 +52,8 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
   return { isValid: true };
 }
 
-// Sanitize bucket name
 export function validateBucketName(bucketName: string): boolean {
-  const allowedBuckets = ["cafe-logos", "product-image", "category-image"];
-  return allowedBuckets.includes(bucketName);
+  return Object.values(BUCKET_NAMES).includes(bucketName);
 }
 
 /**
