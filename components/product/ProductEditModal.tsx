@@ -17,11 +17,11 @@ interface Props {
   onSuccess?: () => void;
   product: Tables<"products">;
   categoryId: number;
+  onClose: () => void;
 }
 
 const ProductEditModal: FC<Props> = (props) => {
   //#region States
-  const [open, setOpen] = useState(false);
 
   const { cafeSlug } = useCafeData(props.cafeId);
 
@@ -34,11 +34,11 @@ const ProductEditModal: FC<Props> = (props) => {
       return await productRepository.update(props.product.id, data);
     },
     onSuccess: () => {
-      setOpen(false);
+      props.onClose();
       props.onSuccess?.();
     },
     successMessage: "Product updated successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.stats],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.productsByCategory(props.categoryId.toString()), QueryKeys.stats],
   });
 
   const handleSubmit = async (data: ProductSchemaType) => {
@@ -46,19 +46,13 @@ const ProductEditModal: FC<Props> = (props) => {
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    props.onClose();
   };
 
   //#endregion
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Edit className="h-4 w-4 mr-2" />
-          Edit
-        </Button>
-      </DialogTrigger>
+    <Dialog open onOpenChange={props.onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>

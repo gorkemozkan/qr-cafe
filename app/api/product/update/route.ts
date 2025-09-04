@@ -40,7 +40,12 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (updateError) {
-      return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
+      console.error("Product update error:", updateError);
+      return NextResponse.json({ 
+        error: "Failed to update product", 
+        details: updateError.message,
+        code: updateError.code 
+      }, { status: 500 });
     }
 
     if (!product) {
@@ -48,7 +53,11 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json(product);
-  } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error) {
+    console.error("Product update catch error:", error);
+    return NextResponse.json({ 
+      error: "Internal server error", 
+      details: error instanceof Error ? error.message : "Unknown error" 
+    }, { status: 500 });
   }
 }
