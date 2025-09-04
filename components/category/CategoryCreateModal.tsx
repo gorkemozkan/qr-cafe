@@ -8,7 +8,7 @@ import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
-import CategoryForm from "@/components/cafe/CategoryForm";
+import CategoryForm from "@/components/category/CategoryForm";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Props {

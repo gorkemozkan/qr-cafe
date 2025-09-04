@@ -26,17 +26,19 @@ const ProductModal: FC<Props> = (props) => {
       <DialogTrigger asChild>{props.trigger}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{props.title}</DialogTitle>
+          <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">{props.title}</DialogTitle>
         </DialogHeader>
-        <ProductForm
-          cafeId={props.cafeId}
-          cafeSlug={props.cafeSlug}
-          categories={props.categories}
-          product={props.product}
-          onSubmit={props.onSubmit}
-          onCancel={props.onCancel}
-          isLoading={props.isLoading}
-        />
+        <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
+          <ProductForm
+            cafeId={props.cafeId}
+            cafeSlug={props.cafeSlug}
+            categories={props.categories}
+            product={props.product}
+            onSubmit={props.onSubmit}
+            onCancel={props.onCancel}
+            isLoading={props.isLoading}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );

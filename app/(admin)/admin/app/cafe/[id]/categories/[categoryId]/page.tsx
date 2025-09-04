@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import DateView from "@/components/ui/date-view";
 import ProductList from "@/components/product/ProductList";
 import ProductCreateModal from "@/components/product/ProductCreateModal";
-import CategoryEditModal from "@/components/cafe/CategoryEditModal";
+import CategoryEditModal from "@/components/category/CategoryEditModal";
 import QueryKeys from "@/constants/query-keys";
 
 const CategoryDetailPage: FC = () => {

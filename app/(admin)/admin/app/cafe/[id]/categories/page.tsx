@@ -1,6 +1,6 @@
 import { FC } from "react";
-import CategoryList from "@/components/cafe/CategoryList";
-import CategoryCreateModal from "@/components/cafe/CategoryCreateModal";
+import CategoryList from "@/components/category/CategoryList";
+import CategoryCreateModal from "@/components/category/CategoryCreateModal";
 
 interface Props {
   params: Promise<{ id: string }>;

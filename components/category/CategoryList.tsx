@@ -7,7 +7,7 @@ import { categoryRepository } from "@/lib/repositories";
 import QueryKeys from "@/constants/query-keys";
 import DataTable from "@/components/ui/data-table";
 import QuestionDialog from "@/components/ui/question-dialog";
-import CategoryEditModal from "@/components/cafe/CategoryEditModal";
+import CategoryEditModal from "@/components/category/CategoryEditModal";
 import TableActions from "@/components/ui/table-actions";
 import DateView from "@/components/ui/date-view";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";

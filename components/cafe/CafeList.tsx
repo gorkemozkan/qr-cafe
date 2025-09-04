@@ -1,9 +1,11 @@
 "use client";
 
 import { FC, useState } from "react";
+import { QrCode } from "lucide-react";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
 import QueryKeys from "@/constants/query-keys";
+import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import DateView from "@/components/ui/date-view";
 import { OptimizedImage } from "@/components/ui";
@@ -12,10 +14,10 @@ import { cafeRepository } from "@/lib/repositories";
 import TableActions from "@/components/ui/table-actions";
 import CafeEditModal from "@/components/cafe/CafeEditModal";
 import QuestionDialog from "@/components/ui/question-dialog";
-import QRPreviewDialog from "@/components/cafe/QRPreviewDialog";
+import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { QrCode } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui";
+import CafeCreateModal from "./CafeCreateModal";
 
 const CafeList: FC = () => {
   //#region Hooks
@@ -82,30 +84,31 @@ const CafeList: FC = () => {
       key: "logo",
       header: "Logo",
       cell: (_: any, row: Tables<"cafes">) => (
-        <div>
+        <>
           {row.logo_url ? (
             <OptimizedImage
               src={row.logo_url}
               alt={`${row.slug} logo`}
-              width={30}
-              height={30}
-              objectFit="contain"
-              className="rounded-md border border-border"
+              width={40}
+              height={40}
+              className="rounded-md border border-border w-10 h-10 "
+              objectFit="cover"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={true}
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-              <span className="text-xs text-muted-foreground">No logo</span>
+            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
+              <span className="text-[8px] text-center text-muted-foreground">No Logo</span>
             </div>
           )}
-        </div>
+        </>
       ),
     },
     {
       key: "slug",
       header: "Slug",
-      cell: (value: any) => <span className="font-mono text-sm block truncate w-max">{value}</span>,
+      tooltipText: "Slug of the cafe, used for URL",
+      cell: (value: any) => <span className="font-mono text-sm block truncate ">{value}</span>,
     },
     {
       key: "currency",
@@ -115,46 +118,53 @@ const CafeList: FC = () => {
     {
       key: "is_active",
       header: "Status",
-      cell: (value: any) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{value ? "Active" : "Inactive"}</span>
-      ),
+      tooltipText: "Status of the cafe, used for visibility",
+      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
     },
     {
       key: "created_at",
       header: "Created",
+      tooltipText: "Date and time when the cafe was created",
       cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
       header: "Actions",
+      className: "flex justify-end",
       cell: (_: any, row: Tables<"cafes">) => (
-        <TableActions
-          additionalActions={
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
-                  <QrCode className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>View QR Code for {row.slug}</p>
-              </TooltipContent>
-            </Tooltip>
-          }
-          onEdit={() => setCafeToEdit(row)}
-          onDelete={() => handleDeleteClick(row)}
-          onInspect={() => handleCategoriesClick(row)}
-        />
+        <div className="flex justify-end">
+          <TableActions
+            onEdit={() => setCafeToEdit(row)}
+            onDelete={() => handleDeleteClick(row)}
+            onInspect={() => handleCategoriesClick(row)}
+            additionalActions={
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
+                    <QrCode className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>View QR Code for {row.slug}</p>
+                </TooltipContent>
+              </Tooltip>
+            }
+          />
+        </div>
       ),
     },
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Cafes</h2>
-      </div>
-      <DataTable columns={columns} queryKey={QueryKeys.cafes} queryFn={async () => await cafeRepository.list()} emptyMessage="No cafes found" />
+    <div>
+      <DataTable
+        title="Cafes"
+        actions={<CafeCreateModal />}
+        columns={columns}
+        queryKey={QueryKeys.cafes}
+        queryFn={async () => await cafeRepository.list()}
+        emptyMessage="No cafes found"
+      />
       {cafeToEdit && <CafeEditModal onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
       <QuestionDialog
         open={deleteDialogOpen}
