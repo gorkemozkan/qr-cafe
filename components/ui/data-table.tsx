@@ -94,13 +94,7 @@ function DataTable<T extends { id?: number | string }>({
 
   const visibleColumns = isMobile ? columns.filter((col) => !col.hideOnMobile) : columns;
 
-  if (!isLoading && !isRefetching && (!data || data.length === 0)) {
-    return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">{emptyMessage}</div>
-      </div>
-    );
-  }
+  const isEmpty = !isLoading && !isRefetching && (!data || data.length === 0);
 
   return (
     <div className="space-y-4">
@@ -112,7 +106,11 @@ function DataTable<T extends { id?: number | string }>({
         </div>
       </div>
 
-      {isLoading || isRefetching ? (
+      {isEmpty ? (
+        <div className="flex items-center justify-center h-32">
+          <div className="text-muted-foreground">{emptyMessage}</div>
+        </div>
+      ) : isLoading || isRefetching ? (
         <div className="flex items-center justify-center h-32">
           <div className="flex items-center space-x-2">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
