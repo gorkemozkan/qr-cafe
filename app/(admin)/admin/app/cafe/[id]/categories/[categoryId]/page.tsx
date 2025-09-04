@@ -47,7 +47,7 @@ const CategoryDetailPage: FC = () => {
     },
   });
 
-  if (isNaN(cafeId) || isNaN(categoryId)) {
+  if (Number.isNaN(cafeId) || Number.isNaN(categoryId)) {
     return (
       <div className="container mx-auto py-6">
         <div className="flex items-center space-x-2 text-destructive">

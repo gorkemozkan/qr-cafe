@@ -91,7 +91,7 @@ const ProductForm: FC<ProductFormProps> = ({ cafeId, cafeSlug, categories, produ
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}
                   </SelectItem>
