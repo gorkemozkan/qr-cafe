@@ -51,7 +51,18 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    const { data, error } = await supabase.from("cafes").update(validationResult.data).eq("id", id).select().single();
+    const { data, error } = await supabase
+      .from("cafes")
+      .update({
+        ...validationResult.data,
+        description: validationResult.data.description || null,
+        logo_url: validationResult.data.logo_url || null,
+        currency: validationResult.data.currency,
+        is_active: validationResult.data.is_active,
+      })
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error) {
       return NextResponse.json({ error: "Failed to update cafe" }, { status: 500 });

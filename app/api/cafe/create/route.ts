@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
     const validationResult = cafeSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -32,9 +33,15 @@ export async function POST(request: NextRequest) {
     const cafeData: TablesInsert<"cafes"> = {
       ...validationResult.data,
       user_id: user.id,
+      description: validationResult.data.description || null,
+      logo_url: validationResult.data.logo_url || null,
+      currency: validationResult.data.currency,
+      is_active: validationResult.data.is_active,
+      slug: validationResult.data.slug,
+      created_at: new Date().toISOString(),
     };
 
-    const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", cafeData.slug).single();
+    const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", validationResult.data.slug).single();
 
     if (existingCafe) {
       return NextResponse.json({ error: "A cafe with this slug already exists" }, { status: 409 });

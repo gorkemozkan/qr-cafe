@@ -1,11 +1,13 @@
 import { signupSchema } from "@/lib/schema";
 import { createClient } from "@/lib/supabase/server";
-import { authRateLimit, verifyCsrfToken } from "@/lib/security";
+import { verifyCsrfToken } from "@/lib/security";
+import { authRateLimiter } from "@/lib/rate-limiter";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    if (!authRateLimit(request)) {
+    if (!authRateLimiter.check(request)) {
       return NextResponse.json({ error: "Too many signup attempts. Please try again later.", success: false }, { status: 429 });
     }
 

@@ -13,14 +13,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  // metadataBase: new URL("https://qrcafe.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
     description: "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.",
-    // url: "https://qrcafe.com",
     siteName: "QR Cafe",
     locale: "en_US",
     type: "website",
