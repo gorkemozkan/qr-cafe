@@ -6,6 +6,7 @@ import { CafeSchema } from "@/lib/schema";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
 import CafeForm from "@/components/cafe/CafeForm";
+import QueryKeys from "@/constants/query-keys";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface CafeEditModalProps {
@@ -23,7 +24,7 @@ const CafeEditModal: FC<CafeEditModalProps> = (props) => {
       props.onSuccess?.(cafe);
     },
     successMessage: "Cafe updated successfully!",
-    invalidateQueries: ["cafes"],
+    invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
   });
 
   return (

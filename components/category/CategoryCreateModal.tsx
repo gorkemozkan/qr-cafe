@@ -32,7 +32,7 @@ const CategoryCreateModal: FC<Props> = (props) => {
       setOpen(false);
     },
     successMessage: "Category created successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
   //#endregion

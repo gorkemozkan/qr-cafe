@@ -37,7 +37,7 @@ const ProductEditModal: FC<Props> = (props) => {
       props.onSuccess?.();
     },
     successMessage: "Product updated successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString())],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
   const handleSubmit = async (data: ProductSchemaType) => {
