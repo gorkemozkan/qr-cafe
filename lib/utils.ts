@@ -14,3 +14,6 @@ export function parseNumericId(id: string, resourceName = "ID"): number {
 
   return numericId;
 }
+
+export const isDevelopment = process.env.NODE_ENV === "development";
+export const isProduction = process.env.NODE_ENV === "production";

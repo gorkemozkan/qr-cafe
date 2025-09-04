@@ -1,9 +1,17 @@
 import { z } from "zod";
+import { isDevelopment } from "@/lib/utils";
+
+const createCaptchaTokenSchema = () => {
+  if (isDevelopment) {
+    return z.string();
+  }
+  return z.string().min(1, "CAPTCHA verification is required");
+};
 
 export const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
-  captchaToken: z.string().min(1, "CAPTCHA verification is required"),
+  captchaToken: createCaptchaTokenSchema(),
 });
 
 export const signupSchema = z
@@ -17,7 +25,7 @@ export const signupSchema = z
         "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       ),
     confirmPassword: z.string(),
-    captchaToken: z.string().min(1, "CAPTCHA verification is required"),
+    captchaToken: createCaptchaTokenSchema(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
