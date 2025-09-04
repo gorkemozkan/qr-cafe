@@ -17,17 +17,41 @@ import { OptimizedImage } from "@/components/ui/optimized-image";
 import { BUCKET_NAMES } from "@/config";
 
 interface Props {
+  mode: "create" | "edit";
   cafeSlug: string;
   product?: Tables<"products">;
   categoryId: number;
   onSubmit: (data: ProductSchemaType) => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
+  isLoading?: boolean;
 }
 
 const ProductForm: FC<Props> = (props) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+  const getDefaultValues = (): ProductSchemaType => {
+    if (props.mode === "edit" && props.product) {
+      return {
+        name: props.product.name,
+        description: props.product.description || "",
+        price: props.product.price || undefined,
+        image_url: props.product.image_url || "",
+        is_available: props.product.is_available,
+        category_id: props.categoryId,
+      };
+    }
+
+    return {
+      name: "",
+      description: "",
+      price: undefined,
+      image_url: "",
+      is_available: true,
+      category_id: props.categoryId,
+    };
+  };
 
   const {
     register,
@@ -37,14 +61,7 @@ const ProductForm: FC<Props> = (props) => {
     watch,
   } = useForm<ProductSchemaType>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      name: props.product?.name || "",
-      description: props.product?.description || "",
-      price: props.product?.price || undefined,
-      image_url: props.product?.image_url || "",
-      is_available: props.product?.is_available ?? true,
-      category_id: props.categoryId,
-    },
+    defaultValues: getDefaultValues(),
   });
 
   const isAvailable = watch("is_available");
@@ -58,7 +75,7 @@ const ProductForm: FC<Props> = (props) => {
     setUploadError(error);
   };
 
-  const handleFormSubmit = async (data: ProductSchemaType) => {
+  const onSubmitForm = async (data: ProductSchemaType) => {
     try {
       let imageUrl = data.image_url;
 
@@ -90,24 +107,26 @@ const ProductForm: FC<Props> = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-100">
+    <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
+      <div className="space-y-2">
         <Label htmlFor="name">Product Name *</Label>
         <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
       </div>
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-200">
+
+      <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" {...register("description")} placeholder="Describe your product..." rows={3} />
+        <Textarea id="description" {...register("description")} placeholder="Describe your product..." rows={3} className={errors.description ? "border-red-500" : ""} />
         {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
       </div>
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-250">
+
+      <div className="space-y-2">
         <Label htmlFor="price">Price</Label>
         <Input id="price" type="number" step="0.01" min="0" {...register("price", { valueAsNumber: true })} placeholder="0.00" className={errors.price ? "border-red-500" : ""} />
         {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
       </div>
 
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-300">
+      <div className="space-y-2">
         <FilePicker
           id="image"
           label="Product Image"
@@ -119,7 +138,7 @@ const ProductForm: FC<Props> = (props) => {
           disabled={isUploading}
         />
         {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
-        {props.product?.image_url && !imageFile && (
+        {props.mode === "edit" && props.product?.image_url && !imageFile && (
           <div className="flex items-center space-x-2">
             <OptimizedImage
               src={props.product.image_url}
@@ -135,28 +154,34 @@ const ProductForm: FC<Props> = (props) => {
         )}
       </div>
 
-      {/* Available Status Field */}
-      <div className="flex items-center space-x-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-350">
+      <div className="flex items-center space-x-2">
         <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-        <Label htmlFor="is_available">{isAvailable ? "Available" : "Unavailable"}</Label>
+        <Label htmlFor="is_available">Available</Label>
         <p className="text-xs text-muted-foreground ml-2">{isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}</p>
       </div>
 
-      {/* Form Actions */}
-      <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-400">
-        <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting || isUploading} className="transition-all duration-200 hover:scale-105">
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px] transition-all duration-200 hover:scale-105">
-          {isSubmitting || isUploading ? (
+      <div className="flex justify-end space-x-2 pt-4">
+        {props.onCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={props.onCancel}
+            disabled={isSubmitting || isUploading || props.isLoading}
+            className="transition-all duration-200 hover:scale-105"
+          >
+            Cancel
+          </Button>
+        )}
+        <Button type="submit" disabled={isSubmitting || isUploading || props.isLoading} className="min-w-[100px] transition-all duration-200 hover:scale-105">
+          {isSubmitting || isUploading || props.isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {props.product ? "Updating..." : "Creating..."}
+              {props.mode === "create" ? "Creating..." : "Updating..."}
             </>
-          ) : props.product ? (
-            "Update"
-          ) : (
+          ) : props.mode === "create" ? (
             "Create"
+          ) : (
+            "Update"
           )}
         </Button>
       </div>

@@ -37,7 +37,7 @@ const CafeForm: FC<Props> = (props) => {
         slug: props.cafe.slug,
         description: props.cafe.description || "",
         logo_url: props.cafe.logo_url || "",
-        currency: props.cafe.currency || "TRY",
+        currency: props.cafe.currency as "TRY" | "USD" | "EUR",
         is_active: props.cafe.is_active,
       };
     }
@@ -63,6 +63,7 @@ const CafeForm: FC<Props> = (props) => {
   });
 
   const isActive = watch("is_active");
+
   const selectedCurrency = watch("currency");
 
   const onSubmitForm = async (data: CafeSchema) => {

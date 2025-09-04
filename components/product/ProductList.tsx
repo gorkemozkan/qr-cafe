@@ -70,21 +70,30 @@ const ProductList: FC<Props> = (props) => {
       key: "image",
       header: "Image",
       cell: (_: any, row: Tables<"products">) => (
-        <div className="w-16 h-16">
+        <>
           {row.image_url ? (
-            <OptimizedImage src={row.image_url} alt={row.name} className="w-full h-full object-cover rounded-md" />
+            <OptimizedImage
+              src={row.image_url}
+              alt={`${row.name} image`}
+              width={40}
+              height={40}
+              className="rounded-md border border-border w-10 h-10 "
+              objectFit="cover"
+              fallbackSrc="/placeholder-logo.svg"
+              showSkeleton={true}
+            />
           ) : (
             <div className="w-full h-16 bg-muted rounded-md flex items-center justify-center">
               <span className="text-xs text-muted-foreground">No image</span>
             </div>
           )}
-        </div>
+        </>
       ),
     },
     {
       key: "name",
       header: "Name",
-      cell: (value: any) => <span className="font-medium">{value}</span>,
+      cell: (value: any) => <span className="font-mono text-sm block truncate ">{value}</span>,
     },
     {
       key: "description",
@@ -109,7 +118,7 @@ const ProductList: FC<Props> = (props) => {
     {
       key: "price",
       header: "Price",
-      cell: (value: any) => <span className="font-mono">{value ? `$${parseFloat(value).toFixed(2)}` : "-"}</span>,
+      cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
       key: "is_available",
@@ -119,11 +128,12 @@ const ProductList: FC<Props> = (props) => {
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="short" />,
+      cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
       header: "Actions",
+      className: "flex justify-end",
       cell: (_: any, row: Tables<"products">) => <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
     },
   ];
@@ -143,8 +153,14 @@ const ProductList: FC<Props> = (props) => {
   return (
     <div className="space-y-4">
       <DataTable title="Products" columns={columns} queryKey={queryKey} queryFn={queryFn} emptyMessage="No products found" />
-      {productToEdit && props.categoryId && (
-        <ProductEditModal categoryId={props.categoryId} product={productToEdit} cafeId={props.cafeId} onSuccess={() => setProductToEdit(null)} />
+      {productToEdit && (
+        <ProductEditModal
+          categoryId={productToEdit.category_id}
+          product={productToEdit}
+          cafeId={props.cafeId}
+          onSuccess={() => setProductToEdit(null)}
+          onClose={() => setProductToEdit(null)}
+        />
       )}
       <QuestionDialog
         open={deleteDialogOpen}
