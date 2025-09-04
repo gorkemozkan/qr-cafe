@@ -28,12 +28,22 @@ export async function PUT(request: NextRequest) {
 
     const validatedData = validationResult.data;
 
+    // First, verify the product exists and belongs to the user
+    const { data: existingProduct, error: fetchError } = await supabase
+      .from("products")
+      .select("id, cafe_id")
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .single();
+
+    if (fetchError || !existingProduct) {
+      return NextResponse.json({ error: "Product not found or access denied" }, { status: 404 });
+    }
+
+    // Now update the product
     const { data: product, error: updateError } = await supabase
       .from("products")
-      .update({
-        ...validatedData,
-        user_id: user.id,
-      })
+      .update(validatedData)
       .eq("id", id)
       .eq("user_id", user.id)
       .select()
@@ -46,10 +56,6 @@ export async function PUT(request: NextRequest) {
         details: updateError.message,
         code: updateError.code 
       }, { status: 500 });
-    }
-
-    if (!product) {
-      return NextResponse.json({ error: "Product not found or access denied" }, { status: 404 });
     }
 
     return NextResponse.json(product);
