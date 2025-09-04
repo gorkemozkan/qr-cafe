@@ -19,7 +19,28 @@ export function verifyCsrfToken(request: NextRequest): boolean {
   return allowedOrigins.includes(origin);
 }
 
-export function validateFileType(file: File): { isValid: boolean; error?: string } {
+export function sanitizeFilename(filename: string): string {
+  const lastDotIndex = filename.lastIndexOf(".");
+  let name = filename;
+  let extension = "";
+
+  if (lastDotIndex > 0) {
+    name = filename.substring(0, lastDotIndex);
+    extension = filename.substring(lastDotIndex);
+  }
+
+  const sanitizedName = name
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9._-]/g, "")
+    .replace(/_{2,}/g, "_")
+    .replace(/^[._-]+|[._-]+$/g, "");
+
+  const finalName = sanitizedName || "file";
+
+  return finalName + extension.toLowerCase();
+}
+
+export function validateFileType(file: File): { isValid: boolean; error?: string; sanitizedName?: string } {
   const allowedTypes = ["png", "jpeg", "jpg", "gif", "webp"];
 
   const maxSize = 5 * 1024 * 1024; // 5MB
@@ -47,11 +68,10 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
     return { isValid: false, error: "File too large. Maximum size is 5MB" };
   }
 
-  if (!/^[a-zA-Z0-9._-]+$/.test(file.name)) {
-    return { isValid: false, error: "Invalid file name. Use only letters, numbers, dots, dashes, and underscores" };
-  }
+  // Sanitize the filename
+  const sanitizedName = sanitizeFilename(file.name);
 
-  return { isValid: true };
+  return { isValid: true, sanitizedName };
 }
 
 export function validateBucketName(bucketName: string): boolean {
