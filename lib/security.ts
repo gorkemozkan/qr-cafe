@@ -1,45 +1,6 @@
 import { NextRequest } from "next/server";
+import { BUCKET_NAMES } from "../config";
 
-// Simple in-memory rate limiter for development
-// For production, consider Redis-based rate limiting
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-interface RateLimitConfig {
-  maxRequests: number;
-  windowMs: number;
-}
-
-export function rateLimit(config: RateLimitConfig) {
-  return function checkRateLimit(request: NextRequest): boolean {
-    const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
-    const now = Date.now();
-
-    // Clean expired entries
-    for (const [key, value] of rateLimitMap.entries()) {
-      if (value.resetTime < now) {
-        rateLimitMap.delete(key);
-      }
-    }
-
-    const current = rateLimitMap.get(ip) || { count: 0, resetTime: now + config.windowMs };
-
-    if (current.resetTime < now) {
-      current.count = 1;
-      current.resetTime = now + config.windowMs;
-    } else {
-      current.count++;
-    }
-
-    rateLimitMap.set(ip, current);
-    return current.count <= config.maxRequests;
-  };
-}
-
-// Rate limiters for different endpoints
-export const authRateLimit = rateLimit({ maxRequests: 5, windowMs: 15 * 60 * 1000 }); // 5 attempts per 15 minutes
-export const uploadRateLimit = rateLimit({ maxRequests: 10, windowMs: 60 * 1000 }); // 10 uploads per minute
-
-// CSRF protection
 export function verifyCsrfToken(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
   const host = request.headers.get("host");
@@ -48,12 +9,17 @@ export function verifyCsrfToken(request: NextRequest): boolean {
     return false;
   }
 
-  const allowedOrigins = [`https://${host}`, `http://${host}`, ...(process.env.ALLOWED_ORIGINS?.split(",") || [])];
+  // Allow both HTTP and HTTPS for development
+  const allowedOrigins = [`https://${host}`, `http://${host}`];
+
+  // Also allow localhost with different ports for development
+  if (host.includes("localhost") || host.includes("127.0.0.1")) {
+    allowedOrigins.push(`http://localhost:3000`, `https://localhost:3000`);
+  }
 
   return allowedOrigins.includes(origin);
 }
 
-// File validation helpers
 export function validateFileType(file: File): { isValid: boolean; error?: string } {
   const allowedTypes = ["png", "jpeg", "jpg", "gif", "webp"];
   const maxSize = 5 * 1024 * 1024; // 5MB
@@ -91,8 +57,85 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
   return { isValid: true };
 }
 
-// Sanitize bucket name
 export function validateBucketName(bucketName: string): boolean {
-  const allowedBuckets = ["cafe-images", "product-images", "category-images"];
-  return allowedBuckets.includes(bucketName);
+  return Object.values(BUCKET_NAMES).includes(bucketName);
 }
+
+export const commonHeaders = [
+  // Prevent MIME-type sniffing attacks
+  { key: "X-Content-Type-Options", value: "nosniff" },
+
+  // Prevent page from being embedded in frames (clickjacking protection)
+  { key: "X-Frame-Options", value: "DENY" },
+
+  // Legacy XSS protection (modern browsers rely on CSP)
+  { key: "X-XSS-Protection", value: "1; mode=block" },
+
+  // Control referrer information sent in requests
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+
+  // Disable browser features that could be privacy/security risks
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+];
+
+export const productionOnlyHeaders = [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" }];
+
+export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
+  const supabaseHosts = supabaseUrl ? `https://${new URL(supabaseUrl).hostname} wss://${new URL(supabaseUrl).hostname}` : "https://*.supabase.co wss://*.supabase.co";
+
+  const vercelLive = environment === "staging" || environment === "production" ? "https://vercel.live" : "";
+
+  const scriptSrc =
+    environment === "development"
+      ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
+      : `'self' 'unsafe-inline' https://challenges.cloudflare.com ${vercelLive}`.trim();
+
+  const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
+
+  const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
+
+  const connectSrc = `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
+
+  const directives = [
+    // DEFAULT-SRC: Fallback for all other directives - only allow same origin
+    "default-src 'self'",
+
+    // SCRIPT-SRC: Controls JavaScript execution sources
+    // 'self' = same origin, 'unsafe-eval' = allow eval(), 'unsafe-inline' = allow inline scripts
+    `script-src ${scriptSrc}`,
+
+    // STYLE-SRC: Controls CSS stylesheets sources
+    // 'unsafe-inline' needed for styled-components and CSS-in-JS libraries
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+
+    // IMG-SRC: Controls image sources
+    // data: = base64 images, https: = any HTTPS image, blob: = dynamically created images
+    "img-src 'self' data: https: blob:",
+
+    // FONT-SRC: Controls web font sources
+    "font-src 'self' https://fonts.gstatic.com",
+
+    // CONNECT-SRC: Controls fetch, XMLHttpRequest, WebSocket connections
+    `connect-src ${connectSrc}`,
+
+    // FRAME-SRC: Controls embedded frames/iframes (for Cloudflare Turnstile and Vercel Live)
+    `frame-src 'self' https://challenges.cloudflare.com${vercelLive ? ` ${vercelLive}` : ""}`,
+
+    // OBJECT-SRC: Controls <object>, <embed>, <applet> elements - blocked for security
+    "object-src 'none'",
+
+    // BASE-URI: Controls <base> element URLs - prevent base tag injection
+    "base-uri 'self'",
+
+    // FORM-ACTION: Controls form submission targets
+    "form-action 'self'",
+
+    // FRAME-ANCESTORS: Controls pages that can embed this site in frames - prevent clickjacking
+    "frame-ancestors 'none'",
+
+    // UPGRADE-INSECURE-REQUESTS: Force HTTPS in production
+    ...(environment === "production" ? ["upgrade-insecure-requests"] : []),
+  ];
+
+  return directives.join("; ");
+};

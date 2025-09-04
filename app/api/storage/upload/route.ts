@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { uploadRateLimit, validateFileType, validateBucketName, verifyCsrfToken } from "@/lib/security";
+import { validateFileType, validateBucketName, verifyCsrfToken } from "@/lib/security";
+import { uploadRateLimiter } from "@/lib/rate-limiter";
 
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting
-    if (!uploadRateLimit(request)) {
+    if (!uploadRateLimiter.check(request).allowed) {
       return NextResponse.json({ error: "Too many upload attempts. Please try again later." }, { status: 429 });
     }
-    
+
     // CSRF protection
     if (!verifyCsrfToken(request)) {
       return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
@@ -29,6 +30,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file") as File;
     const cafeSlug = formData.get("cafeSlug") as string;
     const bucketName = formData.get("bucketName") as string;
+    const skipOwnershipCheck = formData.get("skipOwnershipCheck") === "true";
 
     if (!file || !cafeSlug || !bucketName) {
       return NextResponse.json({ error: "File, cafe slug, and bucket name are required" }, { status: 400 });
@@ -45,16 +47,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: fileValidation.error }, { status: 400 });
     }
 
-    // Verify user owns the cafe slug
-    const { data: cafe, error: cafeError } = await supabase
-      .from("cafes")
-      .select("id")
-      .eq("slug", cafeSlug)
-      .eq("user_id", user.id)
-      .single();
+    // Only check ownership if not explicitly skipped (for new cafe creation)
+    if (!skipOwnershipCheck) {
+      const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
 
-    if (cafeError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+      if (cafeError || !cafe) {
+        return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+      }
     }
 
     const fileExt = file.name.split(".").pop()?.toLowerCase();
@@ -66,7 +65,7 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       return NextResponse.json(
         {
-          error: "Upload failed",
+          error: `Upload failed: ${uploadError.message}`,
         },
         { status: 500 },
       );
@@ -78,10 +77,10 @@ export async function POST(request: NextRequest) {
       url: urlData.publicUrl,
       path: filePath,
     });
-  } catch (_error) {
+  } catch (error) {
     return NextResponse.json(
       {
-        error: "Upload failed",
+        error: `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       },
       { status: 500 },
     );

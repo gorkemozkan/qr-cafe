@@ -5,12 +5,13 @@ import { Plus } from "lucide-react";
 import { Tables } from "@/types/db";
 import { CafeSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
-import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
 import CafeForm from "@/components/cafe/CafeForm";
 import QueryKeys from "@/constants/query-keys";
 import QRPreviewDialog from "@/components/cafe/QRPreviewDialog";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface CafeCreateModalProps {
   onSuccess?: (cafe: Tables<"cafes">) => void;
@@ -19,26 +20,14 @@ interface CafeCreateModalProps {
 const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
   //#region States
   const [open, setOpen] = useState(false);
-
   const [showQRDialog, setShowQRDialog] = useState(false);
-
   const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   //#endregion
 
-  //#region Request
-
-  const { isLoading, execute } = useRequest({
-    mutationFn: (payload: CafeSchema) => cafeRepository.create(payload),
-    onSuccess: (data) => {
-      props.onSuccess?.(data);
-      setCreatedCafe(data);
-      setShowQRDialog(true);
-      setOpen(false);
-    },
-    successMessage: "Cafe created successfully!",
-    invalidateQueries: QueryKeys.cafes,
-  });
+  //#region Hooks
+  const queryClient = useQueryClient();
   //#endregion
 
   return (
@@ -58,8 +47,63 @@ const CafeCreateModal: FC<CafeCreateModalProps> = (props) => {
           <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
             <CafeForm
               mode="create"
-              onSubmit={async (data) => {
-                await execute(data);
+              onSubmit={async (data, logoFile) => {
+                setIsLoading(true);
+
+                try {
+                  // First create the cafe
+                  const createdCafe = await cafeRepository.create(data);
+
+                  let finalCafe = createdCafe;
+
+                  // Then upload the logo if provided
+                  if (logoFile && createdCafe) {
+                    try {
+                      console.log("🖼️ Uploading logo for cafe:", createdCafe.slug);
+                      const { uploadCafeLogo } = await import("@/lib/supabase/storage");
+                      const uploadResult = await uploadCafeLogo(logoFile, createdCafe.slug, true);
+
+                      if (uploadResult.success) {
+                        console.log("✅ Logo uploaded successfully:", uploadResult.data.url);
+                        // Update the cafe with the logo URL
+                        finalCafe = await cafeRepository.update(createdCafe.id, {
+                          ...data,
+                          logo_url: uploadResult.data.url,
+                        });
+                        console.log("✅ Cafe updated with logo URL:", finalCafe.logo_url);
+                      } else {
+                        console.error("❌ Logo upload failed:", uploadResult.error);
+                      }
+                    } catch (error) {
+                      console.error("💥 Logo upload error:", error);
+                      // Don't fail the entire operation if logo upload fails
+                    }
+                  }
+
+                  // Invalidate queries to refresh the cafe list with updated data
+                  console.log("🔄 Invalidating cafe queries to refresh list...");
+                  await queryClient.invalidateQueries({ queryKey: QueryKeys.cafes });
+
+                  // Small delay to ensure cache invalidation propagates
+                  await new Promise((resolve) => setTimeout(resolve, 100));
+                  console.log("✅ Cache invalidation completed");
+
+                  // Show success message
+                  toast.success("Cafe created successfully!");
+
+                  // Update local state and show success
+                  setCreatedCafe(finalCafe);
+                  setShowQRDialog(true);
+                  setOpen(false);
+
+                  // Call success callback with final cafe data (including logo if uploaded)
+                  props.onSuccess?.(finalCafe);
+                } catch (error) {
+                  console.error("Failed to create cafe:", error);
+                  throw error; // Re-throw so CafeForm can handle the error display
+                } finally {
+                  setIsLoading(false);
+                }
               }}
               onCancel={() => setOpen(false)}
               isLoading={isLoading}

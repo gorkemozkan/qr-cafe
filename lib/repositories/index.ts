@@ -5,3 +5,4 @@ export { CategoryRepository, categoryRepository } from "@/lib/repositories/categ
 export { ProductRepository, productRepository } from "@/lib/repositories/product-repository";
 export { StorageRepository, storageRepository } from "@/lib/repositories/storage-repository";
 export type { UploadResult, StorageError } from "@/lib/repositories/storage-repository";
+export type { DashboardStats } from "@/lib/repositories/stats-repository";

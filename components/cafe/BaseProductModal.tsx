@@ -3,8 +3,8 @@
 import { FC, ReactNode } from "react";
 import { Tables } from "@/types/db";
 import { ProductSchema } from "@/lib/schema";
+import ProductForm from "@/components/cafe/ProductForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ProductForm from "./ProductForm";
 
 interface BaseProductModalProps {
   open: boolean;
@@ -20,36 +20,22 @@ interface BaseProductModalProps {
   isLoading: boolean;
 }
 
-const BaseProductModal: FC<BaseProductModalProps> = ({
-  open,
-  onOpenChange,
-  trigger,
-  title,
-  cafeId,
-  cafeSlug,
-  categories,
-  product,
-  onSubmit,
-  onCancel,
-  isLoading,
-}) => {
+const BaseProductModal: FC<BaseProductModalProps> = (props) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        {trigger}
-      </DialogTrigger>
+    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
+      <DialogTrigger asChild>{props.trigger}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>{props.title}</DialogTitle>
         </DialogHeader>
         <ProductForm
-          cafeId={cafeId}
-          cafeSlug={cafeSlug}
-          categories={categories}
-          product={product}
-          onSubmit={onSubmit}
-          onCancel={onCancel}
-          isLoading={isLoading}
+          cafeId={props.cafeId}
+          cafeSlug={props.cafeSlug}
+          categories={props.categories}
+          product={props.product}
+          onSubmit={props.onSubmit}
+          onCancel={props.onCancel}
+          isLoading={props.isLoading}
         />
       </DialogContent>
     </Dialog>

@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { isDevelopment } from "@/lib/utils";
 
 interface TurnstileVerificationResponse {
   success: boolean;
@@ -10,6 +11,10 @@ interface TurnstileVerificationResponse {
 }
 
 export async function verifyTurnstileToken(token: string, maxRetries = 3): Promise<boolean> {
+  if (isDevelopment) {
+    return true;
+  }
+
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secretKey) {

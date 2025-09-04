@@ -1,15 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { parseNumericId } from "@/lib/utils";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+interface Params {
+  id: string;
+}
+
+export async function GET(_request: Request, { params }: { params: Promise<Params> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
-    const cafeId = parseInt(id, 10);
 
-    if (Number.isNaN(cafeId)) {
-      return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
-    }
+    const cafeId = parseNumericId(id, "cafe ID");
+
+    const supabase = await createClient();
 
     const {
       data: { user },
@@ -32,15 +35,13 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: Request, { params }: { params: Promise<Params> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
-    const cafeId = parseInt(id, 10);
 
-    if (Number.isNaN(cafeId)) {
-      return NextResponse.json({ error: "Invalid cafe ID" }, { status: 400 });
-    }
+    const cafeId = parseNumericId(id, "cafe ID");
+
+    const supabase = await createClient();
 
     const {
       data: { user },

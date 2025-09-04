@@ -11,12 +11,20 @@ export interface StorageError {
 export class StorageRepository {
   private baseUrl = "/api/storage";
 
-  async uploadFile(file: File, cafeSlug: string, bucketName: string): Promise<{ success: true; data: UploadResult } | { success: false; error: StorageError }> {
+  async uploadFile(
+    file: File,
+    cafeSlug: string,
+    bucketName: string,
+    skipOwnershipCheck = false,
+  ): Promise<{ success: true; data: UploadResult } | { success: false; error: StorageError }> {
     try {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("cafeSlug", cafeSlug);
       formData.append("bucketName", bucketName);
+      if (skipOwnershipCheck) {
+        formData.append("skipOwnershipCheck", "true");
+      }
 
       const response = await fetch(`${this.baseUrl}/upload`, {
         method: "POST",
@@ -51,7 +59,7 @@ export class StorageRepository {
     }
   }
 
-  async deleteFile(filePath: string, bucketName: string): Promise<{ success: true; data: void } | { success: false; error: StorageError }> {
+  async deleteFile(filePath: string, bucketName: string): Promise<{ success: true; data: undefined } | { success: false; error: StorageError }> {
     try {
       const response = await fetch(`${this.baseUrl}/delete`, {
         method: "DELETE",

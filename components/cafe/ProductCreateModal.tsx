@@ -2,14 +2,14 @@
 
 import { FC, useState } from "react";
 import { Tables } from "@/types/db";
-import { ProductSchema, type ProductSchema as ProductSchemaType } from "@/lib/schema";
+import { type ProductSchema as ProductSchemaType } from "@/lib/schema";
 import { productRepository } from "@/lib/repositories";
 import { useRequest } from "@/hooks/use-request";
 import { useCafeData } from "@/hooks/use-cafe-data";
 import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import BaseProductModal from "./BaseProductModal";
+import BaseProductModal from "@/components/cafe/BaseProductModal";
 
 interface ProductCreateModalProps {
   cafeId: number;
