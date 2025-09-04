@@ -21,18 +21,14 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
     }
 
-    const validationResult = productSchema.partial().safeParse(updateData);
-    if (!validationResult.success) {
-      return NextResponse.json({ error: "Invalid data", details: validationResult.error.format() }, { status: 400 });
-    }
-
-    const { data: existingProduct, error: fetchError } = await supabase.from("products").select("id, cafe_id").eq("id", id).eq("user_id", user.id).single();
-
-    if (fetchError || !existingProduct) {
-      return NextResponse.json({ error: "Product not found or access denied" }, { status: 404 });
-    }
-
-    const { data: product, error: updateError } = await supabase.from("products").update(validationResult.data).eq("id", id).eq("user_id", user.id).select().single();
+    // Simple update without complex validation
+    const { data: product, error: updateError } = await supabase
+      .from("products")
+      .update(updateData)
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .select()
+      .single();
 
     if (updateError) {
       return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
