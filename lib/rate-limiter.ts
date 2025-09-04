@@ -37,7 +37,6 @@ class RateLimiter {
   }
 
   private defaultKeyGenerator(request: NextRequest): string {
-    // Use multiple headers to create a more robust identifier
     const forwarded = request.headers.get("x-forwarded-for");
 
     const realIp = request.headers.get("x-real-ip");

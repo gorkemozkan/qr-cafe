@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { BUCKET_NAMES } from "@/config";
+import { BUCKET_NAMES } from "../config";
 
 export function verifyCsrfToken(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
@@ -56,9 +56,6 @@ export function validateBucketName(bucketName: string): boolean {
   return Object.values(BUCKET_NAMES).includes(bucketName);
 }
 
-/**
- * Common security headers applied to all routes
- */
 export const commonHeaders = [
   // Prevent MIME-type sniffing attacks
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -76,18 +73,8 @@ export const commonHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
-/**
- * Production-only security headers
- */
-export const productionOnlyHeaders = [
-  // Force HTTPS connections and enable HSTS preloading
-  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-];
+export const productionOnlyHeaders = [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" }];
 
-/**
- * Content Security Policy (CSP) Configuration
- * CSP helps prevent XSS attacks by controlling which resources the browser is allowed to load
- */
 export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
   const supabaseHosts = supabaseUrl ? `https://${new URL(supabaseUrl).hostname} wss://${new URL(supabaseUrl).hostname}` : "https://*.supabase.co wss://*.supabase.co";
 

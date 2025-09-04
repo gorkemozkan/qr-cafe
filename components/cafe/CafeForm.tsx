@@ -26,10 +26,11 @@ interface CafeFormProps {
 
 const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [uploadError, setUploadError] = useState<string | null>(null);
+
   const [isUploading, setIsUploading] = useState(false);
 
-  // Function to get default values based on mode and cafe data
   const getDefaultValues = (): CafeSchema => {
     if (mode === "edit" && cafe) {
       return {

@@ -12,7 +12,7 @@ import TableActions from "@/components/ui/table-actions";
 import DateView from "@/components/ui/date-view";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Eye, Package } from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 
 interface CategoryListProps {
