@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
 
   async headers() {
     // Environment detection from environment variables
-    const environment = (process.env.NEXT_PUBLIC_ENV || "development") as "development" | "staging" | "production";
+    const customEnvironment = (process.env.NEXT_PUBLIC_ENV || "development") as "development" | "staging" | "production";
 
     // Supabase configuration for database connections
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING || process.env.NEXT_PUBLIC_SUPABASE_URL_PROD;
@@ -40,9 +40,9 @@ const nextConfig: NextConfig = {
     // Additional origins allowed for CORS (development defaults included)
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000", "https://localhost:3000", "http://localhost:3001", "https://localhost:3001"];
 
-    const isProduction = environment === "production";
+    const isProduction = customEnvironment === "production";
 
-    const isDevelopment = environment === "development";
+    const isDevelopment = customEnvironment === "development";
 
     // DEVELOPMENT: Minimal headers to avoid conflicts with Next.js dev server
     if (isDevelopment) {
@@ -56,7 +56,7 @@ const nextConfig: NextConfig = {
     }
 
     // PRODUCTION/STAGING: Full security headers
-    const csp = createCSP(environment, supabaseUrl, allowedOrigins);
+    const csp = createCSP(customEnvironment, supabaseUrl, allowedOrigins);
 
     return [
       {

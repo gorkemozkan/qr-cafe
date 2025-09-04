@@ -90,17 +90,20 @@ export const productionOnlyHeaders = [
  * CSP helps prevent XSS attacks by controlling which resources the browser is allowed to load
  */
 export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
-  // Configure Supabase connection endpoints for database and real-time features
   const supabaseHosts = supabaseUrl ? `https://${new URL(supabaseUrl).hostname} wss://${new URL(supabaseUrl).hostname}` : "https://*.supabase.co wss://*.supabase.co";
 
-  // Script execution policy: Allow eval in dev for hot reload, restrict in production
-  const scriptSrc = environment === "development" ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com" : "'self' https://challenges.cloudflare.com";
+  const vercelLive = environment === "staging" || environment === "production" ? "https://vercel.live" : "";
 
-  // Development connections: Allow local webpack dev server and hot reload
+  const scriptSrc =
+    environment === "development"
+      ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
+      : `'self' 'unsafe-inline' https://challenges.cloudflare.com ${vercelLive}`.trim();
+
   const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
 
-  // Network connections: API calls, WebSocket, and external services
-  const connectSrc = `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${allowedOrigins.join(" ")}`.trim();
+  const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
+
+  const connectSrc = `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
 
   const directives = [
     // DEFAULT-SRC: Fallback for all other directives - only allow same origin
