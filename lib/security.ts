@@ -127,8 +127,8 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
     // CONNECT-SRC: Controls fetch, XMLHttpRequest, WebSocket connections
     `connect-src ${connectSrc}`,
 
-    // FRAME-SRC: Controls embedded frames/iframes (for Cloudflare Turnstile)
-    "frame-src 'self' https://challenges.cloudflare.com",
+    // FRAME-SRC: Controls embedded frames/iframes (for Cloudflare Turnstile and Vercel Live)
+    `frame-src 'self' https://challenges.cloudflare.com${vercelLive ? ` ${vercelLive}` : ""}`,
 
     // OBJECT-SRC: Controls <object>, <embed>, <applet> elements - blocked for security
     "object-src 'none'",
