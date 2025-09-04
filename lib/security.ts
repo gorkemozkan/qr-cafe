@@ -59,19 +59,14 @@ export function validateBucketName(bucketName: string): boolean {
 }
 
 export const commonHeaders = [
-  // Prevent MIME-type sniffing attacks
   { key: "X-Content-Type-Options", value: "nosniff" },
 
-  // Prevent page from being embedded in frames (clickjacking protection)
   { key: "X-Frame-Options", value: "DENY" },
 
-  // Legacy XSS protection (modern browsers rely on CSP)
   { key: "X-XSS-Protection", value: "1; mode=block" },
 
-  // Control referrer information sent in requests
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
 
-  // Disable browser features that could be privacy/security risks
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
@@ -94,43 +89,28 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
   const connectSrc = `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
 
   const directives = [
-    // DEFAULT-SRC: Fallback for all other directives - only allow same origin
     "default-src 'self'",
 
-    // SCRIPT-SRC: Controls JavaScript execution sources
-    // 'self' = same origin, 'unsafe-eval' = allow eval(), 'unsafe-inline' = allow inline scripts
     `script-src ${scriptSrc}`,
 
-    // STYLE-SRC: Controls CSS stylesheets sources
-    // 'unsafe-inline' needed for styled-components and CSS-in-JS libraries
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
 
-    // IMG-SRC: Controls image sources
-    // data: = base64 images, https: = any HTTPS image, blob: = dynamically created images
     "img-src 'self' data: https: blob:",
 
-    // FONT-SRC: Controls web font sources
     "font-src 'self' https://fonts.gstatic.com",
 
-    // CONNECT-SRC: Controls fetch, XMLHttpRequest, WebSocket connections
     `connect-src ${connectSrc}`,
 
-    // FRAME-SRC: Controls embedded frames/iframes (for Cloudflare Turnstile and Vercel Live)
     `frame-src 'self' https://challenges.cloudflare.com${vercelLive ? ` ${vercelLive}` : ""}`,
 
-    // OBJECT-SRC: Controls <object>, <embed>, <applet> elements - blocked for security
     "object-src 'none'",
 
-    // BASE-URI: Controls <base> element URLs - prevent base tag injection
     "base-uri 'self'",
 
-    // FORM-ACTION: Controls form submission targets
     "form-action 'self'",
 
-    // FRAME-ANCESTORS: Controls pages that can embed this site in frames - prevent clickjacking
     "frame-ancestors 'none'",
 
-    // UPGRADE-INSECURE-REQUESTS: Force HTTPS in production
     ...(environment === "production" ? ["upgrade-insecure-requests"] : []),
   ];
 
