@@ -1,30 +1,29 @@
 import SectionCards from "@/components/SectionCards";
+import { statsRepository } from "@/lib/repositories/stats-repository";
 
-const DashboardStatCards = () => {
+const DashboardStatCards = async () => {
+  const stats = await statsRepository.getDashboardStats();
+
   const items = [
     {
       title: "Total Cafes",
-      value: "10",
-      percentage: "+10%",
+      value: (stats.totalCafes || 0).toString(),
       description: "Active cafe locations across all regions",
     },
     {
       title: "Total Categories",
-      value: "100",
-      percentage: "10%",
-      description: "Menu categories available for cafe products",
+      value: (stats.totalCategories || 0).toString(),
+      description: "Menu categories added",
     },
     {
       title: "Total Products",
-      value: "100",
-      percentage: "10%",
+      value: (stats.totalProducts || 0).toString(),
       description: "Individual menu items across all cafes",
     },
     {
       title: "Active Products",
-      value: "100",
-      percentage: "10%",
-      description: "Active products across all cafes",
+      value: (stats.activeProducts || 0).toString(),
+      description: "Available products ready for customers",
     },
   ];
 
