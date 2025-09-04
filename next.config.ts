@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import { createCSP, commonHeaders, productionOnlyHeaders } from "./lib/security";
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -28,7 +30,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  /*  async headers() {
+  async headers() {
     // Environment detection from environment variables
     const customEnvironment = (process.env.NEXT_PUBLIC_ENV || "development") as "development" | "staging" | "production";
 
@@ -72,7 +74,7 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
-  }, */
+  },
 };
 
 export default nextConfig;
