@@ -10,11 +10,11 @@ const Hero: FC = () => {
       <div className="container mx-auto text-center relative z-10">
         <div className="max-w-3xl mx-auto">
           <h1 id="hero-heading" className="text-4xl md:text-6xl font-black  leading-tight mb-6">
-            <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">Transform Your Cafe</span> with{" "}
-            <span className="bg-gradient-to-r from-orange-700 via-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent">Smart QR Menus</span>
+            <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">Digital QR Menus</span> for{" "}
+            <span className="bg-gradient-to-r from-orange-700 via-orange-600 via-orange-500 to-orange-400 bg-clip-text text-transparent">Modern Cafes</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution.
+            Create and manage digital menus with QR codes, organize your products by categories, and give your customers an easy mobile menu experience.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg px-8 py-6 bg-primary text-primary-foreground">

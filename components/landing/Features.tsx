@@ -51,8 +51,8 @@ const Features: FC = () => {
             Why Choose QR Cafe?
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to <strong>modernize your cafe operations</strong>, enable <strong>contactless dining</strong>, and delight your customers with cutting-edge QR menu
-            technology.
+            Create and manage <strong>digital menus with QR codes</strong>, organize your products by categories, and provide customers with a{" "}
+            <strong>mobile-first menu experience</strong> that's easy to update.
           </p>
         </header>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

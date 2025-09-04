@@ -62,34 +62,16 @@ export async function DELETE(_request: Request, { params }: { params: Promise<Pa
       return NextResponse.json({ error: "Forbidden: You can only delete your own cafes" }, { status: 403 });
     }
 
-    const { data: relatedCategories, error: categoriesError } = await supabase.from("categories").select("id").eq("cafe_id", cafeId).limit(1);
+    const { error: deleteProductsError } = await supabase.from("products").delete().eq("cafe_id", cafeId);
 
-    if (categoriesError) {
-      return NextResponse.json({ error: "Failed to check related data" }, { status: 500 });
+    if (deleteProductsError) {
+      return NextResponse.json({ error: "Failed to delete related products" }, { status: 500 });
     }
 
-    const { data: relatedProducts, error: productsError } = await supabase.from("products").select("id").eq("cafe_id", cafeId).limit(1);
+    const { error: deleteCategoriesError } = await supabase.from("categories").delete().eq("cafe_id", cafeId);
 
-    if (productsError) {
-      return NextResponse.json({ error: "Failed to check related data" }, { status: 500 });
-    }
-
-    if (relatedCategories && relatedCategories.length > 0) {
-      return NextResponse.json(
-        {
-          error: "Cannot delete cafe: It has related categories. Please delete all categories first.",
-        },
-        { status: 400 },
-      );
-    }
-
-    if (relatedProducts && relatedProducts.length > 0) {
-      return NextResponse.json(
-        {
-          error: "Cannot delete cafe: It has related products. Please delete all products first.",
-        },
-        { status: 400 },
-      );
+    if (deleteCategoriesError) {
+      return NextResponse.json({ error: "Failed to delete related categories" }, { status: 500 });
     }
 
     const { error: deleteError } = await supabase.from("cafes").delete().eq("id", cafeId);

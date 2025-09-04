@@ -1,25 +1,15 @@
-import { useState, useEffect } from "react";
 import { cafeRepository } from "@/lib/repositories";
-import { useRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/use-request";
+import QueryKeys from "@/constants/query-keys";
 
-export function useCafeData(cafeId: number, shouldFetch: boolean) {
-  const [cafeSlug, setCafeSlug] = useState<string>("");
-
-  const { isLoading, execute: fetchCafe } = useRequest({
-    mutationFn: async () => {
+export function useCafeData(cafeId: number) {
+  const { isLoading, data } = useQueryRequest({
+    queryFn: async () => {
       const cafe = await cafeRepository.getById(cafeId);
       return cafe;
     },
-    onSuccess: (cafe) => {
-      setCafeSlug(cafe.slug);
-    },
+    queryKey: QueryKeys.cafe(cafeId.toString()),
   });
 
-  useEffect(() => {
-    if (shouldFetch && cafeId && !cafeSlug) {
-      fetchCafe();
-    }
-  }, [shouldFetch, cafeId, cafeSlug, fetchCafe]);
-
-  return { cafeSlug, isLoading, fetchCafe };
+  return { cafeSlug: data?.slug as string, isLoading, data };
 }

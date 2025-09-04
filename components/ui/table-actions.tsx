@@ -3,13 +3,14 @@
 import { FC } from "react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, MoreHorizontal, Eye } from "lucide-react";
+import { Edit, Trash2, MoreHorizontal, Eye, Link } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface TableActionsProps {
   onEdit?: () => void;
   onDelete?: () => void;
   onInspect?: () => void;
+  to?: string;
   rowData?: any;
   additionalActions?: React.ReactNode;
 }
@@ -40,10 +41,12 @@ const TableActions: FC<TableActionsProps> = (props) => {
       );
     }
 
-    if (hasInspect) {
+    if (props.to) {
       return (
-        <Button variant="outline" size="sm" onClick={props.onInspect} className="h-8 w-8 p-0">
-          <Eye className="h-4 w-4" />
+        <Button asChild variant="outline" size="sm" className="h-8 w-8 p-0">
+          <Link href={props.to}>
+            <Eye className="h-4 w-4" />
+          </Link>
         </Button>
       );
     }
@@ -62,6 +65,7 @@ const TableActions: FC<TableActionsProps> = (props) => {
             </DropdownMenuTrigger>
           </div>
         </Tooltip>
+
         <DropdownMenuContent align="end">
           {hasEdit && (
             <DropdownMenuItem onClick={props.onEdit}>
@@ -69,6 +73,7 @@ const TableActions: FC<TableActionsProps> = (props) => {
               Edit
             </DropdownMenuItem>
           )}
+
           {hasInspect && (
             <DropdownMenuItem onClick={props.onInspect}>
               <Eye className="mr-2 h-4 w-4" />

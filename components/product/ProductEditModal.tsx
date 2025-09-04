@@ -8,27 +8,28 @@ import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { useCafeData } from "@/hooks/use-cafe-data";
 import { productRepository } from "@/lib/repositories";
-import ProductModal from "@/components/product/ProductModal";
+import ProductForm from "@/components/product/ProductForm";
 import { type ProductSchema as ProductSchemaType } from "@/lib/schema";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Props {
   cafeId: number;
   onSuccess?: () => void;
   product: Tables<"products">;
-  categories: Tables<"categories">[];
+  categoryId: number;
 }
 
 const ProductEditModal: FC<Props> = (props) => {
   //#region States
   const [open, setOpen] = useState(false);
 
-  const { cafeSlug, isLoading: isLoadingCafe } = useCafeData(props.cafeId, open);
+  const { cafeSlug } = useCafeData(props.cafeId);
 
   //#endregion
 
   //#region Hooks
 
-  const { isLoading, execute: updateProduct } = useRequest({
+  const { execute: updateProduct } = useRequest({
     mutationFn: async (data: ProductSchemaType) => {
       return await productRepository.update(props.product.id, data);
     },
@@ -51,24 +52,21 @@ const ProductEditModal: FC<Props> = (props) => {
   //#endregion
 
   return (
-    <ProductModal
-      open={open}
-      onOpenChange={setOpen}
-      trigger={
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Edit className="h-4 w-4 mr-2" />
           Edit
         </Button>
-      }
-      title="Edit Product"
-      cafeId={props.cafeId}
-      cafeSlug={cafeSlug}
-      categories={props.categories}
-      product={props.product}
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-      isLoading={isLoading || isLoadingCafe}
-    />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Product</DialogTitle>
+          <DialogDescription>Update the product details below.</DialogDescription>
+        </DialogHeader>
+        <ProductForm cafeSlug={cafeSlug} product={props.product} categoryId={props.categoryId} onSubmit={handleSubmit} onCancel={handleCancel} />
+      </DialogContent>
+    </Dialog>
   );
 };
 
