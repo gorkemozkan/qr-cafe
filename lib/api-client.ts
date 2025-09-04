@@ -30,8 +30,8 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
-      // Check if response has content before trying to parse JSON
       const contentType = response.headers.get("content-type");
+
       let data: any;
 
       if (contentType?.includes("application/json")) {

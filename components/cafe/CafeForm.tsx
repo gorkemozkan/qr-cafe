@@ -19,7 +19,7 @@ import { uploadCafeLogo } from "@/lib/supabase/storage";
 interface CafeFormProps {
   mode: "create" | "edit";
   cafe?: Tables<"cafes">;
-  onSubmit: (data: CafeSchema) => Promise<void>;
+  onSubmit: (data: CafeSchema, logoFile?: File) => Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
 }
@@ -67,23 +67,31 @@ const CafeForm = ({ mode, cafe, onSubmit, onCancel }: CafeFormProps) => {
 
   const onSubmitForm = async (data: CafeSchema) => {
     try {
-      if (selectedFile) {
-        setIsUploading(true);
-        setUploadError(null);
+      if (mode === "create") {
+        // For create mode, just pass the file to parent and let it handle upload after cafe creation
+        await onSubmit(data, selectedFile || undefined);
+      } else {
+        // For edit mode, upload the logo first if there's a new file
+        if (selectedFile) {
+          setIsUploading(true);
+          setUploadError(null);
 
-        const uploadResult = await uploadCafeLogo(selectedFile, data.slug);
+          const uploadResult = await uploadCafeLogo(selectedFile, data.slug);
 
-        if (!uploadResult.success) {
-          setUploadError(uploadResult.error.message);
-          return;
+          if (!uploadResult.success) {
+            const errorMessage = `Upload failed: ${uploadResult.error.message}`;
+            setUploadError(errorMessage);
+            return;
+          }
+
+          data.logo_url = uploadResult.data.url;
         }
 
-        data.logo_url = uploadResult.data.url;
+        await onSubmit(data);
       }
-
-      await onSubmit(data);
     } catch (error) {
-      setUploadError(error instanceof Error ? error.message : "Upload failed");
+      const errorMessage = error instanceof Error ? error.message : "Operation failed";
+      setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
     }

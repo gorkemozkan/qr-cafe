@@ -3,14 +3,19 @@ import { BUCKET_NAMES } from "../config";
 
 export function verifyCsrfToken(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
-
   const host = request.headers.get("host");
 
   if (!origin || !host) {
     return false;
   }
 
+  // Allow both HTTP and HTTPS for development
   const allowedOrigins = [`https://${host}`, `http://${host}`];
+
+  // Also allow localhost with different ports for development
+  if (host.includes("localhost") || host.includes("127.0.0.1")) {
+    allowedOrigins.push(`http://localhost:3000`, `https://localhost:3000`);
+  }
 
   return allowedOrigins.includes(origin);
 }
