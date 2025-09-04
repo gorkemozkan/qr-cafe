@@ -17,7 +17,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface Props {
   cafeId: number;
   categoryId?: number;
-  categories?: Tables<"categories">[];
 }
 
 const ProductList: FC<Props> = (props) => {
@@ -42,7 +41,11 @@ const ProductList: FC<Props> = (props) => {
       setProductToDelete(null);
     },
     successMessage: "Product deleted successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.stats, ...(props.categoryId ? [QueryKeys.productsByCategory(props.categoryId.toString())] : [])],
+    invalidateQueries: [
+      QueryKeys.productsByCafe(props.cafeId.toString()),
+      QueryKeys.stats,
+      ...(props.categoryId ? [QueryKeys.productsByCategory(props.categoryId.toString())] : []),
+    ],
   });
 
   const handleDeleteClick = (product: Tables<"products">) => {
@@ -139,8 +142,10 @@ const ProductList: FC<Props> = (props) => {
 
   return (
     <div className="space-y-4">
-      <DataTable columns={columns} queryKey={queryKey} queryFn={queryFn} emptyMessage="No products found" />
-      {productToEdit && <ProductEditModal product={productToEdit} cafeId={props.cafeId} categories={props.categories ?? []} onSuccess={() => setProductToEdit(null)} />}
+      <DataTable title="Products" columns={columns} queryKey={queryKey} queryFn={queryFn} emptyMessage="No products found" />
+      {productToEdit && props.categoryId && (
+        <ProductEditModal categoryId={props.categoryId} product={productToEdit} cafeId={props.cafeId} onSuccess={() => setProductToEdit(null)} />
+      )}
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
