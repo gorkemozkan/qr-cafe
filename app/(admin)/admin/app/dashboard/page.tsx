@@ -1,14 +1,13 @@
-import DashboardStatCards from "@/components/dashboard/DashboardStatCards";
-import CafeCreateModal from "@/components/cafe/CafeCreateModal";
+import { NextPage } from "next";
+import PageTitle from "@/components/PageTitle";
 import CafeList from "@/components/cafe/CafeList";
+import CafeCreateModal from "@/components/cafe/CafeCreateModal";
+import DashboardStatCards from "@/components/dashboard/DashboardStatCards";
 
-const Page = () => {
+const Page: NextPage = () => {
   return (
     <div className="@container/main flex flex-1 flex-col gap-2 space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Welcome to Dashboard 👋🏻</h1>
-        <CafeCreateModal />
-      </div>
+      <PageTitle title="Welcome to Dashboard 👋🏻" actions={<CafeCreateModal />} />
       <DashboardStatCards />
       <CafeList />
     </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { FC, useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
 import { Tables } from "@/types/db";
-import { categoryRepository } from "@/lib/repositories";
+import { useParams } from "next/navigation";
 import { useRequest } from "@/hooks/use-request";
-import ProductList from "@/components/cafe/ProductList";
-import ProductCreateModal from "@/components/cafe/ProductCreateModal";
+import { categoryRepository } from "@/lib/repositories";
+import ProductList from "@/components/product/ProductList";
+import { FC, useEffect, useState, useCallback } from "react";
+import ProductCreateModal from "@/components/product/ProductCreateModal";
 
 const ProductsPage: FC = () => {
   const params = useParams();

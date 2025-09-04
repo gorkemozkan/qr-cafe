@@ -1,29 +1,37 @@
 "use client";
 
-import { FC, useState, useCallback } from "react";
 import { Tables } from "@/types/db";
-import { useRequest } from "@/hooks/use-request";
-import { productRepository } from "@/lib/repositories";
 import QueryKeys from "@/constants/query-keys";
-import DataTable from "@/components/ui/data-table";
-import QuestionDialog from "@/components/ui/question-dialog";
-import ProductEditModal from "@/components/cafe/ProductEditModal";
-import TableActions from "@/components/ui/table-actions";
-import DateView from "@/components/ui/date-view";
-import { OptimizedImage } from "@/components/ui/optimized-image";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import DateView from "@/components/ui/date-view";
+import { useRequest } from "@/hooks/use-request";
+import { FC, useState, useCallback } from "react";
+import DataTable from "@/components/ui/data-table";
+import { productRepository } from "@/lib/repositories";
+import TableActions from "@/components/ui/table-actions";
+import QuestionDialog from "@/components/ui/question-dialog";
+import { OptimizedImage } from "@/components/ui/optimized-image";
+import ProductEditModal from "@/components/product/ProductEditModal";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-interface ProductListProps {
+interface Props {
   cafeId: number;
   categoryId?: number;
   categories?: Tables<"categories">[];
 }
 
-const ProductList: FC<ProductListProps> = ({ cafeId, categoryId, categories = [] }) => {
+const ProductList: FC<Props> = (props) => {
+  //#region States
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   const [productToDelete, setProductToDelete] = useState<Tables<"products"> | null>(null);
+
   const [productToEdit, setProductToEdit] = useState<Tables<"products"> | null>(null);
+
+  //#endregion
+
+  //#region Hooks
 
   const { isLoading: isDeleting, execute: deleteProduct } = useRequest({
     mutationFn: async (id: number) => {
@@ -34,7 +42,7 @@ const ProductList: FC<ProductListProps> = ({ cafeId, categoryId, categories = []
       setProductToDelete(null);
     },
     successMessage: "Product deleted successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(cafeId.toString()), ...(categoryId ? [QueryKeys.productsByCategory(categoryId.toString())] : [])],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), ...(props.categoryId ? [QueryKeys.productsByCategory(props.categoryId.toString())] : [])],
   });
 
   const handleDeleteClick = (product: Tables<"products">) => {
@@ -42,11 +50,17 @@ const ProductList: FC<ProductListProps> = ({ cafeId, categoryId, categories = []
     setDeleteDialogOpen(true);
   };
 
+  //#endregion
+
+  //#region Handlers
+
   const handleDeleteConfirm = async () => {
     if (productToDelete) {
       await deleteProduct(productToDelete.id);
     }
   };
+
+  //#endregion
 
   const columns = [
     {
@@ -111,20 +125,22 @@ const ProductList: FC<ProductListProps> = ({ cafeId, categoryId, categories = []
     },
   ];
 
-  const queryKey = categoryId ? QueryKeys.productsByCategory(categoryId.toString()) : QueryKeys.productsByCafe(cafeId.toString());
+  const queryKey = props.categoryId ? QueryKeys.productsByCategory(props.categoryId.toString()) : QueryKeys.productsByCafe(props.cafeId.toString());
 
   const queryFn = useCallback(async () => {
-    if (categoryId) {
-      return await productRepository.listByCategory(categoryId);
+    if (props.categoryId) {
+      return await productRepository.listByCategory(props.categoryId);
     } else {
-      return await productRepository.listByCafe(cafeId);
+      return await productRepository.listByCafe(props.cafeId);
     }
-  }, [categoryId, cafeId]);
+  }, [props.categoryId, props.cafeId]);
+
+  //#endregion
 
   return (
     <div className="space-y-4">
       <DataTable columns={columns} queryKey={queryKey} queryFn={queryFn} emptyMessage="No products found" />
-      {productToEdit && <ProductEditModal product={productToEdit} cafeId={cafeId} categories={categories} onSuccess={() => setProductToEdit(null)} />}
+      {productToEdit && <ProductEditModal product={productToEdit} cafeId={props.cafeId} categories={props.categories ?? []} onSuccess={() => setProductToEdit(null)} />}
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}

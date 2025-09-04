@@ -1,7 +1,9 @@
-import { PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from "react";
 
 interface Props extends PropsWithChildren {}
 
-export default function Page(props: Props) {
-  return <div className="flex flex-1 flex-col max-w-7xl mx-auto pt-12 px-6 gap-12">{props.children}</div>;
-}
+const Page: FC<Props> = (props) => {
+  return <div className="flex flex-1 flex-col max-w-7xl mx-auto py-12 px-6 gap-12">{props.children}</div>;
+};
+
+export default Page;

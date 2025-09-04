@@ -27,7 +27,6 @@ class RateLimiter {
       ...config,
     };
 
-    // Cleanup expired entries every 5 minutes
     this.cleanupInterval = setInterval(
       () => {
         this.cleanup();
@@ -66,7 +65,6 @@ class RateLimiter {
 
     const now = Date.now();
 
-    // Get or create entry
     let entry = this.cache.get(key);
 
     if (!entry || entry.resetTime < now) {

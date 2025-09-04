@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Item {
@@ -11,10 +12,10 @@ interface Props {
   items: Item[];
 }
 
-const SectionCards = ({ items }: Props) => {
+const SectionCards: FC<Props> = (props) => {
   return (
     <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-      {items.map((item) => (
+      {props.items.map((item) => (
         <Card key={item.title} className="@container/card">
           <CardHeader>
             <CardDescription>{item.title}</CardDescription>

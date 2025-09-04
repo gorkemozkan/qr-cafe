@@ -1,21 +1,29 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Tables } from "@/types/db";
-import { useRequest } from "@/hooks/use-request";
-import { cafeRepository } from "@/lib/repositories";
+import { useRouter } from "next/navigation";
 import QueryKeys from "@/constants/query-keys";
-import DataTable from "@/components/ui/data-table";
-import QuestionDialog from "@/components/ui/question-dialog";
-import CafeEditModal from "@/components/cafe/CafeEditModal";
-import TableActions from "@/components/ui/table-actions";
+import { useRequest } from "@/hooks/use-request";
 import DateView from "@/components/ui/date-view";
 import { OptimizedImage } from "@/components/ui";
+import DataTable from "@/components/ui/data-table";
+import { cafeRepository } from "@/lib/repositories";
+import TableActions from "@/components/ui/table-actions";
+import CafeEditModal from "@/components/cafe/CafeEditModal";
+import QuestionDialog from "@/components/ui/question-dialog";
+import QRPreviewDialog from "@/components/cafe/QRPreviewDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { QrCode } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CafeList: FC = () => {
+  //#region Hooks
+
   const router = useRouter();
+
+  //#endregion
+
   //#region States
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -23,6 +31,10 @@ const CafeList: FC = () => {
   const [cafeToDelete, setCafeToDelete] = useState<Tables<"cafes"> | null>(null);
 
   const [cafeToEdit, setCafeToEdit] = useState<Tables<"cafes"> | null>(null);
+
+  const [qrPreviewOpen, setQRPreviewOpen] = useState(false);
+
+  const [cafeForQR, setCafeForQR] = useState<Tables<"cafes"> | null>(null);
 
   //#endregion
 
@@ -58,6 +70,11 @@ const CafeList: FC = () => {
     router.push(`/admin/app/cafe/${cafe.id}/categories`);
   };
 
+  const handleQRCodeClick = (cafe: Tables<"cafes">) => {
+    setCafeForQR(cafe);
+    setQRPreviewOpen(true);
+  };
+
   //#endregion
 
   const columns = [
@@ -88,23 +105,7 @@ const CafeList: FC = () => {
     {
       key: "slug",
       header: "Slug",
-      cell: (value: any) => <span className="font-mono text-sm bg-muted px-2 py-1 rounded block truncate w-max">{value}</span>,
-    },
-    {
-      key: "description",
-      header: "Description",
-      cell: (value: any) => (
-        <div className="w-max">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="font-mono text-sm bg-muted px-2 py-1 rounded block truncate">{value}</span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="font-mono">{value}</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      ),
+      cell: (value: any) => <span className="font-mono text-sm block truncate w-max">{value}</span>,
     },
     {
       key: "currency",
@@ -121,14 +122,26 @@ const CafeList: FC = () => {
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="short" />,
+      cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
       header: "Actions",
       cell: (_: any, row: Tables<"cafes">) => (
-        <TableActions 
-          onEdit={() => setCafeToEdit(row)} 
+        <TableActions
+          additionalActions={
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
+                  <QrCode className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View QR Code for {row.slug}</p>
+              </TooltipContent>
+            </Tooltip>
+          }
+          onEdit={() => setCafeToEdit(row)}
           onDelete={() => handleDeleteClick(row)}
           onInspect={() => handleCategoriesClick(row)}
         />
@@ -152,6 +165,18 @@ const CafeList: FC = () => {
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
       />
+      {cafeForQR && (
+        <QRPreviewDialog
+          open={qrPreviewOpen}
+          slug={cafeForQR.slug}
+          onOpenChange={(open) => {
+            setQRPreviewOpen(open);
+            if (!open) {
+              setCafeForQR(null);
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

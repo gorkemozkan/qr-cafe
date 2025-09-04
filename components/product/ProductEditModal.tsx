@@ -2,36 +2,42 @@
 
 import { FC, useState } from "react";
 import { Tables } from "@/types/db";
-import { type ProductSchema as ProductSchemaType } from "@/lib/schema";
-import { productRepository } from "@/lib/repositories";
-import { useRequest } from "@/hooks/use-request";
-import { useCafeData } from "@/hooks/use-cafe-data";
+import { Edit } from "lucide-react";
 import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
-import BaseProductModal from "@/components/cafe/BaseProductModal";
+import { useRequest } from "@/hooks/use-request";
+import { useCafeData } from "@/hooks/use-cafe-data";
+import { productRepository } from "@/lib/repositories";
+import ProductModal from "@/components/product/ProductModal";
+import { type ProductSchema as ProductSchemaType } from "@/lib/schema";
 
-interface ProductEditModalProps {
-  product: Tables<"products">;
+interface Props {
   cafeId: number;
-  categories: Tables<"categories">[];
   onSuccess?: () => void;
+  product: Tables<"products">;
+  categories: Tables<"categories">[];
 }
 
-const ProductEditModal: FC<ProductEditModalProps> = ({ product, cafeId, categories, onSuccess }) => {
+const ProductEditModal: FC<Props> = (props) => {
+  //#region States
   const [open, setOpen] = useState(false);
-  const { cafeSlug, isLoading: isLoadingCafe } = useCafeData(cafeId, open);
+
+  const { cafeSlug, isLoading: isLoadingCafe } = useCafeData(props.cafeId, open);
+
+  //#endregion
+
+  //#region Hooks
 
   const { isLoading, execute: updateProduct } = useRequest({
     mutationFn: async (data: ProductSchemaType) => {
-      return await productRepository.update(product.id, data);
+      return await productRepository.update(props.product.id, data);
     },
     onSuccess: () => {
       setOpen(false);
-      onSuccess?.();
+      props.onSuccess?.();
     },
     successMessage: "Product updated successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(cafeId.toString())],
+    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString())],
   });
 
   const handleSubmit = async (data: ProductSchemaType) => {
@@ -42,8 +48,10 @@ const ProductEditModal: FC<ProductEditModalProps> = ({ product, cafeId, categori
     setOpen(false);
   };
 
+  //#endregion
+
   return (
-    <BaseProductModal
+    <ProductModal
       open={open}
       onOpenChange={setOpen}
       trigger={
@@ -53,10 +61,10 @@ const ProductEditModal: FC<ProductEditModalProps> = ({ product, cafeId, categori
         </Button>
       }
       title="Edit Product"
-      cafeId={cafeId}
+      cafeId={props.cafeId}
       cafeSlug={cafeSlug}
-      categories={categories}
-      product={product}
+      categories={props.categories}
+      product={props.product}
       onSubmit={handleSubmit}
       onCancel={handleCancel}
       isLoading={isLoading || isLoadingCafe}

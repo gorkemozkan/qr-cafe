@@ -2,9 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 
 export interface DashboardStats {
   totalCafes: number;
-  totalCategories: number;
   totalProducts: number;
   activeProducts: number;
+  totalCategories: number;
 }
 
 export class StatsRepository {

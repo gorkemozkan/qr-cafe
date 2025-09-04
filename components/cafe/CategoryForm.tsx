@@ -1,17 +1,18 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FC } from "react";
+import { Tables } from "@/types/db";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Tables } from "@/types/db";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CategorySchema, categorySchema } from "@/lib/schema";
 
-interface CategoryFormProps {
+interface Props {
   mode: "create" | "edit";
   category?: Tables<"categories">;
   onSubmit: (data: CategorySchema) => Promise<void>;
@@ -19,14 +20,14 @@ interface CategoryFormProps {
   isLoading?: boolean;
 }
 
-const CategoryForm = ({ mode, category, onSubmit, onCancel }: CategoryFormProps) => {
+const CategoryForm: FC<Props> = (props) => {
   const getDefaultValues = (): CategorySchema => {
-    if (mode === "edit" && category) {
+    if (props.mode === "edit" && props.category) {
       return {
-        name: category.name,
-        description: category.description,
-        is_active: category.is_active,
-        sort_order: category.sort_order ?? "",
+        name: props.category.name,
+        description: props.category.description,
+        is_active: props.category.is_active,
+        sort_order: props.category.sort_order ?? "",
       };
     }
 
@@ -57,7 +58,7 @@ const CategoryForm = ({ mode, category, onSubmit, onCancel }: CategoryFormProps)
       ...data,
       sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
     };
-    await onSubmit(processedData);
+    await props.onSubmit(processedData);
   };
 
   return (
@@ -88,8 +89,8 @@ const CategoryForm = ({ mode, category, onSubmit, onCancel }: CategoryFormProps)
       </div>
 
       <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-250">
-        {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
+        {props.onCancel && (
+          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
             Cancel
           </Button>
         )}
@@ -97,9 +98,9 @@ const CategoryForm = ({ mode, category, onSubmit, onCancel }: CategoryFormProps)
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {mode === "create" ? "Creating..." : "Updating..."}
+              {props.mode === "create" ? "Creating..." : "Updating..."}
             </>
-          ) : mode === "create" ? (
+          ) : props.mode === "create" ? (
             "Create"
           ) : (
             "Update"

@@ -4,30 +4,38 @@ import { FC, useState } from "react";
 import { Plus } from "lucide-react";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
+import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
 import CategoryForm from "@/components/cafe/CategoryForm";
-import QueryKeys from "@/constants/query-keys";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-interface CategoryCreateModalProps {
+interface Props {
   cafeId: number;
   onSuccess?: (category: Tables<"categories">) => void;
 }
 
-const CategoryCreateModal: FC<CategoryCreateModalProps> = ({ cafeId, onSuccess }) => {
+const CategoryCreateModal: FC<Props> = (props) => {
+  //#region States
+
   const [open, setOpen] = useState(false);
 
+  //#endregion
+
+  //#region Hooks
+
   const { isLoading, execute } = useRequest({
-    mutationFn: (payload: CategorySchema) => categoryRepository.create(cafeId, payload),
+    mutationFn: (payload: CategorySchema) => categoryRepository.create(props.cafeId, payload),
     onSuccess: (data) => {
-      onSuccess?.(data);
+      props.onSuccess?.(data);
       setOpen(false);
     },
     successMessage: "Category created successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(cafeId.toString())],
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
   });
+
+  //#endregion
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

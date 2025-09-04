@@ -1,9 +1,10 @@
+import { FC } from "react";
 import NextLink from "next/link";
 import { QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 
-export function Header() {
+const Header: FC = () => {
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -25,4 +26,6 @@ export function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

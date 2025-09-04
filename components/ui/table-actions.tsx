@@ -1,22 +1,26 @@
 "use client";
 
 import { FC } from "react";
+import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, MoreHorizontal, Eye } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TableActionsProps {
   onEdit?: () => void;
   onDelete?: () => void;
   onInspect?: () => void;
   rowData?: any;
+  additionalActions?: React.ReactNode;
 }
 
 const TableActions: FC<TableActionsProps> = (props) => {
   const hasEdit = !!props.onEdit;
+
   const hasDelete = !!props.onDelete;
+
   const hasInspect = !!props.onInspect;
+
   const actionCount = [hasEdit, hasDelete, hasInspect].filter(Boolean).length;
 
   if (actionCount === 1) {
@@ -49,16 +53,14 @@ const TableActions: FC<TableActionsProps> = (props) => {
     return (
       <DropdownMenu>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <div className="flex items-center space-x-2">
+            {props.additionalActions && props.additionalActions}
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="h-8 w-8 p-0">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="font-mono">Actions</p>
-          </TooltipContent>
+          </div>
         </Tooltip>
         <DropdownMenuContent align="end">
           {hasEdit && (

@@ -1,6 +1,7 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { QrCode, Smartphone, Users, Zap, Shield, Coffee } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
   {
@@ -41,7 +42,7 @@ const features = [
   },
 ];
 
-export function Features() {
+const Features: FC = () => {
   return (
     <section id="features" className="py-20 px-4" aria-labelledby="features-heading">
       <div className="container mx-auto">
@@ -49,9 +50,11 @@ export function Features() {
           <h2 id="features-heading" className="text-3xl md:text-4xl font-bold mb-4">
             Why Choose QR Cafe?
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Everything you need to modernize your cafe operations and delight your customers.</p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to <strong>modernize your cafe operations</strong>, enable <strong>contactless dining</strong>, and delight your customers with cutting-edge QR menu
+            technology.
+          </p>
         </header>
-
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature) => {
             const IconComponent = feature.icon;
@@ -76,4 +79,6 @@ export function Features() {
       </div>
     </section>
   );
-}
+};
+
+export default Features;
