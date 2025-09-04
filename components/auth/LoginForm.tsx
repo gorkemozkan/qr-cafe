@@ -130,7 +130,7 @@ const LoginForm = () => {
                   Processing login request
                 </div>
               )}
-              <div className="text-center text-sm">
+              {/*      <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
                 <Button
                   variant="link"
@@ -144,7 +144,7 @@ const LoginForm = () => {
                 >
                   Sign up
                 </Button>
-              </div>
+              </div> */}
             </div>
           </form>
         </CardContent>

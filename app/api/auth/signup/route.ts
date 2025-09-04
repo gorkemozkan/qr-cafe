@@ -1,12 +1,9 @@
-import { signupSchema } from "@/lib/schema";
-import { createClient } from "@/lib/supabase/server";
-import { verifyCsrfToken } from "@/lib/security";
-import { authRateLimiter } from "@/lib/rate-limiter";
+import { NextResponse } from "next/server";
 
-import { NextRequest, NextResponse } from "next/server";
+export async function POST(): Promise<NextResponse> {
+  return NextResponse.json({ error: "Signup is disabled", success: false }, { status: 404 });
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-  try {
+  /*  try {
     if (!authRateLimiter.check(request)) {
       return NextResponse.json({ error: "Too many signup attempts. Please try again later.", success: false }, { status: 429 });
     }
@@ -56,5 +53,5 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Account creation failed", success: false }, { status: 400 });
   } catch (_error) {
     return NextResponse.json({ error: "Internal server error", success: false }, { status: 500 });
-  }
+  } */
 }
