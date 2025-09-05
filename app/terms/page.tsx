@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import BackButton from "@/components/BackButton";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -13,6 +14,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-16 max-w-4xl">
+        <BackButton />
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
           <p className="mb-4 leading-relaxed text-muted-foreground">
