@@ -105,10 +105,20 @@ const CafeList: FC = () => {
       ),
     },
     {
-      key: "slug",
-      header: "Slug",
-      tooltipText: "Slug of the cafe, used for URL",
-      cell: (value: any) => <span className="font-mono text-sm block truncate ">{value}</span>,
+      key: "name",
+      header: "Name",
+      cell: (value: any) => (
+        <div className="w-24">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <p className="truncate text-sm">{value}</p>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{value}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      ),
     },
     {
       key: "currency",

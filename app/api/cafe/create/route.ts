@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
 import { TablesInsert } from "@/types/db";
+import { slugify } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,22 +31,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const slug = slugify(validationResult.data.name, { maxLength: 50 });
+
+    const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", slug).single();
+
+    if (existingCafe) {
+      return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });
+    }
+
     const cafeData: TablesInsert<"cafes"> = {
-      ...validationResult.data,
+      name: validationResult.data.name,
       user_id: user.id,
       description: validationResult.data.description || null,
       logo_url: validationResult.data.logo_url || null,
       currency: validationResult.data.currency,
       is_active: validationResult.data.is_active,
-      slug: validationResult.data.slug,
+      slug: slug,
       created_at: new Date().toISOString(),
     };
-
-    const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", validationResult.data.slug).single();
-
-    if (existingCafe) {
-      return NextResponse.json({ error: "A cafe with this slug already exists" }, { status: 409 });
-    }
 
     const { data, error } = await supabase.from("cafes").insert([cafeData]).select().single();
 

@@ -33,7 +33,7 @@ export const signupSchema = z
   });
 
 export const cafeSchema = z.object({
-  slug: z.string().min(1, "Slug is required").min(3, "Slug must be at least 3 characters"),
+  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters").max(100, "Name must be no more than 100 characters"),
   description: z.string().optional(),
   logo_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
   currency: z.enum(["TRY", "USD", "EUR"]),
