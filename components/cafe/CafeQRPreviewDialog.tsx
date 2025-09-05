@@ -11,6 +11,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import Link from "next/link";
 import { shareWhatsApp } from "@/lib/utils";
+import ExternalLinkButton from "@/components/ExternalLinkButton";
 
 interface QRPreviewDialogProps {
   open: boolean;
@@ -171,11 +172,7 @@ const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChang
               </div>
               <div className="flex items-center gap-2 ">
                 <CopyButton noText text={cafeUrl} variant="outline" size="sm" />
-                <Button asChild variant="outline" size="sm">
-                  <Link href={cafeUrl} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
+                <ExternalLinkButton url={cafeUrl} />
               </div>
             </div>
           </div>

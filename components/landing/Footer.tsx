@@ -30,16 +30,6 @@ const Footer: FC = () => {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li>
-                <a href="mailto:developer@ozgorkem.com" className="hover:text-foreground transition-colors">
-                  Contact Us
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
             <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
