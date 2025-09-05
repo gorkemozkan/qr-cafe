@@ -44,24 +44,15 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized to update this cafe" }, { status: 403 });
     }
 
-    // Generate new slug if name has changed
     let finalSlug = existingCafe.slug;
     if (validationResult.data.name && validationResult.data.name !== existingCafe.name) {
-      const baseSlug = slugify(validationResult.data.name, { maxLength: 50 });
-      let newSlug = baseSlug;
-      let counter = 1;
+      finalSlug = slugify(validationResult.data.name, { maxLength: 50 });
 
-      // Check for existing slugs and make it unique if needed
-      while (true) {
-        const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", newSlug).neq("id", id).single();
+      const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", finalSlug).neq("id", id).single();
 
-        if (!slugExists) break;
-
-        newSlug = `${baseSlug}-${counter}`;
-        counter++;
+      if (slugExists) {
+        return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });
       }
-
-      finalSlug = newSlug;
     }
 
     const { data, error } = await supabase

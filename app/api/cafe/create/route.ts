@@ -31,19 +31,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate unique slug from name
-    const baseSlug = slugify(validationResult.data.name, { maxLength: 50 });
-    let finalSlug = baseSlug;
-    let counter = 1;
+    const slug = slugify(validationResult.data.name, { maxLength: 50 });
 
-    // Check for existing slugs and make it unique if needed
-    while (true) {
-      const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", finalSlug).single();
+    const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", slug).single();
 
-      if (!existingCafe) break;
-
-      finalSlug = `${baseSlug}-${counter}`;
-      counter++;
+    if (existingCafe) {
+      return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });
     }
 
     const cafeData: TablesInsert<"cafes"> = {
@@ -53,7 +46,7 @@ export async function POST(request: NextRequest) {
       logo_url: validationResult.data.logo_url || null,
       currency: validationResult.data.currency,
       is_active: validationResult.data.is_active,
-      slug: finalSlug,
+      slug: slug,
       created_at: new Date().toISOString(),
     };
 

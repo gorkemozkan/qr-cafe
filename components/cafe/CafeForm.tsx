@@ -29,6 +29,8 @@ const CafeForm: FC<Props> = (props) => {
 
   const [uploadError, setUploadError] = useState<string | null>(null);
 
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const [isUploading, setIsUploading] = useState(false);
 
   const getDefaultValues = (): CafeSchema => {
@@ -66,6 +68,8 @@ const CafeForm: FC<Props> = (props) => {
   const selectedCurrency = watch("currency");
 
   const onSubmitForm = async (data: CafeSchema) => {
+    setSubmitError(null);
+
     try {
       if (props.mode === "create") {
         await props.onSubmit(data, selectedFile || undefined);
@@ -74,7 +78,8 @@ const CafeForm: FC<Props> = (props) => {
           setIsUploading(true);
           setUploadError(null);
 
-          const uploadResult = await uploadCafeLogo(selectedFile, `temp-${Date.now()}`);
+          const slug = props.cafe?.slug || `temp-${Date.now()}`;
+          const uploadResult = await uploadCafeLogo(selectedFile, slug);
 
           if (!uploadResult.success) {
             const errorMessage = `Upload failed: ${uploadResult.error.message}`;
@@ -89,7 +94,7 @@ const CafeForm: FC<Props> = (props) => {
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Operation failed";
-      setUploadError(errorMessage);
+      setSubmitError(errorMessage);
     } finally {
       setIsUploading(false);
     }
@@ -98,6 +103,7 @@ const CafeForm: FC<Props> = (props) => {
   const handleFileChange = (file: File | null) => {
     setSelectedFile(file);
     setUploadError(null);
+    setSubmitError(null);
   };
 
   const handleFileError = (error: string) => {
@@ -108,9 +114,17 @@ const CafeForm: FC<Props> = (props) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">Cafe Name *</Label>
-        <Input id="name" placeholder="Enter your cafe's name" {...register("name")} className={errors.name ? "border-red-500" : ""} />
+        <Input
+          id="name"
+          placeholder="Enter your cafe's name"
+          {...register("name")}
+          className={errors.name || submitError ? "border-red-500" : ""}
+          onChange={(e) => {
+            register("name").onChange(e);
+            setSubmitError(null);
+          }}
+        />
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
-        <p className="text-xs text-muted-foreground">URL slug will be automatically generated from the cafe name</p>
       </div>
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
@@ -149,6 +163,7 @@ const CafeForm: FC<Props> = (props) => {
         <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
         <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
       </div>
+      {submitError && <p className="text-sm text-red-500">{submitError}</p>}
       <div className="flex justify-end space-x-2 pt-4">
         {props.onCancel && (
           <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting}>
