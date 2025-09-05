@@ -83,3 +83,7 @@ export function slugify(input: string, opts: SlugifyOptions = {}): string {
 
   return s || (lower ? "n-a" : "N-A");
 }
+
+export function formatPrice(price: number, currency: string) {
+  return `${price.toFixed(2)} ${currency}`;
+}

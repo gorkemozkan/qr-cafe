@@ -1,13 +1,28 @@
 import { NextPage } from "next";
 import { notFound } from "next/navigation";
-import MenuHeader from "@/components/menu/MenuHeader";
-import MenuSections from "@/components/menu/MenuSections";
-import ScrollToTop from "@/components/menu/ScrollToTop";
+import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { publicMenuRepository } from "@/lib/repositories/public-menu-repository";
 
 interface Params {
   params: Promise<{ slug: string }>;
 }
+export const generateMetadata = async ({ params }: Params) => {
+  const { slug } = await params;
+
+  if (!slug) {
+    return {
+      title: "Menu",
+      description: "Menu",
+    };
+  }
+
+  const menu = await publicMenuRepository.getMenuBySlug(slug);
+
+  return {
+    title: menu?.cafe.name,
+    description: menu?.cafe.description,
+  };
+};
 
 const Page: NextPage<Params> = async (props) => {
   const { slug } = await props.params;
@@ -22,17 +37,7 @@ const Page: NextPage<Params> = async (props) => {
     notFound();
   }
 
-  return (
-    <div className="min-h-screen ">
-      <div className="bg-white text-foreground">
-        <div className="max-w-4xl mx-auto px-2 py-6">
-          <MenuHeader />
-          <MenuSections categories={menu.categories} />
-        </div>
-        <ScrollToTop />
-      </div>
-    </div>
-  );
+  return <SimpleMenu menu={menu} />;
 };
 
 export default Page;
