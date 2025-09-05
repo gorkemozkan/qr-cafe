@@ -42,6 +42,7 @@ export type Database = {
           id: number
           is_active: boolean
           logo_url: string | null
+          name: string
           slug: string
           user_id: string | null
         }
@@ -52,6 +53,7 @@ export type Database = {
           id?: number
           is_active?: boolean
           logo_url?: string | null
+          name?: string
           slug: string
           user_id?: string | null
         }
@@ -62,6 +64,7 @@ export type Database = {
           id?: number
           is_active?: boolean
           logo_url?: string | null
+          name?: string
           slug?: string
           user_id?: string | null
         }

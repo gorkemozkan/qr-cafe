@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
+import { slugify } from "@/lib/utils";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -33,7 +34,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, user_id, slug").eq("id", id).single();
+    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, user_id, slug, name").eq("id", id).single();
 
     if (fetchError || !existingCafe) {
       return NextResponse.json({ error: "Cafe not found" }, { status: 404 });
@@ -43,18 +44,31 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized to update this cafe" }, { status: 403 });
     }
 
-    if (updateData.slug && updateData.slug !== existingCafe.slug) {
-      const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", updateData.slug).neq("id", id).single();
+    // Generate new slug if name has changed
+    let finalSlug = existingCafe.slug;
+    if (validationResult.data.name && validationResult.data.name !== existingCafe.name) {
+      const baseSlug = slugify(validationResult.data.name, { maxLength: 50 });
+      let newSlug = baseSlug;
+      let counter = 1;
 
-      if (slugExists) {
-        return NextResponse.json({ error: "A cafe with this slug already exists" }, { status: 409 });
+      // Check for existing slugs and make it unique if needed
+      while (true) {
+        const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", newSlug).neq("id", id).single();
+
+        if (!slugExists) break;
+
+        newSlug = `${baseSlug}-${counter}`;
+        counter++;
       }
+
+      finalSlug = newSlug;
     }
 
     const { data, error } = await supabase
       .from("cafes")
       .update({
-        ...validationResult.data,
+        name: validationResult.data.name,
+        slug: finalSlug,
         description: validationResult.data.description || null,
         logo_url: validationResult.data.logo_url || null,
         currency: validationResult.data.currency,

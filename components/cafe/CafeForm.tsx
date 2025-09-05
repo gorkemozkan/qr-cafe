@@ -34,7 +34,7 @@ const CafeForm: FC<Props> = (props) => {
   const getDefaultValues = (): CafeSchema => {
     if (props.mode === "edit" && props.cafe) {
       return {
-        slug: props.cafe.slug,
+        name: props.cafe.name || props.cafe.slug, // Fallback to slug if name doesn't exist yet
         description: props.cafe.description || "",
         logo_url: props.cafe.logo_url || "",
         currency: props.cafe.currency as "TRY" | "USD" | "EUR",
@@ -43,7 +43,7 @@ const CafeForm: FC<Props> = (props) => {
     }
 
     return {
-      slug: "",
+      name: "",
       description: "",
       logo_url: "",
       currency: "TRY",
@@ -63,7 +63,6 @@ const CafeForm: FC<Props> = (props) => {
   });
 
   const isActive = watch("is_active");
-
   const selectedCurrency = watch("currency");
 
   const onSubmitForm = async (data: CafeSchema) => {
@@ -75,7 +74,7 @@ const CafeForm: FC<Props> = (props) => {
           setIsUploading(true);
           setUploadError(null);
 
-          const uploadResult = await uploadCafeLogo(selectedFile, data.slug);
+          const uploadResult = await uploadCafeLogo(selectedFile, `temp-${Date.now()}`);
 
           if (!uploadResult.success) {
             const errorMessage = `Upload failed: ${uploadResult.error.message}`;
@@ -107,24 +106,17 @@ const CafeForm: FC<Props> = (props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-      {/* Slug Field */}
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-100">
-        <Label htmlFor="slug">Slug *</Label>
-        <Input id="slug" placeholder="my-cafe" {...register("slug")} className={errors.slug ? "border-red-500" : ""} />
-        {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
-        <p className="text-xs text-muted-foreground">
-          This will be used in the URL: {window.location.origin}/{watch("slug")}
-        </p>
+      <div className="space-y-2">
+        <Label htmlFor="name">Cafe Name *</Label>
+        <Input id="name" placeholder="Enter your cafe's name" {...register("name")} className={errors.name ? "border-red-500" : ""} />
+        {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+        <p className="text-xs text-muted-foreground">URL slug will be automatically generated from the cafe name</p>
       </div>
-
-      {/* Description Field */}
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-150">
+      <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
         <Textarea id="description" placeholder="Describe your cafe..." {...register("description")} rows={3} />
       </div>
-
-      {/* Logo Upload Field */}
-      <div className="space-y-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-200">
+      <div className="space-y-2">
         <FilePicker
           id="logo"
           label="Cafe Logo"
@@ -151,27 +143,19 @@ const CafeForm: FC<Props> = (props) => {
           </div>
         )}
       </div>
-
-      {/* Currency Field */}
-      <div className="animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-250">
-        <CurrencySelect id="currency" label="Currency" value={selectedCurrency} onValueChange={(value) => setValue("currency", value)} error={errors.currency?.message} />
-      </div>
-
-      {/* Active Status Field */}
-      <div className="flex items-center space-x-2 animate-in fade-in-0 slide-in-from-left-2 duration-300 delay-300">
+      <CurrencySelect id="currency" label="Currency" value={selectedCurrency} onValueChange={(value) => setValue("currency", value)} error={errors.currency?.message} />
+      <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
         <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
         <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
       </div>
-
-      {/* Form Actions */}
-      <div className="flex justify-end space-x-2 pt-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-350">
+      <div className="flex justify-end space-x-2 pt-4">
         {props.onCancel && (
-          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
+          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px] transition-all duration-200 hover:scale-105">
+        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px]">
           {isSubmitting || isUploading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

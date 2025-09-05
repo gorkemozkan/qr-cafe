@@ -158,23 +158,25 @@ const CafeQRPreviewDialog: FC<QRPreviewDialogProps> = ({ slug, open, onOpenChang
             <QrCode className="h-5 w-5" />
             QR Code Preview
           </DialogTitle>
-          <DialogDescription>QR code for {slug} - Scan to visit the cafe page</DialogDescription>
+          <DialogDescription>QR code - Scan to visit the cafe page</DialogDescription>
         </DialogHeader>
-        <div className="space-y-0 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
+        <div>
           <div className="bg-background p-4 rounded-lg border">
-            <div className="flex items-center justify-between">
-              <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
                 <p className="text-sm font-medium mb-1">Menu URL:</p>
-                <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 transition-all duration-300   ">
+                <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
                   {cafeUrl}
                 </a>
               </div>
-              <CopyButton noText text={cafeUrl} variant="outline" size="sm" className="ml-2 flex-shrink-0" />
-              <Button asChild variant="outline" size="sm" className="ml-2 flex-shrink-0">
-                <Link href={cafeUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="h-4 w-4" />
-                </Link>
-              </Button>
+              <div className="flex items-center gap-2 ">
+                <CopyButton noText text={cafeUrl} variant="outline" size="sm" />
+                <Button asChild variant="outline" size="sm">
+                  <Link href={cafeUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
 
