@@ -54,7 +54,7 @@ const RefreshButton: FC<Props> = (props) => {
     setAttempt(newAttempt);
 
     if (newAttempt >= props.maxAttempt) {
-      const blockTime = Date.now() + 45000; // 45 seconds from now
+      const blockTime = Date.now() + 45000;
       setBlockedUntil(blockTime);
       setRemainingTime(45);
     }
@@ -69,7 +69,7 @@ const RefreshButton: FC<Props> = (props) => {
     if (props.loading) {
       return "Refreshing...";
     }
-    return `Instant refresh (${attempt}/${props.maxAttempt} attempts used)`;
+    return `Refresh (${attempt}/${props.maxAttempt})`;
   };
 
   const isBlocked = blockedUntil !== null && remainingTime > 0;
