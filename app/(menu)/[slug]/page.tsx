@@ -23,12 +23,14 @@ const Page: NextPage<Params> = async (props) => {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-4xl mx-auto px-5 py-6">
-        <MenuHeader />
-        <MenuSections categories={menu.categories} currency={menu.cafe.currency || "€"} />
+    <div className="min-h-screen ">
+      <div className="bg-white text-foreground">
+        <div className="max-w-4xl mx-auto px-2 py-6">
+          <MenuHeader />
+          <MenuSections categories={menu.categories} />
+        </div>
+        <ScrollToTop />
       </div>
-      <ScrollToTop />
     </div>
   );
 };
