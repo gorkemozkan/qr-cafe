@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { QrCode } from "lucide-react";
+import Link from "next/link";
 
 const Footer: FC = () => {
   return (
@@ -12,6 +13,41 @@ const Footer: FC = () => {
               <span className="text-xl font-bold">QR Cafe</span>
             </div>
             <p className="text-muted-foreground">Transforming cafes with smart QR menu solutions.</p>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>
+                <Link href="/terms" className="hover:text-foreground transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-foreground transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Support</h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>
+                <a href="mailto:developer@ozgorkem.com" className="hover:text-foreground transition-colors">
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-4">Product</h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>
+                <Link href="#features" className="hover:text-foreground transition-colors">
+                  Features
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
