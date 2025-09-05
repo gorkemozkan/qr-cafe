@@ -155,7 +155,7 @@ const CafeList: FC = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>View QR Code for {row.slug}</p>
+                  <p>View QR Code</p>
                 </TooltipContent>
               </Tooltip>
             }

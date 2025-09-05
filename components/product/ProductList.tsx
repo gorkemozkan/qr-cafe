@@ -13,10 +13,11 @@ import QuestionDialog from "@/components/ui/question-dialog";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import ProductEditModal from "@/components/product/ProductEditModal";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import ProductCreateModal from "@/components/product/ProductCreateModal";
 
 interface Props {
   cafeId: number;
-  categoryId?: number;
+  categoryId: number;
 }
 
 const ProductList: FC<Props> = (props) => {
@@ -83,8 +84,8 @@ const ProductList: FC<Props> = (props) => {
               showSkeleton={true}
             />
           ) : (
-            <div className="w-full h-16 bg-muted rounded-md flex items-center justify-center">
-              <span className="text-xs text-muted-foreground">No image</span>
+            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
+              <span className="text-[8px] text-center text-muted-foreground">No Image</span>
             </div>
           )}
         </>
@@ -152,7 +153,13 @@ const ProductList: FC<Props> = (props) => {
 
   return (
     <div className="space-y-4">
-      <DataTable title="Products" columns={columns} queryKey={queryKey} queryFn={queryFn} emptyMessage="No products found" />
+      <DataTable
+        actions={<ProductCreateModal cafeId={props.cafeId} categoryId={props.categoryId} />}
+        columns={columns}
+        queryKey={queryKey}
+        queryFn={queryFn}
+        emptyMessage="No products found"
+      />
       {productToEdit && (
         <ProductEditModal
           categoryId={productToEdit.category_id}
