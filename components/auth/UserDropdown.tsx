@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -10,14 +10,16 @@ import { useRequest } from "@/hooks/use-request";
 import { authRepository } from "@/lib/repositories";
 
 const UserDropdown = () => {
-  const router = useRouter();
   const { user, isLoading: userLoading } = useUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { isLoading: logoutLoading, execute: logout } = useRequest({
     mutationFn: () => authRepository.logout(),
     onSuccess: () => {
-      router.push("/admin/auth/login");
+      window.location.href = "/admin/auth/login";
+    },
+    onError: () => {
+      window.location.href = "/admin/auth/login";
     },
     successMessage: "Logged out successfully",
   });
