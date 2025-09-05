@@ -12,6 +12,12 @@ const ThemeToggle = () => {
 
   //#endregion
 
+  const getThemeText = (t: string) => {
+    if (t === "light") return "Light";
+    if (t === "dark") return "Dark";
+    return "System";
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +30,7 @@ const ThemeToggle = () => {
       <DropdownMenuContent align="end">
         {themes.map((theme) => (
           <DropdownMenuItem key={theme} onClick={() => setTheme(theme)}>
-            {theme}
+            {getThemeText(theme)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
