@@ -5,7 +5,7 @@ interface PublicCategory extends Tables<"categories"> {
   products: Tables<"products">[];
 }
 
-interface PublicMenuData {
+export interface PublicMenuData {
   cafe: Tables<"cafes">;
   categories: PublicCategory[];
 }

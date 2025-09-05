@@ -5,7 +5,7 @@ interface Props {
   items: string[];
 }
 
-const MenuSection: FC<Props> = (props) => {
+const SimpleMenuSection: FC<Props> = (props) => {
   const { title, items } = props;
 
   return (
@@ -22,4 +22,4 @@ const MenuSection: FC<Props> = (props) => {
   );
 };
 
-export default MenuSection;
+export default SimpleMenuSection;
