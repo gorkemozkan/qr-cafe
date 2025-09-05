@@ -4,6 +4,7 @@ import Hero from "@/components/landing/Hero";
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
 import Features from "@/components/landing/Features";
+import CTASection from "@/components/landing/CTASection";
 
 export const metadata: Metadata = {
   title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
@@ -52,6 +53,7 @@ const LandingPage: NextPage = () => {
         <Header />
         <Hero />
         <Features />
+        <CTASection />
         <Footer />
       </main>
     </>

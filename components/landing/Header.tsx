@@ -15,7 +15,7 @@ const Header: FC = () => {
           </div>
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <NextLink href="/admin/auth/login" className="hidden md:inline-flex">
+            <NextLink href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
               <Button>Sign In</Button>
             </NextLink>
           </div>

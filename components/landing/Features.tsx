@@ -1,44 +1,63 @@
 import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
-import { QrCode, Smartphone, Users, Zap, Shield, Coffee } from "lucide-react";
+import { QrCode, Smartphone, Users, Zap, Shield, Coffee, FolderTree, Image, Globe } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
   {
     icon: QrCode,
-    title: "Instant QR Menus",
-    description: "Generate beautiful digital menus with QR codes in seconds. No technical skills required.",
+    title: "QR Code Generation",
+    description: "Generate QR codes for each cafe with preview and PDF export capabilities. Share your digital menu instantly.",
+    comingSoon: false,
+  },
+  {
+    icon: FolderTree,
+    title: "Complete Menu Management",
+    description:
+      "Create, edit, and manage your entire menu structure effortlessly. Add cafes, organize categories, and showcase products with intuitive drag-and-drop organization.",
+    comingSoon: false,
+  },
+  {
+    icon: Image,
+    title: "Media Management",
+    description: "Upload and manage cafe logos and product images with secure cloud storage. Show off your dishes with high-quality visuals.",
+    comingSoon: false,
+  },
+  {
+    icon: Zap,
+    title: "Real-time Updates",
+    description: "Changes in your admin panel instantly reflect on customer-facing menus. Update prices and availability in real-time.",
     comingSoon: false,
   },
   {
     icon: Smartphone,
-    title: "Mobile-First Design",
-    description: "Optimized for mobile devices with responsive design that works on any screen size.",
+    title: "Mobile-First Experience",
+    description: "Responsive design optimized for mobile devices. Your customers get a seamless experience on any screen size.",
+    comingSoon: false,
+  },
+  {
+    icon: Globe,
+    title: "Multi-Currency Support",
+    description: "Support for different currencies across cafes. Perfect for international businesses or franchises.",
+    comingSoon: false,
+  },
+  {
+    icon: Shield,
+    title: "Enterprise Security",
+    description: "Built with enterprise-grade security including rate limiting, CSRF protection, and secure authentication.",
+    comingSoon: false,
+  },
+  {
+    icon: Coffee,
+    title: "Cafe-Focused Features",
+    description: "Designed specifically for cafes and restaurants with industry-specific workflows and optimizations.",
     comingSoon: false,
   },
   {
     icon: Users,
     title: "Customer Analytics",
-    description: "Track menu views, popular items, and customer preferences to optimize your offerings.",
+    description: "Track menu views, popular items, and customer preferences to optimize your offerings and boost sales.",
     comingSoon: true,
-  },
-  {
-    icon: Zap,
-    title: "Real-time Updates",
-    description: "Update menu items, prices, and availability instantly across all QR codes.",
-    comingSoon: true,
-  },
-  {
-    icon: Shield,
-    title: "Secure & Reliable",
-    description: "Enterprise-grade security with 99.9% uptime guarantee for your business.",
-    comingSoon: false,
-  },
-  {
-    icon: Coffee,
-    title: "Cafe-Focused",
-    description: "Built specifically for cafes and restaurants with industry-specific features.",
-    comingSoon: false,
   },
 ];
 
@@ -48,11 +67,11 @@ const Features: FC = () => {
       <div className="container mx-auto">
         <header className="text-center mb-16">
           <h2 id="features-heading" className="text-3xl md:text-4xl font-bold mb-4">
-            Why Choose QR Cafe?
+            Powerful Features for Modern Cafes
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Create and manage <strong>digital menus with QR codes</strong>, organize your products by categories, and provide customers with a{" "}
-            <strong>mobile-first menu experience</strong> that's easy to update.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Transform your cafe with our all-in-one platform. Generate <strong>QR codes instantly</strong>, manage your entire menu effortlessly, and push updates in real-time.
+            Everything you need to go digital, simplified.
           </p>
         </header>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

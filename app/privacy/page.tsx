@@ -17,9 +17,6 @@ export default function PrivacyPage() {
         <BackButton />
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <h1 className="text-4xl font-bold mb-8 text-foreground">Privacy Policy</h1>
-          <p className="mb-4 leading-relaxed text-muted-foreground">
-            <strong>Last Updated: January 2025</strong>
-          </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Introduction</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
@@ -168,9 +165,6 @@ export default function PrivacyPage() {
           </ul>
 
           <div className="border-t mt-8 pt-8">
-            <p className="text-sm text-muted-foreground">
-              <strong>Effective Date:</strong> January 2025
-            </p>
             <p className="text-sm text-muted-foreground mt-2">
               This Privacy Policy is part of our Terms of Service. By using QR Cafe, you acknowledge that you have read and understand this Privacy Policy.
             </p>

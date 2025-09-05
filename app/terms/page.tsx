@@ -17,10 +17,6 @@ export default function TermsPage() {
         <BackButton />
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
-          <p className="mb-4 leading-relaxed text-muted-foreground">
-            <strong>Last Updated: January 2025</strong>
-          </p>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
             By accessing and using QR Cafe ("Service", "Platform", "we", "us", "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these
@@ -38,8 +34,7 @@ export default function TermsPage() {
             <li>Multi-cafe management capabilities</li>
             <li>Category and product organization</li>
             <li>Mobile-optimized menu displays</li>
-            <li>File storage for logos and product images</li>
-            <li>Real-time menu updates</li>
+            <li>Real-time menu updates (when available)</li>
             <li>Analytics and reporting (when available)</li>
           </ul>
 
@@ -87,8 +82,6 @@ export default function TermsPage() {
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>WE PROVIDE THE SERVICE "AS IS" WITHOUT WARRANTIES</li>
             <li>WE ARE NOT LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES</li>
-            <li>OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID IN THE LAST 12 MONTHS</li>
-            <li>WE ARE NOT LIABLE for business interruption, lost profits, or data loss</li>
           </ul>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">6. Contact Information</h2>
@@ -99,9 +92,6 @@ export default function TermsPage() {
           </ul>
 
           <div className="border-t mt-8 pt-8">
-            <p className="text-sm text-muted-foreground">
-              <strong>Effective Date:</strong> January 2025
-            </p>
             <p className="text-sm text-muted-foreground mt-2">By using QR Cafe, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
           </div>
         </div>

@@ -17,7 +17,8 @@ import QuestionDialog from "@/components/ui/question-dialog";
 import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui";
-import CafeCreateModal from "./CafeCreateModal";
+import CafeCreateModal from "@/components/cafe/CafeCreateModal";
+import ExternalLinkButton from "@/components/ExternalLinkButton";
 
 const CafeList: FC = () => {
   //#region Hooks
@@ -148,16 +149,19 @@ const CafeList: FC = () => {
             onDelete={() => handleDeleteClick(row)}
             onInspect={() => handleCategoriesClick(row)}
             additionalActions={
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
-                    <QrCode className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>View QR Code</p>
-                </TooltipContent>
-              </Tooltip>
+              <div className="flex items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>View QR Code</p>
+                  </TooltipContent>
+                </Tooltip>
+                <ExternalLinkButton url={`${window.location.origin}/${row.slug}`} />
+              </div>
             }
           />
         </div>
