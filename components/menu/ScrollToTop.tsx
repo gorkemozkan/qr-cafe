@@ -31,7 +31,7 @@ const ScrollToTop: FC = () => {
   return (
     <Button
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 w-12 h-12 p-0 rounded-full bg-[#8B1538] hover:bg-[#8B1538]/90 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-3"
+      className="fixed bottom-6 right-6 z-50 w-12 h-12 p-0 rounded-full bg-[#8B1538] hover:bg-[#8B1538]/90 dark:bg-[#A61E4D] dark:hover:bg-[#A61E4D]/90 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-3"
       aria-label="Scroll to top"
     >
       <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
