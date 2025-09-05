@@ -35,12 +35,12 @@ export class PublicMenuRepository {
         return null;
       }
 
-      // Get products for the cafe
+      // Get products for the cafe (including out-of-stock items for display)
       const { data: products, error: productsError } = await supabase
         .from("products")
         .select("*")
         .eq("cafe_id", cafe.id)
-        .eq("is_available", true)
+        .order("is_available", { ascending: false })
         .order("created_at", { ascending: false });
 
       if (productsError) {

@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { notFound } from "next/navigation";
 import MenuHeader from "@/components/menu/MenuHeader";
 import MenuSections from "@/components/menu/MenuSections";
+import ScrollToTop from "@/components/menu/ScrollToTop";
 import { publicMenuRepository } from "@/lib/repositories/public-menu-repository";
 
 interface Params {
@@ -22,11 +23,12 @@ const Page: NextPage<Params> = async (props) => {
   }
 
   return (
-    <div className="min-h-screen  bg-[#FAF9F2]">
-      <div className="max-w-5xl mx-auto px-5 py-6">
-        <MenuHeader cafe={menu.cafe} />
-        <MenuSections categories={menu.categories} />
+    <div className="min-h-screen">
+      <div className="max-w-4xl mx-auto px-5 py-6">
+        <MenuHeader />
+        <MenuSections categories={menu.categories} currency={menu.cafe.currency || "€"} />
       </div>
+      <ScrollToTop />
     </div>
   );
 };
