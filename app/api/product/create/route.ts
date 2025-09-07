@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { productSchema } from "@/lib/schema";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
 
     const {
@@ -21,7 +26,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Cafe ID is required" }, { status: 400 });
     }
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("id", cafe_id)
+      .eq("user_id", user.id)
+      .single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
@@ -29,7 +39,10 @@ export async function POST(request: NextRequest) {
 
     const validationResult = productSchema.safeParse(productData);
     if (!validationResult.success) {
-      return NextResponse.json({ error: "Invalid product data", details: validationResult.error.issues }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid product data", details: validationResult.error.issues },
+        { status: 400 },
+      );
     }
 
     const validatedData = validationResult.data;

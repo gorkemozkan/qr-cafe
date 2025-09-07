@@ -3,9 +3,14 @@ import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
 import { TablesInsert } from "@/types/db";
 import { slugify } from "@/lib/utils";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
 
     const {

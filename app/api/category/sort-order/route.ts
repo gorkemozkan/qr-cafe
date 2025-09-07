@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -21,13 +26,23 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Cafe ID and category IDs array are required" }, { status: 400 });
     }
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("id", cafe_id)
+      .eq("user_id", user.id)
+      .single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
     }
 
-    const { data: existingCategories, error: fetchError } = await supabase.from("categories").select("id").eq("cafe_id", cafe_id).eq("user_id", user.id).in("id", category_ids);
+    const { data: existingCategories, error: fetchError } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("cafe_id", cafe_id)
+      .eq("user_id", user.id)
+      .in("id", category_ids);
 
     if (fetchError) {
       return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 });
@@ -43,7 +58,11 @@ export async function PUT(request: NextRequest) {
     }));
 
     for (const update of updates) {
-      const { error: updateError } = await supabase.from("categories").update({ sort_order: update.sort_order }).eq("id", update.id).eq("user_id", user.id);
+      const { error: updateError } = await supabase
+        .from("categories")
+        .update({ sort_order: update.sort_order })
+        .eq("id", update.id)
+        .eq("user_id", user.id);
 
       if (updateError) {
         return NextResponse.json({ error: "Failed to update sort order" }, { status: 500 });

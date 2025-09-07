@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { categorySchema } from "@/lib/schema";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
     const {
       data: { user },
@@ -39,7 +44,12 @@ export async function POST(request: NextRequest) {
             : validationResult.data.sort_order,
     };
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("id", cafe_id)
+      .eq("user_id", user.id)
+      .single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
