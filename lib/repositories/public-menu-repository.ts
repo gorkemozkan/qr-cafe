@@ -33,8 +33,7 @@ export interface PublicMenuData {
 export class PublicMenuRepository {
   async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
     try {
-      const baseUrl =
-        process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL : "http://localhost:3000";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
       const response = await fetch(`${baseUrl}/api/public/cafe/${slug}`, {
         method: "GET",
