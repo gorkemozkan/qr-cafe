@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { QrCode, Smartphone, Users, Zap, Shield, Coffee, FolderTree, Image, Globe } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const features = [
   {
@@ -24,12 +25,6 @@ const features = [
     comingSoon: false,
   },
   {
-    icon: Zap,
-    title: "Real-time Updates",
-    description: "Changes in your admin panel instantly reflect on customer-facing menus. Update prices and availability in real-time.",
-    comingSoon: false,
-  },
-  {
     icon: Smartphone,
     title: "Mobile-First Experience",
     description: "Responsive design optimized for mobile devices. Your customers get a seamless experience on any screen size.",
@@ -42,22 +37,10 @@ const features = [
     comingSoon: false,
   },
   {
-    icon: Shield,
-    title: "Enterprise Security",
-    description: "Built with enterprise-grade security including rate limiting, CSRF protection, and secure authentication.",
-    comingSoon: false,
-  },
-  {
     icon: Coffee,
     title: "Cafe-Focused Features",
     description: "Designed specifically for cafes and restaurants with industry-specific workflows and optimizations.",
     comingSoon: false,
-  },
-  {
-    icon: Users,
-    title: "Customer Analytics",
-    description: "Track menu views, popular items, and customer preferences to optimize your offerings and boost sales.",
-    comingSoon: true,
   },
 ];
 
