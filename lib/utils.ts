@@ -18,7 +18,7 @@ export function parseNumericId(id: string, resourceName = "ID"): number {
 export const shareWhatsApp = (text: string) => {
   const message = `Check out this cafe menu: ${text}`;
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, "_blank");
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 };
 
 export const isDevelopment = process.env.NODE_ENV === "development";
