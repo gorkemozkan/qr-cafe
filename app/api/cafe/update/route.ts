@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
 import { slugify } from "@/lib/utils";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
 
     const {
@@ -34,7 +39,11 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, user_id, slug, name").eq("id", id).single();
+    const { data: existingCafe, error: fetchError } = await supabase
+      .from("cafes")
+      .select("id, user_id, slug, name")
+      .eq("id", id)
+      .single();
 
     if (fetchError || !existingCafe) {
       return NextResponse.json({ error: "Cafe not found" }, { status: 404 });
@@ -48,7 +57,12 @@ export async function PUT(request: NextRequest) {
     if (validationResult.data.name && validationResult.data.name !== existingCafe.name) {
       finalSlug = slugify(validationResult.data.name, { maxLength: 50 });
 
-      const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", finalSlug).neq("id", id).single();
+      const { data: slugExists } = await supabase
+        .from("cafes")
+        .select("id")
+        .eq("slug", finalSlug)
+        .neq("id", id)
+        .single();
 
       if (slugExists) {
         return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });

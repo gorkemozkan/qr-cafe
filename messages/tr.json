@@ -1,0 +1,210 @@
+{
+  "common": {
+    "back": "Geri",
+    "loading": "Yükleniyor...",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifreyi Onayla",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "create": "Oluştur",
+    "update": "Güncelle",
+    "close": "Kapat",
+    "yes": "Evet",
+    "no": "Hayır",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "sort": "Sırala",
+    "name": "İsim",
+    "description": "Açıklama",
+    "actions": "İşlemler",
+    "status": "Durum",
+    "date": "Tarih",
+    "price": "Fiyat",
+    "category": "Kategori",
+    "image": "Görsel",
+    "required": "Zorunlu",
+    "optional": "Opsiyonel"
+  },
+  "navigation": {
+    "signIn": "Giriş Yap",
+    "signUp": "Kayıt Ol",
+    "login": "Giriş",
+    "logout": "Çıkış",
+    "dashboard": "Gösterge Paneli",
+    "cafes": "Kafeler",
+    "categories": "Kategoriler",
+    "products": "Ürünler",
+    "menu": "Menü",
+    "settings": "Ayarlar",
+    "profile": "Profil"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Kafenizi Bugün Dönüştürün",
+      "title": "Dijital QR Menü",
+      "subtitle": "Modern Kafeler İçin",
+      "description": "QR kodlarla çarpıcı dijital menüler oluşturun, ürünleri kategorilere ayırın ve müşterilerinizin seveceği olağanüstü mobil yemek deneyimi sunun.",
+      "cta": "QR Menünüzü Oluşturun",
+      "features": {
+        "instant": "Anında",
+        "instantSub": "QR Oluşturma",
+        "mobile": "Mobil",
+        "mobileSub": "Optimize",
+        "realtime": "Gerçek Zamanlı",
+        "realtimeSub": "Güncellemeler",
+        "cafe": "Kafe",
+        "cafeSub": "Odaklı"
+      }
+    },
+    "features": {
+      "title": "Modern Kafeler İçin Güçlü Özellikler",
+      "subtitle": "Kafeınizi hepsi bir arada platformumuzla dönüştürün. Anında QR kodlar oluşturun, tüm menünüzü zahmetsizce yönetin ve gerçek zamanlı güncellemeler gönderin. Dijitalleşmek için ihtiyacınız olan her şey, basitleştirildi.",
+      "items": {
+        "qrGeneration": {
+          "title": "QR Kod Oluşturma",
+          "description": "Her kafe için önizleme ve PDF dışa aktarma özellikli QR kodlar oluşturun. Dijital menünüzü anında paylaşın."
+        },
+        "menuManagement": {
+          "title": "Kapsamlı Menü Yönetimi",
+          "description": "Tüm menü yapınızı zahmetsizce oluşturun, düzenleyin ve yönetin. Kafeler ekleyin, kategorileri organize edin ve sürükle-bırak organizasyonuyla ürünleri sergileyin."
+        },
+        "mediaManagement": {
+          "title": "Medya Yönetimi",
+          "description": "Güvenli bulut depolamayla kafe logolarını ve ürün görsellerini yükleyin ve yönetin. Yemeklerinizi yüksek kaliteli görsellerle sergileyin."
+        },
+        "mobileFirst": {
+          "title": "Mobil Öncelikli Deneyim",
+          "description": "Mobil cihazlar için optimize edilmiş duyarlı tasarım. Müşterileriniz her ekran boyutunda kusursuz deneyim yaşar."
+        },
+        "multiCurrency": {
+          "title": "Çoklu Para Birimi Desteği",
+          "description": "Kafeler arasında farklı para birimlerini destekler. Uluslararası işletmeler veya franchise'lar için mükemmel."
+        },
+        "cafeFocused": {
+          "title": "Kafe Odaklı Özellikler",
+          "description": "Endüstriye özel iş akışları ve optimizasyonlarla özellikle kafeler ve restoranlar için tasarlanmıştır."
+        }
+      },
+      "comingSoon": "Yakında"
+    },
+    "cta": {
+      "title": "Kafenizi <span>Dönüştürmeye</span> Hazır mısınız?",
+      "subtitle": "Güzel dijital menüler oluşturmak için QR Cafe kullanan yüzlerce kafeye katılın. <strong>Ücretsiz deneme sürümünüzü bugün başlatın</strong> ve farkı dakikalar içinde görün.",
+      "button": "Ücretsiz Deneme Başlat",
+      "features": {
+        "instantQR": "Anında QR Kodlar",
+        "mobileOptimized": "Mobil Optimize"
+      }
+    },
+    "footer": {
+      "description": "Akıllı QR menü çözümleriyle kafeleri dönüştürüyoruz.",
+      "legal": "Yasal",
+      "product": "Ürün",
+      "features": "Özellikler",
+      "copyright": "QR Cafe - Tüm hakları saklıdır",
+      "privacy": "Gizlilik Politikası",
+      "terms": "Hizmet Şartları"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Hesabınıza giriş yapın",
+      "description": "Hesabınıza giriş yapmak için e-postanızı girin",
+      "emailPlaceholder": "ornek@email.com",
+      "passwordPlaceholder": "*********",
+      "securityVerification": "Güvenlik Doğrulaması",
+      "loginButton": "Giriş Yap",
+      "loggingIn": "Giriş yapılıyor...",
+      "processingRequest": "Giriş isteği işleniyor",
+      "successMessage": "Giriş başarılı!"
+    },
+    "signup": {
+      "title": "Hesabınızı oluşturun",
+      "description": "Hesabınızı oluşturmak için bilgilerinizi girin",
+      "confirmPasswordLabel": "Şifreyi Onayla",
+      "createAccountButton": "Hesap Oluştur",
+      "creatingAccount": "Hesap oluşturuluyor...",
+      "processingRequest": "Hesap oluşturma isteği işleniyor",
+      "successMessage": "Hesap başarıyla oluşturuldu!",
+      "alreadyHaveAccount": "Zaten hesabınız var mı?",
+      "loginLink": "Giriş yap"
+    },
+    "skipToForm": "{form} formuna geç",
+    "goBackHome": "Ana sayfaya dön"
+  },
+  "cafe": {
+    "title": "Kafeler",
+    "createNew": "Yeni Kafe Oluştur",
+    "editCafe": "Kafe Düzenle",
+    "deleteCafe": "Kafe Sil",
+    "noCafes": "Kafe bulunamadı",
+    "fields": {
+      "name": "Kafe Adı",
+      "slug": "URL Kısaltması",
+      "description": "Açıklama",
+      "address": "Adres",
+      "phone": "Telefon",
+      "website": "Website",
+      "logo": "Logo"
+    }
+  },
+  "category": {
+    "title": "Kategoriler",
+    "createNew": "Yeni Kategori Oluştur",
+    "editCategory": "Kategori Düzenle",
+    "deleteCategory": "Kategori Sil",
+    "noCategories": "Kategori bulunamadı",
+    "fields": {
+      "name": "Kategori Adı",
+      "description": "Açıklama",
+      "sortOrder": "Sıralama Düzeni"
+    }
+  },
+  "product": {
+    "title": "Ürünler",
+    "createNew": "Yeni Ürün Oluştur",
+    "editProduct": "Ürün Düzenle",
+    "deleteProduct": "Ürün Sil",
+    "noProducts": "Ürün bulunamadı",
+    "fields": {
+      "name": "Ürün Adı",
+      "description": "Açıklama",
+      "price": "Fiyat",
+      "image": "Görsel",
+      "available": "Mevcut",
+      "category": "Kategori"
+    }
+  },
+  "dashboard": {
+    "title": "Gösterge Paneli",
+    "welcome": "Tekrar hoş geldiniz!",
+    "stats": {
+      "totalCafes": "Toplam Kafe",
+      "totalProducts": "Toplam Ürün",
+      "totalCategories": "Toplam Kategori",
+      "thisMonth": "Bu Ay"
+    }
+  },
+  "menu": {
+    "viewMenu": "Menüyü Görüntüle",
+    "qrCode": "QR Kod",
+    "downloadQR": "QR İndir",
+    "printQR": "QR Yazdır"
+  },
+  "validation": {
+    "required": "Bu alan zorunludur",
+    "email": "Lütfen geçerli bir e-posta adresi girin",
+    "minLength": "En az {count} karakter olmalıdır",
+    "maxLength": "En fazla {count} karakter olmalıdır",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "invalidFormat": "Geçersiz format"
+  },
+  "language": {
+    "english": "English",
+    "turkish": "Türkçe",
+    "selectLanguage": "Dil Seçin"
+  }
+}

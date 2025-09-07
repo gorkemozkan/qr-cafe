@@ -1,9 +1,8 @@
 import { Metadata, NextPage } from "next";
-import PageTitle from "@/components/PageTitle";
+
 import CafeList from "@/components/cafe/CafeList";
 import DashboardStatCards from "@/components/dashboard/DashboardStatCards";
-import UserDropdown from "@/components/auth/UserDropdown";
-import ThemeToggle from "@/components/ThemeToggle";
+import PageTitleWithUser from "@/components/PageTitleWithUser";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -13,16 +12,7 @@ export const metadata: Metadata = {
 const Page: NextPage = () => {
   return (
     <div className="@container/main flex flex-1 flex-col gap-2 space-y-8">
-      <PageTitle
-        subtitle="You can manage your cafes and categories here. "
-        title="Welcome to Dashboard."
-        actions={
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <UserDropdown />
-          </div>
-        }
-      />
+      <PageTitleWithUser />
       <DashboardStatCards />
       <CafeList />
     </div>

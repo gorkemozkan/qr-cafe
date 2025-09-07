@@ -110,19 +110,38 @@ const ProductForm: FC<Props> = (props) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">Product Name *</Label>
-        <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+        <Input
+          id="name"
+          {...register("name")}
+          placeholder="Enter product name"
+          className={errors.name ? "border-red-500" : ""}
+        />
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" {...register("description")} placeholder="Describe your product..." rows={3} className={errors.description ? "border-red-500" : ""} />
+        <Textarea
+          id="description"
+          {...register("description")}
+          placeholder="Describe your product..."
+          rows={3}
+          className={errors.description ? "border-red-500" : ""}
+        />
         {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="price">Price</Label>
-        <Input id="price" type="number" step="0.01" min="0" {...register("price", { valueAsNumber: true })} placeholder="0.00" className={errors.price ? "border-red-500" : ""} />
+        <Input
+          id="price"
+          type="number"
+          step="0.01"
+          min="0"
+          {...register("price", { valueAsNumber: true })}
+          placeholder="0.00"
+          className={errors.price ? "border-red-500" : ""}
+        />
         {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
       </div>
 
@@ -155,9 +174,15 @@ const ProductForm: FC<Props> = (props) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
+        <Switch
+          id="is_available"
+          checked={isAvailable}
+          onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
+        />
         <Label htmlFor="is_available">Available</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}</p>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
+        </p>
       </div>
 
       <div className="flex justify-end space-x-2 pt-4">
@@ -172,7 +197,11 @@ const ProductForm: FC<Props> = (props) => {
             Cancel
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting || isUploading || props.isLoading} className="min-w-[100px] transition-all duration-200 hover:scale-105">
+        <Button
+          type="submit"
+          disabled={isSubmitting || isUploading || props.isLoading}
+          className="min-w-[100px] transition-all duration-200 hover:scale-105"
+        >
           {isSubmitting || isUploading || props.isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
