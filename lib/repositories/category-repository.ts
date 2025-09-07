@@ -1,6 +1,6 @@
+import { Tables } from "@/types/db";
 import { type CategorySchema } from "@/lib/schema";
 import { BaseRepository } from "@/lib/repositories/base-repository";
-import { Tables } from "@/types/db";
 
 export class CategoryRepository extends BaseRepository {
   protected readonly baseUrl = "/api/category";

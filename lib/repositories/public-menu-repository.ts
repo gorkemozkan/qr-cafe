@@ -1,63 +1,65 @@
-import { createClient } from "@/lib/supabase/server";
-import { Tables } from "@/types/db";
+interface PublicProduct {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number | null;
+  image_url: string | null;
+  is_available: boolean;
+}
 
-interface PublicCategory extends Tables<"categories"> {
-  products: Tables<"products">[];
+interface PublicCategory {
+  id: number;
+  name: string;
+  description: string;
+  sort_order: number | null;
+  products: PublicProduct[];
+}
+
+interface PublicCafe {
+  id: number;
+  name: string;
+  description: string | null;
+  logo_url: string | null;
+  currency: string | null;
+  slug: string;
 }
 
 export interface PublicMenuData {
-  cafe: Tables<"cafes">;
+  cafe: PublicCafe;
   categories: PublicCategory[];
+  generated_at: string;
 }
 
 export class PublicMenuRepository {
   async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
     try {
-      const supabase = await createClient();
+      const baseUrl =
+        process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_BASE_URL : "http://localhost:3000";
 
-      // Get cafe by slug
-      const { data: cafe, error: cafeError } = await supabase.from("cafes").select("*").eq("slug", slug).eq("is_active", true).single();
+      const response = await fetch(`${baseUrl}/api/public/cafe/${slug}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (cafeError || !cafe) {
+      if (!response.ok) {
+        if (response.status === 404) {
+          return null; // Cafe not found
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const menuData: PublicMenuData = await response.json();
+
+      if (!menuData || !menuData.cafe) {
         return null;
       }
 
-      // Get categories for the cafe
-      const { data: categories, error: categoriesError } = await supabase
-        .from("categories")
-        .select("*")
-        .eq("cafe_id", cafe.id)
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false });
-
-      if (categoriesError) {
-        return null;
-      }
-
-      // Get products for the cafe (including out-of-stock items for display)
-      const { data: products, error: productsError } = await supabase
-        .from("products")
-        .select("*")
-        .eq("cafe_id", cafe.id)
-        .order("is_available", { ascending: false })
-        .order("created_at", { ascending: false });
-
-      if (productsError) {
-        return null;
-      }
-
-      // Group products by category
-      const categoriesWithProducts: PublicCategory[] = (categories || []).map((category) => ({
-        ...category,
-        products: (products || []).filter((product) => product.category_id === category.id),
-      }));
-
-      return {
-        cafe,
-        categories: categoriesWithProducts,
-      };
-    } catch (_error) {
+      return menuData;
+    } catch (error) {
+      // If API call fails, return null
+      console.error("Failed to fetch menu data:", error);
       return null;
     }
   }
