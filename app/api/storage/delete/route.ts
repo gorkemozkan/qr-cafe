@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { verifyCsrfToken } from "@/lib/security";
 
 export async function DELETE(request: NextRequest) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+
     const supabase = await createClient();
 
     const {
