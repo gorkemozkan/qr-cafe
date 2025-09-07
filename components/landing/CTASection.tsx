@@ -1,10 +1,15 @@
+"use client";
+
 import { FC } from "react";
 import NextLink from "next/link";
 import { ArrowRight, Sparkles, Rocket } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import FancyBackground from "@/components/landing/FancyBackground";
 
 const CTASection: FC = () => {
+  const t = useTranslations("landing.cta");
+
   return (
     <section className="py-20 px-4 relative overflow-hidden" aria-labelledby="cta-heading">
       <FancyBackground />
@@ -19,22 +24,25 @@ const CTASection: FC = () => {
             </div>
           </div>
           <h2 id="cta-heading" className="text-3xl md:text-5xl font-black mb-6 leading-tight">
-            Ready to <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">Transform</span> Your Cafe?
+            {t.rich("title", {
+              span: (chunks) => <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">{chunks}</span>,
+            })}
           </h2>
 
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Join hundreds of cafes already using QR Cafe to create beautiful digital menus.
-            <strong className="text-foreground"> Start your free trial today</strong> and see the difference in minutes.
+            {t.rich("subtitle", {
+              strong: (chunks) => <strong className="text-foreground">{chunks}</strong>,
+            })}
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span>Instant QR Codes</span>
+              <span>{t("features.instantQR")}</span>
             </div>
             <div className="flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span>Mobile Optimized</span>
+              <span>{t("features.mobileOptimized")}</span>
             </div>
           </div>
 
@@ -47,7 +55,7 @@ const CTASection: FC = () => {
               <NextLink href="/admin/auth/signup" target="_blank">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Rocket className="mr-2 h-5 w-5" aria-hidden="true" />
-                Start Free Trial
+                {t("button")}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
               </NextLink>
             </Button>

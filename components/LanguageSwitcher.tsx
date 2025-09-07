@@ -1,0 +1,41 @@
+"use client";
+
+import { Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+const languages = [
+  { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+];
+
+const LanguageSwitcher = () => {
+  const t = useTranslations("language");
+
+  const setLanguage = (locale: string) => {
+    document.cookie = `locale=${locale}; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax`;
+    window.location.reload();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm" className="gap-2">
+          <Globe className="h-4 w-4" />
+          <span className="sr-only">{t("selectLanguage")}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {languages.map((lang) => (
+          <DropdownMenuItem key={lang.code} onClick={() => setLanguage(lang.code)} className="gap-2 cursor-pointer">
+            <span>{lang.flag}</span>
+            <span>{lang.name}</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default LanguageSwitcher;

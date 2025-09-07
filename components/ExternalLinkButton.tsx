@@ -1,7 +1,7 @@
-import { ExternalLink } from "lucide-react";
 import { FC } from "react";
-import { Button } from "./ui/button";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Props {

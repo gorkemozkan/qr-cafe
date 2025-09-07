@@ -3,9 +3,13 @@
 import { FC } from "react";
 import NextLink from "next/link";
 import { QrCode } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header: FC = () => {
+  const t = useTranslations("navigation");
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -21,10 +25,10 @@ const Header: FC = () => {
             <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
             <span className="text-2xl font-bold">QR Cafe</span>
           </button>
-
           <div className="flex items-center space-x-4">
+            <LanguageSwitcher />
             <NextLink href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
-              <Button>Sign In</Button>
+              <Button>{t("signIn")}</Button>
             </NextLink>
           </div>
         </nav>

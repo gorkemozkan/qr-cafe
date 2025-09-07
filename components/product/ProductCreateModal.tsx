@@ -9,8 +9,15 @@ import { useRequest } from "@/hooks/use-request";
 import { useCafeData } from "@/hooks/use-cafe-data";
 import { productRepository } from "@/lib/repositories";
 import ProductForm from "@/components/product/ProductForm";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface Props {
   cafeId: number;
@@ -38,7 +45,11 @@ const ProductCreateModal: FC<Props> = (props) => {
       props.onSuccess?.();
     },
     successMessage: "Product created successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.productsByCategory(props.categoryId.toString()), QueryKeys.stats],
+    invalidateQueries: [
+      QueryKeys.productsByCafe(props.cafeId.toString()),
+      QueryKeys.productsByCategory(props.categoryId.toString()),
+      QueryKeys.stats,
+    ],
   });
 
   const handleSubmit = async (data: ProductSchema) => {
@@ -70,7 +81,13 @@ const ProductCreateModal: FC<Props> = (props) => {
           <DialogTitle>Create New Product</DialogTitle>
           <DialogDescription>Fill in the details below to create a new product.</DialogDescription>
         </DialogHeader>
-        <ProductForm mode="create" cafeSlug={cafeSlug} onSubmit={handleSubmit} onCancel={handleCancel} categoryId={props.categoryId} />
+        <ProductForm
+          mode="create"
+          cafeSlug={cafeSlug}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          categoryId={props.categoryId}
+        />
       </DialogContent>
     </Dialog>
   );

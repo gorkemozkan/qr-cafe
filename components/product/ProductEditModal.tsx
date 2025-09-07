@@ -36,7 +36,11 @@ const ProductEditModal: FC<Props> = (props) => {
       props.onSuccess?.();
     },
     successMessage: "Product updated successfully!",
-    invalidateQueries: [QueryKeys.productsByCafe(props.cafeId.toString()), QueryKeys.productsByCategory(props.categoryId.toString()), QueryKeys.stats],
+    invalidateQueries: [
+      QueryKeys.productsByCafe(props.cafeId.toString()),
+      QueryKeys.productsByCategory(props.categoryId.toString()),
+      QueryKeys.stats,
+    ],
   });
 
   const handleCancel = () => {
