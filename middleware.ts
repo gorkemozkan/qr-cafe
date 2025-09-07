@@ -3,7 +3,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { updateSession } from "@/lib/supabase/middleware";
 import { locales, defaultLocale } from "./i18n";
 
-const intlMiddleware = createIntlMiddleware({
+createIntlMiddleware({
   locales,
   defaultLocale,
   localeDetection: false, // We'll handle locale detection via cookies

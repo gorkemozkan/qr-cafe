@@ -1,13 +1,25 @@
 "use client";
 
 import { FC } from "react";
-import { Tables } from "@/types/db";
 import SimpleMenuProduct from "@/components/menu/SimpleMenu/SimpleMenuProduct";
 import SimpleMenuNullCase from "@/components/menu/SimpleMenu/SimpleMenuNullCase";
 import SimpleMenuCategoryHeader from "@/components/menu/SimpleMenu/SimpleMenuCategoryHeader";
 
-interface PublicCategory extends Tables<"categories"> {
-  products: Tables<"products">[];
+interface PublicProduct {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number | null;
+  image_url: string | null;
+  is_available: boolean;
+}
+
+interface PublicCategory {
+  id: number;
+  name: string;
+  description: string;
+  sort_order: number | null;
+  products: PublicProduct[];
 }
 
 interface Props {
