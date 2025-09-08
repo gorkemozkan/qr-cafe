@@ -139,21 +139,55 @@ export default function PrivacyPage() {
           </ul>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">6. Your Privacy Rights</h2>
-          <p className="mb-4 leading-relaxed text-muted-foreground">You have the right to:</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">
+            As a user located in the European Union, you have specific rights under the General Data Protection
+            Regulation (GDPR). You have the right to:
+          </p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>
               <strong>Access:</strong> View your personal information and account data
             </li>
             <li>
-              <strong>Update:</strong> Modify your account information and preferences
+              <strong>Rectification:</strong> Update your account information and preferences
             </li>
             <li>
-              <strong>Delete:</strong> Request deletion of your account and associated data
+              <strong>Erasure ("Right to be Forgotten"):</strong> Request deletion of your account and associated data
             </li>
             <li>
-              <strong>Export:</strong> Download your menu data and content
+              <strong>Data Portability:</strong> Download your menu data and content in a structured format
+            </li>
+            <li>
+              <strong>Restriction of Processing:</strong> Limit how we process your data
+            </li>
+            <li>
+              <strong>Object to Processing:</strong> Object to certain types of data processing
             </li>
           </ul>
+
+          <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">6.1 Exercising Your GDPR Rights</h3>
+          <p className="mb-4 leading-relaxed text-muted-foreground">
+            You can exercise your GDPR rights directly through our platform:
+          </p>
+          <ul className="mb-4 space-y-2 text-muted-foreground">
+            <li>
+              <strong>Data Export:</strong> Access your GDPR Compliance page in your account settings to download all
+              your data
+            </li>
+            <li>
+              <strong>Data Deletion:</strong> Use the GDPR Compliance page to permanently delete your account and all
+              associated data
+            </li>
+            <li>
+              <strong>Account Access:</strong> Log into your account to view and modify your personal information
+            </li>
+          </ul>
+          <p className="mb-4 leading-relaxed text-muted-foreground">To access these features:</p>
+          <ol className="mb-4 space-y-2 text-muted-foreground list-decimal list-inside">
+            <li>Log in to your QR Cafe account</li>
+            <li>Click on your user menu (top-right corner)</li>
+            <li>Select "GDPR Compliance" from the dropdown menu</li>
+            <li>Choose whether you want to export or delete your data</li>
+          </ol>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">7. Contact Information</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">For privacy-related questions or concerns:</p>

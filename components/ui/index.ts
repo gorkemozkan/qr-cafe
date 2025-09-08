@@ -16,6 +16,21 @@ export {
 } from "./dialog";
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
 export { Badge } from "./badge";
+export { Alert, AlertTitle, AlertDescription } from "./alert";
+export {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./alert-dialog";
+export { Checkbox } from "./checkbox";
 export { default as Captcha } from "./captcha";
 export {
   DropdownMenu,

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,10 +14,12 @@ import {
 import { useRequest } from "@/hooks/use-request";
 import { authRepository } from "@/lib/repositories";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const UserDropdown = () => {
   const tCommon = useTranslations("common");
-
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { isLoading: logoutLoading, execute: logout } = useRequest({
@@ -45,6 +47,12 @@ const UserDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/admin/app/gdpr">
+            <Shield className="mr-2 h-4 w-4" />
+            {tCommon("settings")}
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleLogout}
           disabled={logoutLoading}
