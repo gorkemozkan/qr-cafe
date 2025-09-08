@@ -26,7 +26,12 @@
     "category": "Category",
     "image": "Image",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "refresh": {
+      "tooManyAttempts": "Too many refresh attempts. Try again in {remainingTime}s",
+      "refreshing": "Refreshing...",
+      "refresh": "Refresh ({attempt}/{maxAttempt})"
+    }
   },
   "navigation": {
     "signIn": "Sign In",

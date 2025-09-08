@@ -22,7 +22,7 @@ const FormSheet: FC<Props> = (props) => {
           <SheetTitle>{props.title}</SheetTitle>
           <SheetDescription>{props.description}</SheetDescription>
         </SheetHeader>
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">{props.children}</div>
+        <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-y-auto">{props.children}</div>
         <SheetFooter>
           {props.footer}
           <Button variant="outline" onClick={() => props.onOpenChange(false)}>

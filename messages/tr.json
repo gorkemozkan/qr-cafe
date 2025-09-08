@@ -26,7 +26,12 @@
     "category": "Kategori",
     "image": "Görsel",
     "required": "Zorunlu",
-    "optional": "Opsiyonel"
+    "optional": "Opsiyonel",
+    "refresh": {
+      "tooManyAttempts": "Çok fazla yenileme denemesi. {remainingTime} saniye sonra tekrar deneyin",
+      "refreshing": "Yeniliyor...",
+      "refresh": "Yenile ({attempt}/{maxAttempt})"
+    }
   },
   "navigation": {
     "signIn": "Giriş Yap",
