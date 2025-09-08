@@ -31,7 +31,7 @@ interface DataTableProps<T extends { id?: number | string }> {
 
 function MobileCard<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
   return (
-    <div className="bg-card border rounded-lg p-4 space-y-3 shadow-sm">
+    <div className="bg-transparent border rounded-lg p-4 space-y-3 shadow-sm">
       {columns.map((column) => {
         const value = item[column.key as keyof T];
         const displayValue = column.cell ? column.cell(value, item) : String(value ?? "-");
@@ -150,7 +150,9 @@ function DataTable<T extends { id?: number | string }>({
               <TableRow key={String(row.id || index)}>
                 {visibleColumns.map((column) => (
                   <TableCell key={String(column.key)} className={column.className}>
-                    {column.cell ? column.cell(row[column.key as keyof T], row) : String(row[column.key as keyof T] ?? "-")}
+                    {column.cell
+                      ? column.cell(row[column.key as keyof T], row)
+                      : String(row[column.key as keyof T] ?? "-")}
                   </TableCell>
                 ))}
               </TableRow>

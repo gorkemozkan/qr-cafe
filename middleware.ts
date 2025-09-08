@@ -6,7 +6,7 @@ import { locales, defaultLocale } from "./i18n";
 createIntlMiddleware({
   locales,
   defaultLocale,
-  localeDetection: false, // We'll handle locale detection via cookies
+  localeDetection: false,
 });
 
 export async function middleware(request: NextRequest) {

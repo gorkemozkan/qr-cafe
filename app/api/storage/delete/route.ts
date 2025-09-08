@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { verifyCsrfToken } from "@/lib/security";
+import { uploadRateLimiter } from "@/lib/rate-limiter";
 import { http } from "@/lib/http";
 
 export async function DELETE(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
       return NextResponse.json({ error: "Invalid request origin" }, { status: http.INVALID_REQUEST_ORIGIN.status });
+    }
+
+    if (!uploadRateLimiter.check(request).allowed) {
+      return NextResponse.json(
+        { error: "Too many delete attempts. Please try again later." },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     const supabase = await createClient();

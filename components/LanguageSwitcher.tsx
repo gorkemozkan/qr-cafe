@@ -26,7 +26,7 @@ const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className=" rounded-full">
+        <Button variant="outline" className=" rounded-lg">
           <Globe className="h-4 w-4" />
           <span className="sr-only">{t("selectLanguage")}</span>
         </Button>

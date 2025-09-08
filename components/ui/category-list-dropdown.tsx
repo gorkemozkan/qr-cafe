@@ -46,8 +46,7 @@ export const CategoryListDropdown = ({
       try {
         const categoriesData = await categoryRepository.listByCafe(cafeId);
         setCategories(categoriesData);
-      } catch (error) {
-        console.error("Failed to load categories:", error);
+      } catch (_error) {
         toast.error("Failed to load categories");
       } finally {
         setIsLoading(false);

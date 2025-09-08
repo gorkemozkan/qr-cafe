@@ -1,9 +1,10 @@
 "use client";
 
 import { FC, useRef } from "react";
-import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
+import { slugify } from "@/lib/utils";
 import { CafeSchema } from "@/lib/schema";
+import { useTranslations } from "next-intl";
 import QueryKeys from "@/constants/query-keys";
 import FormSheet from "@/components/FormSheet";
 import { useRequest } from "@/hooks/use-request";
@@ -42,7 +43,19 @@ const CafeEditSheet: FC<Props> = (props) => {
     optimisticUpdate: {
       queryKey: QueryKeys.cafes,
       updateFn: (oldData: Tables<"cafes">[], variables: CafeSchema) =>
-        oldData.map((cafe) => (cafe.id === props.cafe.id ? { ...cafe, ...variables } : cafe)),
+        oldData.map((cafe) => {
+          if (cafe.id === props.cafe.id) {
+            const optimisticSlug =
+              variables.name && variables.name !== cafe.name ? slugify(variables.name, { maxLength: 50 }) : cafe.slug;
+
+            return {
+              ...cafe,
+              ...variables,
+              slug: optimisticSlug,
+            };
+          }
+          return cafe;
+        }),
     },
   });
 

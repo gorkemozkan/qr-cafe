@@ -83,6 +83,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
   //#region Methods
 
   const isActive = watch("is_active");
+
   const selectedCurrency = watch("currency");
 
   //#endregion
@@ -108,6 +109,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
       } else {
         if (selectedFile) {
           setIsUploading(true);
+
           setUploadError(null);
 
           const slug = props.cafe?.slug || `temp-${Date.now()}`;

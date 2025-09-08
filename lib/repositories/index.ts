@@ -4,5 +4,7 @@ export { CafeRepository, cafeRepository } from "@/lib/repositories/cafe-reposito
 export { CategoryRepository, categoryRepository } from "@/lib/repositories/category-repository";
 export { ProductRepository, productRepository } from "@/lib/repositories/product-repository";
 export { StorageRepository, storageRepository } from "@/lib/repositories/storage-repository";
+export { PublicMenuRepository, publicMenuRepository } from "@/lib/repositories/public-menu-repository";
 export type { UploadResult, StorageError } from "@/lib/repositories/storage-repository";
 export type { DashboardStats } from "@/lib/repositories/stats-repository";
+export type { PublicMenuData } from "@/lib/repositories/public-menu-repository";

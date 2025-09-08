@@ -1,12 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-import { apiRateLimiter } from "@/lib/rate-limiter";
+import { publicRateLimiter } from "@/lib/rate-limiter";
 import { http } from "@/lib/http";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const rateLimitResult = apiRateLimiter.check(request);
+    console.log("publicRateLimiter", request);
+    const rateLimitResult = publicRateLimiter.check(request);
 
+    console.log(rateLimitResult);
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {

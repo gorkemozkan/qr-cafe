@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useMemo, useCallback } from "react";
 import { QrCode } from "lucide-react";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
@@ -65,121 +65,127 @@ const CafeList: FC = () => {
 
   //#region Handlers
 
-  const handleDeleteClick = (cafe: Tables<"cafes">) => {
+  const handleDeleteClick = useCallback((cafe: Tables<"cafes">) => {
     setCafeToDelete(cafe);
     setDeleteDialogOpen(true);
-  };
+  }, []);
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = useCallback(async () => {
     if (cafeToDelete) {
       await deleteCafe(cafeToDelete.id);
     }
-  };
+  }, [cafeToDelete, deleteCafe]);
 
-  const handleCategoriesClick = (cafe: Tables<"cafes">) => {
-    router.push(`/admin/app/cafe/${cafe.id}/categories`);
-  };
+  const handleCategoriesClick = useCallback(
+    (cafe: Tables<"cafes">) => {
+      router.push(`/admin/app/cafe/${cafe.id}/categories`);
+    },
+    [router],
+  );
 
-  const handleQRCodeClick = (cafe: Tables<"cafes">) => {
+  const handleQRCodeClick = useCallback((cafe: Tables<"cafes">) => {
     setCafeForQR(cafe);
     setQRPreviewOpen(true);
-  };
+  }, []);
 
   //#endregion
 
-  const columns = [
-    {
-      key: "logo",
-      header: t("table.headers.logo"),
-      cell: (_: any, row: Tables<"cafes">) => (
-        <>
-          {row.logo_url ? (
-            <OptimizedImage
-              clickable
-              src={row.logo_url}
-              alt={`${row.slug} logo`}
-              width={40}
-              height={40}
-              className="rounded-md border border-border w-10 h-10 "
-              objectFit="cover"
-              fallbackSrc="/placeholder-logo.svg"
-              showSkeleton={true}
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">{t("table.logo.noLogo")}</span>
-            </div>
-          )}
-        </>
-      ),
-    },
-    {
-      key: "name",
-      header: t("table.headers.name"),
-      cell: (value: any) => (
-        <div className="w-24">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <p className="truncate text-sm">{value}</p>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{value}</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      key: "currency",
-      header: t("table.headers.currency"),
-      cell: (value: any) => value || "-",
-    },
-    {
-      key: "is_active",
-      header: t("table.headers.status"),
-      tooltipText: t("table.status.activeTooltip"),
-      cell: (value: any) => (
-        <Badge variant={value ? "active" : "inactive"}>
-          {value ? t("table.status.active") : t("table.status.inactive")}
-        </Badge>
-      ),
-    },
-    {
-      key: "created_at",
-      header: t("table.headers.created"),
-      tooltipText: t("table.status.createdTooltip"),
-      cell: (value: any) => <DateView date={value} format="detailed" />,
-    },
-    {
-      key: "actions",
-      header: t("table.headers.actions"),
-      className: "flex justify-end",
-      cell: (_: any, row: Tables<"cafes">) => (
-        <div className="flex justify-end">
-          <TableActions
-            onEdit={() => setCafeToEdit(row)}
-            onDelete={() => handleDeleteClick(row)}
-            onInspect={() => handleCategoriesClick(row)}
-            additionalActions={
-              <div className="flex items-center gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
-                      <QrCode className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{t("qr.preview.viewTooltip")}</p>
-                  </TooltipContent>
-                </Tooltip>
-                <ExternalLinkButton url={`${window.location.origin}/${row.slug}`} />
+  const columns = useMemo(
+    () => [
+      {
+        key: "logo",
+        header: t("table.headers.logo"),
+        cell: (_: any, row: Tables<"cafes">) => (
+          <>
+            {row.logo_url ? (
+              <OptimizedImage
+                clickable
+                src={row.logo_url}
+                alt={`${row.slug} logo`}
+                width={40}
+                height={40}
+                className="rounded-md border border-border w-10 h-10 "
+                objectFit="cover"
+                fallbackSrc="/placeholder-logo.svg"
+                showSkeleton={true}
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
+                <span className="text-[8px] text-center text-muted-foreground">{t("table.logo.noLogo")}</span>
               </div>
-            }
-          />
-        </div>
-      ),
-    },
-  ];
+            )}
+          </>
+        ),
+      },
+      {
+        key: "name",
+        header: t("table.headers.name"),
+        cell: (value: any) => (
+          <div className="w-24">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="truncate text-sm">{value}</p>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{value}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        ),
+      },
+      {
+        key: "currency",
+        header: t("table.headers.currency"),
+        cell: (value: any) => value || "-",
+      },
+      {
+        key: "is_active",
+        header: t("table.headers.status"),
+        tooltipText: t("table.status.activeTooltip"),
+        cell: (value: any) => (
+          <Badge variant={value ? "active" : "inactive"}>
+            {value ? t("table.status.active") : t("table.status.inactive")}
+          </Badge>
+        ),
+      },
+      {
+        key: "created_at",
+        header: t("table.headers.created"),
+        tooltipText: t("table.status.createdTooltip"),
+        cell: (value: any) => <DateView date={value} format="detailed" />,
+      },
+      {
+        key: "actions",
+        header: t("table.headers.actions"),
+        className: "flex justify-end",
+        cell: (_: any, row: Tables<"cafes">) => (
+          <div className="flex justify-end">
+            <TableActions
+              onEdit={() => setCafeToEdit(row)}
+              onDelete={() => handleDeleteClick(row)}
+              onInspect={() => handleCategoriesClick(row)}
+              additionalActions={
+                <div className="flex items-center gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
+                        <QrCode className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("qr.preview.viewTooltip")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <ExternalLinkButton url={`${process.env.NEXT_PUBLIC_BASE_URL}/${row.slug}`} />
+                </div>
+              }
+            />
+          </div>
+        ),
+      },
+    ],
+    [t, handleDeleteClick, handleCategoriesClick, handleQRCodeClick],
+  );
 
   return (
     <div>
