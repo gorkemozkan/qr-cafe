@@ -1,3 +1,5 @@
+import { BaseRepository } from "@/lib/repositories/base-repository";
+
 interface PublicProduct {
   id: number;
   name: string;
@@ -30,40 +32,11 @@ export interface PublicMenuData {
   generated_at: string;
 }
 
-export class PublicMenuRepository {
+export class PublicMenuRepository extends BaseRepository {
+  protected readonly baseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/public/cafe`;
+
   async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-      console.log("baseUrl", baseUrl);
-
-      const response = await fetch(`${baseUrl}/api/public/cafe/${slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("response", response);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          return null;
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const menuData: PublicMenuData = await response.json();
-
-      if (!menuData || !menuData.cafe) {
-        return null;
-      }
-
-      return menuData;
-    } catch (error) {
-      console.error("Failed to fetch menu data:", error);
-      return null;
-    }
+    return await this.get<PublicMenuData>(`/${slug}`);
   }
 }
 
