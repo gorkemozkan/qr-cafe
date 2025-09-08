@@ -1,33 +1,6 @@
 import { NextRequest } from "next/server";
 import { BUCKET_NAMES } from "../config";
 
-/**
- * Verifies CSRF token by validating request origin and referer headers.
- *
- * This function implements CSRF protection by checking that the request originates
- * from the same origin as the application. It validates both the 'Origin' and
- * 'Referer' headers against the request's host to prevent cross-site request forgery attacks.
- *
- * @param request - The Next.js request object containing headers to validate
- * @returns boolean - Returns true if the request passes CSRF validation, false otherwise
- *
- * @example
- * ```typescript
- * import { verifyCsrfToken } from '@/lib/security';
- *
- * export async function POST(request: NextRequest) {
- *   if (!verifyCsrfToken(request)) {
- *     return NextResponse.json({ error: 'CSRF validation failed' }, { status: 403 });
- *   }
- *   // Process the request...
- * }
- * ```
- *
- * @security-considerations
- * - Always use HTTPS in production to prevent header spoofing
- * - This is a basic CSRF protection; consider using CSRF tokens for enhanced security
- * - Headers can be spoofed in certain scenarios, so combine with other security measures
- */
 export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
 
@@ -158,27 +131,16 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
 
   const directives = [
     "default-src 'self'",
-
     `script-src ${scriptSrc}`,
-
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-
     "img-src 'self' data: https: blob:",
-
     "font-src 'self' https://fonts.gstatic.com",
-
     `connect-src ${connectSrc}`,
-
     `frame-src 'self' https://challenges.cloudflare.com${vercelLive ? ` ${vercelLive}` : ""}`,
-
     "object-src 'none'",
-
     "base-uri 'self'",
-
     "form-action 'self'",
-
     "frame-ancestors 'none'",
-
     ...(environment === "production" ? ["upgrade-insecure-requests"] : []),
   ];
 

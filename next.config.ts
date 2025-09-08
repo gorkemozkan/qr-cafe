@@ -25,27 +25,29 @@ const getRemotePatterns = (): RemotePattern[] => {
         pathname: "/storage/v1/object/public/**",
       },
     );
-  } else {
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING) {
-      const stagingHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING.split("//")[1];
-      if (stagingHostname) {
-        patterns.push({
-          protocol: "https",
-          hostname: stagingHostname,
-          pathname: "/storage/v1/object/public/**",
-        });
-      }
-    }
+  }
 
-    if (process.env.NEXT_PUBLIC_SUPABASE_URL_PROD) {
-      const prodHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_PROD.split("//")[1];
-      if (prodHostname) {
-        patterns.push({
-          protocol: "https",
-          hostname: prodHostname,
-          pathname: "/storage/v1/object/public/**",
-        });
-      }
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING) {
+    const stagingHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING.split("//")[1];
+
+    if (stagingHostname) {
+      patterns.push({
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING.split("//")[1],
+        pathname: "/storage/v1/object/public/**",
+      });
+    }
+  }
+
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL_PROD) {
+    const prodHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_PROD.split("//")[1];
+
+    if (prodHostname) {
+      patterns.push({
+        protocol: "https",
+        hostname: prodHostname,
+        pathname: "/storage/v1/object/public/**",
+      });
     }
   }
 

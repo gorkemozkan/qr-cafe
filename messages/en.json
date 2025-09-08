@@ -41,7 +41,8 @@
     "loggedOutSuccessfully": "Logged out successfully",
     "userMenu": "User menu",
     "account": "Account",
-    "loggingOut": "Logging out..."
+    "loggingOut": "Logging out...",
+    "logout": "Logout"
   },
   "navigation": {
     "signIn": "Sign In",
