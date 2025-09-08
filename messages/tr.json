@@ -53,7 +53,8 @@
     "navigation": "Navigasyon",
     "creation": "Oluşturma",
     "user": "Kullanıcı",
-    "preferences": "Tercihler"
+    "preferences": "Tercihler",
+    "settings": "Ayarlar"
   },
   "navigation": {
     "signIn": "Giriş Yap",

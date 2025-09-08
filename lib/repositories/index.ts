@@ -5,6 +5,8 @@ export { CategoryRepository, categoryRepository } from "@/lib/repositories/categ
 export { ProductRepository, productRepository } from "@/lib/repositories/product-repository";
 export { StorageRepository, storageRepository } from "@/lib/repositories/storage-repository";
 export { PublicMenuRepository, publicMenuRepository } from "@/lib/repositories/public-menu-repository";
+export { GdprRepository, gdprRepository } from "@/lib/repositories/gdpr-repository";
 export type { UploadResult, StorageError } from "@/lib/repositories/storage-repository";
 export type { DashboardStats } from "@/lib/repositories/stats-repository";
 export type { PublicMenuData } from "@/lib/repositories/public-menu-repository";
+export type { UserExportData } from "@/lib/repositories/gdpr-repository";
