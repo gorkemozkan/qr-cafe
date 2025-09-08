@@ -176,7 +176,7 @@ const CafeList: FC = () => {
                       <p>{t("qr.preview.viewTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
-                  <ExternalLinkButton url={`${process.env.NEXT_PUBLIC_BASE_URL}/${row.slug}`} />
+                  <ExternalLinkButton url={`${process.env.NEXT_PUBLIC_APP_URL}/${row.slug}`} />
                 </div>
               }
             />
