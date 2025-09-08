@@ -22,23 +22,34 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "hqsozlasqpltfzxwufdc.supabase.co",
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL_PROD?.split("//")[1] || "",
         pathname: "/storage/v1/object/public/**",
       },
       {
         protocol: "https",
-        hostname: "lxeyungcdkbrldpbxtbc.supabase.co",
+        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING?.split("//")[1] || "",
         pathname: "/storage/v1/object/public/**",
       },
     ],
   },
 
   async headers() {
-    const customEnvironment = (process.env.NEXT_PUBLIC_ENV || "development") as "development" | "staging" | "production";
+    const customEnvironment = (process.env.NEXT_PUBLIC_ENV || "development") as
+      | "development"
+      | "staging"
+      | "production";
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING || process.env.NEXT_PUBLIC_SUPABASE_URL_PROD;
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING ||
+      process.env.NEXT_PUBLIC_SUPABASE_URL_PROD;
 
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000", "https://localhost:3000", "http://localhost:3001", "https://localhost:3001"];
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+      "http://localhost:3000",
+      "https://localhost:3000",
+      "http://localhost:3001",
+      "https://localhost:3001",
+    ];
 
     const isProduction = customEnvironment === "production";
 
@@ -58,7 +69,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/(.*)",
-        headers: [{ key: "Content-Security-Policy", value: csp }, ...commonHeaders, ...(isProduction ? productionOnlyHeaders : [])],
+        headers: [
+          { key: "Content-Security-Policy", value: csp },
+          ...commonHeaders,
+          ...(isProduction ? productionOnlyHeaders : []),
+        ],
       },
       {
         source: "/api/(.*)",
