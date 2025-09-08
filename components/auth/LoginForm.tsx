@@ -25,8 +25,11 @@ const LoginForm = () => {
   //#region Hooks
 
   const router = useRouter();
+
   const t = useTranslations();
+
   const tAuth = useTranslations("auth.login");
+
   const tCommon = useTranslations("common");
 
   const {

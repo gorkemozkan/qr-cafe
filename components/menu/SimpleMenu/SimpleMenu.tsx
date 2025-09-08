@@ -2,7 +2,7 @@ import { FC } from "react";
 import ScrollToTop from "@/components/menu/ScrollToTop";
 import SimpleMenuHeader from "@/components/menu/SimpleMenu/SimpleMenuHeader";
 import SimpleMenuSections from "@/components/menu/SimpleMenu/SimpleMenuSections";
-import { PublicMenuData } from "@/lib/repositories/public-menu-repository";
+import { PublicMenuData } from "@/lib/repositories";
 
 interface Params {
   menu: PublicMenuData;

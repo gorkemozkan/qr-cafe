@@ -146,10 +146,7 @@ const QuickActionsButton = () => {
       id: "profile",
       label: tCommon("profile"),
       icon: User,
-      action: () => {
-        // Could open user profile modal or navigate to profile page
-        console.log("Profile action");
-      },
+      action: () => {},
       group: "user",
     },
     {

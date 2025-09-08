@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { apiRateLimiter } from "@/lib/rate-limiter";
 import { http } from "@/lib/http";
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!apiRateLimiter.check(request).allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
+    }
+
     const { id } = await params;
 
     const supabase = await createClient();

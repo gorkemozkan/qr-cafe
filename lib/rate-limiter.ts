@@ -126,3 +126,8 @@ export const apiRateLimiter = new RateLimiter({
   maxRequests: 20,
   windowMs: 60 * 1000, // 1 minute
 });
+
+export const publicRateLimiter = new RateLimiter({
+  maxRequests: 50,
+  windowMs: 60 * 1000, // 1 minute - Higher limit for public menu access
+});

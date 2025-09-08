@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { notFound } from "next/navigation";
-import { publicMenuRepository } from "@/lib/repositories/public-menu-repository";
+import { publicMenuRepository } from "@/lib/repositories";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -14,7 +14,7 @@ export const generateMetadata = async ({ params }: Params) => {
     notFound();
   }
 
-  const menu = await publicMenuRepository.getMenuBySlugDirect(slug);
+  const menu = await publicMenuRepository.getMenuBySlug(slug);
 
   return {
     title: menu?.cafe.name || "Menu",
@@ -29,7 +29,7 @@ const Page: NextPage<Params> = async (props) => {
     notFound();
   }
 
-  const menu = await publicMenuRepository.getMenuBySlugDirect(slug);
+  const menu = await publicMenuRepository.getMenuBySlug(slug);
 
   if (!menu) {
     notFound();

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-
 import { Plus } from "lucide-react";
-import QuickProductCreateSheet from "@/components/product/QuickProductCreateSheet";
 import { Button } from "@/components/ui/button";
+import QuickProductCreateSheet from "@/components/product/QuickProductCreateSheet";
 
 const PageTitleWithUser = () => {
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
@@ -19,7 +18,6 @@ const PageTitleWithUser = () => {
       >
         <Plus className="h-6 w-6 text-white " />
       </Button>
-
       <QuickProductCreateSheet open={isQuickCreateOpen} onOpenChange={setIsQuickCreateOpen} />
     </>
   );

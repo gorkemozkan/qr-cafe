@@ -1,11 +1,11 @@
-import { FC } from "react";
-import { Tooltip } from "./ui/tooltip";
+import { FC, ReactNode } from "react";
+import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 interface Props {
   onClick: () => void;
   tooltip: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const TooltipButton: FC<Props> = (props) => {

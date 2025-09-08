@@ -94,3 +94,15 @@ export const scrollToSection = (sectionId: string) => {
     element.scrollIntoView({ behavior: "smooth" });
   }
 };
+
+export const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_ENV === "production") {
+    return process.env.NEXT_PUBLIC_BASE_URL_PROD;
+  }
+
+  if (process.env.NEXT_PUBLIC_ENV === "staging") {
+    return process.env.NEXT_PUBLIC_BASE_URL_STAGING;
+  }
+
+  return process.env.NEXT_PUBLIC_BASE_URL;
+};
