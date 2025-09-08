@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { http } from "@/lib/http";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
 
@@ -10,19 +11,24 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const { id } = await params;
     const categoryId = parseInt(id, 10);
     if (Number.isNaN(categoryId)) {
-      return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: category, error: categoryError } = await supabase.from("categories").select("cafe_id").eq("id", categoryId).eq("user_id", user.id).single();
+    const { data: category, error: categoryError } = await supabase
+      .from("categories")
+      .select("cafe_id")
+      .eq("id", categoryId)
+      .eq("user_id", user.id)
+      .single();
 
     if (categoryError || !category) {
-      return NextResponse.json({ error: "Category not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Category not found or access denied" }, { status: http.NOT_FOUND.status });
     }
 
     const { data: products, error: fetchError } = await supabase
@@ -34,11 +40,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .order("created_at", { ascending: false });
 
     if (fetchError) {
-      return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to fetch products" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json(products || []);
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

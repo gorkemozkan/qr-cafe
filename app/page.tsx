@@ -4,14 +4,23 @@ import Hero from "@/components/landing/Hero";
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
 import Features from "@/components/landing/Features";
-import PricingSection from "@/components/landing/PricingSection";
-import ContactSection from "@/components/landing/ContactSection";
 import CTASection from "@/components/landing/CTASection";
 
 export const metadata: Metadata = {
   title: "QR Cafe - Transform Your Cafe with Smart QR Menus",
-  description: "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution for cafes and restaurants.",
-  keywords: ["QR menu", "digital menu", "cafe technology", "restaurant menu", "QR code", "cafe management", "contactless dining", "mobile-first menu", "restaurant digitization"],
+  description:
+    "Create interactive digital menus, track orders in real-time, and enhance customer experience with our innovative QR code solution for cafes and restaurants.",
+  keywords: [
+    "QR menu",
+    "digital menu",
+    "cafe technology",
+    "restaurant menu",
+    "QR code",
+    "cafe management",
+    "contactless dining",
+    "mobile-first menu",
+    "restaurant digitization",
+  ],
   authors: [{ name: "QR Cafe Team" }],
   creator: "QR Cafe",
   publisher: "QR Cafe",

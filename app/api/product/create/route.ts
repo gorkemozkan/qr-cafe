@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { productSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
+import { http } from "@/lib/http";
 
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -16,14 +20,14 @@ export async function POST(request: NextRequest) {
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const body = await request.json();
     const { cafe_id, ...productData } = body;
 
     if (!cafe_id) {
-      return NextResponse.json({ error: "Cafe ID is required" }, { status: 400 });
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
     const { data: cafe, error: cafeError } = await supabase
@@ -34,14 +38,14 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (cafeError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
     }
 
     const validationResult = productSchema.safeParse(productData);
     if (!validationResult.success) {
       return NextResponse.json(
         { error: "Invalid product data", details: validationResult.error.issues },
-        { status: 400 },
+        { status: http.BAD_REQUEST.status },
       );
     }
 
@@ -58,11 +62,11 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to create product" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json(product);
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

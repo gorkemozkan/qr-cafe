@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { http } from "@/lib/http";
 
 export async function GET() {
   try {
@@ -11,18 +12,23 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: http.UNAUTHORIZED.status });
     }
 
-    const [{ count: totalCafes }, { count: totalCategories }, { count: totalProducts }, { count: activeProducts }] = await Promise.all([
-      supabase.from("cafes").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+    const [{ count: totalCafes }, { count: totalCategories }, { count: totalProducts }, { count: activeProducts }] =
+      await Promise.all([
+        supabase.from("cafes").select("*", { count: "exact", head: true }).eq("user_id", user.id),
 
-      supabase.from("categories").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+        supabase.from("categories").select("*", { count: "exact", head: true }).eq("user_id", user.id),
 
-      supabase.from("products").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+        supabase.from("products").select("*", { count: "exact", head: true }).eq("user_id", user.id),
 
-      supabase.from("products").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("is_available", true),
-    ]);
+        supabase
+          .from("products")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .eq("is_available", true),
+      ]);
 
     const stats = {
       totalCafes: totalCafes || 0,
@@ -33,6 +39,6 @@ export async function GET() {
 
     return NextResponse.json(stats);
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

@@ -123,10 +123,6 @@ export const uploadRateLimiter = new RateLimiter({
 });
 
 export const apiRateLimiter = new RateLimiter({
-  maxRequests: 100,
+  maxRequests: 20,
   windowMs: 60 * 1000, // 1 minute
 });
-
-export function uploadRateLimit(request: NextRequest): boolean {
-  return uploadRateLimiter.check(request).allowed;
-}

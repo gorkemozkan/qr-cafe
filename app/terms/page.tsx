@@ -19,11 +19,12 @@ export default function TermsPage() {
           <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            By accessing and using QR Cafe ("Service", "Platform", "we", "us", "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these
-            Terms, please do not use our Service.
+            By accessing and using QR Cafe ("Service", "Platform", "we", "us", "our"), you agree to be bound by these
+            Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our Service.
           </p>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            QR Cafe is a digital menu management platform that allows cafes and restaurants to create, manage, and display QR code-based menus for their customers.
+            QR Cafe is a digital menu management platform that allows cafes and restaurants to create, manage, and
+            display QR code-based menus for their customers.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Description of Service</h2>
@@ -92,7 +93,10 @@ export default function TermsPage() {
           </ul>
 
           <div className="border-t mt-8 pt-8">
-            <p className="text-sm text-muted-foreground mt-2">By using QR Cafe, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              By using QR Cafe, you acknowledge that you have read, understood, and agree to be bound by these Terms of
+              Service.
+            </p>
           </div>
         </div>
       </main>

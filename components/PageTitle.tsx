@@ -12,6 +12,8 @@ interface Props {
   showBackButton?: boolean;
 }
 
+// TODO: Refactor duplicates
+
 const PageTitle = (props: Props) => {
   const router = useRouter();
   if (props.actions) {

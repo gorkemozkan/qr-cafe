@@ -1,27 +1,68 @@
 import { NextRequest } from "next/server";
 import { BUCKET_NAMES } from "../config";
 
-export function verifyCsrfToken(request: NextRequest): boolean {
+/**
+ * Verifies CSRF token by validating request origin and referer headers.
+ *
+ * This function implements CSRF protection by checking that the request originates
+ * from the same origin as the application. It validates both the 'Origin' and
+ * 'Referer' headers against the request's host to prevent cross-site request forgery attacks.
+ *
+ * @param request - The Next.js request object containing headers to validate
+ * @returns boolean - Returns true if the request passes CSRF validation, false otherwise
+ *
+ * @example
+ * ```typescript
+ * import { verifyCsrfToken } from '@/lib/security';
+ *
+ * export async function POST(request: NextRequest) {
+ *   if (!verifyCsrfToken(request)) {
+ *     return NextResponse.json({ error: 'CSRF validation failed' }, { status: 403 });
+ *   }
+ *   // Process the request...
+ * }
+ * ```
+ *
+ * @security-considerations
+ * - Always use HTTPS in production to prevent header spoofing
+ * - This is a basic CSRF protection; consider using CSRF tokens for enhanced security
+ * - Headers can be spoofed in certain scenarios, so combine with other security measures
+ */
+export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
+
+  const referer = request.headers.get("referer");
 
   const host = request.headers.get("host");
 
-  if (!origin || !host) {
-    return false;
+  if (origin) {
+    const allowedOrigins = [`https://${host}`, `http://${host}`];
+
+    return allowedOrigins.includes(origin);
   }
 
-  const allowedOrigins = [`https://${host}`, `http://${host}`];
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer);
 
-  if (host.includes("localhost")) {
-    allowedOrigins.push(`http://localhost:3000`, `https://localhost:3000`);
+      const allowedOrigins = [`https://${host}`, `http://${host}`];
+
+      const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
+
+      return allowedOrigins.includes(refererOrigin);
+    } catch {
+      return false;
+    }
   }
 
-  return allowedOrigins.includes(origin);
-}
+  return false;
+};
 
 export function sanitizeFilename(filename: string): string {
   const lastDotIndex = filename.lastIndexOf(".");
+
   let name = filename;
+
   let extension = "";
 
   if (lastDotIndex > 0) {
@@ -90,10 +131,14 @@ export const commonHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
-export const productionOnlyHeaders = [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" }];
+export const productionOnlyHeaders = [
+  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+];
 
 export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
-  const supabaseHosts = supabaseUrl ? `https://${new URL(supabaseUrl).hostname} wss://${new URL(supabaseUrl).hostname}` : "https://*.supabase.co wss://*.supabase.co";
+  const supabaseHosts = supabaseUrl
+    ? `https://${new URL(supabaseUrl).hostname} wss://${new URL(supabaseUrl).hostname}`
+    : "https://*.supabase.co wss://*.supabase.co";
 
   const vercelLive = environment === "staging" || environment === "production" ? "https://vercel.live" : "";
 
@@ -102,11 +147,14 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
       ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
       : `'self' 'unsafe-inline' https://challenges.cloudflare.com ${vercelLive}`.trim();
 
-  const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
+  const devConnections =
+    environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
 
-  const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
+  const vercelConnections =
+    environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
 
-  const connectSrc = `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
+  const connectSrc =
+    `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
 
   const directives = [
     "default-src 'self'",

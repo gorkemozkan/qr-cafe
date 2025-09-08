@@ -1,3 +1,4 @@
+import { http } from "@/lib/http";
 import { loginSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
@@ -6,15 +7,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    if (!authRateLimiter.check(request).allowed) {
+    if (!verifyCsrfToken(request)) {
       return NextResponse.json(
-        { error: "Too many login attempts. Please try again later.", success: false },
-        { status: 429 },
+        { error: http.INVALID_REQUEST_ORIGIN.message, success: false },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
       );
     }
 
-    if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin", success: false }, { status: 403 });
+    if (!authRateLimiter.check(request).allowed) {
+      return NextResponse.json(
+        { error: http.TOO_MANY_REQUESTS.message, success: false },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     const body = await request.json();
@@ -22,7 +26,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const validationResult = loginSchema.safeParse(body);
 
     if (!validationResult.success) {
-      return NextResponse.json({ error: "Validation failed", details: validationResult.error.issues }, { status: 400 });
+      return NextResponse.json(
+        { error: http.BAD_REQUEST.message, details: validationResult.error.issues },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const { email, password } = validationResult.data;
@@ -32,7 +39,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      return NextResponse.json({ error: "Invalid email or password", success: false }, { status: 401 });
+      return NextResponse.json(
+        { error: "Invalid email or password", success: false },
+        { status: http.UNAUTHORIZED.status },
+      );
     }
 
     if (data.user) {
@@ -44,12 +54,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             email: data.user.email,
           },
         },
-        { status: 200 },
+        { status: http.SUCCESS.status },
       );
     }
 
-    return NextResponse.json({ error: "Authentication failed", success: false }, { status: 401 });
+    return NextResponse.json(
+      { error: http.UNAUTHORIZED.message, success: false },
+      { status: http.UNAUTHORIZED.status },
+    );
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error", success: false }, { status: 500 });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message, success: false },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

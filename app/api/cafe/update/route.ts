@@ -3,11 +3,15 @@ import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
 import { slugify } from "@/lib/utils";
 import { verifyCsrfToken } from "@/lib/security";
+import { http } from "@/lib/http";
 
 export async function PUT(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -18,14 +22,15 @@ export async function PUT(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const body = await request.json();
+
     const { id, ...updateData } = body;
 
     if (!id) {
-      return NextResponse.json({ error: "Cafe ID is required" }, { status: 400 });
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
     const validationResult = cafeSchema.safeParse(updateData);
@@ -35,7 +40,7 @@ export async function PUT(request: NextRequest) {
           error: "Validation failed",
           details: validationResult.error.issues,
         },
-        { status: 400 },
+        { status: http.BAD_REQUEST.status },
       );
     }
 
@@ -46,11 +51,11 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (fetchError || !existingCafe) {
-      return NextResponse.json({ error: "Cafe not found" }, { status: 404 });
+      return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
     }
 
     if (existingCafe.user_id !== user.id) {
-      return NextResponse.json({ error: "Unauthorized to update this cafe" }, { status: 403 });
+      return NextResponse.json({ error: "Unauthorized to update this cafe" }, { status: http.FORBIDDEN.status });
     }
 
     let finalSlug = existingCafe.slug;
@@ -65,7 +70,7 @@ export async function PUT(request: NextRequest) {
         .single();
 
       if (slugExists) {
-        return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });
+        return NextResponse.json({ error: "A cafe with this name already exists" }, { status: http.CONFLICT.status });
       }
     }
 
@@ -84,11 +89,14 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: "Failed to update cafe" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to update cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json(data, { status: 200 });
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }
