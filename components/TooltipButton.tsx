@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { Tooltip } from "./ui/tooltip";
-import { TooltipTrigger } from "./ui/tooltip";
-import { TooltipContent } from "./ui/tooltip";
+import { TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 interface Props {
   onClick: () => void;

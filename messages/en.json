@@ -31,7 +31,13 @@
       "tooManyAttempts": "Too many refresh attempts. Try again in {remainingTime}s",
       "refreshing": "Refreshing...",
       "refresh": "Refresh ({attempt}/{maxAttempt})"
-    }
+    },
+    "view": "View",
+    "openInNewTab": "Open in new tab",
+    "clickToBrowseFiles": "Click to browse files",
+    "fileUpTo": "File up to",
+    "mb": "MB",
+    "chooseFile": "Choose file"
   },
   "navigation": {
     "signIn": "Sign In",

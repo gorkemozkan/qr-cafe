@@ -25,6 +25,7 @@ const CafeList: FC = () => {
   //#region Hooks
 
   const router = useRouter();
+
   const t = useTranslations("cafe");
 
   //#endregion
@@ -52,7 +53,7 @@ const CafeList: FC = () => {
       setDeleteDialogOpen(false);
       setCafeToDelete(null);
     },
-    successMessage: "Cafe deleted successfully!",
+    successMessage: t("delete.successMessage"),
     optimisticUpdate: {
       queryKey: QueryKeys.cafes,
       updateFn: (oldData: Tables<"cafes">[], cafeId: number) => oldData.filter((cafe) => cafe.id !== cafeId),

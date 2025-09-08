@@ -1,11 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { FC, useState, useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { FC, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import TooltipButton from "@/components/TooltipButton";
-import { useTranslations } from "next-intl";
 
 interface Props {
   loading: boolean;

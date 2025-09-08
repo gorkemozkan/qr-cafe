@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface FilePickerProps {
   id?: string;
@@ -21,7 +22,6 @@ interface FilePickerProps {
 
 const FilePicker = ({
   id,
-  label = "Choose file",
   accept = "image/*",
   maxSize = 5 * 1024 * 1024, // 5MB default
   value,
@@ -30,6 +30,10 @@ const FilePicker = ({
   className,
   disabled = false,
 }: FilePickerProps) => {
+  const tCommon = useTranslations("common");
+
+  const label = tCommon("chooseFile");
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [preview, setPreview] = React.useState<string | null>(null);
 
@@ -124,9 +128,9 @@ const FilePicker = ({
                 <Upload className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Click to browse files</p>
+                <p className="text-sm font-medium">{tCommon("clickToBrowseFiles")}</p>
                 <p className="text-xs text-muted-foreground">
-                  {accept === "image/*" ? "PNG, JPG, GIF up to" : "File up to"} {Math.round(maxSize / 1024 / 1024)}MB
+                  {accept === "image/*" ? "PNG, JPG, GIF " : tCommon("fileUpTo")} {Math.round(maxSize / 1024 / 1024)}MB
                 </p>
               </div>
             </div>
@@ -143,10 +147,19 @@ const FilePicker = ({
               )}
               <div>
                 <p className="text-sm font-medium">{value.name}</p>
-                <p className="text-xs text-muted-foreground">{(value.size / 1024 / 1024).toFixed(2)} MB</p>
+                <p className="text-xs text-muted-foreground">
+                  {(value.size / 1024 / 1024).toFixed(2)} {tCommon("mb")}
+                </p>
               </div>
             </div>
-            <Button type="button" variant="ghost" size="sm" onClick={handleRemove} disabled={disabled} className="h-8 w-8 p-0">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleRemove}
+              disabled={disabled}
+              className="h-8 w-8 p-0"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>

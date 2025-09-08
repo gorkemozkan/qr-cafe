@@ -4,7 +4,13 @@ import { FC } from "react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, MoreHorizontal, Eye, Link } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 interface TableActionsProps {
   onEdit?: () => void;
@@ -16,6 +22,7 @@ interface TableActionsProps {
 }
 
 const TableActions: FC<TableActionsProps> = (props) => {
+  const tCommon = useTranslations("common");
   const hasEdit = !!props.onEdit;
 
   const hasDelete = !!props.onDelete;
@@ -70,20 +77,20 @@ const TableActions: FC<TableActionsProps> = (props) => {
           {hasEdit && (
             <DropdownMenuItem onClick={props.onEdit}>
               <Edit className="mr-2 h-4 w-4" />
-              Edit
+              {tCommon("edit")}
             </DropdownMenuItem>
           )}
 
           {hasInspect && (
             <DropdownMenuItem onClick={props.onInspect}>
               <Eye className="mr-2 h-4 w-4" />
-              View
+              {tCommon("view")}
             </DropdownMenuItem>
           )}
           {hasDelete && (
             <DropdownMenuItem onClick={props.onDelete}>
               <Trash2 className="mr-2 h-4 w-4" />
-              Delete
+              {tCommon("delete")}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

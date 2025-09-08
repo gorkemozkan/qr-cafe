@@ -31,7 +31,13 @@
       "tooManyAttempts": "Çok fazla yenileme denemesi. {remainingTime} saniye sonra tekrar deneyin",
       "refreshing": "Yeniliyor...",
       "refresh": "Yenile ({attempt}/{maxAttempt})"
-    }
+    },
+    "view": "Görüntüle",
+    "openInNewTab": "Yeni Sekmede Aç",
+    "clickToBrowseFiles": "Dosya Seç",
+    "fileUpTo": "Dosya",
+    "mb": "MB",
+    "chooseFile": "Dosya Seç"
   },
   "navigation": {
     "signIn": "Giriş Yap",
