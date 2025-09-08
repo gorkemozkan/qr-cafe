@@ -1,10 +1,9 @@
 "use client";
 
-import { FC, useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +15,11 @@ import { Tables } from "@/types/db";
 import { CafeSchema, cafeSchema } from "@/lib/schema";
 import { uploadCafeLogo } from "@/lib/supabase/storage";
 
+export interface CafeFormRef {
+  submitForm: () => void;
+  cancelForm: () => void;
+}
+
 interface Props {
   mode: "create" | "edit";
   cafe?: Tables<"cafes">;
@@ -24,7 +28,15 @@ interface Props {
   isLoading?: boolean;
 }
 
-const CafeForm: FC<Props> = (props) => {
+const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
+  //#region Hooks
+
+  const t = useTranslations("cafe");
+
+  //#endregion
+
+  //#region States
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -33,10 +45,12 @@ const CafeForm: FC<Props> = (props) => {
 
   const [isUploading, setIsUploading] = useState(false);
 
+  //#endregion
+
   const getDefaultValues = (): CafeSchema => {
     if (props.mode === "edit" && props.cafe) {
       return {
-        name: props.cafe.name || props.cafe.slug, // Fallback to slug if name doesn't exist yet
+        name: props.cafe.name || props.cafe.slug,
         description: props.cafe.description || "",
         logo_url: props.cafe.logo_url || "",
         currency: props.cafe.currency as "TRY" | "USD" | "EUR",
@@ -56,7 +70,7 @@ const CafeForm: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<CafeSchema>({
@@ -64,8 +78,26 @@ const CafeForm: FC<Props> = (props) => {
     defaultValues: getDefaultValues(),
   });
 
+  //#endregion
+
+  //#region Methods
+
   const isActive = watch("is_active");
   const selectedCurrency = watch("currency");
+
+  //#endregion
+
+  //#region Methods
+
+  // Expose form methods via ref
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      handleSubmit(onSubmitForm)();
+    },
+    cancelForm: () => {
+      props.onCancel?.();
+    },
+  }));
 
   const onSubmitForm = async (data: CafeSchema) => {
     setSubmitError(null);
@@ -113,10 +145,10 @@ const CafeForm: FC<Props> = (props) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Cafe Name *</Label>
+        <Label htmlFor="name">{t("form.labels.cafeName")} *</Label>
         <Input
           id="name"
-          placeholder="Enter your cafe's name"
+          placeholder={t("form.placeholders.cafeName")}
           {...register("name")}
           className={errors.name || submitError ? "border-red-500" : ""}
           onChange={(e) => {
@@ -127,13 +159,18 @@ const CafeForm: FC<Props> = (props) => {
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea id="description" placeholder="Describe your cafe..." {...register("description")} rows={3} />
+        <Label htmlFor="description">{t("form.labels.description")}</Label>
+        <Textarea
+          id="description"
+          placeholder={t("form.placeholders.description")}
+          {...register("description")}
+          rows={3}
+        />
       </div>
       <div className="space-y-2">
         <FilePicker
           id="logo"
-          label="Cafe Logo"
+          label={t("form.labels.cafeLogo")}
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={selectedFile}
@@ -153,38 +190,33 @@ const CafeForm: FC<Props> = (props) => {
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">Current logo will be replaced if you select a new file</p>
+            <p className="text-sm text-muted-foreground">{t("form.logo.currentLogoNote")}</p>
           </div>
         )}
       </div>
-      <CurrencySelect id="currency" label="Currency" value={selectedCurrency} onValueChange={(value) => setValue("currency", value)} error={errors.currency?.message} />
+      <CurrencySelect
+        id="currency"
+        label={t("form.labels.currency")}
+        value={selectedCurrency}
+        onValueChange={(value) => setValue("currency", value)}
+        error={errors.currency?.message}
+      />
       <div className="flex items-center space-x-2">
-        <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
+        <Switch
+          id="is_active"
+          checked={isActive}
+          onCheckedChange={(checked: boolean) => setValue("is_active", checked)}
+        />
+        <Label htmlFor="is_active">{watch("is_active") ? t("form.status.active") : t("form.status.inactive")}</Label>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}
+        </p>
       </div>
       {submitError && <p className="text-sm text-red-500">{submitError}</p>}
-      <div className="flex justify-end space-x-2 pt-4">
-        {props.onCancel && (
-          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting}>
-            Cancel
-          </Button>
-        )}
-        <Button type="submit" disabled={isSubmitting || isUploading} className="min-w-[100px]">
-          {isSubmitting || isUploading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {props.mode === "create" ? "Creating..." : "Updating..."}
-            </>
-          ) : props.mode === "create" ? (
-            "Create"
-          ) : (
-            "Update"
-          )}
-        </Button>
-      </div>
     </form>
   );
-};
+});
+
+CafeForm.displayName = "CafeForm";
 
 export default CafeForm;

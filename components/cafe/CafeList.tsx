@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import { QrCode } from "lucide-react";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
@@ -12,18 +13,19 @@ import { OptimizedImage } from "@/components/ui";
 import DataTable from "@/components/ui/data-table";
 import { cafeRepository } from "@/lib/repositories";
 import TableActions from "@/components/ui/table-actions";
-import CafeEditModal from "@/components/cafe/CafeEditModal";
+import CafeEditSheet from "@/components/cafe/CafeEditSheet";
 import QuestionDialog from "@/components/ui/question-dialog";
 import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui";
-import CafeCreateModal from "@/components/cafe/CafeCreateModal";
+import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import ExternalLinkButton from "@/components/ExternalLinkButton";
 
 const CafeList: FC = () => {
   //#region Hooks
 
   const router = useRouter();
+  const t = useTranslations("cafe");
 
   //#endregion
 
@@ -51,7 +53,11 @@ const CafeList: FC = () => {
       setCafeToDelete(null);
     },
     successMessage: "Cafe deleted successfully!",
-    invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
+    optimisticUpdate: {
+      queryKey: QueryKeys.cafes,
+      updateFn: (oldData: Tables<"cafes">[], cafeId: number) => oldData.filter((cafe) => cafe.id !== cafeId),
+    },
+    invalidateQueries: [QueryKeys.stats],
   });
 
   //#endregion
@@ -83,7 +89,7 @@ const CafeList: FC = () => {
   const columns = [
     {
       key: "logo",
-      header: "Logo",
+      header: t("table.headers.logo"),
       cell: (_: any, row: Tables<"cafes">) => (
         <>
           {row.logo_url ? (
@@ -99,7 +105,7 @@ const CafeList: FC = () => {
             />
           ) : (
             <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">No Logo</span>
+              <span className="text-[8px] text-center text-muted-foreground">{t("table.logo.noLogo")}</span>
             </div>
           )}
         </>
@@ -107,7 +113,7 @@ const CafeList: FC = () => {
     },
     {
       key: "name",
-      header: "Name",
+      header: t("table.headers.name"),
       cell: (value: any) => (
         <div className="w-24">
           <Tooltip>
@@ -123,24 +129,28 @@ const CafeList: FC = () => {
     },
     {
       key: "currency",
-      header: "Currency",
+      header: t("table.headers.currency"),
       cell: (value: any) => value || "-",
     },
     {
       key: "is_active",
-      header: "Status",
-      tooltipText: "Status of the cafe, used for visibility",
-      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
+      header: t("table.headers.status"),
+      tooltipText: t("table.status.activeTooltip"),
+      cell: (value: any) => (
+        <Badge variant={value ? "active" : "inactive"}>
+          {value ? t("table.status.active") : t("table.status.inactive")}
+        </Badge>
+      ),
     },
     {
       key: "created_at",
-      header: "Created",
-      tooltipText: "Date and time when the cafe was created",
+      header: t("table.headers.created"),
+      tooltipText: t("table.status.createdTooltip"),
       cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
-      header: "Actions",
+      header: t("table.headers.actions"),
       className: "flex justify-end",
       cell: (_: any, row: Tables<"cafes">) => (
         <div className="flex justify-end">
@@ -157,7 +167,7 @@ const CafeList: FC = () => {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>View QR Code</p>
+                    <p>{t("qr.preview.viewTooltip")}</p>
                   </TooltipContent>
                 </Tooltip>
                 <ExternalLinkButton url={`${window.location.origin}/${row.slug}`} />
@@ -172,20 +182,22 @@ const CafeList: FC = () => {
   return (
     <div>
       <DataTable
-        title="Cafes"
-        actions={<CafeCreateModal />}
+        title={t("title")}
+        actions={<CafeCreateSheet />}
         columns={columns}
         queryKey={QueryKeys.cafes}
         queryFn={async () => await cafeRepository.list()}
-        emptyMessage="No cafes found"
+        emptyMessage={t("noCafes")}
       />
-      {cafeToEdit && <CafeEditModal onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
+      {cafeToEdit && (
+        <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />
+      )}
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title="Delete Cafe"
-        description={`Are you sure you want to delete "${cafeToDelete?.slug}"? This action cannot be undone.`}
-        confirmText="Delete"
+        title={t("delete.title")}
+        description={t("delete.confirmMessage", { slug: cafeToDelete?.slug || "" })}
+        confirmText={t("deleteCafe")}
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
       />

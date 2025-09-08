@@ -149,6 +149,97 @@
       "phone": "Phone",
       "website": "Website",
       "logo": "Logo"
+    },
+    "table": {
+      "headers": {
+        "logo": "Logo",
+        "name": "Name",
+        "currency": "Currency",
+        "status": "Status",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "activeTooltip": "Status of the cafe, used for visibility",
+        "createdTooltip": "Date and time when the cafe was created"
+      },
+      "logo": {
+        "noLogo": "No Logo"
+      }
+    },
+    "form": {
+      "labels": {
+        "cafeName": "Cafe Name",
+        "description": "Description",
+        "cafeLogo": "Cafe Logo",
+        "currency": "Currency"
+      },
+      "placeholders": {
+        "cafeName": "Enter your cafe's name",
+        "description": "Describe your cafe..."
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "activeDescription": "Cafe is active and visible",
+        "inactiveDescription": "Cafe is inactive and hidden"
+      },
+      "logo": {
+        "currentLogoNote": "Current logo will be replaced if you select a new file"
+      }
+    },
+    "create": {
+      "title": "Create New Cafe",
+      "description": "Fill in the details below to create a new cafe.",
+      "button": "Create Cafe",
+      "loadingButton": "Creating...",
+      "tooltip": "Create a new cafe"
+    },
+    "edit": {
+      "title": "Edit Cafe",
+      "description": "Update the cafe information below.",
+      "button": "Update Cafe",
+      "loadingButton": "Updating..."
+    },
+    "delete": {
+      "title": "Delete Cafe",
+      "confirmMessage": "Are you sure you want to delete \"{slug}\"? This action cannot be undone.",
+      "successMessage": "Cafe deleted successfully!"
+    },
+    "qr": {
+      "preview": {
+        "title": "QR Code Preview",
+        "description": "QR code - Scan to visit the cafe page",
+        "menuUrl": "Menu URL:",
+        "scanInstruction": "Scan this QR code",
+        "scanDescription": "Visitors can scan this code to access your cafe page",
+        "failedGeneration": "Failed to generate QR code",
+        "viewTooltip": "View QR Code"
+      },
+      "export": {
+        "pdfTitle": "QR Code for Cafe",
+        "pdfInstruction": "Scan this QR code to visit the cafe page",
+        "pdfGenerated": "Generated on {date}",
+        "successMessage": "QR Code exported successfully!",
+        "failedMessage": "Failed to export QR code",
+        "button": "Export",
+        "exporting": "Exporting..."
+      },
+      "share": {
+        "whatsApp": "WhatsApp",
+        "sendToWhatsApp": "Send to WhatsApp",
+        "copyLink": "Copy Link",
+        "goToMenu": "Go to Menu",
+        "linkCopied": "Link copied to clipboard!",
+        "copyFailed": "Failed to copy link"
+      }
+    },
+    "messages": {
+      "createSuccess": "Cafe created successfully!",
+      "updateSuccess": "Cafe updated successfully!",
+      "createFailed": "Failed to create cafe"
     }
   },
   "category": {
@@ -157,6 +248,9 @@
     "editCategory": "Edit Category",
     "deleteCategory": "Delete Category",
     "noCategories": "No categories found",
+    "manageCategories": "Manage categories for your cafe",
+    "manageProducts": "Manage products for your category",
+    "notFound": "Category not found",
     "fields": {
       "name": "Category Name",
       "description": "Description",
@@ -181,10 +275,16 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome back!",
+    "subtitle": "You can manage your cafes and categories here.",
     "stats": {
       "totalCafes": "Total Cafes",
-      "totalProducts": "Total Products",
       "totalCategories": "Total Categories",
+      "totalProducts": "Total Products",
+      "activeProducts": "Active Products",
+      "cafesDescription": "Active cafe locations across all regions",
+      "categoriesDescription": "Menu categories added",
+      "productsDescription": "Individual menu items across all cafes",
+      "activeProductsDescription": "Available products ready for customers",
       "thisMonth": "This Month"
     }
   },

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { FC, useState, useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import TooltipButton from "@/components/TooltipButton";
 
 interface Props {
   loading: boolean;
@@ -78,39 +78,20 @@ const RefreshButton: FC<Props> = (props) => {
 
   if (isBlocked) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            onClick={handleClick}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <RefreshCcw className={"h-4 w-4 "} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{getTooltipText()}</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
+        <Button variant="outline" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <RefreshCcw className="h-4 w-4" />
+        </Button>
+      </TooltipButton>
     );
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant="outline"
-          onClick={handleClick}
-          disabled={props.loading || isBlocked}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{getTooltipText()}</p>
-      </TooltipContent>
-    </Tooltip>
+    <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
+      <Button variant="outline" disabled={props.loading || isBlocked} className="text-sm">
+        <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />{" "}
+      </Button>
+    </TooltipButton>
   );
 };
 

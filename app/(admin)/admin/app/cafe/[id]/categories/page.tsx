@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { getTranslations } from "next-intl/server";
 import PageTitle from "@/components/PageTitle";
 import CategoryList from "@/components/category/CategoryList";
 
@@ -8,12 +9,13 @@ interface Props {
 
 const CategoriesPage: NextPage<Props> = async (props) => {
   const params = await props.params;
+  const t = await getTranslations();
 
   const cafeId = Number.parseInt(params.id as string, 10);
 
   return (
     <div>
-      <PageTitle showBackButton title="Categories" subtitle="Manage categories for your cafe" />
+      <PageTitle showBackButton title={t("category.title")} subtitle={t("category.manageCategories")} />
       <CategoryList cafeId={cafeId} />
     </div>
   );

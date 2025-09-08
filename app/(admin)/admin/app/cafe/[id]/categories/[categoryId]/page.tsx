@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { categoryRepository } from "@/lib/repositories";
 import { useQueryRequest } from "@/hooks/use-request";
 import { AlertCircle } from "lucide-react";
@@ -10,9 +11,11 @@ import CategoryEditModal from "@/components/category/CategoryEditModal";
 import QueryKeys from "@/constants/query-keys";
 import { NextPage } from "next";
 import PageTitle from "@/components/PageTitle";
+import Spinner from "@/components/Spinner";
 
 const CategoryDetailPage: NextPage = () => {
   const params = useParams();
+  const t = useTranslations();
 
   const cafeId = parseInt(params.id as string, 10);
 
@@ -28,13 +31,7 @@ const CategoryDetailPage: NextPage = () => {
   });
 
   if (isLoadingCategory) {
-    return (
-      <div className="container mx-auto py-6">
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (!category) {
@@ -42,7 +39,7 @@ const CategoryDetailPage: NextPage = () => {
       <div className="container mx-auto py-6">
         <div className="flex items-center space-x-2 text-destructive">
           <AlertCircle className="h-5 w-5" />
-          <span>Category not found</span>
+          <span>{t("category.notFound")}</span>
         </div>
       </div>
     );
@@ -50,7 +47,7 @@ const CategoryDetailPage: NextPage = () => {
 
   return (
     <div>
-      <PageTitle showBackButton title={category.name} subtitle="Manage products for your category" />
+      <PageTitle showBackButton title={category.name} subtitle={t("category.manageProducts")} />
       <ProductList cafeId={cafeId} categoryId={categoryId} />
       {showEditModal && (
         <CategoryEditModal

@@ -149,6 +149,97 @@
       "phone": "Telefon",
       "website": "Website",
       "logo": "Logo"
+    },
+    "table": {
+      "headers": {
+        "logo": "Logo",
+        "name": "İsim",
+        "currency": "Para Birimi",
+        "status": "Durum",
+        "created": "Oluşturulma",
+        "actions": "İşlemler"
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "activeTooltip": "Kafenın durumu, görünürlük için kullanılır",
+        "createdTooltip": "Kafenın oluşturulduğu tarih ve saat"
+      },
+      "logo": {
+        "noLogo": "Logo Yok"
+      }
+    },
+    "form": {
+      "labels": {
+        "cafeName": "Kafe Adı",
+        "description": "Açıklama",
+        "cafeLogo": "Kafe Logosu",
+        "currency": "Para Birimi"
+      },
+      "placeholders": {
+        "cafeName": "Kafenizin adını girin",
+        "description": "Kafenizi tarif edin..."
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "activeDescription": "Kafe aktif ve görünür",
+        "inactiveDescription": "Kafe pasif ve gizli"
+      },
+      "logo": {
+        "currentLogoNote": "Yeni bir dosya seçerseniz mevcut logo değiştirilecektir"
+      }
+    },
+    "create": {
+      "title": "Yeni Kafe Oluştur",
+      "description": "Aşağıdaki bilgileri doldurarak yeni bir kafe oluşturun.",
+      "button": "Kafe Oluştur",
+      "loadingButton": "Oluşturuluyor...",
+      "tooltip": "Yeni bir kafe oluştur"
+    },
+    "edit": {
+      "title": "Kafe Düzenle",
+      "description": "Aşağıdaki kafe bilgilerini güncelleyin.",
+      "button": "Kafeyi Güncelle",
+      "loadingButton": "Güncelleniyor..."
+    },
+    "delete": {
+      "title": "Kafe Sil",
+      "confirmMessage": "\"{slug}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "successMessage": "Kafe başarıyla silindi!"
+    },
+    "qr": {
+      "preview": {
+        "title": "QR Kod Önizlemesi",
+        "description": "QR kod - Kafe sayfasına gitmek için tarayın",
+        "menuUrl": "Menü URL'si:",
+        "scanInstruction": "Bu QR kodu tarayın",
+        "scanDescription": "Ziyaretçiler kafe sayfasına erişmek için bu kodu tarayabilir",
+        "failedGeneration": "QR kod oluşturulamadı",
+        "viewTooltip": "QR Kodu Görüntüle"
+      },
+      "export": {
+        "pdfTitle": "Kafe için QR Kod",
+        "pdfInstruction": "Kafe sayfasına gitmek için bu QR kodu tarayın",
+        "pdfGenerated": "{date} tarihinde oluşturuldu",
+        "successMessage": "QR Kod başarıyla dışa aktarıldı!",
+        "failedMessage": "QR kod dışa aktarılamadı",
+        "button": "Dışa Aktar",
+        "exporting": "Dışa aktarılıyor..."
+      },
+      "share": {
+        "whatsApp": "WhatsApp",
+        "sendToWhatsApp": "WhatsApp'e Gönder",
+        "copyLink": "Bağlantıyı Kopyala",
+        "goToMenu": "Menüye Git",
+        "linkCopied": "Bağlantı panoya kopyalandı!",
+        "copyFailed": "Bağlantı kopyalanamadı"
+      }
+    },
+    "messages": {
+      "createSuccess": "Kafe başarıyla oluşturuldu!",
+      "updateSuccess": "Kafe başarıyla güncellendi!",
+      "createFailed": "Kafe oluşturulamadı"
     }
   },
   "category": {
@@ -157,6 +248,9 @@
     "editCategory": "Kategori Düzenle",
     "deleteCategory": "Kategori Sil",
     "noCategories": "Kategori bulunamadı",
+    "manageCategories": "Kafeniz için kategorileri yönetin",
+    "manageProducts": "Kategoriniz için ürünleri yönetin",
+    "notFound": "Kategori bulunamadı",
     "fields": {
       "name": "Kategori Adı",
       "description": "Açıklama",
@@ -181,10 +275,16 @@
   "dashboard": {
     "title": "Gösterge Paneli",
     "welcome": "Tekrar hoş geldiniz!",
+    "subtitle": "Kafelerınızı ve kategorilerinizi buradan yönetebilirsiniz.",
     "stats": {
       "totalCafes": "Toplam Kafe",
-      "totalProducts": "Toplam Ürün",
       "totalCategories": "Toplam Kategori",
+      "totalProducts": "Toplam Ürün",
+      "activeProducts": "Aktif Ürünler",
+      "cafesDescription": "Tüm bölgelerdeki aktif kafe lokasyonları",
+      "categoriesDescription": "Eklenen menü kategorileri",
+      "productsDescription": "Tüm kafelerdeki bireysel menü öğeleri",
+      "activeProductsDescription": "Müşteriler için hazır mevcut ürünler",
       "thisMonth": "Bu Ay"
     }
   },
