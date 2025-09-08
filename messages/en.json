@@ -271,6 +271,59 @@
       "name": "Category Name",
       "description": "Description",
       "sortOrder": "Sort Order"
+    },
+    "table": {
+      "headers": {
+        "name": "Name",
+        "sortOrder": "Sort Order",
+        "status": "Status",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "form": {
+      "labels": {
+        "categoryName": "Category Name",
+        "description": "Description",
+        "sortOrder": "Sort Order"
+      },
+      "placeholders": {
+        "categoryName": "Enter category name",
+        "description": "Describe this category..."
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "activeDescription": "Category is active and visible",
+        "inactiveDescription": "Category is inactive and hidden"
+      }
+    },
+    "create": {
+      "title": "Create New Category",
+      "description": "Fill in the details below to create a new category.",
+      "button": "Create Category",
+      "loadingButton": "Creating...",
+      "tooltip": "Create a new category"
+    },
+    "edit": {
+      "title": "Edit Category",
+      "description": "Update the category information below.",
+      "button": "Update Category",
+      "loadingButton": "Updating..."
+    },
+    "delete": {
+      "title": "Delete Category",
+      "confirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "successMessage": "Category deleted successfully!"
+    },
+    "messages": {
+      "createSuccess": "Category created successfully!",
+      "updateSuccess": "Category updated successfully!",
+      "createFailed": "Failed to create category"
     }
   },
   "product": {

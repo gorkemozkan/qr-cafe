@@ -1,17 +1,18 @@
 "use client";
 
 import { FC, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
 import QueryKeys from "@/constants/query-keys";
 import DataTable from "@/components/ui/data-table";
 import QuestionDialog from "@/components/ui/question-dialog";
-import CategoryEditModal from "@/components/category/CategoryEditModal";
+import CategoryEditSheet from "@/components/category/CategoryEditModal";
 import TableActions from "@/components/ui/table-actions";
 import DateView from "@/components/ui/date-view";
 import { Badge } from "@/components/ui/badge";
-import CategoryCreateModal from "@/components/category/CategoryCreateModal";
+import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -19,6 +20,13 @@ interface Props {
 }
 
 const CategoryList: FC<Props> = (props) => {
+  //#region Hooks
+
+  const t = useTranslations("category");
+  const tCommon = useTranslations("common");
+
+  //#endregion
+
   //#region States
 
   const router = useRouter();
@@ -41,7 +49,7 @@ const CategoryList: FC<Props> = (props) => {
       setDeleteDialogOpen(false);
       setCategoryToDelete(null);
     },
-    successMessage: "Category deleted successfully!",
+    successMessage: t("delete.successMessage"),
     invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
@@ -65,30 +73,38 @@ const CategoryList: FC<Props> = (props) => {
   const columns = [
     {
       key: "name",
-      header: "Name",
+      header: t("table.headers.name"),
       cell: (value: any) => <span className="font-medium">{value}</span>,
     },
     {
       key: "sort_order",
-      header: "Sort Order",
+      header: t("table.headers.sortOrder"),
       cell: (value: any) => value || "-",
     },
     {
       key: "is_active",
-      header: "Status",
-      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
+      header: t("table.headers.status"),
+      cell: (value: any) => (
+        <Badge variant={value ? "active" : "inactive"}>
+          {value ? t("table.status.active") : t("table.status.inactive")}
+        </Badge>
+      ),
     },
     {
       key: "created_at",
-      header: "Created",
+      header: t("table.headers.created"),
       cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
-      header: "Actions",
+      header: t("table.headers.actions"),
       className: "flex justify-end",
       cell: (_: any, row: Tables<"categories">) => (
-        <TableActions onInspect={() => handleInspectClick(row)} onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />
+        <TableActions
+          onInspect={() => handleInspectClick(row)}
+          onEdit={() => setCategoryToEdit(row)}
+          onDelete={() => handleDeleteClick(row)}
+        />
       ),
     },
   ];
@@ -97,20 +113,26 @@ const CategoryList: FC<Props> = (props) => {
     <div className="space-y-4">
       <DataTable
         columns={columns}
-        actions={<CategoryCreateModal cafeId={props.cafeId} />}
+        actions={<CategoryCreateSheet cafeId={props.cafeId} />}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
         queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}
-        emptyMessage="No categories found"
+        emptyMessage={t("noCategories")}
       />
-      {categoryToEdit && <CategoryEditModal onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />}
+      {categoryToEdit && (
+        <CategoryEditSheet
+          onClose={() => setCategoryToEdit(null)}
+          category={categoryToEdit}
+          onSuccess={() => setCategoryToEdit(null)}
+        />
+      )}
       <QuestionDialog
         open={deleteDialogOpen}
-        title="Delete Category"
-        confirmText="Delete"
+        title={t("delete.title")}
+        confirmText={tCommon("delete")}
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
         onOpenChange={setDeleteDialogOpen}
-        description={`Are you sure you want to delete "${categoryToDelete?.name}"? This action cannot be undone.`}
+        description={t("delete.confirmMessage", { name: categoryToDelete?.name || "" })}
       />
     </div>
   );

@@ -5,11 +5,26 @@ export { Textarea } from "./textarea";
 export { Switch } from "./switch";
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 export { default as FilePicker } from "./file-picker";
-export { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./dialog";
+export {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
 export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
 export { Badge } from "./badge";
 export { default as Captcha } from "./captcha";
-export { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./dropdown-menu";
+export {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 export { default as DataTable } from "./data-table";
 export { default as QuestionDialog } from "./question-dialog";
@@ -21,6 +36,18 @@ export { CurrencySelect, type SupportedCurrency } from "./currency-select";
 export { OptimizedImage } from "./optimized-image";
 export { Skeleton } from "./skeleton";
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./tooltip";
+export {
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+} from "./drawer";
 export {
   ContextMenu,
   ContextMenuTrigger,

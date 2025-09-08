@@ -1,72 +1,78 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
 import QueryKeys from "@/constants/query-keys";
+import FormSheet from "@/components/FormSheet";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
-import CategoryForm from "@/components/category/CategoryForm";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import SubmitButton from "@/components/SubmitButton";
+import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 
 interface Props {
   category: Tables<"categories">;
-  onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (category: Tables<"categories">) => void;
+  onClose: (open: boolean) => void;
 }
 
-const CategoryEditModal: FC<Props> = (props) => {
-  //#region States
-
-  const [open, setOpen] = useState(true);
-
-  //#endregion
-
+const CategoryEditSheet: FC<Props> = (props) => {
   //#region Hooks
 
-  const { isLoading, execute } = useRequest({
-    mutationFn: (payload: CategorySchema) => {
-      return categoryRepository.update(props.category.id, payload);
-    },
-    onSuccess: () => {
-      props.onSuccess?.();
-      setOpen(false);
-      props.onClose();
-    },
-    successMessage: "Category updated successfully!",
-    invalidateQueries: [QueryKeys.categoriesByCafe(props.category.cafe_id.toString()), QueryKeys.stats],
-  });
+  const t = useTranslations("category");
 
   //#endregion
 
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (!newOpen) {
-      props.onClose();
-    }
-  };
+  //#region States
+
+  const formRef = useRef<CategoryFormRef>(null);
+
+  //#endregion
+
+  const { isLoading, execute } = useRequest({
+    mutationFn: async (payload: CategorySchema) => {
+      return await categoryRepository.update(props.category.id, payload);
+    },
+    onSuccess: (category) => {
+      props.onSuccess?.(category);
+    },
+    successMessage: t("messages.updateSuccess"),
+    invalidateQueries: [QueryKeys.stats],
+    optimisticUpdate: {
+      queryKey: QueryKeys.categoriesByCafe(props.category.cafe_id.toString()),
+      updateFn: (oldData: Tables<"categories">[], variables: CategorySchema) =>
+        oldData.map((category) => (category.id === props.category.id ? { ...category, ...variables } : category)),
+    },
+  });
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300">
-        <DialogHeader>
-          <DialogTitle className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">Edit Category</DialogTitle>
-          <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">Update the category details below.</DialogDescription>
-        </DialogHeader>
-        <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200 max-h-[calc(90vh-200px)] overflow-y-auto">
-          <CategoryForm
-            mode="edit"
-            category={props.category}
-            onSubmit={async (data) => {
-              await execute(data);
-            }}
-            onCancel={() => handleOpenChange(false)}
-            isLoading={isLoading}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+    <FormSheet
+      title={t("edit.title")}
+      description={t("edit.description")}
+      onOpenChange={props.onClose}
+      footer={
+        <SubmitButton
+          onClick={() => formRef.current?.submitForm()}
+          disabled={isLoading}
+          isLoading={isLoading}
+          text={t("edit.button")}
+          loadingText={t("edit.loadingButton")}
+        />
+      }
+    >
+      <CategoryForm
+        ref={formRef}
+        mode="edit"
+        isLoading={isLoading}
+        category={props.category}
+        onSubmit={async (data) => {
+          await execute(data);
+        }}
+        onCancel={() => props.onClose?.(false)}
+      />
+    </FormSheet>
   );
 };
 
-export default CategoryEditModal;
+export default CategoryEditSheet;

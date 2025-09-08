@@ -95,6 +95,7 @@ const CafeList: FC = () => {
         <>
           {row.logo_url ? (
             <OptimizedImage
+              clickable
               src={row.logo_url}
               alt={`${row.slug} logo`}
               width={40}
