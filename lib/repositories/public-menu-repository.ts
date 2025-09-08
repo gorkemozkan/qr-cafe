@@ -35,6 +35,8 @@ export class PublicMenuRepository {
     try {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
+      console.log("baseUrl", baseUrl);
+
       const response = await fetch(`${baseUrl}/api/public/cafe/${slug}`, {
         method: "GET",
         headers: {
@@ -42,9 +44,11 @@ export class PublicMenuRepository {
         },
       });
 
+      console.log("response", response);
+
       if (!response.ok) {
         if (response.status === 404) {
-          return null; // Cafe not found
+          return null;
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -57,7 +61,6 @@ export class PublicMenuRepository {
 
       return menuData;
     } catch (error) {
-      // If API call fails, return null
       console.error("Failed to fetch menu data:", error);
       return null;
     }

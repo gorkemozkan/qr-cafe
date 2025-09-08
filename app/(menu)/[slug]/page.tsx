@@ -27,11 +27,15 @@ export const generateMetadata = async ({ params }: Params) => {
 const Page: NextPage<Params> = async (props) => {
   const { slug } = await props.params;
 
+  console.log("slug", slug);
+
   if (!slug) {
     notFound();
   }
 
   const menu = await publicMenuRepository.getMenuBySlug(slug);
+
+  console.log("menu", menu);
 
   if (!menu) {
     notFound();

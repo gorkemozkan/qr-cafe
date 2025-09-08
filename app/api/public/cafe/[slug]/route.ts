@@ -5,8 +5,8 @@ import { http } from "@/lib/http";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    // Rate limiting check
     const rateLimitResult = apiRateLimiter.check(request);
+
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {
@@ -24,13 +24,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const supabase = await createClient();
+
     const slug = (await params).slug;
 
     if (!slug) {
       return NextResponse.json({ error: "Slug is required" }, { status: http.BAD_REQUEST.status });
     }
 
-    // Get cafe details with public information only
     const { data: cafe, error: cafeError } = await supabase
       .from("cafes")
       .select("id, name, description, logo_url, currency, slug")
