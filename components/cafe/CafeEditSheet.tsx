@@ -38,10 +38,13 @@ const CafeEditSheet: FC<Props> = (props) => {
       props.onSuccess?.(cafe);
     },
     successMessage: t("messages.updateSuccess"),
-    invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
+    invalidateQueries: [QueryKeys.stats],
+    optimisticUpdate: {
+      queryKey: QueryKeys.cafes,
+      updateFn: (oldData: Tables<"cafes">[], variables: CafeSchema) =>
+        oldData.map((cafe) => (cafe.id === props.cafe.id ? { ...cafe, ...variables } : cafe)),
+    },
   });
-
-  //#endregion
 
   return (
     <FormSheet
