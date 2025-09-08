@@ -3,7 +3,14 @@
 import { FC } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface QuestionDialogProps {
   open: boolean;
@@ -41,7 +48,9 @@ const QuestionDialog: FC<QuestionDialogProps> = ({
             <AlertTriangle className="h-5 w-5 text-destructive" />
             <DialogTitle>{title}</DialogTitle>
           </div>
-          <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">{description}</DialogDescription>
+          <DialogDescription className="animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-150">
+            {description}
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter className="animate-in fade-in-0 slide-in-from-bottom-2 duration-300 delay-200">
           <Button variant="outline" onClick={handleCancel} disabled={isLoading}>

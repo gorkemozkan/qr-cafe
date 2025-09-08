@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import FormSheet from "@/components/FormSheet";
-import { CafeListDropdown } from "@/components/ui/cafe-list-dropdown";
+
 import { CategoryListDropdown } from "@/components/ui/category-list-dropdown";
 import { productRepository } from "@/lib/repositories/product-repository";
 import { storageRepository } from "@/lib/repositories";
@@ -19,6 +19,8 @@ import FilePicker from "@/components/ui/file-picker";
 import { BUCKET_NAMES } from "@/config";
 import { Tables } from "@/types/db";
 import { toast } from "sonner";
+import CafeListDropdown from "@/components/cafe/CafeListDropdown";
+import SubmitButton from "@/components/SubmitButton";
 
 interface QuickProductCreateSheetProps {
   open: boolean;
@@ -132,40 +134,25 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
       description="Quickly create a new product for your cafe menu."
       onOpenChange={onOpenChange}
       footer={
-        <Button
-          type="submit"
-          form="product-form"
+        <SubmitButton
+          onClick={() => handleSubmit(onSubmit)}
           disabled={isSubmitting || isUploading || !selectedCafeId}
-          className="min-w-[100px]"
-        >
-          {isSubmitting || isUploading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            <>
-              <Plus className="mr-2 h-4 w-4" />
-              Create
-            </>
-          )}
-        </Button>
+          isLoading={isSubmitting || isUploading}
+          text="Create"
+          loadingText="Creating..."
+        />
       }
     >
       <form id="product-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Cafe Selection */}
         <CafeListDropdown
           id="cafe"
           label="Cafe"
           value={selectedCafeId || undefined}
           onValueChange={setSelectedCafeId}
-          onCafesLoaded={setCafes}
           placeholder="Select a cafe"
           error={!selectedCafeId ? "Please select a cafe" : undefined}
           required
         />
-
-        {/* Category Selection */}
         <CategoryListDropdown
           id="category"
           label="Category"

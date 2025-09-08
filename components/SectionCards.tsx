@@ -47,7 +47,7 @@ const SectionCards: FC<Props> = (props) => {
   return (
     <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       {props.items.map((item) => (
-        <Card key={item.title} className="@container/card shadow-none">
+        <Card key={item.title} className="@container/card shadow-none bg-transparent">
           <CardHeader>
             <CardDescription>{item.title}</CardDescription>
             <AnimatedValue value={item.value} className="text-2xl font-bold tabular-nums @[250px]/card:text-3xl" />
