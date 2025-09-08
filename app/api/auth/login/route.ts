@@ -6,8 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    if (!authRateLimiter.check(request)) {
-      return NextResponse.json({ error: "Too many login attempts. Please try again later.", success: false }, { status: 429 });
+    if (!authRateLimiter.check(request).allowed) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later.", success: false },
+        { status: 429 },
+      );
     }
 
     if (!verifyCsrfToken(request)) {

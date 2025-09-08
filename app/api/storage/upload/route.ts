@@ -5,12 +5,10 @@ import { uploadRateLimiter } from "@/lib/rate-limiter";
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting
     if (!uploadRateLimiter.check(request).allowed) {
       return NextResponse.json({ error: "Too many upload attempts. Please try again later." }, { status: 429 });
     }
 
-    // CSRF protection
     if (!verifyCsrfToken(request)) {
       return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
     }
@@ -49,7 +47,12 @@ export async function POST(request: NextRequest) {
 
     // Only check ownership if not explicitly skipped (for new cafe creation)
     if (!skipOwnershipCheck) {
-      const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
+      const { data: cafe, error: cafeError } = await supabase
+        .from("cafes")
+        .select("id")
+        .eq("slug", cafeSlug)
+        .eq("user_id", user.id)
+        .single();
 
       if (cafeError || !cafe) {
         return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
@@ -64,7 +67,9 @@ export async function POST(request: NextRequest) {
 
     const filePath = `${user.id}/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
       return NextResponse.json(
