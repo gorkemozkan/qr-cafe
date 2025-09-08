@@ -8,7 +8,7 @@ interface Params {
 }
 export const generateMetadata = async ({ params }: Params) => {
   const { slug } = await params;
-
+  console.log("slug", slug);
   if (!slug) {
     return {
       title: "Menu",
@@ -16,7 +16,11 @@ export const generateMetadata = async ({ params }: Params) => {
     };
   }
 
+  console.log("slug", slug);
+
   const menu = await publicMenuRepository.getMenuBySlug(slug);
+
+  console.log("menu", menu);
 
   return {
     title: menu?.cafe.name,
@@ -28,7 +32,6 @@ const Page: NextPage<Params> = async (props) => {
   const { slug } = await props.params;
 
   console.log("slug", slug);
-
   if (!slug) {
     notFound();
   }
@@ -41,7 +44,7 @@ const Page: NextPage<Params> = async (props) => {
     notFound();
   }
 
-  return <SimpleMenu menu={menu} />;
+  return null;
 };
 
 export default Page;

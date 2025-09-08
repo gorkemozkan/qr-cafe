@@ -67,7 +67,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           .order("created_at", { ascending: true });
 
         if (productsError) {
-          console.error("Error fetching products for category", category.id, productsError);
           return { ...category, products: [] };
         }
 

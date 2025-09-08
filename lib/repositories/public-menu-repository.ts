@@ -35,7 +35,8 @@ export interface PublicMenuData {
 export class PublicMenuRepository extends BaseRepository {
   protected readonly baseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/public/cafe`;
 
-  async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
+  async getMenuBySlug(slug: string) {
+    console.log("Final URL", `${this.baseUrl}/${slug}`);
     return await this.get<PublicMenuData>(`/${slug}`);
   }
 }
