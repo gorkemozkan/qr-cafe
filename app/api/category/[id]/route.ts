@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { verifyCsrfToken } from "@/lib/security";
+import { http } from "@/lib/http";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -13,13 +14,13 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const categoryId = parseInt(id, 10);
 
     if (Number.isNaN(categoryId)) {
-      return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
     const { data: category, error: fetchError } = await supabase
@@ -31,25 +32,31 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
     if (fetchError) {
       if (fetchError.code === "PGRST116") {
-        return NextResponse.json({ error: "Category not found" }, { status: 404 });
+        return NextResponse.json({ error: "Category not found" }, { status: http.NOT_FOUND.status });
       }
       return NextResponse.json({ error: "Failed to fetch category" }, { status: 500 });
     }
 
     if (!category) {
-      return NextResponse.json({ error: "Category not found" }, { status: 404 });
+      return NextResponse.json({ error: "Category not found" }, { status: http.NOT_FOUND.status });
     }
 
     return NextResponse.json(category);
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const { id } = await params;
@@ -62,12 +69,12 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const categoryId = parseInt(id, 10);
     if (Number.isNaN(categoryId)) {
-      return NextResponse.json({ error: "Invalid category ID" }, { status: 400 });
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
     const { data: existingCategory, error: fetchError } = await supabase
@@ -78,7 +85,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       .single();
 
     if (fetchError || !existingCategory) {
-      return NextResponse.json({ error: "Category not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Category not found or access denied" }, { status: http.NOT_FOUND.status });
     }
 
     const { error: deleteError } = await supabase
@@ -88,11 +95,14 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       .eq("user_id", user.id);
 
     if (deleteError) {
-      return NextResponse.json({ error: "Failed to delete category" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to delete category" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json({ success: true });
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

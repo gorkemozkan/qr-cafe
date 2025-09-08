@@ -4,11 +4,15 @@ import { cafeSchema } from "@/lib/schema";
 import { TablesInsert } from "@/types/db";
 import { slugify } from "@/lib/utils";
 import { verifyCsrfToken } from "@/lib/security";
+import { http } from "@/lib/http";
 
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -19,7 +23,7 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const body = await request.json();
@@ -32,7 +36,7 @@ export async function POST(request: NextRequest) {
           error: "Validation failed",
           details: validationResult.error.issues,
         },
-        { status: 400 },
+        { status: http.BAD_REQUEST.status },
       );
     }
 
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest) {
     const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", slug).single();
 
     if (existingCafe) {
-      return NextResponse.json({ error: "A cafe with this name already exists" }, { status: 409 });
+      return NextResponse.json({ error: "A cafe with this name already exists" }, { status: http.CONFLICT.status });
     }
 
     const cafeData: TablesInsert<"cafes"> = {
@@ -58,11 +62,14 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.from("cafes").insert([cafeData]).select().single();
 
     if (error) {
-      return NextResponse.json({ error: "Failed to create cafe" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to create cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json(data, { status: 201 });
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { verifyCsrfToken } from "@/lib/security";
+import { http } from "@/lib/http";
 
 export async function PUT(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -15,7 +19,7 @@ export async function PUT(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
     const body = await request.json();
@@ -23,7 +27,10 @@ export async function PUT(request: NextRequest) {
     const { cafe_id, category_ids } = body;
 
     if (!cafe_id || !Array.isArray(category_ids)) {
-      return NextResponse.json({ error: "Cafe ID and category IDs array are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Cafe ID and category IDs array are required" },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const { data: cafe, error: cafeError } = await supabase
@@ -34,7 +41,7 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (cafeError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
     }
 
     const { data: existingCategories, error: fetchError } = await supabase
@@ -45,11 +52,14 @@ export async function PUT(request: NextRequest) {
       .in("id", category_ids);
 
     if (fetchError) {
-      return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to fetch categories" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     if (existingCategories.length !== category_ids.length) {
-      return NextResponse.json({ error: "Some categories not found or access denied" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Some categories not found or access denied" },
+        { status: http.NOT_FOUND.status },
+      );
     }
 
     const updates = category_ids.map((categoryId: number, index: number) => ({
@@ -65,12 +75,15 @@ export async function PUT(request: NextRequest) {
         .eq("user_id", user.id);
 
       if (updateError) {
-        return NextResponse.json({ error: "Failed to update sort order" }, { status: 500 });
+        return NextResponse.json(
+          { error: "Failed to update sort order" },
+          { status: http.INTERNAL_SERVER_ERROR.status },
+        );
       }
     }
 
     return NextResponse.json({ success: true });
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

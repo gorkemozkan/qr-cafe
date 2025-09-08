@@ -2,17 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { validateFileType, validateBucketName, verifyCsrfToken } from "@/lib/security";
 import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { http } from "@/lib/http";
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting
     if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: "Too many upload attempts. Please try again later." }, { status: 429 });
+      return NextResponse.json(
+        { error: "Too many upload attempts. Please try again later." },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
-    // CSRF protection
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+      return NextResponse.json({ error: "Invalid request origin" }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -23,7 +25,7 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json({ error: "Please log in to upload files" }, { status: 401 });
+      return NextResponse.json({ error: "Please log in to upload files" }, { status: http.UNAUTHORIZED.status });
     }
 
     const formData = await request.formData();
@@ -33,26 +35,34 @@ export async function POST(request: NextRequest) {
     const skipOwnershipCheck = formData.get("skipOwnershipCheck") === "true";
 
     if (!file || !cafeSlug || !bucketName) {
-      return NextResponse.json({ error: "File, cafe slug, and bucket name are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "File, cafe slug, and bucket name are required" },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     // Validate bucket name
     if (!validateBucketName(bucketName)) {
-      return NextResponse.json({ error: "Invalid bucket name" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid bucket name" }, { status: http.BAD_REQUEST.status });
     }
 
     // Validate file type and security
     const fileValidation = validateFileType(file);
     if (!fileValidation.isValid) {
-      return NextResponse.json({ error: fileValidation.error }, { status: 400 });
+      return NextResponse.json({ error: fileValidation.error }, { status: http.BAD_REQUEST.status });
     }
 
     // Only check ownership if not explicitly skipped (for new cafe creation)
     if (!skipOwnershipCheck) {
-      const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
+      const { data: cafe, error: cafeError } = await supabase
+        .from("cafes")
+        .select("id")
+        .eq("slug", cafeSlug)
+        .eq("user_id", user.id)
+        .single();
 
       if (cafeError || !cafe) {
-        return NextResponse.json({ error: "Cafe not found or access denied" }, { status: 404 });
+        return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
       }
     }
 
@@ -64,14 +74,16 @@ export async function POST(request: NextRequest) {
 
     const filePath = `${user.id}/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
       return NextResponse.json(
         {
           error: `Upload failed: ${uploadError.message}`,
         },
-        { status: 500 },
+        { status: http.INTERNAL_SERVER_ERROR.status },
       );
     }
 
@@ -86,7 +98,7 @@ export async function POST(request: NextRequest) {
       {
         error: `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       },
-      { status: 500 },
+      { status: http.INTERNAL_SERVER_ERROR.status },
     );
   }
 }

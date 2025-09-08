@@ -20,10 +20,13 @@ export default function PrivacyPage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Introduction</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            QR Cafe ("we", "us", "our") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose,
-            and safeguard your information when you use our QR code menu management platform.
+            QR Cafe ("we", "us", "our") respects your privacy and is committed to protecting your personal information.
+            This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our
+            QR code menu management platform.
           </p>
-          <p className="mb-4 leading-relaxed text-muted-foreground">By using QR Cafe, you consent to the data practices described in this policy.</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">
+            By using QR Cafe, you consent to the data practices described in this policy.
+          </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Information We Collect</h2>
 
@@ -114,7 +117,9 @@ export default function PrivacyPage() {
           </ul>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">5. Data Security</h2>
-          <p className="mb-4 leading-relaxed text-muted-foreground">We implement industry-standard security measures:</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">
+            We implement industry-standard security measures:
+          </p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>
               <strong>Encryption:</strong> Data is encrypted in transit and at rest
@@ -166,7 +171,8 @@ export default function PrivacyPage() {
 
           <div className="border-t mt-8 pt-8">
             <p className="text-sm text-muted-foreground mt-2">
-              This Privacy Policy is part of our Terms of Service. By using QR Cafe, you acknowledge that you have read and understand this Privacy Policy.
+              This Privacy Policy is part of our Terms of Service. By using QR Cafe, you acknowledge that you have read
+              and understand this Privacy Policy.
             </p>
           </div>
         </div>

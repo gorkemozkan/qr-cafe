@@ -14,7 +14,9 @@ interface Props {
 
 const AnimatedValue: FC<{ value: string; className: string }> = ({ value, className }) => {
   const [displayValue, setDisplayValue] = useState(value);
+
   const [isAnimating, setIsAnimating] = useState(false);
+
   const prevValueRef = useRef(value);
 
   useEffect(() => {
@@ -31,7 +33,11 @@ const AnimatedValue: FC<{ value: string; className: string }> = ({ value, classN
 
   return (
     <div className="relative overflow-hidden">
-      <div className={`${className} transition-all duration-300 ${isAnimating ? "scale-110 text-primary" : "scale-100"}`}>{displayValue}</div>
+      <div
+        className={`${className} transition-all duration-300 ${isAnimating ? "scale-110 text-primary" : "scale-100"}`}
+      >
+        {displayValue}
+      </div>
       {isAnimating && <div className="absolute inset-0 rounded animate-pulse" />}
     </div>
   );

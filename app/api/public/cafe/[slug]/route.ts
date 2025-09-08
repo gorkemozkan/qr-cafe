@@ -1,19 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { apiRateLimiter } from "@/lib/rate-limiter";
+import { http } from "@/lib/http";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    // Rate limiting check
     const rateLimitResult = apiRateLimiter.check(request);
+
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {
-          error: "Too many requests",
+          error: http.TOO_MANY_REQUESTS.message,
           retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000),
         },
         {
-          status: 429,
+          status: http.TOO_MANY_REQUESTS.status,
           headers: {
             "Retry-After": Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
             "X-RateLimit-Remaining": rateLimitResult.remainingRequests.toString(),
@@ -23,13 +24,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const supabase = await createClient();
+
     const slug = (await params).slug;
 
     if (!slug) {
-      return NextResponse.json({ error: "Slug is required" }, { status: 400 });
+      return NextResponse.json({ error: "Slug is required" }, { status: http.BAD_REQUEST.status });
     }
 
-    // Get cafe details with public information only
     const { data: cafe, error: cafeError } = await supabase
       .from("cafes")
       .select("id, name, description, logo_url, currency, slug")
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .single();
 
     if (cafeError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found" }, { status: 404 });
+      return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
     }
 
     // Get active categories for this cafe
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .order("created_at", { ascending: true });
 
     if (categoriesError) {
-      return NextResponse.json({ error: "Failed to fetch categories" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to fetch categories" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     // Get active products for each category
@@ -66,7 +67,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           .order("created_at", { ascending: true });
 
         if (productsError) {
-          console.error("Error fetching products for category", category.id, productsError);
           return { ...category, products: [] };
         }
 
@@ -90,6 +90,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json(publicCafeData);
   } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

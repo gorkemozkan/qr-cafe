@@ -10,6 +10,8 @@ interface Props {
   maxAttempt: number;
 }
 
+// TODO: Refactor duplicates
+
 const RefreshButton: FC<Props> = (props) => {
   //#region States
 
@@ -78,7 +80,11 @@ const RefreshButton: FC<Props> = (props) => {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant="outline" onClick={handleClick} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Button
+            variant="outline"
+            onClick={handleClick}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             <RefreshCcw className={"h-4 w-4 "} />
           </Button>
         </TooltipTrigger>
@@ -92,7 +98,12 @@ const RefreshButton: FC<Props> = (props) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="outline" onClick={handleClick} disabled={props.loading || isBlocked} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <Button
+          variant="outline"
+          onClick={handleClick}
+          disabled={props.loading || isBlocked}
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
           <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />
         </Button>
       </TooltipTrigger>

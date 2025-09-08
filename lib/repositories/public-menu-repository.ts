@@ -1,3 +1,5 @@
+import { createClient } from "@/lib/supabase/server";
+
 interface PublicProduct {
   id: number;
   name: string;
@@ -31,36 +33,58 @@ export interface PublicMenuData {
 }
 
 export class PublicMenuRepository {
-  async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  async getMenuBySlugDirect(slug: string): Promise<PublicMenuData | null> {
+    const supabase = await createClient();
 
-      const response = await fetch(`${baseUrl}/api/public/cafe/${slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    // Fetch cafe data
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id, name, description, logo_url, currency, slug")
+      .eq("slug", slug)
+      .eq("is_active", true)
+      .single();
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          return null; // Cafe not found
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const menuData: PublicMenuData = await response.json();
-
-      if (!menuData || !menuData.cafe) {
-        return null;
-      }
-
-      return menuData;
-    } catch (error) {
-      // If API call fails, return null
-      console.error("Failed to fetch menu data:", error);
+    if (cafeError || !cafe) {
       return null;
     }
+
+    // Fetch categories
+    const { data: categories, error: categoriesError } = await supabase
+      .from("categories")
+      .select("id, name, description, sort_order")
+      .eq("cafe_id", cafe.id)
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (categoriesError) {
+      return null;
+    }
+
+    // Get products for each category
+    const categoriesWithProducts = await Promise.all(
+      categories.map(async (category) => {
+        const { data: products, error: productsError } = await supabase
+          .from("products")
+          .select("id, name, description, price, image_url, is_available")
+          .eq("category_id", category.id)
+          .eq("cafe_id", cafe.id)
+          .eq("is_available", true)
+          .order("created_at", { ascending: true });
+
+        if (productsError) {
+          return { ...category, products: [] };
+        }
+
+        return { ...category, products: products || [] };
+      }),
+    );
+
+    return {
+      cafe,
+      categories: categoriesWithProducts,
+      generated_at: new Date().toISOString(),
+    };
   }
 }
 
