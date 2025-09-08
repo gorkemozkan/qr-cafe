@@ -2,10 +2,11 @@
 
 import { FC } from "react";
 import NextLink from "next/link";
-import { QrCode, Sparkles, ArrowRight, Coffee, Smartphone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import FancyBackground from "./FancyBackground";
+import FancyBackground from "@/components/landing/FancyBackground";
+import { QrCode, Sparkles, ArrowRight, Coffee, Smartphone } from "lucide-react";
+
 const Hero: FC = () => {
   const t = useTranslations("landing.hero");
 
@@ -22,16 +23,23 @@ const Hero: FC = () => {
             <span className="text-sm font-medium text-orange-700 dark:text-orange-300">{t("badge")}</span>
           </div>
           <div className="mb-8 animate-fade-in-up">
-            <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3">
+            <h1
+              id="hero-heading"
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3"
+            >
               <span className="inline-block">
-                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">{t("title")}</span>
+                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">
+                  {t("title")}
+                </span>
               </span>
               <br />
               <span className="inline-block">{t("subtitle")}</span>
             </h1>
           </div>
           <div className="animate-fade-in-up">
-            <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed font-light">{t("description")}</p>
+            <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+              {t("description")}
+            </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-fade-in-up">
             <Button
