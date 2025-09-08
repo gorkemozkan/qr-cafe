@@ -37,7 +37,11 @@
     "clickToBrowseFiles": "Click to browse files",
     "fileUpTo": "File up to",
     "mb": "MB",
-    "chooseFile": "Choose file"
+    "chooseFile": "Choose file",
+    "loggedOutSuccessfully": "Logged out successfully",
+    "userMenu": "User menu",
+    "account": "Account",
+    "loggingOut": "Logging out..."
   },
   "navigation": {
     "signIn": "Sign In",

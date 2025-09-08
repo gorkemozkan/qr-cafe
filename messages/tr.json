@@ -37,7 +37,11 @@
     "clickToBrowseFiles": "Dosya Seç",
     "fileUpTo": "Dosya",
     "mb": "MB",
-    "chooseFile": "Dosya Seç"
+    "chooseFile": "Dosya Seç",
+    "loggedOutSuccessfully": "Çıkış başarılı!",
+    "userMenu": "Kullanıcı Menüsü",
+    "account": "Hesap",
+    "loggingOut": "Çıkış yapılıyor..."
   },
   "navigation": {
     "signIn": "Giriş Yap",
