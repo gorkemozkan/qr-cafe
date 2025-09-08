@@ -20,6 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Badge } from "@/components/ui";
 import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import ExternalLinkButton from "@/components/ExternalLinkButton";
+import { getBaseUrl } from "@/lib/utils";
 
 const CafeList: FC = () => {
   //#region Hooks
@@ -176,7 +177,7 @@ const CafeList: FC = () => {
                       <p>{t("qr.preview.viewTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
-                  <ExternalLinkButton url={`${process.env.NEXT_PUBLIC_APP_URL}/${row.slug}`} />
+                  <ExternalLinkButton url={`${getBaseUrl()}/${row.slug}`} />
                 </div>
               }
             />
