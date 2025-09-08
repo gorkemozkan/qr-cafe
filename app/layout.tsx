@@ -35,24 +35,8 @@ export const metadata: Metadata = {
       "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions that enhance customer experience and streamline operations.",
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "QR Cafe",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "QR Cafe - Digital Menu Solutions",
-      },
-    ],
     type: "website",
     locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "@qrcafe",
-    title: "QR Cafe - Smart QR Menu Solutions",
-    description:
-      "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,

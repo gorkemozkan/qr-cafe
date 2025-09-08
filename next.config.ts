@@ -2,12 +2,16 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 import { createCSP, commonHeaders, productionOnlyHeaders } from "./lib/security";
+import { RemotePattern } from "next/dist/shared/lib/image-config";
+import { isDevelopment } from "./lib/utils";
 
 const withNextIntl = createNextIntlPlugin("./i18n.ts");
 
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
+const getRemotePatterns = (): RemotePattern[] => {
+  const patterns: RemotePattern[] = [];
+
+  if (isDevelopment) {
+    patterns.push(
       {
         protocol: "http",
         hostname: "127.0.0.1",
@@ -20,17 +24,37 @@ const nextConfig: NextConfig = {
         port: "54321",
         pathname: "/storage/v1/object/public/**",
       },
-      {
-        protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL_PROD?.split("//")[1] || "",
-        pathname: "/storage/v1/object/public/**",
-      },
-      {
-        protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING?.split("//")[1] || "",
-        pathname: "/storage/v1/object/public/**",
-      },
-    ],
+    );
+  } else {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING) {
+      const stagingHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_STAGING.split("//")[1];
+      if (stagingHostname) {
+        patterns.push({
+          protocol: "https",
+          hostname: stagingHostname,
+          pathname: "/storage/v1/object/public/**",
+        });
+      }
+    }
+
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL_PROD) {
+      const prodHostname = process.env.NEXT_PUBLIC_SUPABASE_URL_PROD.split("//")[1];
+      if (prodHostname) {
+        patterns.push({
+          protocol: "https",
+          hostname: prodHostname,
+          pathname: "/storage/v1/object/public/**",
+        });
+      }
+    }
+  }
+
+  return patterns;
+};
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: getRemotePatterns(),
   },
 
   async headers() {
