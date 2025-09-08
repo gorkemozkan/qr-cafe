@@ -322,5 +322,14 @@
     "english": "English",
     "turkish": "Türkçe",
     "selectLanguage": "Dil Seçin"
+  },
+  "date": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "tomorrow": "Yarın",
+    "daysAgo": "{{count}} gün önce",
+    "inDays": "{{count}} gün içinde",
+    "invalid": "Geçersiz Tarih",
+    "at": "saat"
   }
 }

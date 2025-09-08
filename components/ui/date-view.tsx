@@ -1,4 +1,9 @@
+"use client";
+
 import { FC } from "react";
+import { useTranslations, useLocale } from "next-intl";
+import { format as formatDate, formatDistance, isValid } from "date-fns";
+import { enUS, tr } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 interface DateViewProps {
@@ -6,84 +11,60 @@ interface DateViewProps {
   format?: "short" | "long" | "relative" | "time" | "datetime" | "detailed";
   className?: string;
   showTime?: boolean;
-  timezone?: string;
 }
 
 const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTime = false }) => {
-  const formatDate = (dateValue: string | Date | number) => {
-    const dateObj = new Date(dateValue);
+  const t = useTranslations("date");
+  const locale = useLocale();
 
-    if (Number.isNaN(dateObj.getTime())) {
-      return "Invalid Date";
+  const dateObj = new Date(date);
+
+  if (!isValid(dateObj)) {
+    return <span className={cn("inline-block", className)}>{t("invalid")}</span>;
+  }
+
+  // Get the appropriate date-fns locale
+  const getDateLocale = () => {
+    switch (locale) {
+      case "tr":
+        return tr;
+      case "en":
+        return enUS;
     }
+  };
 
-    const now = new Date();
-    const diffInMs = now.getTime() - dateObj.getTime();
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  const dateLocale = getDateLocale();
 
+  const getFormattedDate = () => {
     switch (format) {
       case "short":
-        return dateObj.toLocaleDateString();
-
+        return formatDate(dateObj, "P", { locale: dateLocale });
       case "long":
-        return dateObj.toLocaleDateString(undefined, {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-
+        return formatDate(dateObj, "PPPP", { locale: dateLocale });
       case "relative":
-        if (diffInDays === 0) return "Today";
-        if (diffInDays === 1) return "Yesterday";
-        if (diffInDays === -1) return "Tomorrow";
-        if (diffInDays > 0 && diffInDays < 7) return `${diffInDays} days ago`;
-        if (diffInDays < 0 && diffInDays > -7) return `In ${Math.abs(diffInDays)} days`;
-        return dateObj.toLocaleDateString();
-
+        return formatDistance(dateObj, new Date(), { addSuffix: true, locale: dateLocale });
       case "time":
-        return dateObj.toLocaleTimeString();
-
+        return formatDate(dateObj, "p", { locale: dateLocale });
       case "datetime":
-        return dateObj.toLocaleString();
-
-      case "detailed": {
-        const day = dateObj.getDate();
-        const month = dateObj.toLocaleDateString(undefined, { month: "long" });
-        const weekday = dateObj.toLocaleDateString(undefined, { weekday: "long" });
-        const time = dateObj.toLocaleTimeString(undefined, {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        });
-        return `${day} ${month} ${weekday} ${time}`;
-      }
-
+        return formatDate(dateObj, "Pp", { locale: dateLocale });
+      case "detailed":
+        return formatDate(dateObj, "PPPP 'at' p", { locale: dateLocale });
       default:
-        return dateObj.toLocaleDateString();
+        return formatDate(dateObj, "P", { locale: dateLocale });
     }
   };
 
-  const formatTime = (dateValue: string | Date | number) => {
-    const dateObj = new Date(dateValue);
-
-    if (Number.isNaN(dateObj.getTime())) {
+  const getTimeString = () => {
+    if (!showTime || format === "time" || format === "datetime" || format === "detailed") {
       return "";
     }
-
-    return dateObj.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return formatDate(dateObj, "p", { locale: dateLocale });
   };
 
-  const dateString = formatDate(date);
-  const timeString = showTime ? formatTime(date) : "";
-
   return (
-    <time dateTime={new Date(date).toISOString()} className={cn("inline-block", className)}>
-      {dateString}
-      {showTime && timeString && <span className="ml-2 text-muted-foreground">{timeString}</span>}
+    <time dateTime={dateObj.toISOString()} className={cn("inline-block", className)}>
+      {getFormattedDate()}
+      {getTimeString() && <span className="ml-2 text-muted-foreground">{getTimeString()}</span>}
     </time>
   );
 };

@@ -322,5 +322,14 @@
     "english": "English",
     "turkish": "Türkçe",
     "selectLanguage": "Select Language"
+  },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "daysAgo": "{{count}} days ago",
+    "inDays": "In {{count}} days",
+    "invalid": "Invalid Date",
+    "at": "at"
   }
 }
