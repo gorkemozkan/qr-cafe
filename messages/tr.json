@@ -271,6 +271,59 @@
       "name": "Kategori Adı",
       "description": "Açıklama",
       "sortOrder": "Sıralama Düzeni"
+    },
+    "table": {
+      "headers": {
+        "name": "Ad",
+        "sortOrder": "Sıralama",
+        "status": "Durum",
+        "created": "Oluşturulma",
+        "actions": "İşlemler"
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Pasif"
+      }
+    },
+    "form": {
+      "labels": {
+        "categoryName": "Kategori Adı",
+        "description": "Açıklama",
+        "sortOrder": "Sıralama Düzeni"
+      },
+      "placeholders": {
+        "categoryName": "Kategori adını girin",
+        "description": "Bu kategoriyi açıklayın..."
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "activeDescription": "Kategori aktif ve görünür",
+        "inactiveDescription": "Kategori pasif ve gizli"
+      }
+    },
+    "create": {
+      "title": "Yeni Kategori Oluştur",
+      "description": "Yeni kategori oluşturmak için aşağıdaki bilgileri doldurun.",
+      "button": "Kategori Oluştur",
+      "loadingButton": "Oluşturuluyor...",
+      "tooltip": "Yeni kategori oluştur"
+    },
+    "edit": {
+      "title": "Kategori Düzenle",
+      "description": "Kategori bilgilerini aşağıdan güncelleyin.",
+      "button": "Kategoriyi Güncelle",
+      "loadingButton": "Güncelleniyor..."
+    },
+    "delete": {
+      "title": "Kategori Sil",
+      "confirmMessage": "\"{name}\" kategorisini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "successMessage": "Kategori başarıyla silindi!"
+    },
+    "messages": {
+      "createSuccess": "Kategori başarıyla oluşturuldu!",
+      "updateSuccess": "Kategori başarıyla güncellendi!",
+      "createFailed": "Kategori oluşturulamadı"
     }
   },
   "product": {
@@ -322,5 +375,14 @@
     "english": "English",
     "turkish": "Türkçe",
     "selectLanguage": "Dil Seçin"
+  },
+  "date": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "tomorrow": "Yarın",
+    "daysAgo": "{{count}} gün önce",
+    "inDays": "{{count}} gün içinde",
+    "invalid": "Geçersiz Tarih",
+    "at": "saat"
   }
 }

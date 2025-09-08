@@ -1,16 +1,20 @@
 "use client";
 
-import { FC } from "react";
-import { Tables } from "@/types/db";
-import { Loader2 } from "lucide-react";
+import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Tables } from "@/types/db";
 import { CategorySchema, categorySchema } from "@/lib/schema";
+
+export interface CategoryFormRef {
+  submitForm: () => void;
+  cancelForm: () => void;
+}
 
 interface Props {
   mode: "create" | "edit";
@@ -20,7 +24,10 @@ interface Props {
   isLoading?: boolean;
 }
 
-const CategoryForm: FC<Props> = (props) => {
+const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
+  const t = useTranslations("category");
+  const tCommon = useTranslations("common");
+
   const getDefaultValues = (): CategorySchema => {
     if (props.mode === "edit" && props.category) {
       return {
@@ -42,7 +49,7 @@ const CategoryForm: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<CategorySchema>({
@@ -52,11 +59,25 @@ const CategoryForm: FC<Props> = (props) => {
 
   const isActive = watch("is_active");
 
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      handleSubmit(onSubmitForm)();
+    },
+    cancelForm: () => {
+      props.onCancel?.();
+    },
+  }));
+
   const onSubmitForm = async (data: CategorySchema) => {
     // Convert empty string to undefined for sort_order and ensure it's a number
     const processedData = {
       ...data,
-      sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
+      sort_order:
+        data.sort_order === ""
+          ? undefined
+          : typeof data.sort_order === "string"
+            ? Number(data.sort_order)
+            : data.sort_order,
     };
     await props.onSubmit(processedData);
   };
@@ -64,51 +85,56 @@ const CategoryForm: FC<Props> = (props) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Name *</Label>
-        <Input id="name" placeholder="Category name" {...register("name")} className={errors.name ? "border-red-500" : ""} />
+        <Label htmlFor="name">{t("form.labels.categoryName")} *</Label>
+        <Input
+          id="name"
+          placeholder={t("form.placeholders.categoryName")}
+          {...register("name")}
+          className={errors.name ? "border-red-500" : ""}
+        />
         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description *</Label>
-        <Textarea id="description" placeholder="Describe this category..." {...register("description")} rows={3} className={errors.description ? "border-red-500" : ""} />
+        <Label htmlFor="description">{t("form.labels.description")} *</Label>
+        <Textarea
+          id="description"
+          placeholder={t("form.placeholders.description")}
+          {...register("description")}
+          rows={3}
+          className={errors.description ? "border-red-500" : ""}
+        />
         {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="sort_order">Sort Order</Label>
-        <Input id="sort_order" type="number" placeholder="0" {...register("sort_order")} className={errors.sort_order ? "border-red-500" : ""} />
+        <Label htmlFor="sort_order">{t("form.labels.sortOrder")}</Label>
+        <Input
+          id="sort_order"
+          type="number"
+          placeholder="0"
+          {...register("sort_order")}
+          className={errors.sort_order ? "border-red-500" : ""}
+        />
         {errors.sort_order && <p className="text-sm text-red-500">{errors.sort_order.message}</p>}
-        <p className="text-xs text-muted-foreground">Lower numbers appear first. Leave empty for default ordering.</p>
+        <p className="text-xs text-muted-foreground">{tCommon("optional")}</p>
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">Active</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? "Category is active and visible" : "Category is inactive and hidden"}</p>
-      </div>
-
-      <div className="flex justify-end space-x-2 pt-4">
-        {props.onCancel && (
-          <Button type="button" variant="outline" onClick={props.onCancel} disabled={isSubmitting} className="transition-all duration-200 hover:scale-105">
-            Cancel
-          </Button>
-        )}
-        <Button type="submit" disabled={isSubmitting} className="min-w-[100px] transition-all duration-200 hover:scale-105">
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {props.mode === "create" ? "Creating..." : "Updating..."}
-            </>
-          ) : props.mode === "create" ? (
-            "Create"
-          ) : (
-            "Update"
-          )}
-        </Button>
+        <Switch
+          id="is_active"
+          checked={isActive}
+          onCheckedChange={(checked: boolean) => setValue("is_active", checked)}
+        />
+        <Label htmlFor="is_active">{watch("is_active") ? t("form.status.active") : t("form.status.inactive")}</Label>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}
+        </p>
       </div>
     </form>
   );
-};
+});
+
+CategoryForm.displayName = "CategoryForm";
 
 export default CategoryForm;

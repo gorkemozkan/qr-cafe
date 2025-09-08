@@ -1,6 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
@@ -8,22 +9,30 @@ import QueryKeys from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
-import CategoryForm from "@/components/category/CategoryForm";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
+import FormSheet from "@/components/FormSheet";
+import TooltipButton from "@/components/TooltipButton";
+import SubmitButton from "@/components/SubmitButton";
 
 interface Props {
   cafeId: number;
   onSuccess?: (category: Tables<"categories">) => void;
 }
 
-const CategoryCreateModal: FC<Props> = (props) => {
+const CategoryCreateSheet: FC<Props> = (props) => {
+  //#region Hooks
+
+  const t = useTranslations("category");
+
+  //#endregion
+
   //#region States
 
   const [open, setOpen] = useState(false);
 
-  //#endregion
+  const formRef = useRef<CategoryFormRef>(null);
 
-  //#region Hooks
+  //#endregion
 
   const { isLoading, execute } = useRequest({
     mutationFn: (payload: CategorySchema) => categoryRepository.create(props.cafeId, payload),
@@ -31,35 +40,48 @@ const CategoryCreateModal: FC<Props> = (props) => {
       props.onSuccess?.(data);
       setOpen(false);
     },
-    successMessage: "Category created successfully!",
+    successMessage: t("messages.createSuccess"),
+    errorMessage: t("messages.createFailed"),
     invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
   //#endregion
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="transition-all duration-200 hover:scale-105">
+    <>
+      <TooltipButton onClick={() => setOpen(true)} tooltip={t("create.tooltip")}>
+        <Button variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create New Category</DialogTitle>
-          <DialogDescription>Fill in the details below to create a new category.</DialogDescription>
-        </DialogHeader>
-        <CategoryForm
-          mode="create"
-          onSubmit={async (data) => {
-            await execute(data);
-          }}
-          onCancel={() => setOpen(false)}
-          isLoading={isLoading}
-        />
-      </DialogContent>
-    </Dialog>
+      </TooltipButton>
+      {open && (
+        <FormSheet
+          footer={
+            <SubmitButton
+              onClick={() => formRef.current?.submitForm()}
+              disabled={isLoading}
+              isLoading={isLoading}
+              text={t("create.button")}
+              loadingText={t("create.loadingButton")}
+            />
+          }
+          title={t("create.title")}
+          description={t("create.description")}
+          onOpenChange={setOpen}
+        >
+          <CategoryForm
+            ref={formRef}
+            mode="create"
+            onSubmit={async (data) => {
+              await execute(data);
+            }}
+            onCancel={() => setOpen(false)}
+            isLoading={isLoading}
+          />
+        </FormSheet>
+      )}
+    </>
   );
 };
 
-export default CategoryCreateModal;
+export default CategoryCreateSheet;
