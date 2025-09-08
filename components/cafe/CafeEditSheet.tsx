@@ -10,6 +10,7 @@ import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";
 import SubmitButton from "@/components/SubmitButton";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
+import { slugify } from "@/lib/utils";
 
 interface Props {
   cafe: Tables<"cafes">;
@@ -42,7 +43,19 @@ const CafeEditSheet: FC<Props> = (props) => {
     optimisticUpdate: {
       queryKey: QueryKeys.cafes,
       updateFn: (oldData: Tables<"cafes">[], variables: CafeSchema) =>
-        oldData.map((cafe) => (cafe.id === props.cafe.id ? { ...cafe, ...variables } : cafe)),
+        oldData.map((cafe) => {
+          if (cafe.id === props.cafe.id) {
+            const optimisticSlug =
+              variables.name && variables.name !== cafe.name ? slugify(variables.name, { maxLength: 50 }) : cafe.slug;
+
+            return {
+              ...cafe,
+              ...variables,
+              slug: optimisticSlug,
+            };
+          }
+          return cafe;
+        }),
     },
   });
 
