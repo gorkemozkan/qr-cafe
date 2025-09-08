@@ -42,7 +42,18 @@
     "userMenu": "User menu",
     "account": "Account",
     "loggingOut": "Logging out...",
-    "logout": "Logout"
+    "logout": "Logout",
+    "new": "New",
+    "profile": "Profile",
+    "theme": "Theme",
+    "language": "Language",
+    "quickActions": "Quick Actions",
+    "searchCommands": "Search commands...",
+    "noResults": "No results found.",
+    "navigation": "Navigation",
+    "creation": "Creation",
+    "user": "User",
+    "preferences": "Preferences"
   },
   "navigation": {
     "signIn": "Sign In",
@@ -152,6 +163,7 @@
     "goBackHome": "Go back to home page"
   },
   "cafe": {
+    "cafe": "Cafe",
     "title": "Cafes",
     "createNew": "Create New Cafe",
     "editCafe": "Edit Cafe",
@@ -259,6 +271,7 @@
     }
   },
   "category": {
+    "category": "Category",
     "title": "Categories",
     "createNew": "Create New Category",
     "editCategory": "Edit Category",
@@ -327,6 +340,7 @@
     }
   },
   "product": {
+    "product": "Product",
     "title": "Products",
     "createNew": "Create New Product",
     "editProduct": "Edit Product",

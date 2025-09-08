@@ -42,7 +42,18 @@
     "userMenu": "Kullanıcı Menüsü",
     "account": "Hesap",
     "loggingOut": "Çıkış yapılıyor...",
-    "logout": "Çıkış"
+    "logout": "Çıkış",
+    "new": "Yeni",
+    "profile": "Profil",
+    "theme": "Tema",
+    "language": "Dil",
+    "quickActions": "Hızlı İşlemler",
+    "searchCommands": "Komutları ara...",
+    "noResults": "Sonuç bulunamadı.",
+    "navigation": "Navigasyon",
+    "creation": "Oluşturma",
+    "user": "Kullanıcı",
+    "preferences": "Tercihler"
   },
   "navigation": {
     "signIn": "Giriş Yap",
@@ -152,6 +163,7 @@
     "goBackHome": "Ana sayfaya dön"
   },
   "cafe": {
+    "cafe": "Kafe",
     "title": "Kafeler",
     "createNew": "Yeni Kafe Oluştur",
     "editCafe": "Kafe Düzenle",
@@ -259,6 +271,7 @@
     }
   },
   "category": {
+    "category": "Kategori",
     "title": "Kategoriler",
     "createNew": "Yeni Kategori Oluştur",
     "editCategory": "Kategori Düzenle",
@@ -327,6 +340,7 @@
     }
   },
   "product": {
+    "product": "Ürün",
     "title": "Ürünler",
     "createNew": "Yeni Ürün Oluştur",
     "editProduct": "Ürün Düzenle",
