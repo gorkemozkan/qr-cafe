@@ -1,10 +1,10 @@
 "use client";
 
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { QrCode, Smartphone, Coffee, FolderTree, Image, Globe } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTranslations } from "next-intl";
 
 const getFeatures = () => [
   {
@@ -41,6 +41,7 @@ const getFeatures = () => [
 
 const Features: FC = () => {
   const t = useTranslations("landing.features");
+
   const features = getFeatures();
 
   return (

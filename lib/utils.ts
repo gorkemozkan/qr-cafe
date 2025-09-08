@@ -87,3 +87,10 @@ export function slugify(input: string, opts: SlugifyOptions = {}): string {
 export function formatPrice(price: number, currency: string) {
   return `${price.toFixed(2)} ${currency}`;
 }
+
+export const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};

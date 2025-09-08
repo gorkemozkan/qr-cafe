@@ -1,8 +1,8 @@
 "use client";
 
 import { FC } from "react";
-import { QrCode } from "lucide-react";
 import Link from "next/link";
+import { QrCode } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";

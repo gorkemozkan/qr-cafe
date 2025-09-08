@@ -1,0 +1,38 @@
+"use client";
+
+import { FC } from "react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+
+interface Props {
+  children: React.ReactNode;
+  footer: React.ReactNode;
+  title: string;
+  description: string;
+  onOpenChange: (open: boolean) => void;
+}
+
+const FormSheet: FC<Props> = (props) => {
+  const tCommon = useTranslations("common");
+
+  return (
+    <Sheet open onOpenChange={props.onOpenChange}>
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>{props.title}</SheetTitle>
+          <SheetDescription>{props.description}</SheetDescription>
+        </SheetHeader>
+        <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-y-auto">{props.children}</div>
+        <SheetFooter>
+          {props.footer}
+          <Button variant="outline" onClick={() => props.onOpenChange(false)}>
+            {tCommon("cancel")}
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default FormSheet;

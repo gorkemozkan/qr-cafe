@@ -2,9 +2,9 @@
 
 import { FC } from "react";
 import NextLink from "next/link";
-import { ArrowRight, Sparkles, Rocket } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, Sparkles, Rocket } from "lucide-react";
 import FancyBackground from "@/components/landing/FancyBackground";
 
 const CTASection: FC = () => {
@@ -25,7 +25,11 @@ const CTASection: FC = () => {
           </div>
           <h2 id="cta-heading" className="text-3xl md:text-5xl font-black mb-6 leading-tight">
             {t.rich("title", {
-              span: (chunks) => <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">{chunks}</span>,
+              span: (chunks) => (
+                <span className="bg-gradient-to-r from-orange-400 via-orange-500 via-orange-600 to-orange-700 bg-clip-text text-transparent">
+                  {chunks}
+                </span>
+              ),
             })}
           </h2>
 
@@ -56,7 +60,10 @@ const CTASection: FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Rocket className="mr-2 h-5 w-5" aria-hidden="true" />
                 {t("button")}
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                <ArrowRight
+                  className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300"
+                  aria-hidden="true"
+                />
               </NextLink>
             </Button>
           </div>

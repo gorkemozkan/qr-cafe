@@ -1,8 +1,11 @@
+"use client";
+
 import { cn } from "@/lib/utils";
-import { FC, useState, useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { FC, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import TooltipButton from "@/components/TooltipButton";
 
 interface Props {
   loading: boolean;
@@ -13,6 +16,12 @@ interface Props {
 // TODO: Refactor duplicates
 
 const RefreshButton: FC<Props> = (props) => {
+  //#region Hooks
+
+  const tCommon = useTranslations("common");
+
+  //#endregion
+
   //#region States
 
   const [attempt, setAttempt] = useState(0);
@@ -66,51 +75,32 @@ const RefreshButton: FC<Props> = (props) => {
 
   const getTooltipText = () => {
     if (blockedUntil && remainingTime > 0) {
-      return `Too many refresh attempts. Try again in ${remainingTime}s`;
+      return tCommon("refresh.tooManyAttempts", { remainingTime });
     }
     if (props.loading) {
-      return "Refreshing...";
+      return tCommon("refresh.refreshing");
     }
-    return `Refresh (${attempt}/${props.maxAttempt})`;
+    return tCommon("refresh.refresh", { attempt, maxAttempt: props.maxAttempt });
   };
 
   const isBlocked = blockedUntil !== null && remainingTime > 0;
 
   if (isBlocked) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="outline"
-            onClick={handleClick}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <RefreshCcw className={"h-4 w-4 "} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{getTooltipText()}</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
+        <Button variant="outline" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <RefreshCcw className="h-4 w-4" />
+        </Button>
+      </TooltipButton>
     );
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant="outline"
-          onClick={handleClick}
-          disabled={props.loading || isBlocked}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{getTooltipText()}</p>
-      </TooltipContent>
-    </Tooltip>
+    <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
+      <Button variant="outline" disabled={props.loading || isBlocked} className="text-sm">
+        <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />{" "}
+      </Button>
+    </TooltipButton>
   );
 };
 

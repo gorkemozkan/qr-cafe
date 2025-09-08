@@ -1,9 +1,10 @@
 "use client";
 
-import SectionCards from "@/components/SectionCards";
-import { useQueryRequest } from "@/hooks/use-request";
 import { apiClient } from "@/lib/api-client";
 import QueryKeys from "@/constants/query-keys";
+import SectionCards from "@/components/SectionCards";
+import { useQueryRequest } from "@/hooks/use-request";
+import { useTranslations } from "next-intl";
 import type { DashboardStats } from "@/lib/repositories/stats-repository";
 
 const DashboardStatCards = () => {
@@ -12,27 +13,29 @@ const DashboardStatCards = () => {
     queryFn: () => apiClient.get<DashboardStats>("/api/stats"),
   });
 
+  const t = useTranslations();
+
   if (isLoading) {
     const loadingItems = [
       {
-        title: "Total Cafes",
+        title: t("dashboard.stats.totalCafes"),
         value: "...",
-        description: "Active cafe locations across all regions",
+        description: t("dashboard.stats.cafesDescription"),
       },
       {
-        title: "Total Categories",
+        title: t("dashboard.stats.totalCategories"),
         value: "...",
-        description: "Menu categories added",
+        description: t("dashboard.stats.categoriesDescription"),
       },
       {
-        title: "Total Products",
+        title: t("dashboard.stats.totalProducts"),
         value: "...",
-        description: "Individual menu items across all cafes",
+        description: t("dashboard.stats.productsDescription"),
       },
       {
-        title: "Active Products",
+        title: t("dashboard.stats.activeProducts"),
         value: "...",
-        description: "Available products ready for customers",
+        description: t("dashboard.stats.activeProductsDescription"),
       },
     ];
     return <SectionCards items={loadingItems} />;
@@ -40,24 +43,24 @@ const DashboardStatCards = () => {
 
   const items = [
     {
-      title: "Total Cafes",
+      title: t("dashboard.stats.totalCafes"),
       value: (stats?.totalCafes || 0).toString(),
-      description: "Active cafe locations across all regions",
+      description: t("dashboard.stats.cafesDescription"),
     },
     {
-      title: "Total Categories",
+      title: t("dashboard.stats.totalCategories"),
       value: (stats?.totalCategories || 0).toString(),
-      description: "Menu categories added",
+      description: t("dashboard.stats.categoriesDescription"),
     },
     {
-      title: "Total Products",
+      title: t("dashboard.stats.totalProducts"),
       value: (stats?.totalProducts || 0).toString(),
-      description: "Individual menu items across all cafes",
+      description: t("dashboard.stats.productsDescription"),
     },
     {
-      title: "Active Products",
+      title: t("dashboard.stats.activeProducts"),
       value: (stats?.activeProducts || 0).toString(),
-      description: "Available products ready for customers",
+      description: t("dashboard.stats.activeProductsDescription"),
     },
   ];
 
