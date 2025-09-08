@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { NextPage } from "next";
+import Spinner from "@/components/Spinner";
+import { AlertCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { categoryRepository } from "@/lib/repositories";
+import QueryKeys from "@/constants/query-keys";
+import PageTitle from "@/components/PageTitle";
 import { useQueryRequest } from "@/hooks/use-request";
-import { AlertCircle } from "lucide-react";
+import { categoryRepository } from "@/lib/repositories";
 import ProductList from "@/components/product/ProductList";
 import CategoryEditModal from "@/components/category/CategoryEditModal";
-import QueryKeys from "@/constants/query-keys";
-import { NextPage } from "next";
-import PageTitle from "@/components/PageTitle";
-import Spinner from "@/components/Spinner";
 
-const CategoryDetailPage: NextPage = () => {
+const Page: NextPage = () => {
   const params = useParams();
+
   const t = useTranslations();
 
   const cafeId = parseInt(params.id as string, 10);
@@ -62,4 +63,4 @@ const CategoryDetailPage: NextPage = () => {
   );
 };
 
-export default CategoryDetailPage;
+export default Page;

@@ -42,7 +42,6 @@ export class StorageRepository {
         };
       }
 
-      // The API now returns the data directly without the success wrapper
       const data = await response.json();
       return {
         success: true,
@@ -59,7 +58,10 @@ export class StorageRepository {
     }
   }
 
-  async deleteFile(filePath: string, bucketName: string): Promise<{ success: true; data: undefined } | { success: false; error: StorageError }> {
+  async deleteFile(
+    filePath: string,
+    bucketName: string,
+  ): Promise<{ success: true; data: undefined } | { success: false; error: StorageError }> {
     try {
       const response = await fetch(`${this.baseUrl}/delete`, {
         method: "DELETE",

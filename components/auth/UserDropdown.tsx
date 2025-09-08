@@ -55,7 +55,7 @@ const UserDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="rounded-full">
           <User className="h-4 w-4" />
-          <span className="sr-only">{tCommon("userMen u")}</span>
+          <span className="sr-only">{tCommon("userMenu")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

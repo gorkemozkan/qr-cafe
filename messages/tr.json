@@ -41,7 +41,8 @@
     "loggedOutSuccessfully": "Çıkış başarılı!",
     "userMenu": "Kullanıcı Menüsü",
     "account": "Hesap",
-    "loggingOut": "Çıkış yapılıyor..."
+    "loggingOut": "Çıkış yapılıyor...",
+    "logout": "Çıkış"
   },
   "navigation": {
     "signIn": "Giriş Yap",

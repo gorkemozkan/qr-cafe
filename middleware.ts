@@ -10,18 +10,15 @@ createIntlMiddleware({
 });
 
 export async function middleware(request: NextRequest) {
-  // Handle locale detection and setting
   const locale = request.cookies.get("locale")?.value || defaultLocale;
 
-  // Set locale header for next-intl
   const requestHeaders = new Headers(request.headers);
+
   requestHeaders.set("x-locale", locale);
 
-  // Handle admin routes with authentication
   if (request.nextUrl.pathname.split("/")[1].startsWith("admin")) {
     const response = await updateSession(request);
 
-    // Ensure locale header is preserved in auth response
     if (response) {
       response.headers.set("x-locale", locale);
     }
@@ -29,17 +26,15 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Handle other routes with i18n
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
     },
   });
 
-  // Ensure locale cookie is set
   if (!request.cookies.get("locale")) {
     response.cookies.set("locale", defaultLocale, {
-      maxAge: 365 * 24 * 60 * 60, // 1 year
+      maxAge: 365 * 24 * 60 * 60,
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
