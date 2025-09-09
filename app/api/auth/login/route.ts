@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { http } from "@/lib/http";
+import { http, errorMessages, createSafeErrorResponse } from "@/lib/http";
 import { authRateLimiter } from "@/lib/rate-limiter";
 import { loginSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-
-const MAX_PAYLOAD_SIZE = 4 * 1024; // 4KB
+import { validatePayloadSize } from "@/lib/payload-validation";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const contentLength = request.headers.get("content-length");
+    const payloadValidation = validatePayloadSize(request);
 
-    if (contentLength && Number.parseInt(contentLength, 10) > MAX_PAYLOAD_SIZE) {
-      return NextResponse.json({ error: "Payload too large", success: false }, { status: http.BAD_REQUEST.status });
+    if (!payloadValidation.isValid) {
+      return NextResponse.json({ error: payloadValidation.error, success: false }, { status: http.PAYLOAD_TOO_LARGE.status });
     }
 
     let body: unknown;
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       body = await request.json();
     } catch (_error) {
-      return NextResponse.json({ error: "Invalid JSON payload", success: false }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("request body"), success: false }, { status: http.BAD_REQUEST.status });
     }
 
     if (!verifyCsrfToken(request)) {
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      return NextResponse.json({ error: "Invalid email or password", success: false }, { status: http.UNAUTHORIZED.status });
+      return NextResponse.json({ error: errorMessages.INVALID_CREDENTIALS, success: false }, { status: http.UNAUTHORIZED.status });
     }
 
     if (data.user) {
@@ -61,7 +60,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
-  } catch (_error) {
-    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
+  } catch (error) {
+    const safeError = createSafeErrorResponse(error, "login");
+    return NextResponse.json({ error: safeError.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }
