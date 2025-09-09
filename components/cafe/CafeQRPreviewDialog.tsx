@@ -7,16 +7,10 @@ import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CopyButton } from "@/components/ui";
-import {
-  ContextMenu,
-  ContextMenuTrigger,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-} from "@/components/ui/context-menu";
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
 import Image from "next/image";
 import { toast } from "sonner";
-import { shareWhatsApp } from "@/lib/utils";
+
 import ExternalLinkButton from "@/components/ExternalLinkButton";
 
 interface Props {
@@ -68,6 +62,12 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   }, [slug, open, generateQRCode]);
 
   const cafeUrl = slug ? (typeof window !== "undefined" ? `${window.location.origin}/${slug}` : `/${slug}`) : "";
+
+  const shareWhatsApp = (text: string) => {
+    const message = `Check out this cafe menu: ${text}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  };
 
   const handleCopyLink = useCallback(async () => {
     if (!cafeUrl) return;
@@ -170,12 +170,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
                 <p className="text-sm font-medium mb-1">{t("qr.preview.menuUrl")}:</p>
-                <a
-                  href={cafeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm hover:underline underline-offset-4 line-clamp-2 "
-                >
+                <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
                   {cafeUrl}
                 </a>
               </div>
@@ -198,13 +193,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                     <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <div>
-                          <Image
-                            src={qrCodeDataUrl}
-                            alt={`QR Code for ${slug}`}
-                            fill
-                            className="object-contain"
-                            unoptimized
-                          />
+                          <Image src={qrCodeDataUrl} alt={`QR Code for ${slug}`} fill className="object-contain" unoptimized />
                         </div>
                       </ContextMenuTrigger>
                       <ContextMenuContent>
@@ -244,21 +233,11 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
           </div>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                onClick={() => shareWhatsApp(cafeUrl)}
-                disabled={!cafeUrl}
-                className="flex items-center gap-2 w-full"
-              >
+              <Button variant="outline" onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
                 <MessageCircle className="h-4 w-4" />
                 {t("qr.share.whatsApp")}
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleExportPDF}
-                disabled={!qrCodeDataUrl || isExporting}
-                className="flex items-center gap-2 w-full"
-              >
+              <Button variant="outline" onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting} className="flex items-center gap-2 w-full">
                 <Download className="h-4 w-4" />
                 {isExporting ? t("qr.export.exporting") : t("qr.export.button")}
               </Button>

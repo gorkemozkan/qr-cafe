@@ -2,7 +2,7 @@
 
 import { FC, useRef } from "react";
 import { Tables } from "@/types/db";
-import { slugify } from "@/lib/utils";
+import { slugify } from "@/lib/format";
 import { CafeSchema } from "@/lib/schema";
 import { useTranslations } from "next-intl";
 import QueryKeys from "@/constants/query-keys";
@@ -45,8 +45,7 @@ const CafeEditSheet: FC<Props> = (props) => {
       updateFn: (oldData: Tables<"cafes">[], variables: CafeSchema) =>
         oldData.map((cafe) => {
           if (cafe.id === props.cafe.id) {
-            const optimisticSlug =
-              variables.name && variables.name !== cafe.name ? slugify(variables.name, { maxLength: 50 }) : cafe.slug;
+            const optimisticSlug = variables.name && variables.name !== cafe.name ? slugify(variables.name, { maxLength: 50 }) : cafe.slug;
 
             return {
               ...cafe,

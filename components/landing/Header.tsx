@@ -4,7 +4,7 @@ import { FC } from "react";
 import NextLink from "next/link";
 import { QrCode } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { scrollToSection } from "@/lib/utils";
+import { scrollToSection } from "@/lib/dom";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";

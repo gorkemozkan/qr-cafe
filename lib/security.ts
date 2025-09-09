@@ -31,7 +31,7 @@ export const verifyCsrfToken = (request: NextRequest) => {
   return false;
 };
 
-export function sanitizeFilename(filename: string): string {
+export const sanitizeFilename = (filename: string): string => {
   const lastDotIndex = filename.lastIndexOf(".");
 
   let name = filename;
@@ -52,9 +52,9 @@ export function sanitizeFilename(filename: string): string {
   const finalName = sanitizedName || "file";
 
   return finalName + extension.toLowerCase();
-}
+};
 
-export function validateFileType(file: File): { isValid: boolean; error?: string; sanitizedName?: string } {
+export const validateFileType = (file: File): { isValid: boolean; error?: string; sanitizedName?: string } => {
   const allowedTypes = ["png", "jpeg", "jpg", "gif", "webp"];
 
   const maxSize = 5 * 1024 * 1024; // 5MB
@@ -86,11 +86,11 @@ export function validateFileType(file: File): { isValid: boolean; error?: string
   const sanitizedName = sanitizeFilename(file.name);
 
   return { isValid: true, sanitizedName };
-}
+};
 
-export function validateBucketName(bucketName: string): boolean {
+export const validateBucketName = (bucketName: string): boolean => {
   return Object.values(BUCKET_NAMES).includes(bucketName);
-}
+};
 
 export const commonHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -104,9 +104,7 @@ export const commonHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
-export const productionOnlyHeaders = [
-  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-];
+export const productionOnlyHeaders = [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" }];
 
 export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
   const supabaseHosts = supabaseUrl
@@ -120,11 +118,9 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
       ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
       : `'self' 'unsafe-inline' https://challenges.cloudflare.com ${vercelLive}`.trim();
 
-  const devConnections =
-    environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
+  const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
 
-  const vercelConnections =
-    environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
+  const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
 
   const connectSrc =
     `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
