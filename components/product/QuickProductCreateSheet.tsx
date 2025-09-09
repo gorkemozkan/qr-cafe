@@ -3,24 +3,23 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus } from "lucide-react";
 import { productSchema, type ProductSchema as ProductSchemaType } from "@/lib/schema";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import FormSheet from "@/components/FormSheet";
 
-import { CategoryListDropdown } from "@/components/ui/category-list-dropdown";
+import CategoryListDropdown from "@/components/category/CategoryListDropdown";
 import { productRepository } from "@/lib/repositories/product-repository";
-import { storageRepository } from "@/lib/repositories";
+import { storageRepository } from "@/lib/repositories/storage-repository";
 import FilePicker from "@/components/ui/file-picker";
 import { BUCKET_NAMES } from "@/config";
 import { Tables } from "@/types/db";
 import { toast } from "sonner";
 import CafeListDropdown from "@/components/cafe/CafeListDropdown";
 import SubmitButton from "@/components/SubmitButton";
+import InputErrorMessage from "@/components/InputErrorMessage";
 
 interface QuickProductCreateSheetProps {
   open: boolean;
@@ -170,13 +169,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
             Product Name
             <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input
-            id="name"
-            {...register("name")}
-            placeholder="Enter product name"
-            className={errors.name ? "border-red-500" : ""}
-          />
-          {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+          <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+          <InputErrorMessage>{errors.name?.message}</InputErrorMessage>
         </div>
 
         {/* Description */}
@@ -189,7 +183,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
             rows={3}
             className={errors.description ? "border-red-500" : ""}
           />
-          {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+          <InputErrorMessage>{errors.description?.message}</InputErrorMessage>
         </div>
 
         {/* Price */}
@@ -204,7 +198,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
             placeholder="0.00"
             className={errors.price ? "border-red-500" : ""}
           />
-          {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
+          <InputErrorMessage>{errors.price?.message}</InputErrorMessage>
         </div>
 
         {/* Image Upload */}
@@ -219,16 +213,11 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
             onError={handleImageError}
             disabled={isUploading}
           />
-          {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
+          <InputErrorMessage>{uploadError}</InputErrorMessage>
         </div>
-
         {/* Availability */}
         <div className="flex items-center space-x-2">
-          <Switch
-            id="is_available"
-            checked={isAvailable}
-            onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
-          />
+          <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
           <Label htmlFor="is_available">Available</Label>
           <p className="text-xs text-muted-foreground ml-2">
             {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}

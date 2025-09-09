@@ -15,14 +15,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 
-interface GdprDataDeletionDialogProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: (confirmed: boolean) => void;
   isLoading: boolean;
 }
 
-export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoading }: GdprDataDeletionDialogProps) {
+export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoading }: Props) {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const handleConfirm = () => {
@@ -45,9 +45,7 @@ export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoadin
             <AlertTriangle className="h-5 w-5" />
             Delete All Data
           </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action will permanently delete all your data. This cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogDescription>This action will permanently delete all your data. This cannot be undone.</AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="space-y-4">
@@ -71,10 +69,7 @@ export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoadin
               onCheckedChange={(checked: boolean) => setIsConfirmed(checked === true)}
               disabled={isLoading}
             />
-            <label
-              htmlFor="confirm-deletion"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
+            <label htmlFor="confirm-deletion" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               I understand that this action is permanent and cannot be undone
             </label>
           </div>

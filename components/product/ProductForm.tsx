@@ -3,7 +3,6 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
 import { Tables } from "@/types/db";
 import { productSchema, type ProductSchema as ProductSchemaType } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
@@ -11,10 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { storageRepository } from "@/lib/repositories";
+import { storageRepository } from "@/lib/repositories/storage-repository";
 import FilePicker from "@/components/ui/file-picker";
-import { OptimizedImage } from "@/components/ui/optimized-image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { BUCKET_NAMES } from "@/config";
+import InputErrorMessage from "@/components/InputErrorMessage";
+import SubmitButton from "@/components/SubmitButton";
 
 interface Props {
   mode: "create" | "edit";
@@ -110,13 +111,8 @@ const ProductForm: FC<Props> = (props) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">Product Name *</Label>
-        <Input
-          id="name"
-          {...register("name")}
-          placeholder="Enter product name"
-          className={errors.name ? "border-red-500" : ""}
-        />
-        {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+        <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+        <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
 
       <div className="space-y-2">
@@ -128,7 +124,7 @@ const ProductForm: FC<Props> = (props) => {
           rows={3}
           className={errors.description ? "border-red-500" : ""}
         />
-        {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+        <InputErrorMessage id="description-error">{errors.description?.message}</InputErrorMessage>
       </div>
 
       <div className="space-y-2">
@@ -142,9 +138,8 @@ const ProductForm: FC<Props> = (props) => {
           placeholder="0.00"
           className={errors.price ? "border-red-500" : ""}
         />
-        {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
+        <InputErrorMessage id="price-error">{errors.price?.message}</InputErrorMessage>
       </div>
-
       <div className="space-y-2">
         <FilePicker
           id="image"
@@ -156,7 +151,7 @@ const ProductForm: FC<Props> = (props) => {
           onError={handleImageError}
           disabled={isUploading}
         />
-        {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
+        <InputErrorMessage id="upload-error">{uploadError}</InputErrorMessage>
         {props.mode === "edit" && props.product?.image_url && !imageFile && (
           <div className="flex items-center space-x-2">
             <OptimizedImage
@@ -174,17 +169,12 @@ const ProductForm: FC<Props> = (props) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch
-          id="is_available"
-          checked={isAvailable}
-          onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
-        />
+        <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
         <Label htmlFor="is_available">Available</Label>
         <p className="text-xs text-muted-foreground ml-2">
           {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
         </p>
       </div>
-
       <div className="flex justify-end space-x-2 pt-4">
         {props.onCancel && (
           <Button
@@ -197,22 +187,13 @@ const ProductForm: FC<Props> = (props) => {
             Cancel
           </Button>
         )}
-        <Button
-          type="submit"
-          disabled={isSubmitting || isUploading || props.isLoading}
-          className="min-w-[100px] transition-all duration-200 hover:scale-105"
-        >
-          {isSubmitting || isUploading || props.isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {props.mode === "create" ? "Creating..." : "Updating..."}
-            </>
-          ) : props.mode === "create" ? (
-            "Create"
-          ) : (
-            "Update"
-          )}
-        </Button>
+        <SubmitButton
+          onClick={handleSubmit(onSubmitForm)}
+          isLoading={isSubmitting || isUploading || props.isLoading || false}
+          text={props.mode === "create" ? "Create" : "Update"}
+          disabled={isSubmitting || isUploading || props.isLoading || false}
+          loadingText={props.mode === "create" ? "Creating..." : "Updating..."}
+        />
       </div>
     </form>
   );

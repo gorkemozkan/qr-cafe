@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import FilePicker from "@/components/ui/file-picker";
-import { CurrencySelect } from "@/components/ui/currency-select";
-import { OptimizedImage } from "@/components/ui";
+import { CurrencySelect } from "@/components/CurrencySelect";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Tables } from "@/types/db";
 import { CafeSchema, cafeSchema } from "@/lib/schema";
 import { uploadCafeLogo } from "@/lib/supabase/storage";
+import InputErrorMessage from "@/components/InputErrorMessage";
 
 export interface CafeFormRef {
   submitForm: () => void;
@@ -158,16 +159,11 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
             setSubmitError(null);
           }}
         />
-        {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+        <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
         <Label htmlFor="description">{t("form.labels.description")}</Label>
-        <Textarea
-          id="description"
-          placeholder={t("form.placeholders.description")}
-          {...register("description")}
-          rows={3}
-        />
+        <Textarea id="description" placeholder={t("form.placeholders.description")} {...register("description")} rows={3} />
       </div>
       <div className="space-y-2">
         <FilePicker
@@ -180,7 +176,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           onError={handleFileError}
           disabled={isUploading}
         />
-        {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
+        {uploadError && <InputErrorMessage id="upload-error">{uploadError}</InputErrorMessage>}
         {props.cafe?.logo_url && !selectedFile && (
           <div className="flex items-center space-x-2">
             <OptimizedImage
@@ -204,17 +200,11 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
         error={errors.currency?.message}
       />
       <div className="flex items-center space-x-2">
-        <Switch
-          id="is_active"
-          checked={isActive}
-          onCheckedChange={(checked: boolean) => setValue("is_active", checked)}
-        />
+        <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
         <Label htmlFor="is_active">{watch("is_active") ? t("form.status.active") : t("form.status.inactive")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">
-          {isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}
-        </p>
+        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}</p>
       </div>
-      {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+      {submitError && <InputErrorMessage id="submit-error">{submitError}</InputErrorMessage>}
     </form>
   );
 });

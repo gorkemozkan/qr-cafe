@@ -7,7 +7,7 @@ import { categoryRepository } from "@/lib/repositories/category-repository";
 import { Tables } from "@/types/db";
 import { toast } from "sonner";
 
-interface CategoryListDropdownProps {
+interface Props {
   id?: string;
   label?: string;
   value?: number;
@@ -20,7 +20,7 @@ interface CategoryListDropdownProps {
   required?: boolean;
 }
 
-export const CategoryListDropdown = ({
+const CategoryListDropdown = ({
   id,
   label,
   value,
@@ -31,7 +31,7 @@ export const CategoryListDropdown = ({
   error,
   className,
   required = false,
-}: CategoryListDropdownProps) => {
+}: Props) => {
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -67,11 +67,7 @@ export const CategoryListDropdown = ({
           {required && <span className="text-red-500 ml-1">*</span>}
         </Label>
       )}
-      <Select
-        value={value?.toString()}
-        onValueChange={(selectedValue) => onValueChange(Number(selectedValue))}
-        disabled={isDisabled}
-      >
+      <Select value={value?.toString()} onValueChange={(selectedValue) => onValueChange(Number(selectedValue))} disabled={isDisabled}>
         <SelectTrigger id={id} className={`${error ? "border-red-500" : ""} ${className || ""}`}>
           <SelectValue placeholder={displayPlaceholder} />
         </SelectTrigger>
@@ -87,3 +83,5 @@ export const CategoryListDropdown = ({
     </div>
   );
 };
+
+export default CategoryListDropdown;

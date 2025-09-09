@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { CopyButton } from "@/components/ui";
+import CopyButton from "@/components/CopyButton";
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -156,10 +156,10 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">
+          <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
             {t("qr.preview.title")}
           </DialogTitle>

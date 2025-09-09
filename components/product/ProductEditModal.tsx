@@ -2,10 +2,10 @@
 
 import { FC } from "react";
 import { Tables } from "@/types/db";
-import QueryKeys from "@/constants/query-keys";
-import { useRequest } from "@/hooks/use-request";
-import { useCafeData } from "@/hooks/use-cafe-data";
-import { productRepository } from "@/lib/repositories";
+import QueryKeys from "@/lib/query";
+import { useRequest } from "@/hooks/useRequest";
+import useCafeData from "@/hooks/useCafeData";
+import { productRepository } from "@/lib/repositories/product-repository";
 import ProductForm from "@/components/product/ProductForm";
 import { type ProductSchema } from "@/lib/schema";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";

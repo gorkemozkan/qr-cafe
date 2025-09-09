@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Download, Trash2, AlertTriangle } from "lucide-react";
-import { gdprRepository } from "@/lib/repositories";
+import { gdprRepository } from "@/lib/repositories/gdpr-repository";
 import { toast } from "sonner";
 import { GdprDataExportDialog } from "@/components/gdpr/GdprDataExportDialog";
 import { GdprDataDeletionDialog } from "@/components/gdpr/GdprDataDeletionDialog";
@@ -127,8 +127,8 @@ export function GdprCompliance() {
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  This will permanently delete all your cafes, categories, products, and account data. You will be
-                  logged out and cannot access your account anymore.
+                  This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your
+                  account anymore.
                 </AlertDescription>
               </Alert>
               <Button onClick={() => setShowDeletionDialog(true)} disabled={isDeleting} className="w-full">
@@ -138,18 +138,8 @@ export function GdprCompliance() {
           </CardContent>
         </Card>
       </div>
-      <GdprDataExportDialog
-        open={showExportDialog}
-        onOpenChange={setShowExportDialog}
-        onConfirm={handleDataExport}
-        isLoading={isExporting}
-      />
-      <GdprDataDeletionDialog
-        open={showDeletionDialog}
-        onOpenChange={setShowDeletionDialog}
-        onConfirm={handleDataDeletion}
-        isLoading={isDeleting}
-      />
+      <GdprDataExportDialog open={showExportDialog} onOpenChange={setShowExportDialog} onConfirm={handleDataExport} isLoading={isExporting} />
+      <GdprDataDeletionDialog open={showDeletionDialog} onOpenChange={setShowDeletionDialog} onConfirm={handleDataDeletion} isLoading={isDeleting} />
     </div>
   );
 }

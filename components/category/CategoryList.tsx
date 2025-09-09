@@ -3,14 +3,14 @@
 import { FC, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
-import { useRequest } from "@/hooks/use-request";
-import { categoryRepository } from "@/lib/repositories";
-import QueryKeys from "@/constants/query-keys";
-import DataTable from "@/components/ui/data-table";
-import QuestionDialog from "@/components/ui/question-dialog";
+import { useRequest } from "@/hooks/useRequest";
+import { categoryRepository } from "@/lib/repositories/category-repository";
+import QueryKeys from "@/lib/query";
+import DataTable from "@/components/DataTable";
+import QuestionDialog from "@/components/QuestionDialog";
 import CategoryEditSheet from "@/components/category/CategoryEditModal";
-import TableActions from "@/components/ui/table-actions";
-import DateView from "@/components/ui/date-view";
+import TableActions from "@/components/TableActions";
+import DateView from "@/components/DateView";
 import { Badge } from "@/components/ui/badge";
 import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 import { useRouter } from "next/navigation";
@@ -84,11 +84,7 @@ const CategoryList: FC<Props> = (props) => {
     {
       key: "is_active",
       header: t("table.headers.status"),
-      cell: (value: any) => (
-        <Badge variant={value ? "active" : "inactive"}>
-          {value ? t("table.status.active") : t("table.status.inactive")}
-        </Badge>
-      ),
+      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? t("table.status.active") : t("table.status.inactive")}</Badge>,
     },
     {
       key: "created_at",
@@ -100,11 +96,7 @@ const CategoryList: FC<Props> = (props) => {
       header: t("table.headers.actions"),
       className: "flex justify-end",
       cell: (_: any, row: Tables<"categories">) => (
-        <TableActions
-          onInspect={() => handleInspectClick(row)}
-          onEdit={() => setCategoryToEdit(row)}
-          onDelete={() => handleDeleteClick(row)}
-        />
+        <TableActions onInspect={() => handleInspectClick(row)} onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />
       ),
     },
   ];
@@ -119,11 +111,7 @@ const CategoryList: FC<Props> = (props) => {
         emptyMessage={t("noCategories")}
       />
       {categoryToEdit && (
-        <CategoryEditSheet
-          onClose={() => setCategoryToEdit(null)}
-          category={categoryToEdit}
-          onSuccess={() => setCategoryToEdit(null)}
-        />
+        <CategoryEditSheet onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />
       )}
       <QuestionDialog
         open={deleteDialogOpen}

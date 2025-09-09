@@ -11,22 +11,22 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface GdprDataExportDialogProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   isLoading: boolean;
 }
 
-export function GdprDataExportDialog({ open, onOpenChange, onConfirm, isLoading }: GdprDataExportDialogProps) {
+export function GdprDataExportDialog({ open, onOpenChange, onConfirm, isLoading }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Export Your Data</AlertDialogTitle>
           <AlertDialogDescription>
-            You are about to download a complete copy of all your personal data. This includes your account information,
-            cafes, categories, and products. The file will be downloaded in JSON format.
+            You are about to download a complete copy of all your personal data. This includes your account information, cafes, categories, and
+            products. The file will be downloaded in JSON format.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

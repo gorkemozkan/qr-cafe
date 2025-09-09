@@ -7,7 +7,7 @@ interface UseCopyToClipboardReturn {
   resetCopied: () => void;
 }
 
-export function useCopyToClipboard(autoResetDelay: number = 2000): UseCopyToClipboardReturn {
+const useCopyToClipboard = (autoResetDelay: number = 2000): UseCopyToClipboardReturn => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = useCallback(
@@ -36,4 +36,6 @@ export function useCopyToClipboard(autoResetDelay: number = 2000): UseCopyToClip
     copyToClipboard,
     resetCopied,
   };
-}
+};
+
+export default useCopyToClipboard;

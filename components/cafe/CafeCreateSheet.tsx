@@ -5,11 +5,11 @@ import { Plus } from "lucide-react";
 import { FC, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { CafeSchema } from "@/lib/schema";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
-import { useRequest } from "@/hooks/use-request";
-import { cafeRepository } from "@/lib/repositories";
+import { useRequest } from "@/hooks/useRequest";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import FormSheet from "@/components/FormSheet";
 import TooltipButton from "@/components/TooltipButton";
@@ -95,9 +95,7 @@ const CafeCreateSheet: FC = () => {
           />
         </FormSheet>
       )}
-      {createdCafe && (
-        <CafeQRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />
-      )}
+      {createdCafe && <CafeQRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />}
     </>
   );
 };

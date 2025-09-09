@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useQueryRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/useRequest";
 import { HelpCircle } from "lucide-react";
 import RefreshButton from "@/components/RefreshButton";
 
@@ -17,7 +17,7 @@ interface Column<T> {
   priority?: "high" | "medium" | "low";
 }
 
-interface DataTableProps<T extends { id?: number | string }> {
+interface Props<T extends { id?: number | string }> {
   columns: Column<T>[];
   queryKey: string[];
   queryFn: () => Promise<T[]>;
@@ -71,7 +71,7 @@ function DataTable<T extends { id?: number | string }>({
   actions,
   title,
   mobileBreakpoint = 768,
-}: DataTableProps<T>) {
+}: Props<T>) {
   const { data, isLoading, refetch, isRefetching } = useQueryRequest({
     queryKey,
     queryFn,
@@ -150,9 +150,7 @@ function DataTable<T extends { id?: number | string }>({
               <TableRow key={String(row.id || index)}>
                 {visibleColumns.map((column) => (
                   <TableCell key={String(column.key)} className={column.className}>
-                    {column.cell
-                      ? column.cell(row[column.key as keyof T], row)
-                      : String(row[column.key as keyof T] ?? "-")}
+                    {column.cell ? column.cell(row[column.key as keyof T], row) : String(row[column.key as keyof T] ?? "-")}
                   </TableCell>
                 ))}
               </TableRow>
