@@ -1,5 +1,5 @@
 import { FC } from "react";
-import ScrollToTop from "@/components/menu/ScrollToTop";
+import ScrollToTop from "@/components/ScrollToTop";
 import SimpleMenuHeader from "@/components/menu/SimpleMenu/SimpleMenuHeader";
 import SimpleMenuSections from "@/components/menu/SimpleMenu/SimpleMenuSections";
 import { PublicMenuData } from "@/lib/repositories";
