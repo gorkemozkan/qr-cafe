@@ -85,7 +85,7 @@ export function GdprCompliance() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl space-y-12">
+    <div className=" space-y-12">
       <PageTitle showBackButton title="User Settings" subtitle="Manage your account and preferences " />
 
       <div className="grid gap-6 md:grid-cols-2">

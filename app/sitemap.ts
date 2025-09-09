@@ -1,29 +1,32 @@
 import { MetadataRoute } from "next";
+import { nextPublicBaseUrl } from "@/lib/env";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
+  if (!nextPublicBaseUrl) {
+    return [];
+  }
 
   return [
     {
-      url: baseUrl,
+      url: nextPublicBaseUrl,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/admin/auth/login`,
+      url: `${nextPublicBaseUrl}/admin/auth/login`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/admin/auth/signup`,
+      url: `${nextPublicBaseUrl}/admin/auth/signup`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/admin/app/dashboard`,
+      url: `${nextPublicBaseUrl}/admin/app/dashboard`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.6,

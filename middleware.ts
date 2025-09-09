@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { updateSession } from "@/lib/supabase/middleware";
 import { locales, defaultLocale } from "./i18n";
+import { isProduction } from "@/lib/env";
 
 createIntlMiddleware({
   locales,
@@ -36,7 +37,7 @@ export async function middleware(request: NextRequest) {
     response.cookies.set("locale", defaultLocale, {
       maxAge: 365 * 24 * 60 * 60,
       httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
     });
   }
