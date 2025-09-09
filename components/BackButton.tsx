@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 

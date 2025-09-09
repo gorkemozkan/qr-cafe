@@ -1,4 +1,4 @@
-import { cafeRepository } from "@/lib/repositories";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { useQueryRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 

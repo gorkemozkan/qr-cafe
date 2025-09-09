@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Home, Coffee, Package, FolderOpen, User, LogOut, Sun, Moon, Monitor, Globe, Search, Command } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRequest } from "@/hooks/useRequest";
-import { authRepository } from "@/lib/repositories";
+import { authRepository } from "@/lib/repositories/auth-repository";
 import { useTranslations } from "next-intl";
 
 // Helper function to set locale cookie safely

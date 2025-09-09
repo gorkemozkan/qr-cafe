@@ -5,7 +5,7 @@ import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-interface CopyButtonProps {
+interface Props {
   text: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   size?: "default" | "sm" | "lg" | "icon";
@@ -16,7 +16,7 @@ interface CopyButtonProps {
   noText?: boolean;
 }
 
-const CopyButton: FC<CopyButtonProps> = ({
+const CopyButton: FC<Props> = ({
   text,
   variant = "outline",
   size = "default",

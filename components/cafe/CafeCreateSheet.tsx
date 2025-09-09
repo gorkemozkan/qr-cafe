@@ -9,7 +9,7 @@ import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import { useRequest } from "@/hooks/useRequest";
-import { cafeRepository } from "@/lib/repositories";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import FormSheet from "@/components/FormSheet";
 import TooltipButton from "@/components/TooltipButton";

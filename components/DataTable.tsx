@@ -17,7 +17,7 @@ interface Column<T> {
   priority?: "high" | "medium" | "low";
 }
 
-interface DataTableProps<T extends { id?: number | string }> {
+interface Props<T extends { id?: number | string }> {
   columns: Column<T>[];
   queryKey: string[];
   queryFn: () => Promise<T[]>;
@@ -71,7 +71,7 @@ function DataTable<T extends { id?: number | string }>({
   actions,
   title,
   mobileBreakpoint = 768,
-}: DataTableProps<T>) {
+}: Props<T>) {
   const { data, isLoading, refetch, isRefetching } = useQueryRequest({
     queryKey,
     queryFn,

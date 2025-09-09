@@ -10,9 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import FormSheet from "@/components/FormSheet";
 
-import { CategoryListDropdown } from "@/components/ui/category-list-dropdown";
+import CategoryListDropdown from "@/components/category/CategoryListDropdown";
 import { productRepository } from "@/lib/repositories/product-repository";
-import { storageRepository } from "@/lib/repositories";
+import { storageRepository } from "@/lib/repositories/storage-repository";
 import FilePicker from "@/components/ui/file-picker";
 import { BUCKET_NAMES } from "@/config";
 import { Tables } from "@/types/db";

@@ -10,12 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { storageRepository } from "@/lib/repositories";
+import { storageRepository } from "@/lib/repositories/storage-repository";
 import FilePicker from "@/components/ui/file-picker";
-import { OptimizedImage } from "@/components/ui/optimized-image";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { BUCKET_NAMES } from "@/config";
 import InputErrorMessage from "@/components/InputErrorMessage";
-import SubmitButton from "../SubmitButton";
+import SubmitButton from "@/components/SubmitButton";
 
 interface Props {
   mode: "create" | "edit";

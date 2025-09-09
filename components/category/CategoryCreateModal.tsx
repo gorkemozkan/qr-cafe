@@ -8,7 +8,7 @@ import { CategorySchema } from "@/lib/schema";
 import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
-import { categoryRepository } from "@/lib/repositories";
+import { categoryRepository } from "@/lib/repositories/category-repository";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/FormSheet";
 import TooltipButton from "@/components/TooltipButton";

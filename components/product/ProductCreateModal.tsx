@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { type ProductSchema } from "@/lib/schema";
 import { useRequest } from "@/hooks/useRequest";
 import useCafeData from "@/hooks/useCafeData";
-import { productRepository } from "@/lib/repositories";
+import { productRepository } from "@/lib/repositories/product-repository";
 import ProductForm from "@/components/product/ProductForm";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";

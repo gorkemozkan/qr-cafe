@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import QueryKeys from "@/lib/query";
 import PageTitle from "@/components/PageTitle";
 import { useQueryRequest } from "@/hooks/useRequest";
-import { categoryRepository } from "@/lib/repositories";
+import { categoryRepository } from "@/lib/repositories/category-repository";
 import ProductList from "@/components/product/ProductList";
 import CategoryEditModal from "@/components/category/CategoryEditModal";
 

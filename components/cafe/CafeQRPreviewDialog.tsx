@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { CopyButton } from "@/components/ui";
+import CopyButton from "@/components/CopyButton";
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
 import Image from "next/image";
 import { toast } from "sonner";

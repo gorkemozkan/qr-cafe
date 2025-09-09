@@ -4,15 +4,10 @@ import { FC } from "react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, MoreHorizontal, Eye, Link } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
 
-interface TableActionsProps {
+interface Props {
   onEdit?: () => void;
   onDelete?: () => void;
   onInspect?: () => void;
@@ -21,7 +16,7 @@ interface TableActionsProps {
   additionalActions?: React.ReactNode;
 }
 
-const TableActions: FC<TableActionsProps> = (props) => {
+const TableActions: FC<Props> = (props) => {
   const tCommon = useTranslations("common");
   const hasEdit = !!props.onEdit;
 
