@@ -71,13 +71,13 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.from("cafes").insert([cafeData]).select().single();
 
     if (error) {
-      const safeError = createSafeErrorResponse(error, "cafe creation");
+      const safeError = createSafeErrorResponse(error);
       return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    const safeError = createSafeErrorResponse(error, "cafe creation");
+    const safeError = createSafeErrorResponse(error);
     return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

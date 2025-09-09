@@ -61,7 +61,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
   } catch (error) {
-    const safeError = createSafeErrorResponse(error, "login");
+    const safeError = createSafeErrorResponse(error);
     return NextResponse.json({ error: safeError.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

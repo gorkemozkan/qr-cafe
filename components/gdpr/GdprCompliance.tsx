@@ -52,8 +52,7 @@ export function GdprCompliance() {
       window.URL.revokeObjectURL(url);
 
       toast.success("Data export completed successfully");
-    } catch (error) {
-      console.error("Export error:", error);
+    } catch (_error) {
       toast.error("Failed to export data. Please try again.");
     } finally {
       setIsExporting(false);

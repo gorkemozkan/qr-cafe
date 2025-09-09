@@ -48,8 +48,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       cafesData = cafesResult.data || [];
       categoriesData = categoriesResult.data || [];
       productsData = productsResult.data || [];
-    } catch (queryError) {
-      const safeError = createSafeErrorResponse(queryError, "GDPR data export");
+    } catch (_queryError) {
       return NextResponse.json({ error: errorMessages.DATABASE_ERROR, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
@@ -77,7 +76,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    const safeError = createSafeErrorResponse(error, "GDPR data export");
+    const safeError = createSafeErrorResponse(error);
     return NextResponse.json({ error: safeError.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }
