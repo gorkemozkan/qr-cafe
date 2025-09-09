@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
-import { slugify } from "@/lib/utils";
+import { slugify } from "@/lib/format";
 import { verifyCsrfToken } from "@/lib/security";
 import { http } from "@/lib/http";
 
 export async function PUT(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -44,11 +41,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { data: existingCafe, error: fetchError } = await supabase
-      .from("cafes")
-      .select("id, user_id, slug, name")
-      .eq("id", id)
-      .single();
+    const { data: existingCafe, error: fetchError } = await supabase.from("cafes").select("id, user_id, slug, name").eq("id", id).single();
 
     if (fetchError || !existingCafe) {
       return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
@@ -62,12 +55,7 @@ export async function PUT(request: NextRequest) {
     if (validationResult.data.name && validationResult.data.name !== existingCafe.name) {
       finalSlug = slugify(validationResult.data.name, { maxLength: 50 });
 
-      const { data: slugExists } = await supabase
-        .from("cafes")
-        .select("id")
-        .eq("slug", finalSlug)
-        .neq("id", id)
-        .single();
+      const { data: slugExists } = await supabase.from("cafes").select("id").eq("slug", finalSlug).neq("id", id).single();
 
       if (slugExists) {
         return NextResponse.json({ error: "A cafe with this name already exists" }, { status: http.CONFLICT.status });
@@ -94,9 +82,6 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(data, { status: 200 });
   } catch (_error) {
-    return NextResponse.json(
-      { error: http.INTERNAL_SERVER_ERROR.message },
-      { status: http.INTERNAL_SERVER_ERROR.status },
-    );
+    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

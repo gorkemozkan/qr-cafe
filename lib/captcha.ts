@@ -10,7 +10,7 @@ interface TurnstileVerificationResponse {
   cdata?: string;
 }
 
-export async function verifyTurnstileToken(token: string, maxRetries = 3): Promise<boolean> {
+export const verifyTurnstileToken = async (token: string, maxRetries = 3): Promise<boolean> => {
   if (isDevelopment) {
     return true;
   }
@@ -68,4 +68,4 @@ export async function verifyTurnstileToken(token: string, maxRetries = 3): Promi
   }
 
   return false;
-}
+};

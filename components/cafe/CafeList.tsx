@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Badge } from "@/components/ui";
 import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import ExternalLinkButton from "@/components/ExternalLinkButton";
-import { getBaseUrl } from "@/lib/utils";
+import { nextPublicBaseUrl } from "@/lib/env";
 
 const CafeList: FC = () => {
   //#region Hooks
@@ -143,11 +143,7 @@ const CafeList: FC = () => {
         key: "is_active",
         header: t("table.headers.status"),
         tooltipText: t("table.status.activeTooltip"),
-        cell: (value: any) => (
-          <Badge variant={value ? "active" : "inactive"}>
-            {value ? t("table.status.active") : t("table.status.inactive")}
-          </Badge>
-        ),
+        cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? t("table.status.active") : t("table.status.inactive")}</Badge>,
       },
       {
         key: "created_at",
@@ -177,7 +173,7 @@ const CafeList: FC = () => {
                       <p>{t("qr.preview.viewTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
-                  <ExternalLinkButton url={`${getBaseUrl()}/${row.slug}`} />
+                  <ExternalLinkButton url={`${nextPublicBaseUrl}/${row.slug}`} />
                 </div>
               }
             />
@@ -198,9 +194,7 @@ const CafeList: FC = () => {
         queryFn={async () => await cafeRepository.list()}
         emptyMessage={t("noCafes")}
       />
-      {cafeToEdit && (
-        <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />
-      )}
+      {cafeToEdit && <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}

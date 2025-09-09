@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import QueryProvider from "@/components/providers/QueryProvider";
 import { type FC, type ReactNode } from "react";
 import { defaultLocale } from "@/i18n";
+import { nextPublicBaseUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions that enhance customer experience and streamline operations.",
-  keywords: [
-    "QR menu",
-    "digital menu",
-    "cafe technology",
-    "restaurant menu",
-    "QR code",
-    "cafe management",
-    "contactless menu",
-    "mobile menu",
-  ],
+  keywords: ["QR menu", "digital menu", "cafe technology", "restaurant menu", "QR code", "cafe management", "contactless menu", "mobile menu"],
   authors: [{ name: "QR Cafe Team" }],
   creator: "QR Cafe",
   publisher: "QR Cafe",
@@ -33,7 +25,7 @@ export const metadata: Metadata = {
     title: "QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
     description:
       "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions that enhance customer experience and streamline operations.",
-    url: process.env.NEXT_PUBLIC_BASE_URL,
+    url: nextPublicBaseUrl,
     siteName: "QR Cafe",
     type: "website",
     locale: "en_US",

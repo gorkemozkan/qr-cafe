@@ -2,17 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cafeSchema } from "@/lib/schema";
 import { TablesInsert } from "@/types/db";
-import { slugify } from "@/lib/utils";
+import { slugify } from "@/lib/format";
 import { verifyCsrfToken } from "@/lib/security";
 import { http } from "@/lib/http";
 
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -67,9 +64,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(data, { status: 201 });
   } catch (_error) {
-    return NextResponse.json(
-      { error: http.INTERNAL_SERVER_ERROR.message },
-      { status: http.INTERNAL_SERVER_ERROR.status },
-    );
+    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }
