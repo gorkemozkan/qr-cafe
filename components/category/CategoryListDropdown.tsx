@@ -3,9 +3,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { categoryRepository } from "@/lib/repositories/category-repository";
 import { Tables } from "@/types/db";
+import { categoryRepository } from "@/lib/repositories/category-repository";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import InputErrorMessage from "@/components/InputErrorMessage";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 interface Props {
   id?: string;
@@ -34,7 +39,8 @@ const CategoryListDropdown = ({
 }: Props) => {
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const t = useTranslations("category");
+  const router = useRouter();
   useEffect(() => {
     const loadCategories = async () => {
       if (!cafeId) {
@@ -57,6 +63,7 @@ const CategoryListDropdown = ({
   }, [cafeId]);
 
   const isDisabled = disabled || !cafeId || isLoading;
+
   const displayPlaceholder = !cafeId ? "Select a cafe first" : isLoading ? "Loading categories..." : placeholder;
 
   return (
@@ -72,14 +79,23 @@ const CategoryListDropdown = ({
           <SelectValue placeholder={displayPlaceholder} />
         </SelectTrigger>
         <SelectContent>
-          {categories.map((category) => (
-            <SelectItem key={category.id} value={category.id.toString()}>
-              {category.name}
-            </SelectItem>
-          ))}
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <SelectItem key={category.id} value={category.id.toString()}>
+                {category.name}
+              </SelectItem>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-2 space-y-2">
+              <p className="text-sm text-muted-foreground text-center">{t("noCategories")}</p>
+              <Button asChild variant="secondary" size="sm" className="w-full">
+                <Link href={`/admin/app/cafe/${cafeId}/categories`}>Create Category</Link>
+              </Button>
+            </div>
+          )}
         </SelectContent>
       </Select>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      <InputErrorMessage>{error}</InputErrorMessage>
     </div>
   );
 };

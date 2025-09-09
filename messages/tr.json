@@ -54,7 +54,8 @@
     "creation": "Oluşturma",
     "user": "Kullanıcı",
     "preferences": "Tercihler",
-    "settings": "Ayarlar"
+    "settings": "Ayarlar",
+    "loadingCafes": "Kafeler yükleniyor..."
   },
   "navigation": {
     "signIn": "Giriş Yap",
@@ -203,11 +204,18 @@
         "cafeName": "Kafe Adı",
         "description": "Açıklama",
         "cafeLogo": "Kafe Logosu",
-        "currency": "Para Birimi"
+        "currency": "Para Birimi",
+        "cafe": "Kafe",
+        "category": "Kategori",
+        "name": "Ürün Adı",
+        "price": "Fiyat",
+        "image": "Ürün Görseli"
       },
       "placeholders": {
         "cafeName": "Kafenizin adını girin",
-        "description": "Kafenizi tarif edin..."
+        "description": "Kafenizi tarif edin...",
+        "name": "Ürün adını girin",
+        "category": "Kategori seçin"
       },
       "status": {
         "active": "Aktif",
@@ -217,6 +225,14 @@
       },
       "logo": {
         "currentLogoNote": "Yeni bir dosya seçerseniz mevcut logo değiştirilecektir"
+      },
+      "available": {
+        "active": "Mevcut",
+        "inactive": "Mevcut Değil"
+      },
+      "availableDescription": {
+        "active": "Ürün mevcut ve satışa sunuluyor",
+        "inactive": "Ürün mevcut değil ve satışa sunulmuyor"
       }
     },
     "create": {
@@ -337,7 +353,13 @@
     "messages": {
       "createSuccess": "Kategori başarıyla oluşturuldu!",
       "updateSuccess": "Kategori başarıyla güncellendi!",
-      "createFailed": "Kategori oluşturulamadı"
+      "createFailed": "Kategori oluşturulamadı",
+      "loadFailed": "Kategoriler yüklenemedi"
+    },
+    "dropdown": {
+      "selectCafeFirst": "Önce bir kafe seçin",
+      "loadingCategories": "Kategoriler yükleniyor...",
+      "createCategory": "Kategori Oluştur"
     }
   },
   "product": {
@@ -354,6 +376,60 @@
       "image": "Görsel",
       "available": "Mevcut",
       "category": "Kategori"
+    },
+    "form": {
+      "labels": {
+        "cafe": "Kafe",
+        "category": "Kategori",
+        "name": "Ürün Adı",
+        "description": "Açıklama",
+        "price": "Fiyat",
+        "image": "Ürün Görseli"
+      },
+      "status": {
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "activeDescription": "Ürün mevcut ve sipariş edilebilir",
+        "inactiveDescription": "Ürün mevcut değil ve sipariş edilemez"
+      },
+      "available": {
+        "active": "Mevcut",
+        "inactive": "Mevcut Değil"
+      },
+      "availableDescription": {
+        "active": "Ürün mevcut ve satışa sunuluyor",
+        "inactive": "Ürün mevcut değil ve satışa sunulmuyor"
+      }
+    },
+    "messages": {
+      "selectCafe": "Lütfen bir kafe seçin",
+      "selectCategory": "Lütfen bir kategori seçin",
+      "cafeNotFound": "Seçilen kafe bulunamadı",
+      "uploadFailed": "Yükleme başarısız",
+      "createSuccess": "Ürün başarıyla oluşturuldu",
+      "createFailed": "Ürün oluşturulamadı"
+    },
+    "placeholders": {
+      "selectCafe": "Kafe seçin",
+      "selectCategory": "Kategori seçin",
+      "productName": "Ürün adını girin",
+      "productDescription": "Ürününüzü tarif edin...",
+      "productImage": "Ürün Görseli",
+      "price": "0,00"
+    },
+    "quickCreate": {
+      "title": "Yeni Ürün Oluştur",
+      "description": "Kafe menünüz için hızlıca yeni bir ürün oluşturun.",
+      "createButton": "Oluştur",
+      "creatingButton": "Oluşturuluyor...",
+      "selectCafe": "Lütfen bir kafe seçin",
+      "selectCategory": "Lütfen bir kategori seçin",
+      "cafeNotFound": "Seçilen kafe bulunamadı",
+      "uploadFailed": "Yükleme başarısız",
+      "unknownError": "Bilinmeyen hata",
+      "successMessage": "Ürün başarıyla oluşturuldu",
+      "failedMessage": "Ürün oluşturulamadı",
+      "selectCafePlaceholder": "Kafe seçin"
     }
   },
   "dashboard": {
@@ -399,5 +475,34 @@
     "inDays": "{{count}} gün içinde",
     "invalid": "Geçersiz Tarih",
     "at": "saat"
+  },
+  "gdpr": {
+    "title": "Kullanıcı Ayarları",
+    "subtitle": "Hesabınızı ve tercihlerinizi yönetin",
+    "export": {
+      "title": "Verilerinizi Dışa Aktarın",
+      "description": "Tüm kişisel verilerinizin tam bir kopyasını JSON formatında indirin.",
+      "exportButton": "Verileri Dışa Aktar",
+      "exportingButton": "Dışa aktarılıyor...",
+      "successMessage": "Veri dışa aktarma başarıyla tamamlandı",
+      "errorMessage": "Veri dışa aktarılamadı. Lütfen tekrar deneyin.",
+      "failedToExport": "Veri dışa aktarılamadı"
+    },
+    "delete": {
+      "title": "Verilerinizi Silin",
+      "description": "Tüm verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.",
+      "deleteButton": "Tüm Verileri Sil",
+      "deletingButton": "Siliniyor...",
+      "successMessage": "Verileriniz kalıcı olarak silindi",
+      "errorMessage": "Veriler silinemedi. Lütfen tekrar deneyin.",
+      "failedToDelete": "Veriler silinemedi",
+      "warningMessage": "Bu işlem tüm kafeleriniz, kategorileriniz, ürünleriniz ve hesap verilerinizi kalıcı olarak silecektir. Oturumunuz kapatılacak ve hesabınıza artık erişemeyeceksiniz."
+    },
+    "dataTypes": {
+      "userAccount": "Kullanıcı Hesabı",
+      "cafes": "Kafeler",
+      "categories": "Kategoriler",
+      "products": "Ürünler"
+    }
   }
 }

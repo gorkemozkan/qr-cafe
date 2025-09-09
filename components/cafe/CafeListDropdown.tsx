@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQueryRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
+import InputErrorMessage from "@/components/InputErrorMessage";
 
 interface Props {
   id?: string;
@@ -49,7 +50,7 @@ const CafeListDropdown: FC<Props> = (props) => {
           ))}
         </SelectContent>
       </Select>
-      {props.error && <p className="text-sm text-red-500">{props.error}</p>}
+      <InputErrorMessage>{props.error}</InputErrorMessage>
     </div>
   );
 };

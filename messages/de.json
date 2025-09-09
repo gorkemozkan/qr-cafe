@@ -54,7 +54,8 @@
     "creation": "Erstellung",
     "user": "Benutzer",
     "preferences": "Einstellungen",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "loadingCafes": "Cafés werden geladen..."
   },
   "navigation": {
     "signIn": "Anmelden",
@@ -203,11 +204,18 @@
         "cafeName": "Café-Name",
         "description": "Beschreibung",
         "cafeLogo": "Café-Logo",
-        "currency": "Währung"
+        "currency": "Währung",
+        "cafe": "Café",
+        "category": "Kategorie",
+        "name": "Produktname",
+        "price": "Preis",
+        "image": "Produktbild"
       },
       "placeholders": {
         "cafeName": "Geben Sie den Namen Ihres Cafés ein",
-        "description": "Beschreiben Sie Ihr Café..."
+        "description": "Beschreiben Sie Ihr Café...",
+        "name": "Produktname eingeben",
+        "category": "Kategorie auswählen"
       },
       "status": {
         "active": "Aktiv",
@@ -337,7 +345,13 @@
     "messages": {
       "createSuccess": "Kategorie erfolgreich erstellt!",
       "updateSuccess": "Kategorie erfolgreich aktualisiert!",
-      "createFailed": "Kategorie-Erstellung fehlgeschlagen"
+      "createFailed": "Kategorie-Erstellung fehlgeschlagen",
+      "loadFailed": "Kategorien konnten nicht geladen werden"
+    },
+    "dropdown": {
+      "selectCafeFirst": "Wählen Sie zuerst ein Café aus",
+      "loadingCategories": "Kategorien werden geladen...",
+      "createCategory": "Kategorie erstellen"
     }
   },
   "product": {
@@ -354,6 +368,52 @@
       "image": "Bild",
       "available": "Verfügbar",
       "category": "Kategorie"
+    },
+    "form": {
+      "labels": {
+        "cafe": "Café",
+        "category": "Kategorie",
+        "name": "Produktname",
+        "description": "Beschreibung",
+        "price": "Preis",
+        "image": "Produktbild"
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "activeDescription": "Produkt ist verfügbar und kann bestellt werden",
+        "inactiveDescription": "Produkt ist nicht verfügbar und kann nicht bestellt werden"
+      }
+    },
+    "messages": {
+      "selectCafe": "Bitte wählen Sie ein Café aus",
+      "selectCategory": "Bitte wählen Sie eine Kategorie aus",
+      "cafeNotFound": "Ausgewähltes Café nicht gefunden",
+      "uploadFailed": "Upload fehlgeschlagen",
+      "createSuccess": "Produkt erfolgreich erstellt",
+      "createFailed": "Produkt-Erstellung fehlgeschlagen"
+    },
+    "placeholders": {
+      "selectCafe": "Café auswählen",
+      "selectCategory": "Kategorie auswählen",
+      "productName": "Produktname eingeben",
+      "productDescription": "Beschreiben Sie Ihr Produkt...",
+      "productImage": "Produktbild",
+      "price": "0,00"
+    },
+    "quickCreate": {
+      "title": "Neues Produkt erstellen",
+      "description": "Erstellen Sie schnell ein neues Produkt für Ihr Café-Menü.",
+      "createButton": "Erstellen",
+      "creatingButton": "Wird erstellt...",
+      "selectCafe": "Bitte wählen Sie ein Café aus",
+      "selectCategory": "Bitte wählen Sie eine Kategorie aus",
+      "cafeNotFound": "Ausgewähltes Café nicht gefunden",
+      "uploadFailed": "Upload fehlgeschlagen",
+      "unknownError": "Unbekannter Fehler",
+      "successMessage": "Produkt erfolgreich erstellt",
+      "failedMessage": "Produkt-Erstellung fehlgeschlagen",
+      "selectCafePlaceholder": "Café auswählen"
     }
   },
   "dashboard": {
@@ -400,5 +460,34 @@
     "inDays": "In {{count}} Tagen",
     "invalid": "Ungültiges Datum",
     "at": "um"
+  },
+  "gdpr": {
+    "title": "Benutzereinstellungen",
+    "subtitle": "Verwalten Sie Ihr Konto und Ihre Einstellungen",
+    "export": {
+      "title": "Ihre Daten exportieren",
+      "description": "Laden Sie eine vollständige Kopie all Ihrer persönlichen Daten im JSON-Format herunter.",
+      "exportButton": "Daten exportieren",
+      "exportingButton": "Exportiere...",
+      "successMessage": "Datenexport erfolgreich abgeschlossen",
+      "errorMessage": "Datenexport fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "failedToExport": "Datenexport fehlgeschlagen"
+    },
+    "delete": {
+      "title": "Ihre Daten löschen",
+      "description": "Löschen Sie alle Ihre Daten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteButton": "Alle Daten löschen",
+      "deletingButton": "Lösche...",
+      "successMessage": "Ihre Daten wurden dauerhaft gelöscht",
+      "errorMessage": "Datenlöschung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "failedToDelete": "Datenlöschung fehlgeschlagen",
+      "warningMessage": "Dies wird alle Ihre Cafés, Kategorien, Produkte und Kontodaten dauerhaft löschen. Sie werden ausgeloggt und können nicht mehr auf Ihr Konto zugreifen."
+    },
+    "dataTypes": {
+      "userAccount": "Benutzerkonto",
+      "cafes": "Cafés",
+      "categories": "Kategorien",
+      "products": "Produkte"
+    }
   }
 }

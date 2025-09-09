@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CafeListDropdown from "@/components/cafe/CafeListDropdown";
@@ -18,7 +18,9 @@ import { BUCKET_NAMES } from "@/config";
 import { productRepository } from "@/lib/repositories/product-repository";
 import { storageRepository } from "@/lib/repositories/storage-repository";
 import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
-import { Tables } from "@/types/db";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 interface QuickProductCreateSheetProps {
   open: boolean;
@@ -26,11 +28,17 @@ interface QuickProductCreateSheetProps {
 }
 
 const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheetProps) => {
-  const [cafes, _setCafes] = useState<Tables<"cafes">[]>([]);
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
+
   const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [uploadError, setUploadError] = useState<string | null>(null);
+
   const [isUploading, setIsUploading] = useState(false);
+
+  const t = useTranslations("product");
+
+  const router = useRouter();
 
   const {
     register,
@@ -47,19 +55,22 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
       price: undefined,
       image_url: "",
       is_available: true,
-      category_id: 0, // Start with 0, will be validated
+      category_id: undefined,
     },
   });
 
   const isAvailable = watch("is_available");
-  const currentCategoryId = watch("category_id");
 
-  // Reset category selection when cafe changes
-  useEffect(() => {
-    if (selectedCafeId && currentCategoryId !== 0) {
-      setValue("category_id", 0);
-    }
-  }, [selectedCafeId, currentCategoryId, setValue]);
+  const selectedCategoryId = watch("category_id");
+
+  const handleCafeChange = (cafeId: number | null) => {
+    setSelectedCafeId(cafeId);
+    setValue("category_id", undefined as any);
+  };
+
+  const handleCategoryChange = (categoryId: number | undefined) => {
+    setValue("category_id", categoryId as any);
+  };
 
   const handleImageUpload = (file: File | null) => {
     setImageFile(file);
@@ -71,52 +82,42 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
   };
 
   const onSubmit = async (data: ProductSchemaType) => {
-    if (!selectedCafeId) {
-      toast.error("Please select a cafe");
-      return;
-    }
-
-    if (!data.category_id || data.category_id === 0) {
-      toast.error("Please select a category");
-      return;
-    }
+    if (!selectedCafeId) return toast.error(t("quickCreate.selectCafe"));
+    if (!data.category_id) return toast.error(t("quickCreate.selectCategory"));
 
     try {
-      let imageUrl = data.image_url;
+      setIsUploading(true);
+      setUploadError(null);
+
+      let imageUrl = data.image_url || "";
 
       if (imageFile) {
-        setIsUploading(true);
-        setUploadError(null);
+        const cafe = await cafeRepository.getById(selectedCafeId);
 
-        const cafe = cafes.find((c) => c.id === selectedCafeId);
-        if (!cafe) {
-          throw new Error("Selected cafe not found");
-        }
+        if (!cafe) throw new Error(t("quickCreate.cafeNotFound"));
 
         const uploadResult = await storageRepository.uploadFile(imageFile, cafe.slug, BUCKET_NAMES.PRODUCT_IMAGE);
-
         if (!uploadResult.success) {
-          const errorMessage = `Upload failed: ${uploadResult.error?.message || "Unknown error"}`;
+          const errorMessage = `${t("quickCreate.uploadFailed")}: ${uploadResult.error?.message || t("quickCreate.unknownError")}`;
           setUploadError(errorMessage);
+          toast.error(errorMessage);
           return;
         }
-
         imageUrl = uploadResult.data.url;
       }
 
-      await productRepository.create(selectedCafeId, {
-        ...data,
-        image_url: imageUrl,
-      });
+      await productRepository.create(selectedCafeId, { ...data, image_url: imageUrl });
 
-      toast.success("Product created successfully");
+      toast.success(t("quickCreate.successMessage"));
       onOpenChange(false);
       reset();
       setSelectedCafeId(null);
       setImageFile(null);
       setUploadError(null);
+
+      router.push(`/admin/app/cafe/${selectedCafeId}/categories/${data.category_id}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to create product";
+      const errorMessage = error instanceof Error ? error.message : t("quickCreate.failedMessage");
       toast.error(errorMessage);
       setUploadError(errorMessage);
     } finally {
@@ -128,83 +129,79 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
   return (
     <FormSheet
-      title="Create New Product"
-      description="Quickly create a new product for your cafe menu."
+      title={t("quickCreate.title")}
+      description={t("quickCreate.description")}
       onOpenChange={onOpenChange}
       footer={
         <SubmitButton
-          onClick={() => handleSubmit(onSubmit)}
-          disabled={isSubmitting || isUploading || !selectedCafeId}
+          type="submit"
+          form="product-form"
+          disabled={isSubmitting || isUploading}
           isLoading={isSubmitting || isUploading}
-          text="Create"
-          loadingText="Creating..."
+          text={t("quickCreate.createButton")}
+          loadingText={t("quickCreate.creatingButton")}
         />
       }
     >
       <form id="product-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <CafeListDropdown
-          id="cafe"
-          label="Cafe"
-          value={selectedCafeId || undefined}
-          onValueChange={setSelectedCafeId}
-          placeholder="Select a cafe"
-          error={!selectedCafeId ? "Please select a cafe" : undefined}
           required
+          id="cafe"
+          label={t("form.labels.cafe")}
+          placeholder={t("quickCreate.selectCafePlaceholder")}
+          onValueChange={handleCafeChange}
+          value={selectedCafeId || undefined}
         />
         <CategoryListDropdown
           id="category"
-          label="Category"
-          value={watch("category_id") && watch("category_id") !== 0 ? watch("category_id") : undefined}
-          onValueChange={(value) => setValue("category_id", value)}
+          label={t("form.labels.category")}
+          value={selectedCategoryId || undefined}
+          onValueChange={handleCategoryChange}
           cafeId={selectedCafeId}
-          placeholder="Select a category"
+          placeholder={t("placeholders.selectCategory")}
           error={errors.category_id?.message}
           required
         />
-
-        {/* Product Name */}
         <div className="space-y-2">
           <Label htmlFor="name">
-            Product Name
+            {t("form.labels.name")}
             <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+          <Input id="name" {...register("name")} placeholder={t("placeholders.productName")} className={errors.name ? "border-red-500" : ""} />
           <InputErrorMessage>{errors.name?.message}</InputErrorMessage>
         </div>
-
-        {/* Description */}
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">{t("form.labels.description")}</Label>
           <Textarea
             id="description"
             {...register("description")}
-            placeholder="Describe your product..."
+            placeholder={t("placeholders.productDescription")}
             rows={3}
             className={errors.description ? "border-red-500" : ""}
           />
           <InputErrorMessage>{errors.description?.message}</InputErrorMessage>
         </div>
-
-        {/* Price */}
         <div className="space-y-2">
-          <Label htmlFor="price">Price</Label>
+          <Label htmlFor="price">{t("form.labels.price")}</Label>
           <Input
             id="price"
             type="number"
             step="0.01"
             min="0"
-            {...register("price", { valueAsNumber: true })}
-            placeholder="0.00"
+            {...register("price", {
+              valueAsNumber: true,
+              setValueAs: (value) => (value === "" ? undefined : parseFloat(value)),
+            })}
+            placeholder={t("placeholders.price")}
             className={errors.price ? "border-red-500" : ""}
           />
           <InputErrorMessage>{errors.price?.message}</InputErrorMessage>
         </div>
 
-        {/* Image Upload */}
         <div className="space-y-2">
           <FilePicker
             id="image"
-            label="Product Image"
+            label={t("form.labels.image")}
             accept="image/*"
             maxSize={5 * 1024 * 1024} // 5MB
             value={imageFile}
@@ -214,12 +211,11 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
           />
           <InputErrorMessage>{uploadError}</InputErrorMessage>
         </div>
-        {/* Availability */}
         <div className="flex items-center space-x-2">
           <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-          <Label htmlFor="is_available">Available</Label>
+          <Label htmlFor="is_available">{isAvailable ? t("form.status.active") : t("form.status.inactive")}</Label>
           <p className="text-xs text-muted-foreground ml-2">
-            {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
+            {isAvailable ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}
           </p>
         </div>
       </form>
