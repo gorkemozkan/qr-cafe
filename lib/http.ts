@@ -39,4 +39,8 @@ export const http = {
     message: "Conflict",
     status: 409,
   },
+  TOO_MANY_REQUESTS_MESSAGE: {
+    message: "Too Many Requests",
+    status: 429,
+  },
 };

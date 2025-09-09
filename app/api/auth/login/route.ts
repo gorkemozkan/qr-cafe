@@ -5,8 +5,24 @@ import { loginSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
+const MAX_PAYLOAD_SIZE = 4 * 1024; // 4KB
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const contentLength = request.headers.get("content-length");
+
+    if (contentLength && Number.parseInt(contentLength, 10) > MAX_PAYLOAD_SIZE) {
+      return NextResponse.json({ error: "Payload too large", success: false }, { status: http.BAD_REQUEST.status });
+    }
+
+    let body: unknown;
+
+    try {
+      body = await request.json();
+    } catch (_error) {
+      return NextResponse.json({ error: "Invalid JSON payload", success: false }, { status: http.BAD_REQUEST.status });
+    }
+
     if (!verifyCsrfToken(request)) {
       return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message, success: false }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
@@ -14,8 +30,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!authRateLimiter.check(request).allowed) {
       return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
     }
-
-    const body = await request.json();
 
     const validationResult = loginSchema.safeParse(body);
 

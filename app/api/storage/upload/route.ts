@@ -4,6 +4,8 @@ import { uploadRateLimiter } from "@/lib/rate-limiter";
 import { validateBucketName, validateFileType, verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 export async function POST(request: NextRequest) {
   try {
     if (!uploadRateLimiter.check(request).allowed) {
@@ -44,6 +46,10 @@ export async function POST(request: NextRequest) {
     const fileValidation = validateFileType(file);
     if (!fileValidation.isValid) {
       return NextResponse.json({ error: fileValidation.error }, { status: http.BAD_REQUEST.status });
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ error: "File too large. Maximum size is 5MB" }, { status: http.BAD_REQUEST.status });
     }
 
     // Only check ownership if not explicitly skipped (for new cafe creation)

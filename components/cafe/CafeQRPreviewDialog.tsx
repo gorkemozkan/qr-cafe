@@ -155,7 +155,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
