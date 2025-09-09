@@ -12,10 +12,6 @@ export const isNextProduction = process.env.NEXT_PUBLIC_ENV === "production";
 export const isNextDevelopment = process.env.NEXT_PUBLIC_ENV === "development";
 
 export const getNextPublicBaseUrl = () => {
-  /*  if (!process.env.NEXT_PUBLIC_BASE_URL_PROD || !process.env.NEXT_PUBLIC_BASE_URL_STAGING) {
-    throw new Error("NEXT_PUBLIC_BASE_URL_PROD or NEXT_PUBLIC_BASE_URL_STAGING are not set, please check your environment variables.");
-  } */
-
   if (isNextProduction) {
     return process.env.NEXT_PUBLIC_BASE_URL_PROD;
   }
