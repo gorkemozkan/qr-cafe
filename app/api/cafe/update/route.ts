@@ -4,6 +4,7 @@ import { http } from "@/lib/http";
 import { cafeSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidateUserCafesCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -79,6 +80,8 @@ export async function PUT(request: NextRequest) {
     if (error) {
       return NextResponse.json({ error: "Failed to update cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidateUserCafesCache(user.id);
 
     return NextResponse.json(data, { status: 200 });
   } catch (_error) {

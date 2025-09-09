@@ -5,6 +5,7 @@ import { cafeSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { validatePayloadSize } from "@/lib/payload-validation";
+import { invalidateUserCafesCache } from "@/lib/redis";
 import { TablesInsert } from "@/types/db";
 
 export async function POST(request: NextRequest) {
@@ -74,6 +75,8 @@ export async function POST(request: NextRequest) {
       const safeError = createSafeErrorResponse(error);
       return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidateUserCafesCache(user.id);
 
     return NextResponse.json(data, { status: 201 });
   } catch (error) {

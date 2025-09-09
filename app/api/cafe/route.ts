@@ -3,6 +3,9 @@ import { http } from "@/lib/http";
 import { apiRateLimiter } from "@/lib/rate-limiter";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { getCacheKeys, redis } from "@/lib/redis";
+
+const CACHE_EXPIRATION = 300;
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,13 +28,32 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
+    const cacheKey = getCacheKeys.cafes(user.id);
+
+    try {
+      const cachedCafes = await redis.get(cacheKey);
+      if (cachedCafes) {
+        return NextResponse.json(cachedCafes);
+      }
+    } catch (cacheError) {
+      console.warn("Redis cache read failed:", cacheError);
+    }
+
     const { data: cafes, error } = await supabase.from("cafes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
 
     if (error) {
       return NextResponse.json({ error: "Failed to fetch cafes" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
-    return NextResponse.json(cafes || []);
+    const cafesData = cafes || [];
+
+    try {
+      await redis.setex(cacheKey, CACHE_EXPIRATION, cafesData);
+    } catch (cacheError) {
+      console.warn("Redis cache write failed:", cacheError);
+    }
+
+    return NextResponse.json(cafesData);
   } catch (_error) {
     return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }

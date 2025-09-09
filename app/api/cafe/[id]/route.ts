@@ -3,6 +3,7 @@ import { http } from "@/lib/http";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { parseNumericId } from "@/lib/utils";
+import { invalidateUserCafesCache } from "@/lib/redis";
 
 interface Params {
   id: string;
@@ -89,6 +90,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (deleteError) {
       return NextResponse.json({ error: "Failed to delete cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidateUserCafesCache(user.id);
 
     return NextResponse.json({ success: true, message: "Cafe deleted successfully" }, { status: http.SUCCESS.status });
   } catch (_error) {
