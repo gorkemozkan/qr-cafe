@@ -3,12 +3,7 @@
 import { Globe } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const languages = [
   { code: "en", name: "English", flag: "🇺🇸" },
@@ -19,6 +14,7 @@ const LanguageSwitcher = () => {
   const t = useTranslations("language");
 
   const setLanguage = (locale: string) => {
+    // biome-ignore lint/suspicious/noDocumentCookie: Direct cookie usage is appropriate for locale switching
     document.cookie = `locale=${locale}; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax`;
     window.location.reload();
   };

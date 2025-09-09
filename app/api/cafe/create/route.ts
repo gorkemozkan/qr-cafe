@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { cafeSchema } from "@/lib/schema";
-import { TablesInsert } from "@/types/db";
 import { slugify } from "@/lib/format";
-import { verifyCsrfToken } from "@/lib/security";
 import { http } from "@/lib/http";
+import { cafeSchema } from "@/lib/schema";
+import { verifyCsrfToken } from "@/lib/security";
+import { createClient } from "@/lib/supabase/server";
+import { TablesInsert } from "@/types/db";
 
 export async function POST(request: NextRequest) {
   try {

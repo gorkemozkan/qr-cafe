@@ -1,15 +1,15 @@
 "use client";
 
+import { AlertTriangle, Download, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
+import { GdprDataDeletionDialog } from "@/components/gdpr/GdprDataDeletionDialog";
+import { GdprDataExportDialog } from "@/components/gdpr/GdprDataExportDialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Download, Trash2, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { gdprRepository } from "@/lib/repositories/gdpr-repository";
-import { toast } from "sonner";
-import { GdprDataExportDialog } from "@/components/gdpr/GdprDataExportDialog";
-import { GdprDataDeletionDialog } from "@/components/gdpr/GdprDataDeletionDialog";
 import PageTitle from "../PageTitle";
 
 export function GdprCompliance() {

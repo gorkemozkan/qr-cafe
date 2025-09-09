@@ -1,5 +1,5 @@
-import { type LoginSchema } from "@/lib/schema";
 import { BaseRepository } from "@/lib/repositories/base-repository";
+import { type LoginSchema } from "@/lib/schema";
 
 export class AuthRepository extends BaseRepository {
   protected readonly baseUrl = "/api/auth";

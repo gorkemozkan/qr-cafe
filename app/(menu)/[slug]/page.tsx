@@ -1,6 +1,6 @@
 import { NextPage } from "next";
-import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { notFound } from "next/navigation";
+import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { publicMenuRepository } from "@/lib/repositories/public-menu-repository";
 
 interface Params {

@@ -1,5 +1,5 @@
-import { BaseRepository } from "@/lib/repositories/base-repository";
 import { nextPublicBaseUrl } from "@/lib/env";
+import { BaseRepository } from "@/lib/repositories/base-repository";
 
 interface PublicProduct {
   id: number;

@@ -1,23 +1,17 @@
+import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { authRateLimiter } from "@/lib/rate-limiter";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { authRateLimiter } from "@/lib/rate-limiter";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message, success: false },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message, success: false }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     if (!authRateLimiter.check(request).allowed) {
-      return NextResponse.json(
-        { error: http.TOO_MANY_REQUESTS.message, success: false },
-        { status: http.TOO_MANY_REQUESTS.status },
-      );
+      return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
     }
 
     const supabase = await createClient();
@@ -29,10 +23,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json(
-        { error: http.UNAUTHORIZED.message, success: false },
-        { status: http.UNAUTHORIZED.status },
-      );
+      return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
     }
 
     const body = await request.json();
@@ -40,10 +31,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Require explicit confirmation
     if (!confirm_deletion || confirm_deletion !== true) {
-      return NextResponse.json(
-        { error: "Deletion must be explicitly confirmed", success: false },
-        { status: http.BAD_REQUEST.status },
-      );
+      return NextResponse.json({ error: "Deletion must be explicitly confirmed", success: false }, { status: http.BAD_REQUEST.status });
     }
 
     // Start a transaction-like approach (Supabase doesn't support transactions across tables)
@@ -91,16 +79,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     } catch (deletionError) {
       console.error("Data deletion error:", deletionError);
-      return NextResponse.json(
-        { error: "Failed to delete user data", success: false },
-        { status: http.INTERNAL_SERVER_ERROR.status },
-      );
+      return NextResponse.json({ error: "Failed to delete user data", success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
   } catch (error) {
     console.error("GDPR data deletion error:", error);
-    return NextResponse.json(
-      { error: http.INTERNAL_SERVER_ERROR.message, success: false },
-      { status: http.INTERNAL_SERVER_ERROR.status },
-    );
+    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

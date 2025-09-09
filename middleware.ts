@@ -1,8 +1,8 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
-import { updateSession } from "@/lib/supabase/middleware";
-import { locales, defaultLocale } from "./i18n";
 import { isProduction } from "@/lib/env";
+import { updateSession } from "@/lib/supabase/middleware";
+import { defaultLocale, locales } from "./i18n";
 
 createIntlMiddleware({
   locales,

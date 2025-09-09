@@ -1,6 +1,6 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getRequestConfig } from "next-intl/server";
-import { cookies } from "next/headers";
 
 export const locales = ["en", "tr"] as const;
 export type Locale = (typeof locales)[number];

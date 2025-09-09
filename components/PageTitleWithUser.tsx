@@ -1,11 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import PageTitle from "@/components/PageTitle";
-import ThemeToggle from "@/components/ThemeToggle";
 import UserDropdown from "@/components/auth/UserDropdown";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PageTitle from "@/components/PageTitle";
 import QuickActionsButton from "@/components/QuickActionsButton";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const PageTitleWithUser = () => {
   const t = useTranslations();

@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { http } from "@/lib/http";
 import { productSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
-import { http } from "@/lib/http";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -30,12 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: cafe, error: cafeError } = await supabase
-      .from("cafes")
-      .select("id")
-      .eq("id", cafe_id)
-      .eq("user_id", user.id)
-      .single();
+    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
@@ -43,10 +35,7 @@ export async function POST(request: NextRequest) {
 
     const validationResult = productSchema.safeParse(productData);
     if (!validationResult.success) {
-      return NextResponse.json(
-        { error: "Invalid product data", details: validationResult.error.issues },
-        { status: http.BAD_REQUEST.status },
-      );
+      return NextResponse.json({ error: "Invalid product data", details: validationResult.error.issues }, { status: http.BAD_REQUEST.status });
     }
 
     const validatedData = validationResult.data;

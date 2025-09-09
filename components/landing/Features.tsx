@@ -1,9 +1,9 @@
 "use client";
 
-import { FC } from "react";
+import { Coffee, FolderTree, Globe, Image, QrCode, Smartphone } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
-import { QrCode, Smartphone, Coffee, FolderTree, Image, Globe } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const getFeatures = () => [

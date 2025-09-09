@@ -1,11 +1,11 @@
 "use client";
 
-import { FC } from "react";
-import { Tooltip } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { Edit, Trash2, MoreHorizontal, Eye, Link } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Edit, Eye, Link, MoreHorizontal, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { FC } from "react";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip } from "@/components/ui/tooltip";
 
 interface Props {
   onEdit?: () => void;

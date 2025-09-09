@@ -1,9 +1,9 @@
 "use client";
 
-import { FC } from "react";
-import { useTranslations, useLocale } from "next-intl";
 import { format as formatDate, formatDistance, isValid } from "date-fns";
 import { enUS, tr } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
+import { FC } from "react";
 import { cn } from "@/lib/utils";
 
 interface DateViewProps {

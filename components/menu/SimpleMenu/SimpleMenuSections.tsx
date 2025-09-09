@@ -1,9 +1,9 @@
 "use client";
 
 import { FC } from "react";
-import SimpleMenuProduct from "@/components/menu/SimpleMenu/SimpleMenuProduct";
-import SimpleMenuNullCase from "@/components/menu/SimpleMenu/SimpleMenuNullCase";
 import SimpleMenuCategoryHeader from "@/components/menu/SimpleMenu/SimpleMenuCategoryHeader";
+import SimpleMenuNullCase from "@/components/menu/SimpleMenu/SimpleMenuNullCase";
+import SimpleMenuProduct from "@/components/menu/SimpleMenu/SimpleMenuProduct";
 
 interface PublicProduct {
   id: number;

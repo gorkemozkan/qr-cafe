@@ -1,10 +1,10 @@
 "use client";
 
-import QueryKeys from "@/lib/query";
 import { useTranslations } from "next-intl";
-import { apiClient } from "@/lib/api-client";
 import SectionCards from "@/components/SectionCards";
 import { useQueryRequest } from "@/hooks/useRequest";
+import { apiClient } from "@/lib/api-client";
+import QueryKeys from "@/lib/query";
 import type { DashboardStats } from "@/lib/repositories/stats-repository";
 
 const DashboardStatCards = () => {

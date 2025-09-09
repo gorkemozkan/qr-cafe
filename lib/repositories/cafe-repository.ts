@@ -1,6 +1,6 @@
-import { Tables } from "@/types/db";
-import { type CafeSchema } from "@/lib/schema";
 import { BaseRepository } from "@/lib/repositories/base-repository";
+import { type CafeSchema } from "@/lib/schema";
+import { Tables } from "@/types/db";
 
 export class CafeRepository extends BaseRepository {
   protected readonly baseUrl = "/api/cafe";

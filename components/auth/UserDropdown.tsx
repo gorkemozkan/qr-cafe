@@ -1,15 +1,13 @@
 "use client";
 
+import { LogOut, Shield, User } from "lucide-react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-
-import { User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useRequest } from "@/hooks/useRequest";
 import { authRepository } from "@/lib/repositories/auth-repository";
-import { useTranslations } from "next-intl";
-
-import Link from "next/link";
 
 const UserDropdown = () => {
   const tCommon = useTranslations("common");

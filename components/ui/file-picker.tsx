@@ -1,12 +1,12 @@
 "use client";
 
+import { Image as ImageIcon, Upload, X } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useTranslations } from "next-intl";
 
 interface FilePickerProps {
   id?: string;
@@ -152,14 +152,7 @@ const FilePicker = ({
                 </p>
               </div>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleRemove}
-              disabled={disabled}
-              className="h-8 w-8 p-0"
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={handleRemove} disabled={disabled} className="h-8 w-8 p-0">
               <X className="h-4 w-4" />
             </Button>
           </div>

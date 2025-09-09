@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
   src: string | null;
@@ -66,12 +66,7 @@ export function OptimizedImage({
     }
   };
 
-  const imageClasses = cn(
-    "transition-opacity duration-300",
-    isLoading ? "opacity-0" : "opacity-100",
-    clickable && "cursor-pointer",
-    className,
-  );
+  const imageClasses = cn("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100", clickable && "cursor-pointer", className);
 
   // If no valid src is provided and no fallback, render fallback UI
   if (!currentSrc || currentSrc.trim().length === 0) {
@@ -98,12 +93,7 @@ export function OptimizedImage({
 
   const imageElement = (
     <div className="relative">
-      {showSkeleton && isLoading && (
-        <Skeleton
-          className={cn("absolute inset-0", className)}
-          style={{ width: width || 100, height: height || 100 }}
-        />
-      )}
+      {showSkeleton && isLoading && <Skeleton className={cn("absolute inset-0", className)} style={{ width: width || 100, height: height || 100 }} />}
 
       <Image
         src={currentSrc} // We've already validated currentSrc is not empty
