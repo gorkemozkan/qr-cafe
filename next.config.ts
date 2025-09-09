@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
+  /* 
   async headers() {
     if (isNextDevelopment) {
       return [
@@ -54,7 +54,7 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
-  },
+  }, */
 };
 
 export default withNextIntl(nextConfig);
