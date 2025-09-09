@@ -4,6 +4,7 @@ import { apiRateLimiter } from "@/lib/rate-limiter";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { getCacheKeys, redis } from "@/lib/redis";
+import { isNextDevelopment } from "@/lib/env";
 
 const CACHE_EXPIRATION = 300;
 
@@ -30,13 +31,16 @@ export async function GET(request: NextRequest) {
 
     const cacheKey = getCacheKeys.cafes(user.id);
 
-    try {
-      const cachedCafes = await redis.get(cacheKey);
-      if (cachedCafes) {
-        return NextResponse.json(cachedCafes);
+    // Skip cache operations in development
+    if (!isNextDevelopment) {
+      try {
+        const cachedCafes = await redis.get(cacheKey);
+        if (cachedCafes) {
+          return NextResponse.json(cachedCafes);
+        }
+      } catch (cacheError) {
+        console.warn("Redis cache read failed:", cacheError);
       }
-    } catch (cacheError) {
-      console.warn("Redis cache read failed:", cacheError);
     }
 
     const { data: cafes, error } = await supabase.from("cafes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
@@ -47,10 +51,12 @@ export async function GET(request: NextRequest) {
 
     const cafesData = cafes || [];
 
-    try {
-      await redis.setex(cacheKey, CACHE_EXPIRATION, cafesData);
-    } catch (cacheError) {
-      console.warn("Redis cache write failed:", cacheError);
+    if (!isNextDevelopment) {
+      try {
+        await redis.setex(cacheKey, CACHE_EXPIRATION, cafesData);
+      } catch (cacheError) {
+        console.warn("Redis cache write failed:", cacheError);
+      }
     }
 
     return NextResponse.json(cafesData);

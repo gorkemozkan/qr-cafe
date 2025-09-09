@@ -54,7 +54,8 @@
     "creation": "Creation",
     "user": "User",
     "preferences": "Preferences",
-    "settings": "Settings"
+    "settings": "Settings",
+    "loadingCafes": "Loading cafes..."
   },
   "navigation": {
     "signIn": "Sign In",
@@ -203,11 +204,18 @@
         "cafeName": "Cafe Name",
         "description": "Description",
         "cafeLogo": "Cafe Logo",
-        "currency": "Currency"
+        "currency": "Currency",
+        "cafe": "Cafe",
+        "category": "Category",
+        "name": "Product Name",
+        "price": "Price",
+        "image": "Product Image"
       },
       "placeholders": {
         "cafeName": "Enter your cafe's name",
-        "description": "Describe your cafe..."
+        "description": "Describe your cafe...",
+        "name": "Enter product name",
+        "category": "Select a category"
       },
       "status": {
         "active": "Active",
@@ -337,7 +345,13 @@
     "messages": {
       "createSuccess": "Category created successfully!",
       "updateSuccess": "Category updated successfully!",
-      "createFailed": "Failed to create category"
+      "createFailed": "Failed to create category",
+      "loadFailed": "Failed to load categories"
+    },
+    "dropdown": {
+      "selectCafeFirst": "Select a cafe first",
+      "loadingCategories": "Loading categories...",
+      "createCategory": "Create Category"
     }
   },
   "product": {
@@ -354,6 +368,52 @@
       "image": "Image",
       "available": "Available",
       "category": "Category"
+    },
+    "form": {
+      "labels": {
+        "cafe": "Cafe",
+        "category": "Category",
+        "name": "Product Name",
+        "description": "Description",
+        "price": "Price",
+        "image": "Product Image"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "activeDescription": "Product is available and can be ordered",
+        "inactiveDescription": "Product is unavailable and cannot be ordered"
+      }
+    },
+    "messages": {
+      "selectCafe": "Please select a cafe",
+      "selectCategory": "Please select a category",
+      "cafeNotFound": "Selected cafe not found",
+      "uploadFailed": "Upload failed",
+      "createSuccess": "Product created successfully",
+      "createFailed": "Failed to create product"
+    },
+    "placeholders": {
+      "selectCafe": "Select a cafe",
+      "selectCategory": "Select a category",
+      "productName": "Enter product name",
+      "productDescription": "Describe your product...",
+      "productImage": "Product Image",
+      "price": "0.00"
+    },
+    "quickCreate": {
+      "title": "Create New Product",
+      "description": "Quickly create a new product for your cafe menu.",
+      "createButton": "Create",
+      "creatingButton": "Creating...",
+      "selectCafe": "Please select a cafe",
+      "selectCategory": "Please select a category",
+      "cafeNotFound": "Selected cafe not found",
+      "uploadFailed": "Upload failed",
+      "unknownError": "Unknown error",
+      "successMessage": "Product created successfully",
+      "failedMessage": "Failed to create product",
+      "selectCafePlaceholder": "Select a cafe"
     }
   },
   "dashboard": {
@@ -399,5 +459,34 @@
     "inDays": "In {{count}} days",
     "invalid": "Invalid Date",
     "at": "at"
+  },
+  "gdpr": {
+    "title": "User Settings",
+    "subtitle": "Manage your account and preferences",
+    "export": {
+      "title": "Export Your Data",
+      "description": "Download a complete copy of all your personal data in JSON format.",
+      "exportButton": "Export Data",
+      "exportingButton": "Exporting...",
+      "successMessage": "Data export completed successfully",
+      "errorMessage": "Failed to export data. Please try again.",
+      "failedToExport": "Failed to export data"
+    },
+    "delete": {
+      "title": "Delete Your Data",
+      "description": "Permanently delete all your data. This action cannot be undone.",
+      "deleteButton": "Delete All Data",
+      "deletingButton": "Deleting...",
+      "successMessage": "Your data has been permanently deleted",
+      "errorMessage": "Failed to delete data. Please try again.",
+      "failedToDelete": "Failed to delete data",
+      "warningMessage": "This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your account anymore."
+    },
+    "dataTypes": {
+      "userAccount": "User Account",
+      "cafes": "Cafes",
+      "categories": "Categories",
+      "products": "Products"
+    }
   }
 }

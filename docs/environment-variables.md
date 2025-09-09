@@ -63,6 +63,15 @@ Environment is determined by the `NEXT_PUBLIC_ENV` variable. If not set, the app
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | string | No | Cloudflare Turnstile site key for CAPTCHA |
 | `TURNSTILE_SECRET_KEY` | string | No | Cloudflare Turnstile secret key for server-side validation |
 
+### Redis Configuration (Upstash)
+
+| Variable | Type | Required | Description |
+|----------|------|----------|-------------|
+| `UPSTASH_REDIS_REST_URL` | string | Yes | Upstash Redis REST API URL for caching operations |
+| `UPSTASH_REDIS_REST_TOKEN` | string | Yes | Upstash Redis REST API token for authentication |
+
+**Note**: Redis is used for caching user-specific data such as cafe listings to improve application performance.
+
 ### Legacy Variables (Deprecated)
 
 | Variable | Type | Status | Description |
@@ -116,6 +125,8 @@ if (isNextProduction) {
    NEXT_PUBLIC_ENV=development
    NEXT_PUBLIC_SUPABASE_URL=your_development_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_development_supabase_anon_key
+   UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
+   UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token
    ```
 
 ### Staging Environment
@@ -126,6 +137,8 @@ if (isNextProduction) {
    NEXT_PUBLIC_BASE_URL_STAGING=https://staging.yourdomain.com
    NEXT_PUBLIC_SUPABASE_URL_STAGING=your_staging_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY_STAGING=your_staging_supabase_anon_key
+   UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
+   UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token
    ```
 
 ### Production Environment
@@ -136,6 +149,8 @@ if (isNextProduction) {
    NEXT_PUBLIC_BASE_URL_PROD=https://yourdomain.com
    NEXT_PUBLIC_SUPABASE_URL_PROD=your_production_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD=your_production_supabase_anon_key
+   UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
+   UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token
    ```
 
 ## Error Handling
@@ -145,6 +160,7 @@ The application includes comprehensive error handling for missing environment va
 ### Critical Errors
 - `NEXT_PUBLIC_ENV` not set: Application startup fails
 - Missing Supabase credentials for current environment: Application startup fails
+- Missing Redis credentials: Application startup fails (Redis is required for caching)
 - Missing base URL for production/staging: Application startup fails
 
 ### Error Messages
@@ -210,8 +226,10 @@ const { supabaseUrl, supabaseAnonKey, environment } = supabaseConfig;
 
 1. **Application won't start**: Check that `NEXT_PUBLIC_ENV` is set
 2. **Supabase connection fails**: Verify Supabase credentials for current environment
-3. **Wrong base URL**: Ensure base URL variables match the environment
-4. **CAPTCHA not working**: Check Turnstile keys are properly configured
+3. **Redis connection fails**: Verify Upstash Redis URL and token are correctly configured
+4. **Caching not working**: Check Redis credentials and network connectivity
+5. **Wrong base URL**: Ensure base URL variables match the environment
+6. **CAPTCHA not working**: Check Turnstile keys are properly configured
 
 ### Validation
 
@@ -227,3 +245,4 @@ npm run dev
 - `NEXT_PUBLIC_APP_URL` is deprecated in favor of environment-specific base URLs
 - All Supabase variables now support environment-specific configuration
 - CAPTCHA support added with Cloudflare Turnstile integration
+- Redis caching support added with Upstash for improved performance
