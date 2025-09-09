@@ -1,7 +1,7 @@
 "use client";
 
 import { Tables } from "@/types/db";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { Badge } from "@/components/ui/badge";
 import DateView from "@/components/ui/date-view";
 import { useRequest } from "@/hooks/use-request";

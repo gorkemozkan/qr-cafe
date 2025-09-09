@@ -5,7 +5,7 @@ import { Tables } from "@/types/db";
 import { slugify } from "@/lib/format";
 import { CafeSchema } from "@/lib/schema";
 import { useTranslations } from "next-intl";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import FormSheet from "@/components/FormSheet";
 import { useRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories";

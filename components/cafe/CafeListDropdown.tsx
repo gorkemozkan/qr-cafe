@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Label } from "@/components/ui/label";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { useQueryRequest } from "@/hooks/use-request";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

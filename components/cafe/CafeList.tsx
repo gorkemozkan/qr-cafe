@@ -5,7 +5,7 @@ import { QrCode } from "lucide-react";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import DateView from "@/components/ui/date-view";

@@ -1,7 +1,7 @@
 "use client";
 
 import { apiClient } from "@/lib/api-client";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import SectionCards from "@/components/SectionCards";
 import { useQueryRequest } from "@/hooks/use-request";
 import { useTranslations } from "next-intl";

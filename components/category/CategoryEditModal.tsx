@@ -4,7 +4,7 @@ import { FC, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import FormSheet from "@/components/FormSheet";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";

@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Tables } from "@/types/db";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { useRequest } from "@/hooks/use-request";
 import { useCafeData } from "@/hooks/use-cafe-data";
 import { productRepository } from "@/lib/repositories";

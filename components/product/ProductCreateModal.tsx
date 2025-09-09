@@ -2,7 +2,7 @@
 
 import { FC, useState } from "react";
 import { Plus } from "lucide-react";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import { type ProductSchema } from "@/lib/schema";
 import { useRequest } from "@/hooks/use-request";
@@ -10,14 +10,7 @@ import { useCafeData } from "@/hooks/use-cafe-data";
 import { productRepository } from "@/lib/repositories";
 import ProductForm from "@/components/product/ProductForm";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Props {
   cafeId: number;
@@ -81,13 +74,7 @@ const ProductCreateModal: FC<Props> = (props) => {
           <DialogTitle>Create New Product</DialogTitle>
           <DialogDescription>Fill in the details below to create a new product.</DialogDescription>
         </DialogHeader>
-        <ProductForm
-          mode="create"
-          cafeSlug={cafeSlug}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          categoryId={props.categoryId}
-        />
+        <ProductForm mode="create" cafeSlug={cafeSlug} onSubmit={handleSubmit} onCancel={handleCancel} categoryId={props.categoryId} />
       </DialogContent>
     </Dialog>
   );

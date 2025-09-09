@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Plus } from "lucide-react";
 import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
-import QueryKeys from "@/constants/query-keys";
+import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/use-request";
 import { categoryRepository } from "@/lib/repositories";
