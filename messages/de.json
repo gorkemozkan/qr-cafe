@@ -1,0 +1,404 @@
+{
+  "common": {
+    "back": "Zurück",
+    "loading": "Lädt...",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "update": "Aktualisieren",
+    "close": "Schließen",
+    "yes": "Ja",
+    "no": "Nein",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "name": "Name",
+    "description": "Beschreibung",
+    "actions": "Aktionen",
+    "status": "Status",
+    "date": "Datum",
+    "price": "Preis",
+    "category": "Kategorie",
+    "image": "Bild",
+    "required": "Erforderlich",
+    "optional": "Optional",
+    "refresh": {
+      "tooManyAttempts": "Zu viele Aktualisierungsversuche. Versuchen Sie es in {remainingTime}s erneut",
+      "refreshing": "Aktualisiere...",
+      "refresh": "Aktualisieren ({attempt}/{maxAttempt})"
+    },
+    "view": "Anzeigen",
+    "openInNewTab": "In neuem Tab öffnen",
+    "clickToBrowseFiles": "Klicken um Dateien zu durchsuchen",
+    "fileUpTo": "Datei bis zu",
+    "mb": "MB",
+    "chooseFile": "Datei auswählen",
+    "loggedOutSuccessfully": "Erfolgreich abgemeldet",
+    "userMenu": "Benutzermenü",
+    "account": "Konto",
+    "loggingOut": "Abmelden...",
+    "logout": "Abmelden",
+    "new": "Neu",
+    "profile": "Profil",
+    "theme": "Thema",
+    "language": "Sprache",
+    "quickActions": "Schnellaktionen",
+    "searchCommands": "Befehle suchen...",
+    "noResults": "Keine Ergebnisse gefunden.",
+    "navigation": "Navigation",
+    "creation": "Erstellung",
+    "user": "Benutzer",
+    "preferences": "Einstellungen",
+    "settings": "Einstellungen"
+  },
+  "navigation": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "dashboard": "Dashboard",
+    "cafes": "Cafés",
+    "categories": "Kategorien",
+    "products": "Produkte",
+    "menu": "Speisekarte",
+    "settings": "Einstellungen",
+    "profile": "Profil"
+  },
+  "landing": {
+    "hero": {
+      "badge": "Transformieren Sie Ihr Café heute",
+      "title": "Digitales QR-Menü",
+      "subtitle": "für moderne Cafés",
+      "description": "Erstellen Sie atemberaubende digitale Speisekarten mit QR-Codes, organisieren Sie Produkte nach Kategorien und bieten Sie Ihren Kunden ein außergewöhnliches mobiles Essenserlebnis.",
+      "cta": "Erstellen Sie Ihr QR-Menü",
+      "features": {
+        "instant": "Sofortige",
+        "instantSub": "QR-Generierung",
+        "mobile": "Mobile",
+        "mobileSub": "Optimiert",
+        "realtime": "Echtzeit-",
+        "realtimeSub": "Aktualisierungen",
+        "cafe": "Café-",
+        "cafeSub": "Fokussiert"
+      }
+    },
+    "features": {
+      "title": "Leistungsstarke Funktionen für moderne Cafés",
+      "subtitle": "Transformieren Sie Ihr Café mit unserer All-in-One-Plattform. Generieren Sie QR-Codes sofort, verwalten Sie Ihr gesamtes Menü mühelos und pushen Sie Aktualisierungen in Echtzeit. Alles, was Sie brauchen, um digital zu werden, vereinfacht.",
+      "items": {
+        "qrGeneration": {
+          "title": "QR-Code-Generierung",
+          "description": "Generieren Sie QR-Codes für jedes Café mit Vorschau- und PDF-Export-Funktionen. Teilen Sie Ihre digitale Speisekarte sofort."
+        },
+        "menuManagement": {
+          "title": "Vollständige Menüverwaltung",
+          "description": "Erstellen, bearbeiten und verwalten Sie Ihre gesamte Menüstruktur mühelos. Fügen Sie Cafés hinzu, organisieren Sie Kategorien und präsentieren Sie Produkte mit intuitiver Drag-and-Drop-Organisation."
+        },
+        "mediaManagement": {
+          "title": "Medienverwaltung",
+          "description": "Laden Sie Café-Logos und Produktbilder hoch und verwalten Sie sie mit sicherer Cloud-Speicherung. Zeigen Sie Ihre Gerichte mit hochwertigen Visualisierungen."
+        },
+        "mobileFirst": {
+          "title": "Mobile-First-Erlebnis",
+          "description": "Responsives Design, optimiert für mobile Geräte. Ihre Kunden erhalten ein nahtloses Erlebnis auf jeder Bildschirmgröße."
+        },
+        "multiCurrency": {
+          "title": "Multi-Währungs-Unterstützung",
+          "description": "Unterstützung für verschiedene Währungen über Cafés hinweg. Perfekt für internationale Unternehmen oder Franchises."
+        },
+        "cafeFocused": {
+          "title": "Café-fokussierte Funktionen",
+          "description": "Speziell für Cafés und Restaurants entwickelt mit branchenspezifischen Workflows und Optimierungen."
+        }
+      },
+      "comingSoon": "Demnächst verfügbar"
+    },
+    "cta": {
+      "title": "Bereit, Ihr Café zu <span>transformieren</span>?",
+      "subtitle": "Treten Sie Hunderten von Cafés bei, die bereits QR Cafe nutzen, um wunderschöne digitale Menüs zu erstellen. <strong>Starten Sie Ihre kostenlose Testversion heute</strong> und sehen Sie den Unterschied in Minuten.",
+      "button": "Kostenlose Testversion starten",
+      "features": {
+        "instantQR": "Sofortige QR-Codes",
+        "mobileOptimized": "Mobil optimiert"
+      }
+    },
+    "footer": {
+      "description": "Cafés mit smarten QR-Menü-Lösungen transformieren.",
+      "legal": "Rechtliches",
+      "product": "Produkt",
+      "features": "Funktionen",
+      "copyright": "QR Cafe - Alle Rechte vorbehalten",
+      "privacy": "Datenschutzrichtlinie",
+      "terms": "Nutzungsbedingungen"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Melden Sie sich in Ihrem Konto an",
+      "description": "Geben Sie Ihre E-Mail-Adresse ein, um sich in Ihrem Konto anzumelden",
+      "emailPlaceholder": "beispiel@domain.com",
+      "passwordPlaceholder": "*********",
+      "securityVerification": "Sicherheitsüberprüfung",
+      "loginButton": "Anmelden",
+      "loggingIn": "Anmeldung läuft...",
+      "processingRequest": "Anmeldeanfrage wird verarbeitet",
+      "successMessage": "Anmeldung erfolgreich!"
+    },
+    "signup": {
+      "title": "Erstellen Sie Ihr Konto",
+      "description": "Geben Sie Ihre Daten ein, um Ihr Konto zu erstellen",
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "createAccountButton": "Konto erstellen",
+      "creatingAccount": "Konto wird erstellt...",
+      "processingRequest": "Kontenerstellungsanfrage wird verarbeitet",
+      "successMessage": "Konto erfolgreich erstellt!",
+      "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+      "loginLink": "Anmelden"
+    },
+    "skipToForm": "Zum {form} Formular springen",
+    "goBackHome": "Zurück zur Startseite"
+  },
+  "cafe": {
+    "cafe": "Café",
+    "title": "Cafés",
+    "createNew": "Neues Café erstellen",
+    "editCafe": "Café bearbeiten",
+    "deleteCafe": "Café löschen",
+    "noCafes": "Keine Cafés gefunden",
+    "fields": {
+      "name": "Café-Name",
+      "slug": "URL-Slug",
+      "description": "Beschreibung",
+      "address": "Adresse",
+      "phone": "Telefon",
+      "website": "Website",
+      "logo": "Logo"
+    },
+    "table": {
+      "headers": {
+        "logo": "Logo",
+        "name": "Name",
+        "currency": "Währung",
+        "status": "Status",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "activeTooltip": "Status des Cafés, wird für Sichtbarkeit verwendet",
+        "createdTooltip": "Datum und Uhrzeit der Café-Erstellung"
+      },
+      "logo": {
+        "noLogo": "Kein Logo"
+      }
+    },
+    "form": {
+      "labels": {
+        "cafeName": "Café-Name",
+        "description": "Beschreibung",
+        "cafeLogo": "Café-Logo",
+        "currency": "Währung"
+      },
+      "placeholders": {
+        "cafeName": "Geben Sie den Namen Ihres Cafés ein",
+        "description": "Beschreiben Sie Ihr Café..."
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "activeDescription": "Café ist aktiv und sichtbar",
+        "inactiveDescription": "Café ist inaktiv und ausgeblendet"
+      },
+      "logo": {
+        "currentLogoNote": "Das aktuelle Logo wird ersetzt, wenn Sie eine neue Datei auswählen"
+      }
+    },
+    "create": {
+      "title": "Neues Café erstellen",
+      "description": "Füllen Sie die Details unten aus, um ein neues Café zu erstellen.",
+      "button": "Café erstellen",
+      "loadingButton": "Wird erstellt...",
+      "tooltip": "Ein neues Café erstellen"
+    },
+    "edit": {
+      "title": "Café bearbeiten",
+      "description": "Aktualisieren Sie die Café-Informationen unten.",
+      "button": "Café aktualisieren",
+      "loadingButton": "Aktualisiere..."
+    },
+    "delete": {
+      "title": "Café löschen",
+      "confirmMessage": "Sind Sie sicher, dass Sie \"{slug}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "successMessage": "Café erfolgreich gelöscht!"
+    },
+    "qr": {
+      "preview": {
+        "title": "QR-Code-Vorschau",
+        "description": "QR-Code - Scannen Sie, um die Café-Seite zu besuchen",
+        "menuUrl": "Menü-URL:",
+        "scanInstruction": "Scannen Sie diesen QR-Code",
+        "scanDescription": "Besucher können diesen Code scannen, um auf Ihre Café-Seite zuzugreifen",
+        "failedGeneration": "QR-Code-Generierung fehlgeschlagen",
+        "viewTooltip": "QR-Code anzeigen"
+      },
+      "export": {
+        "pdfTitle": "QR-Code für Café",
+        "pdfInstruction": "Scannen Sie diesen QR-Code, um die Café-Seite zu besuchen",
+        "pdfGenerated": "Generiert am {date}",
+        "successMessage": "QR-Code erfolgreich exportiert!",
+        "failedMessage": "QR-Code-Export fehlgeschlagen",
+        "button": "Exportieren",
+        "exporting": "Exportiere..."
+      },
+      "share": {
+        "whatsApp": "WhatsApp",
+        "sendToWhatsApp": "An WhatsApp senden",
+        "copyLink": "Link kopieren",
+        "goToMenu": "Zum Menü gehen",
+        "linkCopied": "Link in die Zwischenablage kopiert!",
+        "copyFailed": "Link konnte nicht kopiert werden"
+      }
+    },
+    "messages": {
+      "createSuccess": "Café erfolgreich erstellt!",
+      "updateSuccess": "Café erfolgreich aktualisiert!",
+      "createFailed": "Café-Erstellung fehlgeschlagen"
+    }
+  },
+  "category": {
+    "category": "Kategorie",
+    "title": "Kategorien",
+    "createNew": "Neue Kategorie erstellen",
+    "editCategory": "Kategorie bearbeiten",
+    "deleteCategory": "Kategorie löschen",
+    "noCategories": "Keine Kategorien gefunden",
+    "manageCategories": "Verwalten Sie Kategorien für Ihr Café",
+    "manageProducts": "Verwalten Sie Produkte für Ihre Kategorie",
+    "notFound": "Kategorie nicht gefunden",
+    "fields": {
+      "name": "Kategorie-Name",
+      "description": "Beschreibung",
+      "sortOrder": "Sortierreihenfolge"
+    },
+    "table": {
+      "headers": {
+        "name": "Name",
+        "sortOrder": "Sortierreihenfolge",
+        "status": "Status",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv"
+      }
+    },
+    "form": {
+      "labels": {
+        "categoryName": "Kategorie-Name",
+        "description": "Beschreibung",
+        "sortOrder": "Sortierreihenfolge"
+      },
+      "placeholders": {
+        "categoryName": "Kategorie-Name eingeben",
+        "description": "Diese Kategorie beschreiben..."
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "activeDescription": "Kategorie ist aktiv und sichtbar",
+        "inactiveDescription": "Kategorie ist inaktiv und ausgeblendet"
+      }
+    },
+    "create": {
+      "title": "Neue Kategorie erstellen",
+      "description": "Füllen Sie die Details unten aus, um eine neue Kategorie zu erstellen.",
+      "button": "Kategorie erstellen",
+      "loadingButton": "Wird erstellt...",
+      "tooltip": "Eine neue Kategorie erstellen"
+    },
+    "edit": {
+      "title": "Kategorie bearbeiten",
+      "description": "Aktualisieren Sie die Kategorie-Informationen unten.",
+      "button": "Kategorie aktualisieren",
+      "loadingButton": "Aktualisiere..."
+    },
+    "delete": {
+      "title": "Kategorie löschen",
+      "confirmMessage": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "successMessage": "Kategorie erfolgreich gelöscht!"
+    },
+    "messages": {
+      "createSuccess": "Kategorie erfolgreich erstellt!",
+      "updateSuccess": "Kategorie erfolgreich aktualisiert!",
+      "createFailed": "Kategorie-Erstellung fehlgeschlagen"
+    }
+  },
+  "product": {
+    "product": "Produkt",
+    "title": "Produkte",
+    "createNew": "Neues Produkt erstellen",
+    "editProduct": "Produkt bearbeiten",
+    "deleteProduct": "Produkt löschen",
+    "noProducts": "Keine Produkte gefunden",
+    "fields": {
+      "name": "Produktname",
+      "description": "Beschreibung",
+      "price": "Preis",
+      "image": "Bild",
+      "available": "Verfügbar",
+      "category": "Kategorie"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück!",
+    "subtitle": "Hier können Sie Ihre Cafés und Kategorien verwalten.",
+    "stats": {
+      "totalCafes": "Gesamtanzahl Cafés",
+      "totalCategories": "Gesamtanzahl Kategorien",
+      "totalProducts": "Gesamtanzahl Produkte",
+      "activeProducts": "Aktive Produkte",
+      "cafesDescription": "Aktive Café-Standorte in allen Regionen",
+      "categoriesDescription": "Hinzugefügte Menükategorien",
+      "productsDescription": "Einzelne Menüelemente in allen Cafés",
+      "activeProductsDescription": "Verfügbare Produkte für Kunden",
+      "thisMonth": "Dieser Monat"
+    }
+  },
+  "menu": {
+    "viewMenu": "Menü anzeigen",
+    "qrCode": "QR-Code",
+    "downloadQR": "QR herunterladen",
+    "printQR": "QR drucken"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "minLength": "Muss mindestens {count} Zeichen lang sein",
+    "maxLength": "Darf nicht mehr als {count} Zeichen lang sein",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "invalidFormat": "Ungültiges Format"
+  },
+  "language": {
+    "english": "English",
+    "turkish": "Türkçe",
+    "german": "Deutsch",
+    "selectLanguage": "Sprache auswählen"
+  },
+  "date": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "tomorrow": "Morgen",
+    "daysAgo": "Vor {{count}} Tagen",
+    "inDays": "In {{count}} Tagen",
+    "invalid": "Ungültiges Datum",
+    "at": "um"
+  }
+}
