@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { publicRateLimiter } from "@/lib/rate-limiter";
 import { createClient } from "@/lib/supabase/server";
+import { redis, getCacheKeys } from "@/lib/redis";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -31,6 +32,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Slug is required" }, { status: http.BAD_REQUEST.status });
     }
 
+    const cacheKey = getCacheKeys.publicCafe(slug);
+    try {
+      const cachedData = await redis.get(cacheKey);
+      if (cachedData && typeof cachedData === "string") {
+        return NextResponse.json(JSON.parse(cachedData));
+      }
+    } catch (cacheError) {
+      console.warn("Redis cache read failed:", cacheError);
+    }
+
     const { data: cafe, error: cafeError } = await supabase
       .from("cafes")
       .select("id, name, description, logo_url, currency, slug")
@@ -42,7 +53,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
     }
 
-    // Get active categories for this cafe
     const { data: categories, error: categoriesError } = await supabase
       .from("categories")
       .select("id, name, description, sort_order")
@@ -55,7 +65,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Failed to fetch categories" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
-    // Get active products for each category
     const categoriesWithProducts = await Promise.all(
       categories.map(async (category) => {
         const { data: products, error: productsError } = await supabase
@@ -74,7 +83,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       }),
     );
 
-    // Return public cafe menu data
     const publicCafeData = {
       cafe: {
         id: cafe.id,
@@ -87,6 +95,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       categories: categoriesWithProducts,
       generated_at: new Date().toISOString(),
     };
+
+    try {
+      await redis.setex(cacheKey, 900, JSON.stringify(publicCafeData));
+    } catch (cacheError) {
+      console.warn("Redis cache write failed:", cacheError);
+    }
 
     return NextResponse.json(publicCafeData);
   } catch (_error) {

@@ -7,6 +7,7 @@ export const redis = new Redis({
 
 export const getCacheKeys = {
   cafes: (userId: string) => `cafes:user:${userId}`,
+  publicCafe: (slug: string) => `public:cafe:${slug}`,
 };
 
 export async function invalidateUserCafesCache(userId: string) {
@@ -15,5 +16,14 @@ export async function invalidateUserCafesCache(userId: string) {
     await redis.del(cacheKey);
   } catch (error) {
     console.warn("Failed to invalidate cafes cache:", error);
+  }
+}
+
+export async function invalidatePublicCafeCache(slug: string) {
+  try {
+    const cacheKey = getCacheKeys.publicCafe(slug);
+    await redis.del(cacheKey);
+  } catch (error) {
+    console.warn("Failed to invalidate public cafe cache:", error);
   }
 }

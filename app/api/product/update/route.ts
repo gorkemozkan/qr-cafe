@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -37,12 +38,14 @@ export async function PUT(request: NextRequest) {
       .update(updateDataWithUserId)
       .eq("id", id)
       .eq("user_id", user.id)
-      .select()
+      .select("*, cafes!inner(slug)")
       .single();
 
     if (updateError) {
       return NextResponse.json({ error: "Failed to update product" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidatePublicCafeCache(product.cafes.slug);
 
     return NextResponse.json(product);
   } catch (_error) {

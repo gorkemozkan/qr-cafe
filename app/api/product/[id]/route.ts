@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -59,11 +60,24 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
+    const { data: product, error: fetchError } = await supabase
+      .from("products")
+      .select("id, cafes!inner(slug)")
+      .eq("id", productId)
+      .eq("user_id", user.id)
+      .single();
+
+    if (fetchError || !product) {
+      return NextResponse.json({ error: "Product not found or access denied" }, { status: http.NOT_FOUND.status });
+    }
+
     const { error: deleteError } = await supabase.from("products").delete().eq("id", productId).eq("user_id", user.id);
 
     if (deleteError) {
       return NextResponse.json({ error: "Failed to delete product" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidatePublicCafeCache(product.cafes.slug);
 
     return NextResponse.json({ success: true });
   } catch (_error) {
