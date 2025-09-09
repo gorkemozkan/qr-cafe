@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { isDevelopment } from "@/lib/utils";
+import { isDevelopment } from "@/lib/env";
 
 interface TurnstileVerificationResponse {
   success: boolean;

@@ -1,8 +1,8 @@
 "use client";
 
 import { FC, useEffect } from "react";
+import { isDevelopment } from "@/lib/env";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { isDevelopment } from "@/lib/utils";
 
 interface CaptchaProps {
   onVerify: (token: string) => void;
@@ -28,7 +28,9 @@ const Captcha: FC<CaptchaProps> = (props) => {
   //#endregion
 
   if (isDevelopment) {
-    return <div className="text-green-600 text-xs p-2 border border-green-200 rounded bg-green-50">✓ CAPTCHA verification bypassed (development mode)</div>;
+    return (
+      <div className="text-green-600 text-xs p-2 border border-green-200 rounded bg-green-50">✓ CAPTCHA verification bypassed (development mode)</div>
+    );
   }
 
   if (!siteKey) {

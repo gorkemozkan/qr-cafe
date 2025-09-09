@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isDevelopment } from "@/lib/utils";
+import { isDevelopment } from "@/lib/env";
 
 const createCaptchaTokenSchema = () => {
   if (isDevelopment) {
