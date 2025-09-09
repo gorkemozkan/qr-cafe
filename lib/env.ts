@@ -71,3 +71,7 @@ export const getSupabaseEnvironment = () => {
 export const nextPublicBaseUrl = getNextPublicBaseUrl();
 
 export const supabaseConfig = getSupabaseEnvironment();
+
+console.log(nextPublicBaseUrl);
+
+console.log(supabaseConfig);
