@@ -4,7 +4,7 @@ import { http } from "@/lib/http";
 import { cafeSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { invalidateUserCafesCache } from "@/lib/redis";
+import { invalidateUserCafesCache, invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -82,6 +82,12 @@ export async function PUT(request: NextRequest) {
     }
 
     invalidateUserCafesCache(user.id);
+
+    // Invalidate public cafe cache for both old and new slugs
+    if (existingCafe.slug !== finalSlug) {
+      invalidatePublicCafeCache(existingCafe.slug);
+    }
+    invalidatePublicCafeCache(finalSlug);
 
     return NextResponse.json(data, { status: 200 });
   } catch (_error) {

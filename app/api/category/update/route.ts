@@ -3,6 +3,7 @@ import { http } from "@/lib/http";
 import { categorySchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -45,7 +46,7 @@ export async function PUT(request: NextRequest) {
 
     const { data: existingCategory, error: fetchError } = await supabase
       .from("categories")
-      .select("id, cafe_id")
+      .select("id, cafe_id, cafes!inner(slug)")
       .eq("id", id)
       .eq("user_id", user.id)
       .single();
@@ -65,6 +66,8 @@ export async function PUT(request: NextRequest) {
     if (updateError) {
       return NextResponse.json({ error: "Failed to update category" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidatePublicCafeCache(existingCategory.cafes.slug);
 
     return NextResponse.json(category);
   } catch (_error) {

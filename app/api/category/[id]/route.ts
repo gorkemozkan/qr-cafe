@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -68,7 +69,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { data: existingCategory, error: fetchError } = await supabase
       .from("categories")
-      .select("id")
+      .select("id, cafes!inner(slug)")
       .eq("id", categoryId)
       .eq("user_id", user.id)
       .single();
@@ -82,6 +83,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     if (deleteError) {
       return NextResponse.json({ error: "Failed to delete category" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
+
+    invalidatePublicCafeCache(existingCategory.cafes.slug);
 
     return NextResponse.json({ success: true });
   } catch (_error) {

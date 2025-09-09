@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Cafe ID and category IDs array are required" }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafe_id).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id, slug").eq("id", cafe_id).eq("user_id", user.id).single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
@@ -64,6 +65,8 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: "Failed to update sort order" }, { status: http.INTERNAL_SERVER_ERROR.status });
       }
     }
+
+    invalidatePublicCafeCache(cafe.slug);
 
     return NextResponse.json({ success: true });
   } catch (_error) {
