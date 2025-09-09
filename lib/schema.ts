@@ -36,7 +36,7 @@ const sanitizeXSS = (value: string) => {
   }
 
   const sanitized = value
-    .replace(/<[^>]*>/g, "") // Remove any HTML tags
+    .replace(/<[^>]*>/g, "")
     .replace(/javascript:/gi, "")
     .replace(/vbscript:/gi, "")
     .replace(/data:/gi, "")
@@ -76,7 +76,7 @@ export const loginSchema = z
 
 export const signupSchema = z
   .object({
-    email: z.string().email("Please enter a valid email address").min(1).max(254),
+    email: z.email("Please enter a valid email address").min(1).max(254),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters long")
@@ -107,24 +107,38 @@ export const signupSchema = z
     },
   );
 
+const sanitaizedString = (property: string) => {
+  return z.string({ message: `${property} is required` }).refine((val) => {
+    try {
+      sanitizeXSS(val);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+};
+
 export const cafeSchema = z.object({
-  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters").max(100, "Name must be no more than 100 characters"),
-  description: z.string().optional(),
+  name: sanitaizedString("name")
+    .min(1, "Name is required")
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must be no more than 100 characters"),
+  description: sanitaizedString("description").optional(),
   logo_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
   currency: z.enum(["TRY", "USD", "EUR"]),
   is_active: z.boolean(),
 });
 
 export const categorySchema = z.object({
-  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
-  description: z.string().min(1, "Description is required"),
+  name: sanitaizedString("name").min(1, "Name is required").min(2, "Name must be at least 2 characters"),
+  description: sanitaizedString("description").min(1, "Description is required"),
   is_active: z.boolean(),
   sort_order: z.union([z.string(), z.number().int().min(0)]).optional(),
 });
 
 export const productSchema = z.object({
-  name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
-  description: z.string().optional(),
+  name: sanitaizedString("name").min(1, "Name is required").min(2, "Name must be at least 2 characters"),
+  description: sanitaizedString("description").optional(),
   price: z.number().min(0, "Price must be non-negative").optional(),
   image_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
   is_available: z.boolean(),

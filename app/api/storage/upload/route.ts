@@ -85,7 +85,6 @@ export async function POST(request: NextRequest) {
     const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
-      const safeError = createSafeErrorResponse(uploadError, "file upload");
       return NextResponse.json({ error: errorMessages.STORAGE_ERROR }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
@@ -96,7 +95,7 @@ export async function POST(request: NextRequest) {
       path: filePath,
     });
   } catch (error) {
-    const safeError = createSafeErrorResponse(error, "file upload");
+    const safeError = createSafeErrorResponse(error);
     return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

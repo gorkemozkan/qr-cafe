@@ -164,6 +164,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
       <div className="space-y-2">
         <Label htmlFor="description">{t("form.labels.description")}</Label>
         <Textarea id="description" placeholder={t("form.placeholders.description")} {...register("description")} rows={3} />
+        <InputErrorMessage id="description-error">{errors.description?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
         <FilePicker
