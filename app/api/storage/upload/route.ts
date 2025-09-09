@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { http } from "@/lib/http";
+import { http, errorMessages, createSafeErrorResponse } from "@/lib/http";
 import { uploadRateLimiter } from "@/lib/rate-limiter";
 import { validateBucketName, validateFileType, verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { validatePayloadSize } from "@/lib/payload-validation";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: NextRequest) {
   try {
+    const payloadValidation = validatePayloadSize(request);
+
+    if (!payloadValidation.isValid) {
+      return NextResponse.json({ error: payloadValidation.error }, { status: http.PAYLOAD_TOO_LARGE.status });
+    }
+
     if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: "Too many upload attempts. Please try again later." }, { status: http.TOO_MANY_REQUESTS.status });
+      return NextResponse.json({ error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 60000) }, { status: http.TOO_MANY_REQUESTS.status });
     }
 
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: "Invalid request origin" }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -24,22 +31,28 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json({ error: "Please log in to upload files" }, { status: http.UNAUTHORIZED.status });
+      return NextResponse.json({ error: http.UNAUTHORIZED.message }, { status: http.UNAUTHORIZED.status });
     }
 
-    const formData = await request.formData();
+    let formData: FormData;
+    try {
+      formData = await request.formData();
+    } catch (_error) {
+      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("form data") }, { status: http.BAD_REQUEST.status });
+    }
+
     const file = formData.get("file") as File;
     const cafeSlug = formData.get("cafeSlug") as string;
     const bucketName = formData.get("bucketName") as string;
     const skipOwnershipCheck = formData.get("skipOwnershipCheck") === "true";
 
     if (!file || !cafeSlug || !bucketName) {
-      return NextResponse.json({ error: "File, cafe slug, and bucket name are required" }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json({ error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") }, { status: http.BAD_REQUEST.status });
     }
 
     // Validate bucket name
     if (!validateBucketName(bucketName)) {
-      return NextResponse.json({ error: "Invalid bucket name" }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("bucket name") }, { status: http.BAD_REQUEST.status });
     }
 
     // Validate file type and security
@@ -49,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: "File too large. Maximum size is 5MB" }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json({ error: errorMessages.FILE_TOO_LARGE("5MB") }, { status: http.BAD_REQUEST.status });
     }
 
     // Only check ownership if not explicitly skipped (for new cafe creation)
@@ -57,7 +70,7 @@ export async function POST(request: NextRequest) {
       const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
 
       if (cafeError || !cafe) {
-        return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
+        return NextResponse.json({ error: errorMessages.RESOURCE_ACCESS_DENIED("cafe") }, { status: http.FORBIDDEN.status });
       }
     }
 
@@ -72,12 +85,8 @@ export async function POST(request: NextRequest) {
     const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
-      return NextResponse.json(
-        {
-          error: `Upload failed: ${uploadError.message}`,
-        },
-        { status: http.INTERNAL_SERVER_ERROR.status },
-      );
+      const safeError = createSafeErrorResponse(uploadError, "file upload");
+      return NextResponse.json({ error: errorMessages.STORAGE_ERROR }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(filePath);
@@ -87,11 +96,7 @@ export async function POST(request: NextRequest) {
       path: filePath,
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error: `Upload failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-      },
-      { status: http.INTERNAL_SERVER_ERROR.status },
-    );
+    const safeError = createSafeErrorResponse(error, "file upload");
+    return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

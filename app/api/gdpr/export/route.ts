@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { http } from "@/lib/http";
+import { http, errorMessages, createSafeErrorResponse } from "@/lib/http";
 import { authRateLimiter } from "@/lib/rate-limiter";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
@@ -11,7 +11,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     if (!authRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
+      return NextResponse.json(
+        { error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 900000), success: false },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     const supabase = await createClient();
@@ -46,8 +49,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       categoriesData = categoriesResult.data || [];
       productsData = productsResult.data || [];
     } catch (queryError) {
-      console.error("Database query error:", queryError);
-      return NextResponse.json({ error: "Failed to retrieve user data", success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
+      const safeError = createSafeErrorResponse(queryError, "GDPR data export");
+      return NextResponse.json({ error: errorMessages.DATABASE_ERROR, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     // Structure the exported data
@@ -74,7 +77,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error("GDPR data export error:", error);
-    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
+    const safeError = createSafeErrorResponse(error, "GDPR data export");
+    return NextResponse.json({ error: safeError.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }
