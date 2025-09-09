@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         pathname: "/storage/v1/object/public/**",
-        hostname: supabaseConfig.supabaseUrl,
+        hostname: supabaseConfig.supabaseUrl.replace(/^https?:\/\//, ""),
       },
       {
         protocol: "http",
