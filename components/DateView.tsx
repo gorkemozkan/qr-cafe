@@ -1,7 +1,7 @@
 "use client";
 
 import { format as formatDate, formatDistance, isValid } from "date-fns";
-import { enUS, tr } from "date-fns/locale";
+import { de, enUS, tr } from "date-fns/locale";
 import { useLocale, useTranslations } from "next-intl";
 import { FC } from "react";
 import { cn } from "@/lib/utils";
@@ -30,6 +30,8 @@ const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTi
         return tr;
       case "en":
         return enUS;
+      case "de":
+        return de;
     }
   };
 

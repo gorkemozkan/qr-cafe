@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const languages = [
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪" },
 ];
 
 const LanguageSwitcher = () => {
