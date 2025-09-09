@@ -2,6 +2,7 @@
 
 Manageable, multi-use QR Menu SaaS platform for cafes & restaurants.
 
+![App Intro](public/app-intro.png)
 
 ## Prerequisites
 
