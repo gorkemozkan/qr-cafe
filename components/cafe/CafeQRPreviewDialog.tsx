@@ -156,10 +156,10 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-2 duration-300 delay-100">
+          <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
             {t("qr.preview.title")}
           </DialogTitle>
