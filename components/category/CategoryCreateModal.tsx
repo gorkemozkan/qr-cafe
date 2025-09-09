@@ -7,7 +7,7 @@ import { Tables } from "@/types/db";
 import { CategorySchema } from "@/lib/schema";
 import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import { categoryRepository } from "@/lib/repositories";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/FormSheet";

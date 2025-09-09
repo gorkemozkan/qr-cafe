@@ -7,7 +7,7 @@ import { CafeSchema } from "@/lib/schema";
 import { useTranslations } from "next-intl";
 import QueryKeys from "@/lib/query";
 import FormSheet from "@/components/FormSheet";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import { cafeRepository } from "@/lib/repositories";
 import SubmitButton from "@/components/SubmitButton";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";

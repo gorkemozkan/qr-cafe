@@ -3,8 +3,8 @@
 import { FC } from "react";
 import { Tables } from "@/types/db";
 import QueryKeys from "@/lib/query";
-import { useRequest } from "@/hooks/use-request";
-import { useCafeData } from "@/hooks/use-cafe-data";
+import { useRequest } from "@/hooks/useRequest";
+import useCafeData from "@/hooks/useCafeData";
 import { productRepository } from "@/lib/repositories";
 import ProductForm from "@/components/product/ProductForm";
 import { type ProductSchema } from "@/lib/schema";

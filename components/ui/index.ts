@@ -46,7 +46,7 @@ export { default as QuestionDialog } from "./question-dialog";
 export { default as TableActions } from "./table-actions";
 export { default as DateView } from "./date-view";
 export { Toaster } from "./sonner";
-export { CopyButton } from "./copy-button";
+export { default as CopyButton } from "./copy-button";
 export { CurrencySelect, type SupportedCurrency } from "./currency-select";
 export { CategoryListDropdown } from "./category-list-dropdown";
 export { OptimizedImage } from "./optimized-image";

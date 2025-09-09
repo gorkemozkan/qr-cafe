@@ -3,7 +3,7 @@
 import { apiClient } from "@/lib/api-client";
 import QueryKeys from "@/lib/query";
 import SectionCards from "@/components/SectionCards";
-import { useQueryRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/useRequest";
 import { useTranslations } from "next-intl";
 import type { DashboardStats } from "@/lib/repositories/stats-repository";
 

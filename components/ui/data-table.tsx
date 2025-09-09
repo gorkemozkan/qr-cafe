@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useQueryRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/useRequest";
 import { HelpCircle } from "lucide-react";
 import RefreshButton from "@/components/RefreshButton";
 
@@ -150,9 +150,7 @@ function DataTable<T extends { id?: number | string }>({
               <TableRow key={String(row.id || index)}>
                 {visibleColumns.map((column) => (
                   <TableCell key={String(column.key)} className={column.className}>
-                    {column.cell
-                      ? column.cell(row[column.key as keyof T], row)
-                      : String(row[column.key as keyof T] ?? "-")}
+                    {column.cell ? column.cell(row[column.key as keyof T], row) : String(row[column.key as keyof T] ?? "-")}
                   </TableCell>
                 ))}
               </TableRow>

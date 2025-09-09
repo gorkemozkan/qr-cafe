@@ -3,7 +3,7 @@
 import { FC, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Tables } from "@/types/db";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import { categoryRepository } from "@/lib/repositories";
 import QueryKeys from "@/lib/query";
 import DataTable from "@/components/ui/data-table";

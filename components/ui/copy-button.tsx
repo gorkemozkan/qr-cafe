@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -16,7 +16,16 @@ interface CopyButtonProps {
   noText?: boolean;
 }
 
-export const CopyButton: FC<CopyButtonProps> = ({ text, variant = "outline", size = "default", className, children, showIcon = true, autoResetDelay = 2000, noText = false }) => {
+const CopyButton: FC<CopyButtonProps> = ({
+  text,
+  variant = "outline",
+  size = "default",
+  className,
+  children,
+  showIcon = true,
+  autoResetDelay = 2000,
+  noText = false,
+}) => {
   const { copied, copyToClipboard } = useCopyToClipboard(autoResetDelay);
 
   const handleCopy = () => {
@@ -37,3 +46,5 @@ export const CopyButton: FC<CopyButtonProps> = ({ text, variant = "outline", siz
     </Tooltip>
   );
 };
+
+export default CopyButton;

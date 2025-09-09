@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import QueryKeys from "@/lib/query";
 import { Button } from "@/components/ui/button";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import DateView from "@/components/ui/date-view";
 import { OptimizedImage } from "@/components/ui";
 import DataTable from "@/components/ui/data-table";

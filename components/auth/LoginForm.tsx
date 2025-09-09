@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Captcha from "@/components/ui/captcha";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import SkipLink from "@/components/auth/SkipLink";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import { authRepository } from "@/lib/repositories";
@@ -76,13 +76,7 @@ const LoginForm = () => {
           <CardDescription id="login-description">{tAuth("description")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            id="login-form"
-            onSubmit={handleSubmit(execute)}
-            aria-labelledby="login-title"
-            aria-describedby="login-description"
-            noValidate
-          >
+          <form id="login-form" onSubmit={handleSubmit(execute)} aria-labelledby="login-title" aria-describedby="login-description" noValidate>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">{tCommon("email")}</Label>
@@ -139,12 +133,7 @@ const LoginForm = () => {
                   </p>
                 )}
               </div>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isLoading}
-                aria-describedby={isLoading ? "loading-status" : undefined}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading} aria-describedby={isLoading ? "loading-status" : undefined}>
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />

@@ -2,32 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import {
-  Home,
-  Coffee,
-  Package,
-  FolderOpen,
-  User,
-  LogOut,
-  Sun,
-  Moon,
-  Monitor,
-  Globe,
-  Search,
-  Command,
-} from "lucide-react";
+import { Home, Coffee, Package, FolderOpen, User, LogOut, Sun, Moon, Monitor, Globe, Search, Command } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import { authRepository } from "@/lib/repositories";
 import { useTranslations } from "next-intl";
 
@@ -86,9 +65,7 @@ const QuickActionsButton = () => {
       icon: Search,
       action: () => {
         // Focus search input if available
-        const searchInput = document.querySelector(
-          'input[type="search"], input[placeholder*="search" i]',
-        ) as HTMLInputElement;
+        const searchInput = document.querySelector('input[type="search"], input[placeholder*="search" i]') as HTMLInputElement;
         if (searchInput) {
           searchInput.focus();
         }
@@ -225,13 +202,7 @@ const QuickActionsButton = () => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-lg"
-        onClick={() => setOpen(true)}
-        title={`${tCommon("quickActions")} (⌘K)`}
-      >
+      <Button variant="outline" size="icon" className="rounded-lg" onClick={() => setOpen(true)} title={`${tCommon("quickActions")} (⌘K)`}>
         <Command className="h-4 w-4" />
         <span className="sr-only">{tCommon("quickActions")} (⌘K)</span>
       </Button>

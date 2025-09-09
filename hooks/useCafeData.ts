@@ -1,8 +1,8 @@
 import { cafeRepository } from "@/lib/repositories";
-import { useQueryRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 
-export function useCafeData(cafeId: number) {
+const useCafeData = (cafeId: number) => {
   const { isLoading, data } = useQueryRequest({
     queryFn: async () => {
       const cafe = await cafeRepository.getById(cafeId);
@@ -12,4 +12,6 @@ export function useCafeData(cafeId: number) {
   });
 
   return { cafeSlug: data?.slug as string, isLoading, data };
-}
+};
+
+export default useCafeData;

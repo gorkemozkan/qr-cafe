@@ -4,7 +4,7 @@ import { Tables } from "@/types/db";
 import QueryKeys from "@/lib/query";
 import { Badge } from "@/components/ui/badge";
 import DateView from "@/components/ui/date-view";
-import { useRequest } from "@/hooks/use-request";
+import { useRequest } from "@/hooks/useRequest";
 import { FC, useState, useCallback } from "react";
 import DataTable from "@/components/ui/data-table";
 import { productRepository } from "@/lib/repositories";

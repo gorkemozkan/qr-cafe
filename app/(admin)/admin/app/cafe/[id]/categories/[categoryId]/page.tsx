@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import QueryKeys from "@/lib/query";
 import PageTitle from "@/components/PageTitle";
-import { useQueryRequest } from "@/hooks/use-request";
+import { useQueryRequest } from "@/hooks/useRequest";
 import { categoryRepository } from "@/lib/repositories";
 import ProductList from "@/components/product/ProductList";
 import CategoryEditModal from "@/components/category/CategoryEditModal";
