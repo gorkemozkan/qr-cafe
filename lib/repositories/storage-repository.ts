@@ -58,10 +58,7 @@ export class StorageRepository {
     }
   }
 
-  async deleteFile(
-    filePath: string,
-    bucketName: string,
-  ): Promise<{ success: true; data: undefined } | { success: false; error: StorageError }> {
+  async deleteFile(filePath: string, bucketName: string): Promise<{ success: true; data: undefined } | { success: false; error: StorageError }> {
     try {
       const response = await fetch(`${this.baseUrl}/delete`, {
         method: "DELETE",

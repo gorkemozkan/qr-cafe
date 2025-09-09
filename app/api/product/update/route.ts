@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { verifyCsrfToken } from "@/lib/security";
 import { http } from "@/lib/http";
+import { verifyCsrfToken } from "@/lib/security";
+import { createClient } from "@/lib/supabase/server";
 
 export async function PUT(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();

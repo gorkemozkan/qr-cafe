@@ -1,18 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Coffee, Command, FolderOpen, Globe, Home, LogOut, Monitor, Moon, Package, Search, Sun, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
-import { Home, Coffee, Package, FolderOpen, User, LogOut, Sun, Moon, Monitor, Globe, Search, Command } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { useRequest } from "@/hooks/useRequest";
 import { authRepository } from "@/lib/repositories/auth-repository";
-import { useTranslations } from "next-intl";
 
 // Helper function to set locale cookie safely
 const setLocaleCookie = (locale: string) => {
   const cookieValue = encodeURIComponent(locale);
+  // biome-ignore lint/suspicious/noDocumentCookie: Direct cookie usage is appropriate for locale switching with proper encoding
   document.cookie = `locale=${cookieValue}; path=/; max-age=31536000; samesite=lax`;
 };
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { FC } from "react";
+import { ArrowRight, Coffee, QrCode, Smartphone, Sparkles } from "lucide-react";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { FC } from "react";
 import FancyBackground from "@/components/landing/FancyBackground";
-import { QrCode, Sparkles, ArrowRight, Coffee, Smartphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Hero: FC = () => {
   const t = useTranslations("landing.hero");
@@ -23,14 +23,9 @@ const Hero: FC = () => {
             <span className="text-sm font-medium text-orange-700 dark:text-orange-300">{t("badge")}</span>
           </div>
           <div className="mb-8 animate-fade-in-up">
-            <h1
-              id="hero-heading"
-              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3"
-            >
+            <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3">
               <span className="inline-block">
-                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">
-                  {t("title")}
-                </span>
+                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">{t("title")}</span>
               </span>
               <br />
               <span className="inline-block">{t("subtitle")}</span>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { verifyCsrfToken } from "@/lib/security";
 import { http } from "@/lib/http";
+import { verifyCsrfToken } from "@/lib/security";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -21,12 +21,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: product, error: fetchError } = await supabase
-      .from("products")
-      .select("*")
-      .eq("id", productId)
-      .eq("user_id", user.id)
-      .single();
+    const { data: product, error: fetchError } = await supabase.from("products").select("*").eq("id", productId).eq("user_id", user.id).single();
 
     if (fetchError) {
       return NextResponse.json({ error: "Failed to fetch product" }, { status: http.INTERNAL_SERVER_ERROR.status });
@@ -45,10 +40,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();

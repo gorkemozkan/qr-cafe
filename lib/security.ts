@@ -3,25 +3,23 @@ import { BUCKET_NAMES } from "../config";
 
 export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
-
   const referer = request.headers.get("referer");
-
   const host = request.headers.get("host");
+
+  if (process.env.NODE_ENV === "development") {
+    return true;
+  }
 
   if (origin) {
     const allowedOrigins = [`https://${host}`, `http://${host}`];
-
     return allowedOrigins.includes(origin);
   }
 
   if (referer) {
     try {
       const refererUrl = new URL(referer);
-
       const allowedOrigins = [`https://${host}`, `http://${host}`];
-
       const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
-
       return allowedOrigins.includes(refererOrigin);
     } catch {
       return false;

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { cookies } from "next/headers";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeContext";
-import { Toaster } from "@/components/ui/sonner";
-import QueryProvider from "@/components/providers/QueryProvider";
 import { type FC, type ReactNode } from "react";
+import QueryProvider from "@/components/providers/QueryProvider";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { defaultLocale } from "@/i18n";
 import { nextPublicBaseUrl } from "@/lib/env";
 

@@ -1,10 +1,10 @@
+import { Metadata, NextPage } from "next";
 import Script from "next/script";
-import { NextPage, Metadata } from "next";
-import Hero from "@/components/landing/Hero";
+import CTASection from "@/components/landing/CTASection";
+import Features from "@/components/landing/Features";
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
-import Features from "@/components/landing/Features";
-import CTASection from "@/components/landing/CTASection";
+import Hero from "@/components/landing/Hero";
 
 export const metadata: Metadata = {
   title: "QR Cafe - Transform Your Cafe with Smart QR Menus",

@@ -1,21 +1,21 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Tables } from "@/types/db";
-import { productSchema, type ProductSchema as ProductSchemaType } from "@/lib/schema";
+import InputErrorMessage from "@/components/InputErrorMessage";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import SubmitButton from "@/components/SubmitButton";
 import { Button } from "@/components/ui/button";
+import FilePicker from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { storageRepository } from "@/lib/repositories/storage-repository";
-import FilePicker from "@/components/ui/file-picker";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { Textarea } from "@/components/ui/textarea";
 import { BUCKET_NAMES } from "@/config";
-import InputErrorMessage from "@/components/InputErrorMessage";
-import SubmitButton from "@/components/SubmitButton";
+import { storageRepository } from "@/lib/repositories/storage-repository";
+import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
+import { Tables } from "@/types/db";
 
 interface Props {
   mode: "create" | "edit";

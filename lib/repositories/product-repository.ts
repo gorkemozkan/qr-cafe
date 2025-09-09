@@ -1,5 +1,5 @@
-import { type ProductSchema } from "@/lib/schema";
 import { BaseRepository } from "@/lib/repositories/base-repository";
+import { type ProductSchema } from "@/lib/schema";
 import { Tables } from "@/types/db";
 
 export class ProductRepository extends BaseRepository {

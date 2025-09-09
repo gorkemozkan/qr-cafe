@@ -1,5 +1,5 @@
-import { formatPrice } from "@/lib/format";
 import { FC } from "react";
+import { formatPrice } from "@/lib/format";
 
 interface PublicProduct {
   id: number;

@@ -1,8 +1,8 @@
 "use client";
 
+import { Turnstile } from "@marsidev/react-turnstile";
 import { FC, useEffect } from "react";
 import { isDevelopment } from "@/lib/env";
-import { Turnstile } from "@marsidev/react-turnstile";
 
 interface CaptchaProps {
   onVerify: (token: string) => void;

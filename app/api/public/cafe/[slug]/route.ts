@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-import { publicRateLimiter } from "@/lib/rate-limiter";
 import { http } from "@/lib/http";
+import { publicRateLimiter } from "@/lib/rate-limiter";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {

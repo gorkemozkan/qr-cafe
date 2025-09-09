@@ -1,25 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema, type ProductSchema as ProductSchemaType } from "@/lib/schema";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import FormSheet from "@/components/FormSheet";
-
-import CategoryListDropdown from "@/components/category/CategoryListDropdown";
-import { productRepository } from "@/lib/repositories/product-repository";
-import { storageRepository } from "@/lib/repositories/storage-repository";
-import FilePicker from "@/components/ui/file-picker";
-import { BUCKET_NAMES } from "@/config";
-import { Tables } from "@/types/db";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CafeListDropdown from "@/components/cafe/CafeListDropdown";
-import SubmitButton from "@/components/SubmitButton";
+import CategoryListDropdown from "@/components/category/CategoryListDropdown";
+import FormSheet from "@/components/FormSheet";
 import InputErrorMessage from "@/components/InputErrorMessage";
+import SubmitButton from "@/components/SubmitButton";
+import FilePicker from "@/components/ui/file-picker";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { BUCKET_NAMES } from "@/config";
+import { productRepository } from "@/lib/repositories/product-repository";
+import { storageRepository } from "@/lib/repositories/storage-repository";
+import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
+import { Tables } from "@/types/db";
 
 interface QuickProductCreateSheetProps {
   open: boolean;
@@ -27,7 +26,7 @@ interface QuickProductCreateSheetProps {
 }
 
 const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheetProps) => {
-  const [cafes, setCafes] = useState<Tables<"cafes">[]>([]);
+  const [cafes, _setCafes] = useState<Tables<"cafes">[]>([]);
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);

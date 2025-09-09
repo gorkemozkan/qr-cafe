@@ -1,20 +1,21 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import SkipLink from "@/components/auth/SkipLink";
+import BackButton from "@/components/BackButton";
+import Captcha from "@/components/Captcha";
+import InputErrorMessage from "@/components/InputErrorMessage";
+import SubmitButton from "@/components/SubmitButton";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Captcha from "@/components/Captcha";
 import { useRequest } from "@/hooks/useRequest";
-import SkipLink from "@/components/auth/SkipLink";
 import { authRepository } from "@/lib/repositories/auth-repository";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginSchema } from "@/lib/schema";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import InputErrorMessage from "@/components/InputErrorMessage";
-import SubmitButton from "../SubmitButton";
-import BackButton from "../BackButton";
+import { type LoginSchema, loginSchema } from "@/lib/schema";
 
 const defaultValues: LoginSchema = {
   email: "",

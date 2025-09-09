@@ -1,11 +1,11 @@
 "use client";
 
-import { FC } from "react";
-import Link from "next/link";
 import { QrCode } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
-import ThemeToggle from "@/components/ThemeToggle";
+import { FC } from "react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Footer: FC = () => {
   const t = useTranslations("landing.footer");

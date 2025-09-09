@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { http } from "@/lib/http";
 import { categorySchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
-import { http } from "@/lib/http";
+import { createClient } from "@/lib/supabase/server";
 
 export async function PUT(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     const supabase = await createClient();
@@ -32,10 +29,7 @@ export async function PUT(request: NextRequest) {
 
     const validationResult = categorySchema.partial().safeParse(updateData);
     if (!validationResult.success) {
-      return NextResponse.json(
-        { error: "Invalid data", details: validationResult.error.format() },
-        { status: http.BAD_REQUEST.status },
-      );
+      return NextResponse.json({ error: "Invalid data", details: validationResult.error.format() }, { status: http.BAD_REQUEST.status });
     }
 
     // Process the validated data to ensure proper types

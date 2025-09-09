@@ -1,23 +1,17 @@
+import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { authRateLimiter } from "@/lib/rate-limiter";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { authRateLimiter } from "@/lib/rate-limiter";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json(
-        { error: http.INVALID_REQUEST_ORIGIN.message, success: false },
-        { status: http.INVALID_REQUEST_ORIGIN.status },
-      );
+      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message, success: false }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     if (!authRateLimiter.check(request).allowed) {
-      return NextResponse.json(
-        { error: http.TOO_MANY_REQUESTS.message, success: false },
-        { status: http.TOO_MANY_REQUESTS.status },
-      );
+      return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
     }
 
     const supabase = await createClient();
@@ -29,10 +23,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return NextResponse.json(
-        { error: http.UNAUTHORIZED.message, success: false },
-        { status: http.UNAUTHORIZED.status },
-      );
+      return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
     }
 
     // Fetch all user data with error handling
@@ -56,10 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       productsData = productsResult.data || [];
     } catch (queryError) {
       console.error("Database query error:", queryError);
-      return NextResponse.json(
-        { error: "Failed to retrieve user data", success: false },
-        { status: http.INTERNAL_SERVER_ERROR.status },
-      );
+      return NextResponse.json({ error: "Failed to retrieve user data", success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
     // Structure the exported data
@@ -87,9 +75,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     console.error("GDPR data export error:", error);
-    return NextResponse.json(
-      { error: http.INTERNAL_SERVER_ERROR.message, success: false },
-      { status: http.INTERNAL_SERVER_ERROR.status },
-    );
+    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }

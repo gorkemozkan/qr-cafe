@@ -1,17 +1,16 @@
 "use client";
 
-import { FC, useEffect, useState, useRef, useCallback } from "react";
-import { Download, QrCode, MessageCircle, ExternalLink, Copy } from "lucide-react";
+import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import CopyButton from "@/components/CopyButton";
-import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu";
-import Image from "next/image";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-
+import CopyButton from "@/components/CopyButton";
 import ExternalLinkButton from "@/components/ExternalLinkButton";
+import { Button } from "@/components/ui/button";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Props {
   open: boolean;
@@ -156,7 +155,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

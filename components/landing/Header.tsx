@@ -1,13 +1,13 @@
 "use client";
 
-import { FC } from "react";
-import NextLink from "next/link";
 import { QrCode } from "lucide-react";
+import NextLink from "next/link";
 import { useTranslations } from "next-intl";
-import { scrollToSection } from "@/lib/dom";
-import { Button } from "@/components/ui/button";
+import { FC } from "react";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import { scrollToSection } from "@/lib/dom";
 
 const Header: FC = () => {
   const t = useTranslations("navigation");

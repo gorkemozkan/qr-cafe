@@ -1,5 +1,5 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 interface UseRequestOptions<TData, TVariables> {
   mutationFn: (variables: TVariables) => Promise<TData>;

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import { createCSP, commonHeaders, productionOnlyHeaders } from "./lib/security";
-import { supabaseConfig, isNextDevelopment, nextEnvironment, isNextProduction } from "./lib/env";
+import { isNextDevelopment, isNextProduction, nextEnvironment, supabaseConfig } from "./lib/env";
+import { commonHeaders, createCSP, productionOnlyHeaders } from "./lib/security";
 
 const withNextIntl = createNextIntlPlugin("./i18n.ts");
 

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { verifyCsrfToken } from "@/lib/security";
-import { uploadRateLimiter } from "@/lib/rate-limiter";
 import { http } from "@/lib/http";
+import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { verifyCsrfToken } from "@/lib/security";
+import { createClient } from "@/lib/supabase/server";
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -11,10 +11,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json(
-        { error: "Too many delete attempts. Please try again later." },
-        { status: http.TOO_MANY_REQUESTS.status },
-      );
+      return NextResponse.json({ error: "Too many delete attempts. Please try again later." }, { status: http.TOO_MANY_REQUESTS.status });
     }
 
     const supabase = await createClient();

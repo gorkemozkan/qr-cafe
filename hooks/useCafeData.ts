@@ -1,6 +1,6 @@
-import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { useQueryRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
 
 const useCafeData = (cafeId: number) => {
   const { isLoading, data } = useQueryRequest({
