@@ -12,7 +12,18 @@ const createCaptchaTokenSchema = () => {
 export const loginSchema = z
   .object({
     email: z.email("Please enter a valid email address").min(1).max(254),
-    password: z.string().min(6, "Password must be at least 6 characters long").max(128),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters long")
+      .max(128)
+      .refine((data) => {
+        try {
+          sanitizeXSS(data);
+          return true;
+        } catch {
+          return false;
+        }
+      }),
     captchaToken: createCaptchaTokenSchema(),
   })
   .refine(
