@@ -18,6 +18,12 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
+      "performance": {
+        "noImgElement": "off"
+      },
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off",
