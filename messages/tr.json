@@ -56,7 +56,9 @@
     "preferences": "Tercihler",
     "settings": "Ayarlar",
     "loadingCafes": "Kafeler yükleniyor...",
-    "deleting": "Siliniyor..."
+    "deleting": "Siliniyor...",
+    "copiedToClipboard": "Panoya kopyalandı!",
+    "failedToCopyToClipboard": "Panoya kopyalanamadı"
   },
   "navigation": {
     "signIn": "Giriş Yap",
@@ -539,7 +541,10 @@
       "exportingButton": "Dışa aktarılıyor...",
       "successMessage": "Veri dışa aktarma başarıyla tamamlandı",
       "errorMessage": "Veri dışa aktarılamadı. Lütfen tekrar deneyin.",
-      "failedToExport": "Veri dışa aktarılamadı"
+      "failedToExport": "Veri dışa aktarılamadı",
+      "dialogTitle": "Verilerinizi Dışa Aktarın",
+      "dialogDescription": "Tüm kişisel verilerinizin tam bir kopyasını indirmek üzeresiniz. Bu, hesap bilgileriniz, kafeleriniz, kategorileriniz ve ürünlerinizi içerir. Dosya JSON formatında indirilecektir.",
+      "downloadButton": "Verileri İndir"
     },
     "delete": {
       "title": "Verilerinizi Silin",
@@ -549,13 +554,26 @@
       "successMessage": "Verileriniz kalıcı olarak silindi",
       "errorMessage": "Veriler silinemedi. Lütfen tekrar deneyin.",
       "failedToDelete": "Veriler silinemedi",
-      "warningMessage": "Bu işlem tüm kafeleriniz, kategorileriniz, ürünleriniz ve hesap verilerinizi kalıcı olarak silecektir. Oturumunuz kapatılacak ve hesabınıza artık erişemeyeceksiniz."
+      "warningMessage": "Bu işlem tüm kafeleriniz, kategorileriniz, ürünleriniz ve hesap verilerinizi kalıcı olarak silecektir. Oturumunuz kapatılacak ve hesabınıza artık erişemeyeceksiniz.",
+      "dialogTitle": "Tüm Verileri Sil",
+      "dialogDescription": "Bu işlem tüm verilerinizi kalıcı olarak silecektir. Bu geri alınamaz.",
+      "whatWillBeDeleted": "Ne silinecek:",
+      "deletedItems": {
+        "cafes": "Tüm kafeleriniz ve ayarları",
+        "categories": "Tüm kategoriler ve menü organizasyonu",
+        "products": "Tüm ürünler ve menü öğeleri",
+        "account": "Hesabınız ve profil verileriniz"
+      },
+      "confirmationText": "Bu işlemin kalıcı olduğunu ve geri alınamayacağını anlıyorum"
     },
     "dataTypes": {
       "userAccount": "Kullanıcı Hesabı",
       "cafes": "Kafeler",
       "categories": "Kategoriler",
       "products": "Ürünler"
+    },
+    "buttons": {
+      "cancel": "İptal"
     }
   }
 }

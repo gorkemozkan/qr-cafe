@@ -33,7 +33,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Invalid data", details: validationResult.error.format() }, { status: http.BAD_REQUEST.status });
     }
 
-    // Process the validated data to ensure proper types
     const processedData = {
       ...validationResult.data,
       sort_order:

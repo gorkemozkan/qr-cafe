@@ -16,7 +16,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const supabase = await createClient();
 
-    // Get authenticated user
     const {
       data: { user },
       error: userError,
@@ -29,45 +28,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.json();
     const { confirm_deletion } = body;
 
-    // Require explicit confirmation
     if (!confirm_deletion || confirm_deletion !== true) {
       return NextResponse.json({ error: "Deletion must be explicitly confirmed", success: false }, { status: http.BAD_REQUEST.status });
     }
 
-    // Start a transaction-like approach (Supabase doesn't support transactions across tables)
-    // We'll delete in the correct order: products -> categories -> cafes
-
     try {
-      // 1. Delete all products for this user
       const { error: productsError } = await supabase.from("products").delete().eq("user_id", user.id);
 
       if (productsError) {
         throw new Error(`Failed to delete products: ${productsError.message}`);
       }
 
-      // 2. Delete all categories for this user
       const { error: categoriesError } = await supabase.from("categories").delete().eq("user_id", user.id);
 
       if (categoriesError) {
         throw new Error(`Failed to delete categories: ${categoriesError.message}`);
       }
 
-      // 3. Delete all cafes for this user
       const { error: cafesError } = await supabase.from("cafes").delete().eq("user_id", user.id);
 
       if (cafesError) {
         throw new Error(`Failed to delete cafes: ${cafesError.message}`);
       }
 
-      // 4. Sign out the user (account deletion should be handled by Supabase policies or admin)
-      // Note: For security reasons, we don't automatically delete the auth account
-      // This should be handled manually by administrators or through Supabase dashboard
-      const { error: signOutError } = await supabase.auth.signOut();
-
-      if (signOutError) {
-        console.warn("Failed to sign out user:", signOutError);
-        // This is not critical as data is already deleted
-      }
+      await supabase.auth.signOut();
 
       return NextResponse.json(
         {
@@ -77,8 +61,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         },
         { status: http.SUCCESS.status },
       );
-    } catch (deletionError) {
-      console.error("Data deletion error:", deletionError);
+    } catch (_error) {
       return NextResponse.json({ error: "Failed to delete user data", success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
   } catch (error) {

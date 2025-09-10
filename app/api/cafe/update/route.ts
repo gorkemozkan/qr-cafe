@@ -83,10 +83,10 @@ export async function PUT(request: NextRequest) {
 
     invalidateUserCafesCache(user.id);
 
-    // Invalidate public cafe cache for both old and new slugs
     if (existingCafe.slug !== finalSlug) {
       invalidatePublicCafeCache(existingCafe.slug);
     }
+
     invalidatePublicCafeCache(finalSlug);
 
     return NextResponse.json(data, { status: 200 });

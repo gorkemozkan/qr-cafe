@@ -56,7 +56,9 @@
     "preferences": "Preferences",
     "settings": "Settings",
     "loadingCafes": "Loading cafes...",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "copiedToClipboard": "Copied to clipboard!",
+    "failedToCopyToClipboard": "Failed to copy to clipboard"
   },
   "navigation": {
     "signIn": "Sign In",
@@ -531,7 +533,10 @@
       "exportingButton": "Exporting...",
       "successMessage": "Data export completed successfully",
       "errorMessage": "Failed to export data. Please try again.",
-      "failedToExport": "Failed to export data"
+      "failedToExport": "Failed to export data",
+      "dialogTitle": "Export Your Data",
+      "dialogDescription": "You are about to download a complete copy of all your personal data. This includes your account information, cafes, categories, and products. The file will be downloaded in JSON format.",
+      "downloadButton": "Download Data"
     },
     "delete": {
       "title": "Delete Your Data",
@@ -541,13 +546,26 @@
       "successMessage": "Your data has been permanently deleted",
       "errorMessage": "Failed to delete data. Please try again.",
       "failedToDelete": "Failed to delete data",
-      "warningMessage": "This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your account anymore."
+      "warningMessage": "This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your account anymore.",
+      "dialogTitle": "Delete All Data",
+      "dialogDescription": "This action will permanently delete all your data. This cannot be undone.",
+      "whatWillBeDeleted": "What will be deleted:",
+      "deletedItems": {
+        "cafes": "All your cafes and their settings",
+        "categories": "All categories and menu organization",
+        "products": "All products and menu items",
+        "account": "Your account and profile data"
+      },
+      "confirmationText": "I understand that this action is permanent and cannot be undone"
     },
     "dataTypes": {
       "userAccount": "User Account",
       "cafes": "Cafes",
       "categories": "Categories",
       "products": "Products"
+    },
+    "buttons": {
+      "cancel": "Cancel"
     }
   }
 }
