@@ -16,25 +16,23 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         },
         {
           status: http.TOO_MANY_REQUESTS.status,
-          headers: {
-            "Retry-After": Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
-            "X-RateLimit-Remaining": rateLimitResult.remainingRequests.toString(),
-          },
         },
       );
     }
 
-    const supabase = await createClient();
-
-    const slug = (await params).slug;
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json({ error: "Slug is required" }, { status: http.BAD_REQUEST.status });
     }
 
+    const supabase = await createClient();
+
     const cacheKey = getCacheKeys.publicCafe(slug);
+
     try {
       const cachedData = await redis.get(cacheKey);
+
       if (cachedData && typeof cachedData === "string") {
         return NextResponse.json(JSON.parse(cachedData));
       }
@@ -53,35 +51,43 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
     }
 
-    const { data: categories, error: categoriesError } = await supabase
-      .from("categories")
-      .select("id, name, description, sort_order, image_url")
-      .eq("cafe_id", cafe.id)
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: true });
+    const [categoriesResult, productsResult] = await Promise.all([
+      supabase
+        .from("categories")
+        .select("id, name, description, sort_order, image_url")
+        .eq("cafe_id", cafe.id)
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("products")
+        .select("id, name, description, price, image_url, is_available, category_id")
+        .eq("cafe_id", cafe.id)
+        .eq("is_available", true)
+        .order("created_at", { ascending: true }),
+    ]);
 
-    if (categoriesError) {
+    if (categoriesResult.error) {
       return NextResponse.json({ error: "Failed to fetch categories" }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
-    const categoriesWithProducts = await Promise.all(
-      categories.map(async (category) => {
-        const { data: products, error: productsError } = await supabase
-          .from("products")
-          .select("id, name, description, price, image_url, is_available")
-          .eq("category_id", category.id)
-          .eq("cafe_id", cafe.id)
-          .eq("is_available", true)
-          .order("created_at", { ascending: true });
+    if (productsResult.error) {
+      return NextResponse.json({ error: "Failed to fetch products" }, { status: http.INTERNAL_SERVER_ERROR.status });
+    }
 
-        if (productsError) {
-          return { ...category, products: [] };
-        }
-
-        return { ...category, products: products || [] };
-      }),
+    const productsByCategory = (productsResult.data || []).reduce(
+      (acc, { category_id, ...product }) => {
+        if (!acc[category_id]) acc[category_id] = [];
+        acc[category_id].push(product);
+        return acc;
+      },
+      {} as Record<string, any[]>,
     );
+
+    const categoriesWithProducts = (categoriesResult.data || []).map((category) => ({
+      ...category,
+      products: productsByCategory[category.id] || [],
+    }));
 
     const publicCafeData = {
       cafe: {

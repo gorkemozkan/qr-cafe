@@ -14,20 +14,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: payloadValidation.error, success: false }, { status: http.PAYLOAD_TOO_LARGE.status });
     }
 
-    let body: unknown;
-
-    try {
-      body = await request.json();
-    } catch (_error) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("request body"), success: false }, { status: http.BAD_REQUEST.status });
-    }
-
     if (!verifyCsrfToken(request)) {
       return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message, success: false }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
     if (!authRateLimiter.check(request).allowed) {
       return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
+    }
+
+    let body: unknown;
+
+    try {
+      body = await request.json();
+    } catch (_error) {
+      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("request body"), success: false }, { status: http.BAD_REQUEST.status });
     }
 
     const validationResult = loginSchema.safeParse(body);
