@@ -15,6 +15,11 @@ import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { CafeSchema } from "@/lib/schema";
 import { Tables } from "@/types/db";
 
+interface CreateMutationPayload {
+  data: CafeSchema;
+  logoFile?: File;
+}
+
 const CafeCreateSheet: FC = () => {
   //#region Hooks
 
@@ -26,26 +31,32 @@ const CafeCreateSheet: FC = () => {
 
   const [open, setOpen] = useState(false);
 
+  const formRef = useRef<CafeFormRef>(null);
+
   const [showQRDialog, setShowQRDialog] = useState(false);
 
-  const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const formRef = useRef<CafeFormRef>(null);
+  const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
 
   //#endregion
 
   const createCafeMutation = useRequest({
-    mutationFn: async ({ data, logoFile }: { data: CafeSchema; logoFile?: File }) => {
-      let cafe = await cafeRepository.create(data);
+    mutationFn: async (payload: CreateMutationPayload) => {
+      let cafe = await cafeRepository.create(payload.data);
 
-      if (logoFile) {
+      if (payload.logoFile) {
+        setIsUploading(true);
+
         const { uploadCafeLogo } = await import("@/lib/supabase/storage");
 
-        const uploadResult = await uploadCafeLogo(logoFile, cafe.slug);
+        const uploadResult = await uploadCafeLogo(payload.logoFile, cafe.slug);
 
         if (uploadResult.success) {
-          cafe = await cafeRepository.update(cafe.id, { ...data, logo_url: uploadResult.data.url });
+          cafe = await cafeRepository.update(cafe.id, { ...payload.data, logo_url: uploadResult.data.url });
         }
+
+        setIsUploading(false);
       }
 
       return cafe;
@@ -65,33 +76,33 @@ const CafeCreateSheet: FC = () => {
   return (
     <>
       <TooltipButton onClick={() => setOpen(true)} tooltip={t("create.tooltip")}>
-        <Button variant="outline">
+        <Button size={"lg"} variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
       </TooltipButton>
       {open && (
         <FormSheet
-          footer={
-            <SubmitButton
-              onClick={() => formRef.current?.submitForm()}
-              disabled={createCafeMutation.isLoading}
-              isLoading={createCafeMutation.isLoading}
-              text={t("create.button")}
-              loadingText={t("create.loadingButton")}
-            />
-          }
+          onOpenChange={setOpen}
           title={t("create.title")}
           description={t("create.description")}
-          onOpenChange={setOpen}
+          footer={
+            <SubmitButton
+              text={t("create.button")}
+              loadingText={t("create.loadingButton")}
+              isLoading={createCafeMutation.isLoading}
+              onClick={() => formRef.current?.submitForm()}
+              disabled={createCafeMutation.isLoading || isUploading}
+            />
+          }
         >
           <CafeForm
             ref={formRef}
             mode="create"
+            onCancel={() => setOpen(false)}
+            isLoading={createCafeMutation.isLoading}
             onSubmit={async (data, logoFile) => {
               await createCafeMutation.execute({ data, logoFile });
             }}
-            onCancel={() => setOpen(false)}
-            isLoading={createCafeMutation.isLoading}
           />
         </FormSheet>
       )}

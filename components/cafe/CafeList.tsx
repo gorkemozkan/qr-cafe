@@ -29,6 +29,8 @@ const CafeList: FC = () => {
 
   const t = useTranslations("cafe");
 
+  const tCommon = useTranslations("common");
+
   //#endregion
 
   //#region States
@@ -201,8 +203,10 @@ const CafeList: FC = () => {
         title={t("delete.title")}
         description={t("delete.confirmMessage", { slug: cafeToDelete?.slug || "" })}
         confirmText={t("deleteCafe")}
+        confirmLoadingText={tCommon("deleting")}
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
+        cancelText={tCommon("cancel")}
       />
       {cafeForQR && (
         <QRPreviewDialog

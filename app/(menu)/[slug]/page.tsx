@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { publicMenuRepository, PublicMenuData } from "@/lib/repositories/public-menu-repository";
 import { nextPublicBaseUrl } from "@/lib/env";
+import Script from "next/script";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -43,11 +44,6 @@ function generateStructuredData(menu: PublicMenuData): string {
       })),
     },
     servesCuisine: "Various",
-    priceRange: "$$",
-    address: {
-      "@type": "PostalAddress",
-      addressCountry: "TR",
-    },
   });
 }
 
@@ -59,7 +55,7 @@ function generateSEOTitle(menu: PublicMenuData): string {
   const productCount = menu.categories.reduce((total, cat) => total + cat.products.length, 0);
 
   if (categoryCount === 0) {
-    return `${cafeName} - Menü`;
+    return `${cafeName} - Menu`;
   }
 
   const categoryNames = menu.categories
@@ -87,6 +83,7 @@ function generateSEODescription(menu: PublicMenuData): string {
   }
 
   const truncatedDesc = description.length > 120 ? description.substring(0, 120) + "..." : description;
+
   return `${truncatedDesc} | ${cafeName} Menu`;
 }
 
@@ -172,13 +169,9 @@ const Page: NextPage<Params> = async (props) => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: structuredData,
-        }}
-        suppressHydrationWarning
-      />
+      <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
+        {JSON.stringify(structuredData)}
+      </Script>
       <SimpleMenu menu={menu} />
     </>
   );

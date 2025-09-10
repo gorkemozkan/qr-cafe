@@ -95,7 +95,7 @@ const RefreshButton: FC<Props> = (props) => {
 
   return (
     <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
-      <Button variant="outline" disabled={props.loading || isBlocked} className="text-sm">
+      <Button size={"lg"} variant="outline" disabled={props.loading || isBlocked} className="text-sm">
         <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />{" "}
       </Button>
     </TooltipButton>

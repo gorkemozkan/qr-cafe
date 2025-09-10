@@ -7,6 +7,8 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import Spinner from "@/components/common/Spinner";
+import { Loader2 } from "lucide-react";
 
 interface FilePickerProps {
   id?: string;
@@ -18,6 +20,7 @@ interface FilePickerProps {
   onError?: (error: string) => void;
   className?: string;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 const FilePicker = ({
@@ -29,6 +32,7 @@ const FilePicker = ({
   onError,
   className,
   disabled = false,
+  loading = false,
 }: FilePickerProps) => {
   const tCommon = useTranslations("common");
 
@@ -118,14 +122,14 @@ const FilePicker = ({
           accept={accept}
           onChange={handleInputChange}
           style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: "1px", height: "1px" }}
-          disabled={disabled}
+          disabled={disabled || loading}
         />
 
         {!value ? (
           <div className="text-center">
             <div className="flex flex-col items-center space-y-2">
               <div className="rounded-full bg-muted p-3">
-                <Upload className="h-6 w-6 text-muted-foreground" />
+                {loading ? <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" /> : <Upload className="h-6 w-6 text-muted-foreground" />}
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium">{tCommon("clickToBrowseFiles")}</p>

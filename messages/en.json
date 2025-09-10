@@ -55,7 +55,8 @@
     "user": "User",
     "preferences": "Preferences",
     "settings": "Settings",
-    "loadingCafes": "Loading cafes..."
+    "loadingCafes": "Loading cafes...",
+    "deleting": "Deleting..."
   },
   "navigation": {
     "signIn": "Sign In",
