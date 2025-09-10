@@ -9,15 +9,27 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { defaultLocale } from "@/i18n";
 import { nextPublicBaseUrl } from "@/lib/env";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: {
     template: "%s | QR Cafe",
     default: "QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
   },
+  category: "Technology",
   description:
     "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions that enhance customer experience and streamline operations.",
-  keywords: ["QR menu", "digital menu", "cafe technology", "restaurant menu", "QR code", "cafe management", "contactless menu", "mobile menu"],
+  keywords: [
+    "QR menu",
+    "digital menu",
+    "cafe technology",
+    "restaurant menu",
+    "QR code",
+    "cafe management",
+    "contactless dining",
+    "mobile-first menu",
+    "restaurant digitization",
+  ],
   authors: [{ name: "QR Cafe Team" }],
   creator: "QR Cafe",
   publisher: "QR Cafe",
@@ -46,13 +58,39 @@ export const metadata: Metadata = {
   },
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "QR Cafe",
+  description: "Smart QR menu solutions for cafes and restaurants. Create interactive digital menus with QR codes.",
+  url: "/",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "developer@ozgorkem.com",
+  },
+  founder: {
+    "@type": "Person",
+    name: "QR Cafe Team",
+  },
+  industry: "Technology",
+  serviceArea: "Global",
+  offers: {
+    "@type": "Service",
+    name: "QR Menu Solutions",
+    description: "Digital menu creation and management for cafes and restaurants",
+  },
+};
+
 interface Props {
   children: ReactNode;
 }
 
 const RootLayout: FC<Props> = async (props) => {
   const cookieStore = await cookies();
+
   const locale = cookieStore.get("locale")?.value || defaultLocale;
+
   const messages = await getMessages();
 
   return (
@@ -65,11 +103,11 @@ const RootLayout: FC<Props> = async (props) => {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+        <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify(structuredData)}
+        </Script>
       </head>
-      <body className={` antialiased`}>
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
+      <body className="antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <QueryProvider>{props.children}</QueryProvider>

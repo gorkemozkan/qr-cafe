@@ -4,8 +4,6 @@ import { QrCode } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
-import ThemeToggle from "@/components/common/ThemeToggle";
 
 const Footer: FC = () => {
   const t = useTranslations("landing.footer");
@@ -52,10 +50,6 @@ const Footer: FC = () => {
           <p>
             &copy; {new Date().getFullYear()} {t("copyright")}
           </p>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSwitcher />
-          </div>
         </div>
       </div>
     </footer>
