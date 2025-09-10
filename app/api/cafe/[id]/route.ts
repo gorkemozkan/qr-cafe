@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { invalidateUserCafesCache } from "@/lib/redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { parseNumericId } from "@/lib/utils";
-import { invalidateUserCafesCache } from "@/lib/redis";
 
 interface Params {
   id: string;

@@ -1,8 +1,8 @@
 "use client";
 
-import { Alert } from "@/components/ui/alert";
-import { FC, useEffect } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { FC, useEffect } from "react";
+import { Alert } from "@/components/ui/alert";
 import { isDevelopment } from "@/lib/env";
 
 interface Props {

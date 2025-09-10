@@ -1,9 +1,9 @@
 import { Check, Copy } from "lucide-react";
 import { FC, ReactNode } from "react";
+import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { cn } from "@/lib/utils";
-import TooltipButton from "@/components/common/TooltipButton";
 
 interface Props {
   text: string;

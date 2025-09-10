@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import FancyBackground from "@/components/landing/FancyBackground";
+import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 
 interface Item {
   title: string;
