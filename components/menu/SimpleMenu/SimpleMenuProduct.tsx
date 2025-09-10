@@ -21,7 +21,6 @@ interface Props {
 }
 
 const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
-  console.log("Product", product);
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
