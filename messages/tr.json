@@ -56,7 +56,9 @@
     "preferences": "Tercihler",
     "settings": "Ayarlar",
     "loadingCafes": "Kafeler yükleniyor...",
-    "deleting": "Siliniyor..."
+    "deleting": "Siliniyor...",
+    "copiedToClipboard": "Panoya kopyalandı!",
+    "failedToCopyToClipboard": "Panoya kopyalanamadı"
   },
   "navigation": {
     "signIn": "Giriş Yap",

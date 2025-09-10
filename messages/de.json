@@ -56,7 +56,9 @@
     "preferences": "Einstellungen",
     "settings": "Einstellungen",
     "loadingCafes": "Cafés werden geladen...",
-    "deleting": "Löschen..."
+    "deleting": "Löschen...",
+    "copiedToClipboard": "In die Zwischenablage kopiert!",
+    "failedToCopyToClipboard": "In die Zwischenablage konnte nicht kopiert werden"
   },
   "navigation": {
     "signIn": "Anmelden",

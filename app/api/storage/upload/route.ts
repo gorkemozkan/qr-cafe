@@ -50,12 +50,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") }, { status: http.BAD_REQUEST.status });
     }
 
-    // Validate bucket name
     if (!validateBucketName(bucketName)) {
       return NextResponse.json({ error: errorMessages.INVALID_FORMAT("bucket name") }, { status: http.BAD_REQUEST.status });
     }
 
-    // Validate file type and security
     const fileValidation = validateFileType(file);
     if (!fileValidation.isValid) {
       return NextResponse.json({ error: fileValidation.error }, { status: http.BAD_REQUEST.status });
@@ -65,7 +63,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: errorMessages.FILE_TOO_LARGE("5MB") }, { status: http.BAD_REQUEST.status });
     }
 
-    // Only check ownership if not explicitly skipped (for new cafe creation)
     if (!skipOwnershipCheck) {
       const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
 

@@ -27,7 +27,6 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    // Ensure we include user_id in the update to satisfy RLS policy
     const updateDataWithUserId = {
       ...updateData,
       user_id: user.id,

@@ -56,7 +56,9 @@
     "preferences": "Preferences",
     "settings": "Settings",
     "loadingCafes": "Loading cafes...",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "copiedToClipboard": "Copied to clipboard!",
+    "failedToCopyToClipboard": "Failed to copy to clipboard"
   },
   "navigation": {
     "signIn": "Sign In",

@@ -19,7 +19,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const supabase = await createClient();
 
-    // Get authenticated user
     const {
       data: { user },
       error: userError,
@@ -29,9 +28,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
     }
 
-    // Fetch all user data with error handling
     let cafesData: any[] = [];
+
     let categoriesData: any[] = [];
+
     let productsData: any[] = [];
 
     try {
@@ -52,7 +52,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: errorMessages.DATABASE_ERROR, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
 
-    // Structure the exported data
     const exportData = {
       user: {
         id: user.id,
@@ -67,7 +66,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       gdpr_compliant: true,
     };
 
-    // Return as JSON with appropriate headers for download
     return new NextResponse(JSON.stringify(exportData, null, 2), {
       status: http.SUCCESS.status,
       headers: {

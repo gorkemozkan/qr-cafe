@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
 
     const cacheKey = getCacheKeys.cafes(user.id);
 
-    // Skip cache operations in development
     if (!isNextDevelopment) {
       try {
         const cachedCafes = await redis.get(cacheKey);
