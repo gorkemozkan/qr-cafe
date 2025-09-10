@@ -1,12 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
-import SubmitButton from "@/components/common/SubmitButton";
-import { Button } from "@/components/ui/button";
 import FilePicker from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +15,11 @@ import { BUCKET_NAMES } from "@/config";
 import { storageRepository } from "@/lib/repositories/storage-repository";
 import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
 import { Tables } from "@/types/db";
+
+export interface ProductFormRef {
+  submitForm: () => void;
+  cancelForm: () => void;
+}
 
 interface Props {
   mode: "create" | "edit";
@@ -27,10 +31,12 @@ interface Props {
   isLoading?: boolean;
 }
 
-const ProductForm: FC<Props> = (props) => {
+const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+  const t = useTranslations("product");
 
   const getDefaultValues = (): ProductSchemaType => {
     if (props.mode === "edit" && props.product) {
@@ -57,7 +63,7 @@ const ProductForm: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<ProductSchemaType>({
@@ -65,16 +71,15 @@ const ProductForm: FC<Props> = (props) => {
     defaultValues: getDefaultValues(),
   });
 
-  const isAvailable = watch("is_available");
-
-  const handleImageUpload = (file: File | null) => {
-    setImageFile(file);
-    setUploadError(null);
-  };
-
-  const handleImageError = (error: string) => {
-    setUploadError(error);
-  };
+  // Expose form methods via ref
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      handleSubmit(onSubmitForm)();
+    },
+    cancelForm: () => {
+      props.onCancel?.();
+    },
+  }));
 
   const onSubmitForm = async (data: ProductSchemaType) => {
     try {
@@ -87,7 +92,7 @@ const ProductForm: FC<Props> = (props) => {
         const uploadResult = await storageRepository.uploadFile(imageFile, props.cafeSlug, BUCKET_NAMES.PRODUCT_IMAGE);
 
         if (!uploadResult.success) {
-          const errorMessage = `Upload failed: ${uploadResult.error?.message || "Unknown error"}`;
+          const errorMessage = `${t("image.uploadFailed")}: ${uploadResult.error?.message || t("image.operationFailed")}`;
           setUploadError(errorMessage);
           return;
         }
@@ -100,27 +105,38 @@ const ProductForm: FC<Props> = (props) => {
         image_url: imageUrl,
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Operation failed";
+      const errorMessage = error instanceof Error ? error.message : t("image.operationFailed");
       setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
     }
   };
 
+  const isAvailable = watch("is_available");
+
+  const handleImageUpload = (file: File | null) => {
+    setImageFile(file);
+    setUploadError(null);
+  };
+
+  const handleImageError = (error: string) => {
+    setUploadError(error);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Product Name *</Label>
-        <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+        <Label htmlFor="name">{t("form.labels.name")} *</Label>
+        <Input id="name" {...register("name")} placeholder={t("form.placeholders.productName")} className={errors.name ? "border-red-500" : ""} />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("form.labels.description")}</Label>
         <Textarea
           id="description"
           {...register("description")}
-          placeholder="Describe your product..."
+          placeholder={t("form.placeholders.productDescription")}
           rows={3}
           className={errors.description ? "border-red-500" : ""}
         />
@@ -128,14 +144,14 @@ const ProductForm: FC<Props> = (props) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="price">Price</Label>
+        <Label htmlFor="price">{t("form.labels.price")}</Label>
         <Input
           id="price"
           type="number"
           step="0.01"
           min="0"
           {...register("price", { valueAsNumber: true })}
-          placeholder="0.00"
+          placeholder={t("form.placeholders.price")}
           className={errors.price ? "border-red-500" : ""}
         />
         <InputErrorMessage id="price-error">{errors.price?.message}</InputErrorMessage>
@@ -143,7 +159,7 @@ const ProductForm: FC<Props> = (props) => {
       <div className="space-y-2">
         <FilePicker
           id="image"
-          label="Product Image"
+          label={t("form.labels.image")}
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={imageFile}
@@ -156,47 +172,29 @@ const ProductForm: FC<Props> = (props) => {
           <div className="flex items-center space-x-2">
             <OptimizedImage
               src={props.product.image_url}
-              alt="Current product image"
+              alt={t("form.image.currentImageAlt")}
               width={48}
               height={48}
               className="h-12 w-12 rounded object-cover"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">Current image will be replaced if you select a new file</p>
+            <p className="text-sm text-muted-foreground">{t("form.image.currentImageNote")}</p>
           </div>
         )}
       </div>
 
       <div className="flex items-center space-x-2">
         <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-        <Label htmlFor="is_available">Available</Label>
+        <Label htmlFor="is_available">{t("form.labels.available")}</Label>
         <p className="text-xs text-muted-foreground ml-2">
-          {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
+          {isAvailable ? t("form.status.availableDescription") : t("form.status.unavailableDescription")}
         </p>
-      </div>
-      <div className="flex justify-end space-x-2 pt-4">
-        {props.onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={props.onCancel}
-            disabled={isSubmitting || isUploading || props.isLoading}
-            className="transition-all duration-200 hover:scale-105"
-          >
-            Cancel
-          </Button>
-        )}
-        <SubmitButton
-          onClick={handleSubmit(onSubmitForm)}
-          isLoading={isSubmitting || isUploading || props.isLoading || false}
-          text={props.mode === "create" ? "Create" : "Update"}
-          disabled={isSubmitting || isUploading || props.isLoading || false}
-          loadingText={props.mode === "create" ? "Creating..." : "Updating..."}
-        />
       </div>
     </form>
   );
-};
+});
+
+ProductForm.displayName = "ProductForm";
 
 export default ProductForm;

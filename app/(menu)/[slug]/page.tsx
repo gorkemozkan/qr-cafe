@@ -30,7 +30,7 @@ const Page: NextPage<Params> = async (props) => {
   }
 
   const menu = await publicMenuRepository.getMenuBySlug(slug);
-
+  console.log("Menu", menu);
   if (!menu) {
     notFound();
   }

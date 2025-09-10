@@ -1,7 +1,7 @@
 import { nextPublicBaseUrl } from "@/lib/env";
 import { BaseRepository } from "@/lib/repositories/base-repository";
 
-interface PublicProduct {
+export interface PublicProduct {
   id: number;
   name: string;
   description: string | null;
@@ -10,15 +10,16 @@ interface PublicProduct {
   is_available: boolean;
 }
 
-interface PublicCategory {
+export interface PublicCategory {
   id: number;
   name: string;
   description: string;
   sort_order: number | null;
+  image_url: string | null;
   products: PublicProduct[];
 }
 
-interface PublicCafe {
+export interface PublicCafe {
   id: number;
   name: string;
   description: string | null;

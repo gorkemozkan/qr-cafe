@@ -1,5 +1,10 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useState } from "react";
 import { formatPrice } from "@/lib/format";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface PublicProduct {
   id: number;
@@ -16,22 +21,55 @@ interface Props {
 }
 
 const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
+  console.log("Product", product);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const hasValidImage = product.image_url && !imageError;
+
   return (
     <div
       key={product.id}
-      className={`flex  justify-between py-2 border-b border-gray-200/50 dark:border-gray-200/50 last:border-b-0 ${!product.is_available ? "opacity-60" : ""}`}
+      className={`flex justify-between border-b py-6 border-gray-300/50 dark:border-gray-300/50 ${!product.is_available ? "opacity-60" : ""}`}
     >
       <div className="flex-1">
-        <div className={`flex items-center ${!product.is_available ? "text-muted-foreground line-through" : "text-[#8B1538] dark:text-[#A61E4D]"}`}>
-          <div className="flex justify-between items-center w-full">
-            <p className="font-semibold flex-shrink-0">{product.name}</p>
-            <div className="border-b border-dashed border-gray-200/50 dark:border-gray-200  w-full mx-12 py-1"></div>
-            {!!product.price && product.price > 0 && currency && <p className="flex-shrink-0 block">{formatPrice(product.price, currency)}</p>}
+        <div className={`flex items-center ${!product.is_available ? "text-muted-foreground line-through" : "text-gray-800 "}`}>
+          <div className="flex justify-between items-start w-full gap-4 ">
+            <div>
+              <p className="font-semibold flex-shrink-0">{product.name}</p>
+
+              {product.description && <p className="text-gray-500  text-xs mt-1 leading-relaxed font-normal italic">{product.description}</p>}
+              {!!product.price && product.price > 0 && currency && (
+                <p className="text-md w-max flex-shrink-0  text-gray-800 font-black mt-1">{formatPrice(product.price, currency)}</p>
+              )}
+            </div>
+
+            <div className="h-32 w-32 bg-gray-100 rounded-lg my-6 overflow-hidden relative flex-shrink-0">
+              {hasValidImage ? (
+                <>
+                  {!imageLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />}
+                  {product.image_url && (
+                    <Image
+                      src={product.image_url}
+                      alt={product.name}
+                      fill
+                      className={cn("object-cover rounded-lg transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
+                      onLoad={() => setImageLoaded(true)}
+                      onError={() => setImageError(true)}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority={false}
+                      quality={100}
+                    />
+                  )}
+                </>
+              ) : (
+                <div className="h-full w-full bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-[8px] text-center text-muted-foreground">Kategori Görseli Buraya Gelecek</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        {product.description && (
-          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 leading-relaxed font-normal italic">{product.description}</p>
-        )}
       </div>
     </div>
   );

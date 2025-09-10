@@ -1,14 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import FilePicker from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { BUCKET_NAMES } from "@/config";
+import { storageRepository } from "@/lib/repositories/storage-repository";
 import { CategorySchema, categorySchema } from "@/lib/schema";
 import { Tables } from "@/types/db";
 
@@ -19,6 +23,7 @@ export interface CategoryFormRef {
 
 interface Props {
   mode: "create" | "edit";
+  cafeSlug: string;
   category?: Tables<"categories">;
   onSubmit: (data: CategorySchema) => Promise<void>;
   onCancel?: () => void;
@@ -26,6 +31,10 @@ interface Props {
 }
 
 const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const t = useTranslations("category");
   const tCommon = useTranslations("common");
 
@@ -34,6 +43,7 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
       return {
         name: props.category.name,
         description: props.category.description,
+        image_url: props.category.image_url || "",
         is_active: props.category.is_active,
         sort_order: props.category.sort_order ?? "",
       };
@@ -42,6 +52,7 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
     return {
       name: "",
       description: "",
+      image_url: "",
       is_active: true,
       sort_order: "",
     };
@@ -60,6 +71,15 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
 
   const isActive = watch("is_active");
 
+  const handleImageUpload = (file: File | null) => {
+    setImageFile(file);
+    setUploadError(null);
+  };
+
+  const handleImageError = (error: string) => {
+    setUploadError(error);
+  };
+
   useImperativeHandle(ref, () => ({
     submitForm: () => {
       handleSubmit(onSubmitForm)();
@@ -70,11 +90,36 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
   }));
 
   const onSubmitForm = async (data: CategorySchema) => {
-    const processedData = {
-      ...data,
-      sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
-    };
-    await props.onSubmit(processedData);
+    try {
+      let imageUrl = data.image_url;
+
+      if (imageFile && props.cafeSlug) {
+        setIsUploading(true);
+        setUploadError(null);
+
+        const uploadResult = await storageRepository.uploadFile(imageFile, props.cafeSlug, BUCKET_NAMES.CATEGORY_IMAGE);
+
+        if (!uploadResult.success) {
+          const errorMessage = `${t("image.uploadFailed")}: ${uploadResult.error?.message || t("image.operationFailed")}`;
+          setUploadError(errorMessage);
+          return;
+        }
+
+        imageUrl = uploadResult.data.url;
+      }
+
+      const processedData = {
+        ...data,
+        image_url: imageUrl,
+        sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
+      };
+      await props.onSubmit(processedData);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : t("image.operationFailed");
+      setUploadError(errorMessage);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -100,6 +145,33 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
         <Input id="sort_order" type="number" placeholder="0" {...register("sort_order")} className={errors.sort_order ? "border-red-500" : ""} />
         <InputErrorMessage id="sort_order-error">{errors.sort_order?.message}</InputErrorMessage>
         <p className="text-xs text-muted-foreground">{tCommon("optional")}</p>
+      </div>
+      <div className="space-y-2">
+        <FilePicker
+          id="image"
+          label={t("form.labels.image")}
+          accept="image/*"
+          maxSize={5 * 1024 * 1024} // 5MB
+          value={imageFile}
+          onChange={handleImageUpload}
+          onError={handleImageError}
+          disabled={isUploading}
+        />
+        <InputErrorMessage id="upload-error">{uploadError}</InputErrorMessage>
+        {props.mode === "edit" && props.category?.image_url && !imageFile && (
+          <div className="flex items-center space-x-2">
+            <OptimizedImage
+              src={props.category.image_url}
+              alt={t("form.image.currentImageAlt")}
+              width={48}
+              height={48}
+              className="h-12 w-12 rounded object-cover"
+              fallbackSrc="/placeholder-logo.svg"
+              showSkeleton={false}
+            />
+            <p className="text-sm text-muted-foreground">{t("form.image.currentImageNote")}</p>
+          </div>
+        )}
       </div>
       <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />

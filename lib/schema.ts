@@ -99,6 +99,7 @@ export const cafeSchema = z.object({
 export const categorySchema = z.object({
   name: sanitaizedString("name").min(1, "Name is required").min(2, "Name must be at least 2 characters"),
   description: sanitaizedString("description").min(1, "Description is required"),
+  image_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
   is_active: z.boolean(),
   sort_order: z.union([z.string(), z.number().int().min(0)]).optional(),
 });

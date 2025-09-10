@@ -296,6 +296,7 @@
     },
     "table": {
       "headers": {
+        "image": "Image",
         "name": "Name",
         "sortOrder": "Sort Order",
         "status": "Status",
@@ -304,18 +305,26 @@
       },
       "status": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "noImage": "No Image"
       }
     },
     "form": {
       "labels": {
         "categoryName": "Category Name",
         "description": "Description",
-        "sortOrder": "Sort Order"
+        "sortOrder": "Sort Order",
+        "image": "Category Image"
       },
       "placeholders": {
         "categoryName": "Enter category name",
         "description": "Describe this category..."
+      },
+      "image": {
+        "currentImageAlt": "Current category image",
+        "currentImageNote": "Current image will be replaced if you select a new file",
+        "uploadFailed": "Upload failed",
+        "operationFailed": "Operation failed"
       },
       "status": {
         "active": "Active",
@@ -370,6 +379,22 @@
       "available": "Available",
       "category": "Category"
     },
+    "table": {
+      "headers": {
+        "image": "Image",
+        "name": "Name",
+        "description": "Description",
+        "price": "Price",
+        "status": "Status",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "status": {
+        "available": "Available",
+        "unavailable": "Unavailable",
+        "noImage": "No Image"
+      }
+    },
     "form": {
       "labels": {
         "cafe": "Cafe",
@@ -377,14 +402,48 @@
         "name": "Product Name",
         "description": "Description",
         "price": "Price",
-        "image": "Product Image"
+        "image": "Product Image",
+        "available": "Available"
+      },
+      "placeholders": {
+        "productName": "Enter product name",
+        "productDescription": "Describe your product...",
+        "price": "0.00"
       },
       "status": {
         "active": "Active",
         "inactive": "Inactive",
         "activeDescription": "Product is available and can be ordered",
-        "inactiveDescription": "Product is unavailable and cannot be ordered"
+        "inactiveDescription": "Product is unavailable and cannot be ordered",
+        "availableDescription": "Product is available for purchase",
+        "unavailableDescription": "Product is not available for purchase"
+      },
+      "image": {
+        "currentImageAlt": "Current product image",
+        "currentImageNote": "Current image will be replaced if you select a new file",
+        "uploadFailed": "Upload failed",
+        "operationFailed": "Operation failed"
       }
+    },
+    "create": {
+      "title": "Create New Product",
+      "description": "Fill in the details below to create a new product.",
+      "button": "Create Product",
+      "loadingButton": "Creating...",
+      "tooltip": "Create new product",
+      "successMessage": "Product created successfully!"
+    },
+    "edit": {
+      "title": "Edit Product",
+      "description": "Update the product details below.",
+      "button": "Update Product",
+      "loadingButton": "Updating...",
+      "successMessage": "Product updated successfully!"
+    },
+    "delete": {
+      "title": "Delete Product",
+      "confirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "successMessage": "Product deleted successfully!"
     },
     "messages": {
       "selectCafe": "Please select a cafe",

@@ -7,6 +7,7 @@ import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 import CategoryEditSheet from "@/components/category/CategoryEditModal";
 import DataTable from "@/components/common/DataTable";
 import DateView from "@/components/common/DateView";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
 import QuestionDialog from "@/components/common/QuestionDialog";
 import TableActions from "@/components/common/TableActions";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,30 @@ const CategoryList: FC<Props> = (props) => {
   //#endregion
 
   const columns = [
+    {
+      key: "image",
+      header: t("table.headers.image"),
+      cell: (_: any, row: Tables<"categories">) => (
+        <>
+          {row.image_url ? (
+            <OptimizedImage
+              src={row.image_url}
+              alt={`${row.name} image`}
+              width={40}
+              height={40}
+              className="rounded-md border border-border w-10 h-10 "
+              objectFit="cover"
+              fallbackSrc="/placeholder-logo.svg"
+              showSkeleton={true}
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
+              <span className="text-[8px] text-center text-muted-foreground">{t("table.status.noImage")}</span>
+            </div>
+          )}
+        </>
+      ),
+    },
     {
       key: "name",
       header: t("table.headers.name"),

@@ -70,6 +70,7 @@ export type Database = {
           created_at: string;
           description: string;
           id: number;
+          image_url: string | null;
           is_active: boolean;
           name: string;
           sort_order: number | null;
@@ -80,6 +81,7 @@ export type Database = {
           created_at?: string;
           description: string;
           id?: number;
+          image_url?: string | null;
           is_active?: boolean;
           name: string;
           sort_order?: number | null;
@@ -90,6 +92,7 @@ export type Database = {
           created_at?: string;
           description?: string;
           id?: number;
+          image_url?: string | null;
           is_active?: boolean;
           name?: string;
           sort_order?: number | null;

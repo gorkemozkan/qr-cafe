@@ -55,7 +55,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { data: categories, error: categoriesError } = await supabase
       .from("categories")
-      .select("id, name, description, sort_order")
+      .select("id, name, description, sort_order, image_url")
       .eq("cafe_id", cafe.id)
       .eq("is_active", true)
       .order("sort_order", { ascending: true })

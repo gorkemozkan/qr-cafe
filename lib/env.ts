@@ -19,6 +19,10 @@ export const getNextPublicBaseUrl = () => {
   if (isNextStaging) {
     return process.env.NEXT_PUBLIC_BASE_URL_STAGING;
   }
+
+  if (isNextDevelopment) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
 };
 
 export const getSupabaseEnvironment = () => {

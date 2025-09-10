@@ -96,7 +96,9 @@ export function OptimizedImage({
 
   const imageElement = (
     <div className="relative">
-      {showSkeleton && isLoading && <Skeleton className={cn("absolute inset-0", className)} style={{ width: width || 100, height: height || 100 }} />}
+      {showSkeleton && isLoading && (
+        <Skeleton className={cn("absolute inset-0", className)} style={fill ? undefined : { width: width || 100, height: height || 100 }} />
+      )}
 
       <Image
         src={currentSrc}
