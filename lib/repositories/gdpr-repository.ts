@@ -17,7 +17,7 @@ export interface UserExportData {
 export class GdprRepository extends BaseRepository {
   protected readonly baseUrl = "/api/gdpr";
 
-  async exportUserData(): Promise<UserExportData> {
+  async exportUserData() {
     return await this.get("/export");
   }
 

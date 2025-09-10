@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { publicRateLimiter } from "@/lib/rate-limiter";
+import { getCacheKeys, redis } from "@/lib/redis";
 import { createClient } from "@/lib/supabase/server";
-import { redis, getCacheKeys } from "@/lib/redis";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {

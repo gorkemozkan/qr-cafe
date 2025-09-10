@@ -3,7 +3,7 @@
 import { RefreshCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FC, useEffect, useState } from "react";
-import TooltipButton from "@/components/TooltipButton";
+import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,8 +12,6 @@ interface Props {
   refetch: () => void;
   maxAttempt: number;
 }
-
-// TODO: Refactor duplicates
 
 const RefreshButton: FC<Props> = (props) => {
   //#region Hooks

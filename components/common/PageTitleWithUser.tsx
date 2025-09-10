@@ -2,10 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import UserDropdown from "@/components/auth/UserDropdown";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import PageTitle from "@/components/PageTitle";
-import QuickActionsButton from "@/components/QuickActionsButton";
-import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import PageTitle from "@/components/common/PageTitle";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 const PageTitleWithUser = () => {
   const t = useTranslations();
@@ -16,7 +15,6 @@ const PageTitleWithUser = () => {
       title={`${t("dashboard.welcome")}`}
       actions={
         <div className="flex items-center gap-2">
-          <QuickActionsButton />
           <LanguageSwitcher />
           <ThemeToggle />
           <UserDropdown />

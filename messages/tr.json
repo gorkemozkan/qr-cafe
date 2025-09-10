@@ -359,7 +359,8 @@
     "dropdown": {
       "selectCafeFirst": "Önce bir kafe seçin",
       "loadingCategories": "Kategoriler yükleniyor...",
-      "createCategory": "Kategori Oluştur"
+      "createCategory": "Kategori Oluştur",
+      "selectCategory": "Kategori seçin"
     }
   },
   "product": {

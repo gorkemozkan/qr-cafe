@@ -1,50 +1,6 @@
 import { z } from "zod";
 import { isDevelopment } from "@/lib/env";
-
-const xssPatterns = [
-  /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-  /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-  /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
-  /<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi,
-  /<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi,
-  /<img\b[^<]*(?:(?!<\/img>)<[^<]*)*<\/img>/gi,
-  /javascript:/gi,
-  /vbscript:/gi,
-  /data:/gi,
-  /on\w+\s*=/gi,
-  /alert\s*\(/gi,
-  /eval\s*\(/gi,
-  /document\./gi,
-  /window\./gi,
-  /location\./gi,
-  /cookie/gi,
-  /%3C/gi,
-  /%3E/gi,
-  /<[^>]*>/g,
-];
-
-const containsXSS = (value: string): boolean => {
-  if (typeof value !== "string") return false;
-  return xssPatterns.some((pattern) => pattern.test(value));
-};
-
-const sanitizeXSS = (value: string) => {
-  if (typeof value !== "string") return value;
-
-  if (containsXSS(value)) {
-    throw new Error("Input contains potentially dangerous content");
-  }
-
-  const sanitized = value
-    .replace(/<[^>]*>/g, "")
-    .replace(/javascript:/gi, "")
-    .replace(/vbscript:/gi, "")
-    .replace(/data:/gi, "")
-    .replace(/on\w+\s*=/gi, "")
-    .trim();
-
-  return sanitized;
-};
+import { sanitizeXSS } from "@/lib/security";
 
 const createCaptchaTokenSchema = () => {
   if (isDevelopment) {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

@@ -1,13 +1,13 @@
 "use client";
 
 import { FC, useCallback, useState } from "react";
-import DataTable from "@/components/DataTable";
-import DateView from "@/components/DateView";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import DataTable from "@/components/common/DataTable";
+import DateView from "@/components/common/DateView";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import QuestionDialog from "@/components/common/QuestionDialog";
+import TableActions from "@/components/common/TableActions";
 import ProductCreateModal from "@/components/product/ProductCreateModal";
 import ProductEditModal from "@/components/product/ProductEditModal";
-import QuestionDialog from "@/components/QuestionDialog";
-import TableActions from "@/components/TableActions";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRequest } from "@/hooks/useRequest";

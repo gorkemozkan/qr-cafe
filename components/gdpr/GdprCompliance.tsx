@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { gdprRepository } from "@/lib/repositories/gdpr-repository";
-import PageTitle from "../PageTitle";
+import PageTitle from "../common/PageTitle";
 
 export function GdprCompliance() {
   const [isExporting, setIsExporting] = useState(false);

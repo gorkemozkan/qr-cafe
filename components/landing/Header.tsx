@@ -4,8 +4,8 @@ import { QrCode } from "lucide-react";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/dom";
 

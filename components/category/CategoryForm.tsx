@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
-import InputErrorMessage from "@/components/InputErrorMessage";
+import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";

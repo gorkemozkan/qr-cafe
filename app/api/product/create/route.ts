@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 import { productSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function POST(request: NextRequest) {
   try {

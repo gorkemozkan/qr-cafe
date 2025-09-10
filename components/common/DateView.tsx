@@ -23,7 +23,6 @@ const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTi
     return <span className={cn("inline-block", className)}>{t("invalid")}</span>;
   }
 
-  // Get the appropriate date-fns locale
   const getDateLocale = () => {
     switch (locale) {
       case "tr":

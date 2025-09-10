@@ -37,13 +37,16 @@ export function OptimizedImage({
   objectFit = "cover",
   clickable = false,
 }: OptimizedImageProps) {
-  // Check if src is valid (not empty string, null, or undefined)
   const isValidSrc = src && src.trim().length > 0;
+
   const initialSrc = isValidSrc ? src : fallbackSrc;
 
   const [isLoading, setIsLoading] = useState(!!initialSrc);
+
   const [hasError, setHasError] = useState(false);
+
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
+
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleLoad = () => {
@@ -96,7 +99,7 @@ export function OptimizedImage({
       {showSkeleton && isLoading && <Skeleton className={cn("absolute inset-0", className)} style={{ width: width || 100, height: height || 100 }} />}
 
       <Image
-        src={currentSrc} // We've already validated currentSrc is not empty
+        src={currentSrc}
         alt={alt}
         width={width}
         height={height}

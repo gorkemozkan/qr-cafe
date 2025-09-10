@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { getTranslations } from "next-intl/server";
 import CategoryList from "@/components/category/CategoryList";
-import PageTitle from "@/components/PageTitle";
+import PageTitle from "@/components/common/PageTitle";
 
 interface Props {
   params: Promise<{ id: string }>;

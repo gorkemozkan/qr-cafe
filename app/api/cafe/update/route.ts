@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { slugify } from "@/lib/format";
 import { http } from "@/lib/http";
+import { invalidatePublicCafeCache, invalidateUserCafesCache } from "@/lib/redis";
 import { cafeSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-import { invalidateUserCafesCache, invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {

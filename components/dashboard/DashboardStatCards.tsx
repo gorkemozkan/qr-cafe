@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import SectionCards from "@/components/SectionCards";
+import SectionCards from "@/components/common/SectionCards";
 import { useQueryRequest } from "@/hooks/useRequest";
 import { apiClient } from "@/lib/api-client";
 import QueryKeys from "@/lib/query";

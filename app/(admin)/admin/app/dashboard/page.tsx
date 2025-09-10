@@ -1,8 +1,8 @@
 import { Metadata, NextPage } from "next";
 import CafeList from "@/components/cafe/CafeList";
+import PageTitleWithUser from "@/components/common/PageTitleWithUser";
+import QuickCreateProduct from "@/components/common/QuickCreateProduct";
 import DashboardStatCards from "@/components/dashboard/DashboardStatCards";
-import PageTitleWithUser from "@/components/PageTitleWithUser";
-import QuickCreateProduct from "@/components/QuickCreateProduct";
 
 export const metadata: Metadata = {
   title: "Dashboard",
