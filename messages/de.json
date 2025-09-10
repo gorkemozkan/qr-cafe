@@ -534,7 +534,10 @@
       "exportingButton": "Exportiere...",
       "successMessage": "Datenexport erfolgreich abgeschlossen",
       "errorMessage": "Datenexport fehlgeschlagen. Bitte versuchen Sie es erneut.",
-      "failedToExport": "Datenexport fehlgeschlagen"
+      "failedToExport": "Datenexport fehlgeschlagen",
+      "dialogTitle": "Ihre Daten exportieren",
+      "dialogDescription": "Sie sind dabei, eine vollständige Kopie all Ihrer persönlichen Daten herunterzuladen. Dies umfasst Ihre Kontoinformationen, Cafés, Kategorien und Produkte. Die Datei wird im JSON-Format heruntergeladen.",
+      "downloadButton": "Daten herunterladen"
     },
     "delete": {
       "title": "Ihre Daten löschen",
@@ -544,13 +547,26 @@
       "successMessage": "Ihre Daten wurden dauerhaft gelöscht",
       "errorMessage": "Datenlöschung fehlgeschlagen. Bitte versuchen Sie es erneut.",
       "failedToDelete": "Datenlöschung fehlgeschlagen",
-      "warningMessage": "Dies wird alle Ihre Cafés, Kategorien, Produkte und Kontodaten dauerhaft löschen. Sie werden ausgeloggt und können nicht mehr auf Ihr Konto zugreifen."
+      "warningMessage": "Dies wird alle Ihre Cafés, Kategorien, Produkte und Kontodaten dauerhaft löschen. Sie werden ausgeloggt und können nicht mehr auf Ihr Konto zugreifen.",
+      "dialogTitle": "Alle Daten löschen",
+      "dialogDescription": "Diese Aktion wird alle Ihre Daten dauerhaft löschen. Dies kann nicht rückgängig gemacht werden.",
+      "whatWillBeDeleted": "Was wird gelöscht:",
+      "deletedItems": {
+        "cafes": "Alle Ihre Cafés und deren Einstellungen",
+        "categories": "Alle Kategorien und Menüorganisation",
+        "products": "Alle Produkte und Menüelemente",
+        "account": "Ihr Konto und Profildaten"
+      },
+      "confirmationText": "Ich verstehe, dass diese Aktion dauerhaft ist und nicht rückgängig gemacht werden kann"
     },
     "dataTypes": {
       "userAccount": "Benutzerkonto",
       "cafes": "Cafés",
       "categories": "Kategorien",
       "products": "Produkte"
+    },
+    "buttons": {
+      "cancel": "Abbrechen"
     }
   }
 }
