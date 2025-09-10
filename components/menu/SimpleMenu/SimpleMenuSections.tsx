@@ -27,8 +27,8 @@ interface Props {
   currency: string | null;
 }
 
-const SimpleMenuSections: FC<Props> = ({ categories, currency }) => {
-  const activeCategories = categories.filter((category) => category.products.length > 0);
+const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null }) => {
+  const activeCategories = props.categories.filter((category) => category.products.length > 0);
 
   if (activeCategories.length === 0) {
     return <SimpleMenuNullCase />;
@@ -39,10 +39,10 @@ const SimpleMenuSections: FC<Props> = ({ categories, currency }) => {
       <div className="space-y-12">
         {activeCategories.map((category) => (
           <section key={category.id}>
-            <SimpleMenuCategoryHeader categorName={category.name} />
-            <div className="space-y-3">
+            <SimpleMenuCategoryHeader category={category} />
+            <div>
               {category.products.map((product) => (
-                <SimpleMenuProduct key={product.id} product={product} currency={currency} />
+                <SimpleMenuProduct key={product.id} product={product} currency={props.currency} />
               ))}
             </div>
           </section>
