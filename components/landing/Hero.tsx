@@ -16,7 +16,7 @@ const Hero: FC = () => {
       aria-labelledby="hero-heading"
     >
       <FancyBackground />
-      <div className="container mx-auto px-4 relative z-20">
+      <div className="container mx-auto py-6 px-4 relative z-20">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-900/30 dark:to-amber-900/30 border border-orange-200/50 dark:border-orange-800/50 mb-8 animate-fade-in-up">
             <Sparkles className="h-4 w-4 text-orange-500" />
