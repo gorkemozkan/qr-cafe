@@ -378,6 +378,22 @@
       "available": "Mevcut",
       "category": "Kategori"
     },
+    "table": {
+      "headers": {
+        "image": "Görsel",
+        "name": "Ad",
+        "description": "Açıklama",
+        "price": "Fiyat",
+        "status": "Durum",
+        "created": "Oluşturulma",
+        "actions": "İşlemler"
+      },
+      "status": {
+        "available": "Mevcut",
+        "unavailable": "Mevcut Değil",
+        "noImage": "Görsel Yok"
+      }
+    },
     "form": {
       "labels": {
         "cafe": "Kafe",
@@ -385,22 +401,48 @@
         "name": "Ürün Adı",
         "description": "Açıklama",
         "price": "Fiyat",
-        "image": "Ürün Görseli"
+        "image": "Ürün Görseli",
+        "available": "Mevcut"
+      },
+      "placeholders": {
+        "productName": "Ürün adını girin",
+        "productDescription": "Ürününüzü tarif edin...",
+        "price": "0,00"
       },
       "status": {
         "active": "Aktif",
         "inactive": "Pasif",
         "activeDescription": "Ürün mevcut ve sipariş edilebilir",
-        "inactiveDescription": "Ürün mevcut değil ve sipariş edilemez"
+        "inactiveDescription": "Ürün mevcut değil ve sipariş edilemez",
+        "availableDescription": "Ürün satışa sunuluyor",
+        "unavailableDescription": "Ürün satışa sunulmuyor"
       },
-      "available": {
-        "active": "Mevcut",
-        "inactive": "Mevcut Değil"
-      },
-      "availableDescription": {
-        "active": "Ürün mevcut ve satışa sunuluyor",
-        "inactive": "Ürün mevcut değil ve satışa sunulmuyor"
+      "image": {
+        "currentImageAlt": "Mevcut ürün görseli",
+        "currentImageNote": "Yeni bir dosya seçerseniz mevcut görsel değiştirilecektir",
+        "uploadFailed": "Yükleme başarısız",
+        "operationFailed": "İşlem başarısız"
       }
+    },
+    "create": {
+      "title": "Yeni Ürün Oluştur",
+      "description": "Yeni ürün oluşturmak için aşağıdaki bilgileri doldurun.",
+      "button": "Ürün Oluştur",
+      "loadingButton": "Oluşturuluyor...",
+      "tooltip": "Yeni ürün oluştur",
+      "successMessage": "Ürün başarıyla oluşturuldu!"
+    },
+    "edit": {
+      "title": "Ürün Düzenle",
+      "description": "Ürün bilgilerini aşağıdan güncelleyin.",
+      "button": "Ürün Güncelle",
+      "loadingButton": "Güncelleniyor...",
+      "successMessage": "Ürün başarıyla güncellendi!"
+    },
+    "delete": {
+      "title": "Ürün Sil",
+      "confirmMessage": "\"{name}\" ürününü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "successMessage": "Ürün başarıyla silindi!"
     },
     "messages": {
       "selectCafe": "Lütfen bir kafe seçin",

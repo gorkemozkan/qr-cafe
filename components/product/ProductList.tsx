@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import DataTable from "@/components/common/DataTable";
 import DateView from "@/components/common/DateView";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
@@ -29,6 +30,8 @@ const ProductList: FC<Props> = (props) => {
 
   const [productToEdit, setProductToEdit] = useState<Tables<"products"> | null>(null);
 
+  const t = useTranslations("product");
+
   //#endregion
 
   //#region Hooks
@@ -41,7 +44,7 @@ const ProductList: FC<Props> = (props) => {
       setDeleteDialogOpen(false);
       setProductToDelete(null);
     },
-    successMessage: "Product deleted successfully!",
+    successMessage: t("delete.successMessage"),
     invalidateQueries: [
       QueryKeys.productsByCafe(props.cafeId.toString()),
       QueryKeys.stats,
@@ -69,7 +72,7 @@ const ProductList: FC<Props> = (props) => {
   const columns = [
     {
       key: "image",
-      header: "Image",
+      header: t("table.headers.image"),
       cell: (_: any, row: Tables<"products">) => (
         <>
           {row.image_url ? (
@@ -85,7 +88,7 @@ const ProductList: FC<Props> = (props) => {
             />
           ) : (
             <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">No Image</span>
+              <span className="text-[8px] text-center text-muted-foreground">{t("table.status.noImage")}</span>
             </div>
           )}
         </>
@@ -93,12 +96,12 @@ const ProductList: FC<Props> = (props) => {
     },
     {
       key: "name",
-      header: "Name",
+      header: t("table.headers.name"),
       cell: (value: any) => <span className="font-mono text-sm block truncate ">{value}</span>,
     },
     {
       key: "description",
-      header: "Description",
+      header: t("table.headers.description"),
       cell: (value: any) => (
         <div className="w-max max-w-xs">
           {value ? (
@@ -118,22 +121,24 @@ const ProductList: FC<Props> = (props) => {
     },
     {
       key: "price",
-      header: "Price",
+      header: t("table.headers.price"),
       cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
       key: "is_available",
-      header: "Status",
-      cell: (value: any) => <Badge variant={value ? "default" : "secondary"}>{value ? "Available" : "Unavailable"}</Badge>,
+      header: t("table.headers.status"),
+      cell: (value: any) => (
+        <Badge variant={value ? "active" : "inactive"}>{value ? t("table.status.available") : t("table.status.unavailable")}</Badge>
+      ),
     },
     {
       key: "created_at",
-      header: "Created",
+      header: t("table.headers.created"),
       cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
-      header: "Actions",
+      header: t("table.headers.actions"),
       className: "flex justify-end",
       cell: (_: any, row: Tables<"products">) => <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
     },
@@ -158,7 +163,7 @@ const ProductList: FC<Props> = (props) => {
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
-        emptyMessage="No products found"
+        emptyMessage={t("noProducts")}
       />
       {productToEdit && (
         <ProductEditSheet
@@ -172,9 +177,9 @@ const ProductList: FC<Props> = (props) => {
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title="Delete Product"
-        description={`Are you sure you want to delete "${productToDelete?.name}"? This action cannot be undone.`}
-        confirmText="Delete"
+        title={t("delete.title")}
+        description={t("delete.confirmMessage", { name: productToDelete?.name || "" })}
+        confirmText={t("deleteProduct")}
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
       />

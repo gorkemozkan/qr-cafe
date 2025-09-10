@@ -370,6 +370,22 @@
       "available": "Verfügbar",
       "category": "Kategorie"
     },
+    "table": {
+      "headers": {
+        "image": "Bild",
+        "name": "Name",
+        "description": "Beschreibung",
+        "price": "Preis",
+        "status": "Status",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      },
+      "status": {
+        "available": "Verfügbar",
+        "unavailable": "Nicht verfügbar",
+        "noImage": "Kein Bild"
+      }
+    },
     "form": {
       "labels": {
         "cafe": "Café",
@@ -377,14 +393,48 @@
         "name": "Produktname",
         "description": "Beschreibung",
         "price": "Preis",
-        "image": "Produktbild"
+        "image": "Produktbild",
+        "available": "Verfügbar"
+      },
+      "placeholders": {
+        "productName": "Produktname eingeben",
+        "productDescription": "Beschreiben Sie Ihr Produkt...",
+        "price": "0,00"
       },
       "status": {
         "active": "Aktiv",
         "inactive": "Inaktiv",
         "activeDescription": "Produkt ist verfügbar und kann bestellt werden",
-        "inactiveDescription": "Produkt ist nicht verfügbar und kann nicht bestellt werden"
+        "inactiveDescription": "Produkt ist nicht verfügbar und kann nicht bestellt werden",
+        "availableDescription": "Produkt ist zum Verkauf verfügbar",
+        "unavailableDescription": "Produkt ist nicht zum Verkauf verfügbar"
+      },
+      "image": {
+        "currentImageAlt": "Aktuelles Produktbild",
+        "currentImageNote": "Das aktuelle Bild wird ersetzt, wenn Sie eine neue Datei auswählen",
+        "uploadFailed": "Upload fehlgeschlagen",
+        "operationFailed": "Vorgang fehlgeschlagen"
       }
+    },
+    "create": {
+      "title": "Neues Produkt erstellen",
+      "description": "Füllen Sie die Details unten aus, um ein neues Produkt zu erstellen.",
+      "button": "Produkt erstellen",
+      "loadingButton": "Wird erstellt...",
+      "tooltip": "Neues Produkt erstellen",
+      "successMessage": "Produkt erfolgreich erstellt!"
+    },
+    "edit": {
+      "title": "Produkt bearbeiten",
+      "description": "Aktualisieren Sie die Produktdetails unten.",
+      "button": "Produkt aktualisieren",
+      "loadingButton": "Aktualisiere...",
+      "successMessage": "Produkt erfolgreich aktualisiert!"
+    },
+    "delete": {
+      "title": "Produkt löschen",
+      "confirmMessage": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "successMessage": "Produkt erfolgreich gelöscht!"
     },
     "messages": {
       "selectCafe": "Bitte wählen Sie ein Café aus",

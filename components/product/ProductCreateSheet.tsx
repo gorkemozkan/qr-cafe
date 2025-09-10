@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { FC, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
@@ -29,6 +30,8 @@ const ProductCreateSheet: FC<Props> = (props) => {
 
   const { cafeSlug } = useCafeData(props.cafeId);
 
+  const t = useTranslations("product");
+
   //#endregion
 
   //#region Hooks
@@ -41,7 +44,7 @@ const ProductCreateSheet: FC<Props> = (props) => {
       setOpen(false);
       props.onSuccess?.();
     },
-    successMessage: "Product created successfully!",
+    successMessage: t("create.successMessage"),
     invalidateQueries: [
       QueryKeys.productsByCafe(props.cafeId.toString()),
       QueryKeys.productsByCategory(props.categoryId.toString()),
@@ -65,7 +68,7 @@ const ProductCreateSheet: FC<Props> = (props) => {
 
   return (
     <>
-      <TooltipButton onClick={handleCreateClick} tooltip="Create new product">
+      <TooltipButton onClick={handleCreateClick} tooltip={t("create.tooltip")}>
         <Button variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
@@ -77,12 +80,12 @@ const ProductCreateSheet: FC<Props> = (props) => {
               onClick={() => formRef.current?.submitForm()}
               disabled={createProductMutation.isLoading}
               isLoading={createProductMutation.isLoading}
-              text="Create Product"
-              loadingText="Creating..."
+              text={t("create.button")}
+              loadingText={t("create.loadingButton")}
             />
           }
-          title="Create New Product"
-          description="Fill in the details below to create a new product."
+          title={t("create.title")}
+          description={t("create.description")}
           onOpenChange={setOpen}
         >
           <ProductForm
