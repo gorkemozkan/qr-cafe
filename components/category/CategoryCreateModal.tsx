@@ -8,6 +8,7 @@ import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
 import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
+import useCafeData from "@/hooks/useCafeData";
 import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { categoryRepository } from "@/lib/repositories/category-repository";
@@ -23,6 +24,8 @@ const CategoryCreateSheet: FC<Props> = (props) => {
   //#region Hooks
 
   const t = useTranslations("category");
+
+  const { cafeSlug } = useCafeData(props.cafeId);
 
   //#endregion
 
@@ -72,6 +75,7 @@ const CategoryCreateSheet: FC<Props> = (props) => {
           <CategoryForm
             ref={formRef}
             mode="create"
+            cafeSlug={cafeSlug}
             onSubmit={async (data) => {
               await execute(data);
             }}

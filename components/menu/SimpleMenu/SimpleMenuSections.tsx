@@ -5,22 +5,7 @@ import SimpleMenuCategoryHeader from "@/components/menu/SimpleMenu/SimpleMenuCat
 import SimpleMenuNullCase from "@/components/menu/SimpleMenu/SimpleMenuNullCase";
 import SimpleMenuProduct from "@/components/menu/SimpleMenu/SimpleMenuProduct";
 
-interface PublicProduct {
-  id: number;
-  name: string;
-  description: string | null;
-  price: number | null;
-  image_url: string | null;
-  is_available: boolean;
-}
-
-interface PublicCategory {
-  id: number;
-  name: string;
-  description: string;
-  sort_order: number | null;
-  products: PublicProduct[];
-}
+import { PublicCategory } from "@/lib/repositories/public-menu-repository";
 
 interface Props {
   categories: PublicCategory[];

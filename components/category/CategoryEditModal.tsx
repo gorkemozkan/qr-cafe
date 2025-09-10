@@ -5,6 +5,7 @@ import { FC, useRef } from "react";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
+import useCafeData from "@/hooks/useCafeData";
 import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { categoryRepository } from "@/lib/repositories/category-repository";
@@ -21,6 +22,8 @@ const CategoryEditSheet: FC<Props> = (props) => {
   //#region Hooks
 
   const t = useTranslations("category");
+
+  const { cafeSlug } = useCafeData(props.category.cafe_id);
 
   //#endregion
 
@@ -64,6 +67,7 @@ const CategoryEditSheet: FC<Props> = (props) => {
       <CategoryForm
         ref={formRef}
         mode="edit"
+        cafeSlug={cafeSlug}
         isLoading={isLoading}
         category={props.category}
         onSubmit={async (data) => {

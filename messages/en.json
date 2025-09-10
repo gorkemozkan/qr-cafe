@@ -296,6 +296,7 @@
     },
     "table": {
       "headers": {
+        "image": "Image",
         "name": "Name",
         "sortOrder": "Sort Order",
         "status": "Status",
@@ -304,18 +305,26 @@
       },
       "status": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "noImage": "No Image"
       }
     },
     "form": {
       "labels": {
         "categoryName": "Category Name",
         "description": "Description",
-        "sortOrder": "Sort Order"
+        "sortOrder": "Sort Order",
+        "image": "Category Image"
       },
       "placeholders": {
         "categoryName": "Enter category name",
         "description": "Describe this category..."
+      },
+      "image": {
+        "currentImageAlt": "Current category image",
+        "currentImageNote": "Current image will be replaced if you select a new file",
+        "uploadFailed": "Upload failed",
+        "operationFailed": "Operation failed"
       },
       "status": {
         "active": "Active",

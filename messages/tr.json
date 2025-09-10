@@ -304,6 +304,7 @@
     },
     "table": {
       "headers": {
+        "image": "Resim",
         "name": "Ad",
         "sortOrder": "Sıralama",
         "status": "Durum",
@@ -312,18 +313,26 @@
       },
       "status": {
         "active": "Aktif",
-        "inactive": "Pasif"
+        "inactive": "Pasif",
+        "noImage": "Resim Yok"
       }
     },
     "form": {
       "labels": {
         "categoryName": "Kategori Adı",
         "description": "Açıklama",
-        "sortOrder": "Sıralama Düzeni"
+        "sortOrder": "Sıralama Düzeni",
+        "image": "Kategori Resmi"
       },
       "placeholders": {
         "categoryName": "Kategori adını girin",
         "description": "Bu kategoriyi açıklayın..."
+      },
+      "image": {
+        "currentImageAlt": "Mevcut kategori resmi",
+        "currentImageNote": "Yeni bir dosya seçerseniz mevcut resim değiştirilecek",
+        "uploadFailed": "Yükleme başarısız",
+        "operationFailed": "İşlem başarısız"
       },
       "status": {
         "active": "Aktif",
