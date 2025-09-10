@@ -1,8 +1,10 @@
 "use client";
 
-import { FC } from "react";
-import ProductForm from "@/components/product/ProductForm";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { FC, useRef } from "react";
+
+import FormSheet from "@/components/common/FormSheet";
+import SubmitButton from "@/components/common/SubmitButton";
+import ProductForm, { ProductFormRef } from "@/components/product/ProductForm";
 import useCafeData from "@/hooks/useCafeData";
 import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
@@ -18,8 +20,10 @@ interface Props {
   onClose: () => void;
 }
 
-const ProductEditModal: FC<Props> = (props) => {
+const ProductEditSheet: FC<Props> = (props) => {
   //#region States
+
+  const formRef = useRef<ProductFormRef>(null);
 
   const { cafeSlug } = useCafeData(props.cafeId);
 
@@ -27,7 +31,7 @@ const ProductEditModal: FC<Props> = (props) => {
 
   //#region Hooks
 
-  const { execute } = useRequest({
+  const { execute, isLoading } = useRequest({
     mutationFn: async (payload: ProductSchema) => {
       return await productRepository.update(props.product.id, payload);
     },
@@ -50,25 +54,34 @@ const ProductEditModal: FC<Props> = (props) => {
   //#endregion
 
   return (
-    <Dialog open onOpenChange={props.onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Product</DialogTitle>
-          <DialogDescription>Update the product details below.</DialogDescription>
-        </DialogHeader>
-        <ProductForm
-          mode="edit"
-          cafeSlug={cafeSlug}
-          product={props.product}
-          categoryId={props.categoryId}
-          onSubmit={async (data) => {
-            await execute(data);
-          }}
-          onCancel={handleCancel}
+    <FormSheet
+      title="Edit Product"
+      description="Update the product details below."
+      onOpenChange={props.onClose}
+      footer={
+        <SubmitButton
+          onClick={() => formRef.current?.submitForm()}
+          disabled={isLoading}
+          isLoading={isLoading}
+          text="Update Product"
+          loadingText="Updating..."
         />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <ProductForm
+        ref={formRef}
+        mode="edit"
+        cafeSlug={cafeSlug}
+        product={props.product}
+        categoryId={props.categoryId}
+        onSubmit={async (data) => {
+          await execute(data);
+        }}
+        onCancel={handleCancel}
+        isLoading={isLoading}
+      />
+    </FormSheet>
   );
 };
 
-export default ProductEditModal;
+export default ProductEditSheet;

@@ -1,12 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
-import SubmitButton from "@/components/common/SubmitButton";
-import { Button } from "@/components/ui/button";
 import FilePicker from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +14,11 @@ import { BUCKET_NAMES } from "@/config";
 import { storageRepository } from "@/lib/repositories/storage-repository";
 import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
 import { Tables } from "@/types/db";
+
+export interface ProductFormRef {
+  submitForm: () => void;
+  cancelForm: () => void;
+}
 
 interface Props {
   mode: "create" | "edit";
@@ -27,7 +30,7 @@ interface Props {
   isLoading?: boolean;
 }
 
-const ProductForm: FC<Props> = (props) => {
+const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -57,7 +60,7 @@ const ProductForm: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
   } = useForm<ProductSchemaType>({
@@ -65,16 +68,15 @@ const ProductForm: FC<Props> = (props) => {
     defaultValues: getDefaultValues(),
   });
 
-  const isAvailable = watch("is_available");
-
-  const handleImageUpload = (file: File | null) => {
-    setImageFile(file);
-    setUploadError(null);
-  };
-
-  const handleImageError = (error: string) => {
-    setUploadError(error);
-  };
+  // Expose form methods via ref
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      handleSubmit(onSubmitForm)();
+    },
+    cancelForm: () => {
+      props.onCancel?.();
+    },
+  }));
 
   const onSubmitForm = async (data: ProductSchemaType) => {
     try {
@@ -105,6 +107,17 @@ const ProductForm: FC<Props> = (props) => {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const isAvailable = watch("is_available");
+
+  const handleImageUpload = (file: File | null) => {
+    setImageFile(file);
+    setUploadError(null);
+  };
+
+  const handleImageError = (error: string) => {
+    setUploadError(error);
   };
 
   return (
@@ -175,28 +188,10 @@ const ProductForm: FC<Props> = (props) => {
           {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
         </p>
       </div>
-      <div className="flex justify-end space-x-2 pt-4">
-        {props.onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={props.onCancel}
-            disabled={isSubmitting || isUploading || props.isLoading}
-            className="transition-all duration-200 hover:scale-105"
-          >
-            Cancel
-          </Button>
-        )}
-        <SubmitButton
-          onClick={handleSubmit(onSubmitForm)}
-          isLoading={isSubmitting || isUploading || props.isLoading || false}
-          text={props.mode === "create" ? "Create" : "Update"}
-          disabled={isSubmitting || isUploading || props.isLoading || false}
-          loadingText={props.mode === "create" ? "Creating..." : "Updating..."}
-        />
-      </div>
     </form>
   );
-};
+});
+
+ProductForm.displayName = "ProductForm";
 
 export default ProductForm;

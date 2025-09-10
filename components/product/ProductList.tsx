@@ -6,8 +6,8 @@ import DateView from "@/components/common/DateView";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import QuestionDialog from "@/components/common/QuestionDialog";
 import TableActions from "@/components/common/TableActions";
-import ProductCreateModal from "@/components/product/ProductCreateModal";
-import ProductEditModal from "@/components/product/ProductEditModal";
+import ProductCreateSheet from "@/components/product/ProductCreateSheet";
+import ProductEditSheet from "@/components/product/ProductEditSheet";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRequest } from "@/hooks/useRequest";
@@ -154,14 +154,14 @@ const ProductList: FC<Props> = (props) => {
   return (
     <div className="space-y-4">
       <DataTable
-        actions={<ProductCreateModal cafeId={props.cafeId} categoryId={props.categoryId} />}
+        actions={<ProductCreateSheet cafeId={props.cafeId} categoryId={props.categoryId} />}
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
         emptyMessage="No products found"
       />
       {productToEdit && (
-        <ProductEditModal
+        <ProductEditSheet
           categoryId={productToEdit.category_id}
           product={productToEdit}
           cafeId={props.cafeId}
