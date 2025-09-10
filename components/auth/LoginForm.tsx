@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import SkipLink from "@/components/auth/SkipLink";
-import BackButton from "@/components/BackButton";
-import Captcha from "@/components/Captcha";
-import InputErrorMessage from "@/components/InputErrorMessage";
-import SubmitButton from "@/components/SubmitButton";
+import BackButton from "@/components/common/BackButton";
+import Captcha from "@/components/common/Captcha";
+import InputErrorMessage from "@/components/common/InputErrorMessage";
+import SubmitButton from "@/components/common/SubmitButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -105,9 +105,9 @@ const LoginForm = () => {
               <div className="grid gap-3">
                 <Label htmlFor="captcha">{tAuth("securityVerification")}</Label>
                 <Captcha
-                  onVerify={(token) => setValue("captchaToken", token)}
                   onError={() => setValue("captchaToken", "")}
                   onExpire={() => setValue("captchaToken", "")}
+                  onVerify={(token) => setValue("captchaToken", token)}
                 />
                 <InputErrorMessage id="captcha-error">{errors.captchaToken?.message}</InputErrorMessage>
               </div>

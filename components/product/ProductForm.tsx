@@ -3,9 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import InputErrorMessage from "@/components/InputErrorMessage";
-import { OptimizedImage } from "@/components/OptimizedImage";
-import SubmitButton from "@/components/SubmitButton";
+import InputErrorMessage from "@/components/common/InputErrorMessage";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import SubmitButton from "@/components/common/SubmitButton";
 import { Button } from "@/components/ui/button";
 import FilePicker from "@/components/ui/file-picker";
 import { Input } from "@/components/ui/input";

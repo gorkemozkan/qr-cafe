@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import CopyButton from "@/components/CopyButton";
-import ExternalLinkButton from "@/components/ExternalLinkButton";
+import CopyButton from "@/components/common/CopyButton";
+import ExternalLinkButton from "@/components/common/ExternalLinkButton";
 import { Button } from "@/components/ui/button";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -174,7 +174,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                 </a>
               </div>
               <div className="flex items-center gap-2 ">
-                <CopyButton noText text={cafeUrl} variant="outline" size="sm" />
+                <CopyButton text={cafeUrl} />
                 <ExternalLinkButton url={cafeUrl} />
               </div>
             </div>

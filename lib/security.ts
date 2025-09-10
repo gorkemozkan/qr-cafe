@@ -1,12 +1,13 @@
 import { NextRequest } from "next/server";
 import { BUCKET_NAMES } from "../config";
+import { isDevelopment } from "./env";
 
 export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");
   const host = request.headers.get("host");
 
-  if (process.env.NODE_ENV === "development") {
+  if (isDevelopment) {
     return true;
   }
 

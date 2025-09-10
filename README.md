@@ -126,32 +126,6 @@ Ensure all production environment variables are set:
 - Production Supabase credentials
 - Any other production-specific variables
 
-### Deployment Platforms
-
-The application can be deployed to:
-
-- **Vercel**: Recommended for Next.js applications
-- **Netlify**: Alternative hosting platform
-- **Self-hosted**: Using Docker or traditional hosting
-
-### Database Deployment
-
-For production database setup:
-
-1. Create a production Supabase project
-2. Apply all migrations from `supabase/migrations`
-3. Configure production environment variables
-4. Set up database backups and monitoring
-
-### Database Changes
-
-When making database changes:
-
-1. Create a new migration file using the provided script
-2. Test migrations on a development database first
-3. Update any affected TypeScript types
-4. Document schema changes in the migration file
-
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.

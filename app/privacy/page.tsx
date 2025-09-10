@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/common/BackButton";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",

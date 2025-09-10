@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQueryRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
-import InputErrorMessage from "@/components/InputErrorMessage";
+import InputErrorMessage from "@/components/common/InputErrorMessage";
 
 interface Props {
   id?: string;

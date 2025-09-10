@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { FC, useRef } from "react";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
-import FormSheet from "@/components/FormSheet";
-import SubmitButton from "@/components/SubmitButton";
+import FormSheet from "@/components/common/FormSheet";
+import SubmitButton from "@/components/common/SubmitButton";
 import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { categoryRepository } from "@/lib/repositories/category-repository";

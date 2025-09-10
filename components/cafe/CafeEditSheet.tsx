@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { FC, useRef } from "react";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
-import FormSheet from "@/components/FormSheet";
-import SubmitButton from "@/components/SubmitButton";
+import FormSheet from "@/components/common/FormSheet";
+import SubmitButton from "@/components/common/SubmitButton";
 import { useRequest } from "@/hooks/useRequest";
 import { slugify } from "@/lib/format";
 import QueryKeys from "@/lib/query";

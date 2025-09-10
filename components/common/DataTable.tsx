@@ -2,7 +2,7 @@
 
 import { HelpCircle } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
-import RefreshButton from "@/components/RefreshButton";
+import RefreshButton from "@/components/common/RefreshButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useQueryRequest } from "@/hooks/useRequest";

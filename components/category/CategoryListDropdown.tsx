@@ -1,16 +1,15 @@
 "use client";
 
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Tables } from "@/types/db";
 import { categoryRepository } from "@/lib/repositories/category-repository";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import InputErrorMessage from "@/components/InputErrorMessage";
+import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 interface Props {
   id?: string;
@@ -31,7 +30,7 @@ const CategoryListDropdown = ({
   value,
   onValueChange,
   cafeId,
-  placeholder = "Select a category",
+  placeholder,
   disabled = false,
   error,
   className,
@@ -40,7 +39,6 @@ const CategoryListDropdown = ({
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations("category");
-  const router = useRouter();
   useEffect(() => {
     const loadCategories = async () => {
       if (!cafeId) {
@@ -53,18 +51,22 @@ const CategoryListDropdown = ({
         const categoriesData = await categoryRepository.listByCafe(cafeId);
         setCategories(categoriesData);
       } catch (_error) {
-        toast.error("Failed to load categories");
+        toast.error(t("messages.loadFailed"));
       } finally {
         setIsLoading(false);
       }
     };
 
     loadCategories();
-  }, [cafeId]);
+  }, [cafeId, t]);
 
   const isDisabled = disabled || !cafeId || isLoading;
 
-  const displayPlaceholder = !cafeId ? "Select a cafe first" : isLoading ? "Loading categories..." : placeholder;
+  const displayPlaceholder = !cafeId
+    ? t("dropdown.selectCafeFirst")
+    : isLoading
+      ? t("dropdown.loadingCategories")
+      : placeholder || t("dropdown.selectCategory");
 
   return (
     <div className="space-y-2">
