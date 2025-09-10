@@ -5,7 +5,6 @@ import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
-import ThemeToggle from "@/components/common/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/dom";
 
@@ -18,16 +17,15 @@ const Header: FC = () => {
         <nav className="flex items-center justify-between" aria-label="Main navigation">
           <button
             type="button"
+            aria-label="Go to top"
             onClick={() => scrollToSection("main-content")}
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
-            aria-label="Go to top"
           >
             <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
             <span className="text-2xl font-bold">QR Cafe</span>
           </button>
           <div className="flex items-center space-x-4">
             <LanguageSwitcher />
-            <ThemeToggle />
             <NextLink href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
               <Button>{t("signIn")}</Button>
             </NextLink>

@@ -47,10 +47,7 @@ export default async function Image(props: Params) {
         <h1 style={{ fontSize: "128px", fontWeight: "bold", color: "black" }}>{menu.cafe.name}</h1>
       )}
     </div>,
-    // ImageResponse options
     {
-      // For convenience, we can re-use the exported opengraph-image
-      // size config to also set the ImageResponse's width and height.
       ...size,
     },
   );

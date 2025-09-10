@@ -55,7 +55,8 @@
     "user": "Kullanıcı",
     "preferences": "Tercihler",
     "settings": "Ayarlar",
-    "loadingCafes": "Kafeler yükleniyor..."
+    "loadingCafes": "Kafeler yükleniyor...",
+    "deleting": "Siliniyor..."
   },
   "navigation": {
     "signIn": "Giriş Yap",

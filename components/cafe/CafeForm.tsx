@@ -176,6 +176,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           onChange={handleFileChange}
           onError={handleFileError}
           disabled={isUploading}
+          loading={isUploading}
         />
         {uploadError && <InputErrorMessage id="upload-error">{uploadError}</InputErrorMessage>}
         {props.cafe?.logo_url && !selectedFile && (
@@ -209,7 +210,5 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
     </form>
   );
 });
-
-CafeForm.displayName = "CafeForm";
 
 export default CafeForm;

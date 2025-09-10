@@ -1,11 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import SkipLink from "@/components/auth/SkipLink";
 import BackButton from "@/components/common/BackButton";
 import Captcha from "@/components/common/Captcha";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
@@ -56,11 +54,8 @@ const LoginForm = () => {
 
   //#endregion
 
-  //#region Render
-
   return (
     <div>
-      <SkipLink targetId="login-form">{t("auth.skipToForm", { form: t("navigation.login") })}</SkipLink>
       <BackButton href="/" />
       <Card className="bg-background">
         <CardHeader>
@@ -129,8 +124,6 @@ const LoginForm = () => {
       </Card>
     </div>
   );
-
-  //#endregion
 };
 
 export default LoginForm;

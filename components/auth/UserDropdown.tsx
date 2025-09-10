@@ -32,7 +32,7 @@ const UserDropdown = () => {
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="rounded-lg">
+        <Button size={"lg"} variant="outline" className="rounded-lg">
           <User className="h-4 w-4" />
           <span className="sr-only">{tCommon("userMenu")}</span>
         </Button>

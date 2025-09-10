@@ -4,6 +4,7 @@ import { AlertTriangle } from "lucide-react";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useTranslations } from "next-intl";
 
 interface QuestionDialogProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface QuestionDialogProps {
   onConfirm: () => void;
   onCancel?: () => void;
   isLoading?: boolean;
+  confirmLoadingText?: string;
 }
 
 const QuestionDialog: FC<QuestionDialogProps> = ({
@@ -27,11 +29,14 @@ const QuestionDialog: FC<QuestionDialogProps> = ({
   onConfirm,
   onCancel,
   isLoading = false,
+  confirmLoadingText,
 }) => {
   const handleCancel = () => {
     onCancel?.();
     onOpenChange(false);
   };
+
+  const tCommon = useTranslations("common");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -48,7 +53,7 @@ const QuestionDialog: FC<QuestionDialogProps> = ({
             {cancelText}
           </Button>
           <Button variant="destructive" onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? "Loading..." : confirmText}
+            {isLoading ? confirmLoadingText || tCommon("loading") : confirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

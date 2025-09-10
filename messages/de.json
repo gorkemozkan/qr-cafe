@@ -55,7 +55,8 @@
     "user": "Benutzer",
     "preferences": "Einstellungen",
     "settings": "Einstellungen",
-    "loadingCafes": "Cafés werden geladen..."
+    "loadingCafes": "Cafés werden geladen...",
+    "deleting": "Löschen..."
   },
   "navigation": {
     "signIn": "Anmelden",
