@@ -76,7 +76,6 @@ export function GdprCompliance() {
         throw new Error(result.message || "Failed to delete data");
       }
     } catch (error) {
-      console.error("Deletion error:", error);
       toast.error("Failed to delete data. Please try again.");
     } finally {
       setIsDeleting(false);
