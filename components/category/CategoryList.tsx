@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useState, useCallback } from "react";
 import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 import CategoryEditSheet from "@/components/category/CategoryEditModal";
 import DataTable from "@/components/common/DataTable";
@@ -14,17 +13,17 @@ import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
 import { categoryRepository } from "@/lib/repositories/category-repository";
 import { Tables } from "@/types/db";
+import { useRouter } from "next/navigation";
 
 interface Props {
   cafeId: number;
 }
 
 const CategoryList: FC<Props> = (props) => {
+  const router = useRouter();
   //#endregion
 
   //#region States
-
-  const router = useRouter();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -47,6 +46,23 @@ const CategoryList: FC<Props> = (props) => {
     successMessage: "Category deleted successfully!",
     invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
+
+  const { execute: updateSortOrder } = useRequest({
+    mutationFn: async (categoryIds: number[]) => {
+      return await categoryRepository.updateSortOrder(props.cafeId, categoryIds);
+    },
+    successMessage: "Categories reordered successfully!",
+
+    invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString())],
+  });
+
+  const handleSortOrderChange = useCallback(
+    async (categories: Tables<"categories">[]) => {
+      const categoryIds = categories.map((category) => category.id);
+      await updateSortOrder(categoryIds);
+    },
+    [updateSortOrder],
+  );
 
   const handleDeleteClick = (category: Tables<"categories">) => {
     setCategoryToDelete(category);
@@ -93,8 +109,8 @@ const CategoryList: FC<Props> = (props) => {
     },
     {
       key: "sort_order",
-      header: "Sort Order",
-      cell: (value: any) => value || "-",
+      header: "Order",
+      cell: (value: any) => <span className="font-medium ">{value}</span>,
     },
     {
       key: "is_active",
@@ -104,7 +120,7 @@ const CategoryList: FC<Props> = (props) => {
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="detailed" />,
+      cell: (value: any) => <DateView date={value} format="relative" />,
     },
     {
       key: "actions",
@@ -123,6 +139,11 @@ const CategoryList: FC<Props> = (props) => {
   return (
     <div className="space-y-4">
       <DataTable
+        enableSorting={true}
+        onSortOrderChange={handleSortOrderChange}
+        onRowClick={(row) => {
+          router.push(`/admin/app/cafe/${props.cafeId}/categories/${row.id}`);
+        }}
         columns={columns}
         actions={<CategoryCreateSheet cafeId={props.cafeId} />}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}

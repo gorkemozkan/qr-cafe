@@ -1,162 +1,73 @@
 "use client";
 
-import { HelpCircle } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
-import RefreshButton from "@/components/common/RefreshButton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useQueryRequest } from "@/hooks/useRequest";
-
-interface Column<T> {
-  key: keyof T | string;
-  header: string;
-  cell?: (value: any, row: T) => ReactNode;
-  className?: string;
-  tooltipText?: string;
-  hideOnMobile?: boolean;
-  priority?: "high" | "medium" | "low";
-}
-
-interface Props<T extends { id?: number | string }> {
-  columns: Column<T>[];
-  queryKey: string[];
-  queryFn: () => Promise<T[]>;
-  emptyMessage?: string;
-  staleTime?: number;
-  gcTime?: number;
-  actions?: ReactNode;
-  title?: string;
-  mobileBreakpoint?: number;
-}
-
-function MobileCard<T>({ item, columns }: { item: T; columns: Column<T>[] }) {
-  return (
-    <div className="bg-transparent border rounded-lg p-4 space-y-3 shadow-sm">
-      {columns.map((column) => {
-        const value = item[column.key as keyof T];
-        const displayValue = column.cell ? column.cell(value, item) : String(value ?? "-");
-
-        if (!displayValue || displayValue === "-") return null;
-
-        return (
-          <div key={String(column.key)} className="flex justify-between items-start gap-2">
-            <div className="text-sm font-medium text-muted-foreground flex items-center gap-1 min-w-0 flex-1">
-              <span className="truncate">{column.header}</span>
-              {column.tooltipText && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground hover:text-foreground transition-colors flex-shrink-0" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{column.tooltipText}</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-            <div className="text-sm text-foreground text-right min-w-0 ">{displayValue}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import { useDataTable } from "@/hooks/useDataTable";
+import { useResponsive } from "@/hooks/useResponsive";
+import { useSorting } from "@/hooks/useSorting";
+import { DataTableHeader } from "./DataTable/DataTableHeader";
+import { DataTableContent } from "./DataTable/DataTableContent";
+import { DataTableProps } from "./DataTable/types";
+import { DEFAULT_EMPTY_MESSAGE, DEFAULT_MOBILE_BREAKPOINT, DEFAULT_STALE_TIME, DEFAULT_GC_TIME } from "./DataTable/constants";
 function DataTable<T extends { id?: number | string }>({
   columns,
   queryKey,
   queryFn,
-  emptyMessage = "No data available",
-  staleTime = 5 * 60 * 1000,
-  gcTime = 10 * 60 * 1000,
+  emptyMessage = DEFAULT_EMPTY_MESSAGE,
+  staleTime = DEFAULT_STALE_TIME,
+  gcTime = DEFAULT_GC_TIME,
   actions,
   title,
-  mobileBreakpoint = 768,
-}: Props<T>) {
-  const { data, isLoading, refetch, isRefetching } = useQueryRequest({
+  mobileBreakpoint = DEFAULT_MOBILE_BREAKPOINT,
+  onRowClick,
+  enableSorting,
+  sortConfig,
+  onSortOrderChange,
+}: DataTableProps<T>) {
+  // Use extracted hooks for cleaner logic separation
+  const { data, isLoading, refetch, isRefetching } = useDataTable({
     queryKey,
     queryFn,
     staleTime,
     gcTime,
   });
 
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useResponsive({ breakpoint: mobileBreakpoint });
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < mobileBreakpoint);
-    };
-
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, [mobileBreakpoint]);
-
-  const visibleColumns = isMobile ? columns.filter((col) => !col.hideOnMobile) : columns;
-
-  const isEmpty = !isLoading && !isRefetching && (!data || data.length === 0);
+  const { sortedData, sensors, handleDragEnd } = useSorting({
+    data,
+    sortConfig,
+    onSortOrderChange,
+    enableSorting,
+  });
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        {title ? <h2 className="text-xl font-semibold">{title}</h2> : <div />}
-        <div className="flex justify-end gap-2">
-          <RefreshButton loading={isRefetching} refetch={refetch} maxAttempt={3} />
-          {actions}
-        </div>
-      </div>
+      <DataTableHeader title={title} actions={actions} isRefetching={isRefetching} onRefetch={refetch} />
 
-      {isEmpty ? (
-        <div className="flex items-center justify-center h-32">
-          <div className="text-muted-foreground">{emptyMessage}</div>
-        </div>
-      ) : isLoading || isRefetching ? (
-        <div className="flex items-center justify-center h-32">
-          <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </div>
-      ) : isMobile ? (
-        <div className="grid gap-4">
-          {data?.map((row, index) => (
-            <MobileCard key={String(row.id || index)} item={row} columns={visibleColumns} />
-          ))}
-        </div>
+      {enableSorting ? (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <DataTableContent
+            data={sortedData}
+            columns={columns}
+            isLoading={isLoading}
+            isRefetching={isRefetching}
+            emptyMessage={emptyMessage}
+            isMobile={isMobile}
+            onRowClick={onRowClick}
+            enableSorting={enableSorting}
+          />
+        </DndContext>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {visibleColumns.map((column) => (
-                <TableHead key={String(column.key)} className={column.className}>
-                  <div className="flex items-center gap-1">
-                    <span>{column.header}</span>
-                    {column.tooltipText && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className="h-3 w-3 cursor-help text-muted-foreground hover:text-foreground transition-colors" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{column.tooltipText}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-                  </div>
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data?.map((row, index) => (
-              <TableRow key={String(row.id || index)}>
-                {visibleColumns.map((column) => (
-                  <TableCell key={String(column.key)} className={column.className}>
-                    {column.cell ? column.cell(row[column.key as keyof T], row) : String(row[column.key as keyof T] ?? "-")}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTableContent
+          data={sortedData}
+          columns={columns}
+          isLoading={isLoading}
+          isRefetching={isRefetching}
+          emptyMessage={emptyMessage}
+          isMobile={isMobile}
+          onRowClick={onRowClick}
+          enableSorting={false}
+        />
       )}
     </div>
   );

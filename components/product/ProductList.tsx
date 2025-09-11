@@ -129,7 +129,7 @@ const ProductList: FC<Props> = (props) => {
     {
       key: "created_at",
       header: "Created",
-      cell: (value: any) => <DateView date={value} format="detailed" />,
+      cell: (value: any) => <DateView date={value} format="relative" />,
     },
     {
       key: "actions",

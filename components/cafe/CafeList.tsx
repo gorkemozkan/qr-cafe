@@ -1,27 +1,26 @@
 "use client";
 
-import { QrCode } from "lucide-react";
 import { FC, useCallback, useMemo, useState } from "react";
 import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import CafeEditSheet from "@/components/cafe/CafeEditSheet";
 import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import DataTable from "@/components/common/DataTable";
 import DateView from "@/components/common/DateView";
-import ExternalLinkButton from "@/components/common/ExternalLinkButton";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import QuestionDialog from "@/components/common/QuestionDialog";
 import TableActions from "@/components/common/TableActions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRequest } from "@/hooks/useRequest";
-import { nextPublicBaseUrl } from "@/lib/env";
 import QueryKeys from "@/lib/query";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { Tables } from "@/types/db";
+import { useRouter } from "next/navigation";
 
 const CafeList: FC = () => {
   //#region Hooks
+
+  const router = useRouter();
 
   //#endregion
 
@@ -88,7 +87,6 @@ const CafeList: FC = () => {
           <>
             {row.logo_url ? (
               <OptimizedImage
-                clickable
                 src={row.logo_url}
                 alt={`${row.slug} logo`}
                 width={40}
@@ -137,35 +135,14 @@ const CafeList: FC = () => {
         key: "created_at",
         header: "Created",
         tooltipText: "Date and time when the cafe was created",
-        cell: (value: any) => <DateView date={value} format="detailed" />,
+        cell: (value: any) => <DateView date={value} format="relative" />,
       },
       {
         key: "actions",
         header: "Actions",
         className: "flex justify-end",
         cell: (_: any, row: Tables<"cafes">) => (
-          <div className="flex justify-end">
-            <TableActions
-              onEdit={() => setCafeToEdit(row)}
-              onDelete={() => handleDeleteClick(row)}
-              to={`/admin/app/cafe/${row.id}/categories`}
-              additionalActions={
-                <div className="flex items-center gap-2">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="outline" size="lg" onClick={() => handleQRCodeClick(row)} className="p-2">
-                        <QrCode className="h-6 w-6" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>View QR Code</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <ExternalLinkButton url={`${nextPublicBaseUrl}/${row.slug}`} />
-                </div>
-              }
-            />
-          </div>
+          <TableActions onEdit={() => setCafeToEdit(row)} onDelete={() => handleDeleteClick(row)} to={`/admin/app/cafe/${row.id}/categories`} />
         ),
       },
     ],
@@ -175,6 +152,9 @@ const CafeList: FC = () => {
   return (
     <div>
       <DataTable
+        onRowClick={(row) => {
+          router.push(`/admin/app/cafe/${row.id}/categories`);
+        }}
         title="Cafes"
         actions={<CafeCreateSheet />}
         columns={columns}
