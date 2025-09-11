@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import FilePicker from "@/components/ui/file-picker";
@@ -34,9 +33,6 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-
-  const t = useTranslations("category");
-  const tCommon = useTranslations("common");
 
   const getDefaultValues = (): CategorySchema => {
     if (props.mode === "edit" && props.category) {
@@ -100,7 +96,7 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
         const uploadResult = await storageRepository.uploadFile(imageFile, props.cafeSlug, BUCKET_NAMES.CATEGORY_IMAGE);
 
         if (!uploadResult.success) {
-          const errorMessage = `${t("image.uploadFailed")}: ${uploadResult.error?.message || t("image.operationFailed")}`;
+          const errorMessage = `Upload failed: ${uploadResult.error?.message || "Operation failed"}`;
           setUploadError(errorMessage);
           return;
         }
@@ -115,7 +111,7 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
       };
       await props.onSubmit(processedData);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : t("image.operationFailed");
+      const errorMessage = error instanceof Error ? error.message : "Operation failed";
       setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
@@ -125,15 +121,15 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">{t("form.labels.categoryName")} *</Label>
-        <Input id="name" placeholder={t("form.placeholders.categoryName")} {...register("name")} className={errors.name ? "border-red-500" : ""} />
+        <Label htmlFor="name">Category Name *</Label>
+        <Input id="name" placeholder="Enter category name" {...register("name")} className={errors.name ? "border-red-500" : ""} />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">{t("form.labels.description")} *</Label>
+        <Label htmlFor="description">Description *</Label>
         <Textarea
           id="description"
-          placeholder={t("form.placeholders.description")}
+          placeholder="Describe this category..."
           {...register("description")}
           rows={3}
           className={errors.description ? "border-red-500" : ""}
@@ -141,15 +137,15 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
         <InputErrorMessage id="description-error">{errors.description?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="sort_order">{t("form.labels.sortOrder")}</Label>
+        <Label htmlFor="sort_order">Sort Order</Label>
         <Input id="sort_order" type="number" placeholder="0" {...register("sort_order")} className={errors.sort_order ? "border-red-500" : ""} />
         <InputErrorMessage id="sort_order-error">{errors.sort_order?.message}</InputErrorMessage>
-        <p className="text-xs text-muted-foreground">{tCommon("optional")}</p>
+        <p className="text-xs text-muted-foreground">Optional</p>
       </div>
       <div className="space-y-2">
         <FilePicker
           id="image"
-          label={t("form.labels.image")}
+          label="Category Image"
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={imageFile}
@@ -162,21 +158,21 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
           <div className="flex items-center space-x-2">
             <OptimizedImage
               src={props.category.image_url}
-              alt={t("form.image.currentImageAlt")}
+              alt="Current category image"
               width={48}
               height={48}
               className="h-12 w-12 rounded object-cover"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">{t("form.image.currentImageNote")}</p>
+            <p className="text-sm text-muted-foreground">Current image will be replaced if you select a new file</p>
           </div>
         )}
       </div>
       <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">{watch("is_active") ? t("form.status.active") : t("form.status.inactive")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}</p>
+        <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
+        <p className="text-xs text-muted-foreground ml-2">{isActive ? "Category is active and visible" : "Category is inactive and hidden"}</p>
       </div>
     </form>
   );

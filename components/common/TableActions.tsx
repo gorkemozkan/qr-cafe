@@ -1,7 +1,6 @@
 "use client";
 
 import { Edit, Eye, Link, MoreHorizontal, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -17,7 +16,6 @@ interface Props {
 }
 
 const TableActions: FC<Props> = (props) => {
-  const tCommon = useTranslations("common");
   const hasEdit = !!props.onEdit;
 
   const hasDelete = !!props.onDelete;
@@ -72,20 +70,20 @@ const TableActions: FC<Props> = (props) => {
           {hasEdit && (
             <DropdownMenuItem onClick={props.onEdit}>
               <Edit className="mr-2 h-4 w-4" />
-              {tCommon("edit")}
+              Edit
             </DropdownMenuItem>
           )}
 
           {hasInspect && (
             <DropdownMenuItem onClick={props.onInspect}>
               <Eye className="mr-2 h-4 w-4" />
-              {tCommon("view")}
+              View
             </DropdownMenuItem>
           )}
           {hasDelete && (
             <DropdownMenuItem onClick={props.onDelete}>
               <Trash2 className="mr-2 h-4 w-4" />
-              {tCommon("delete")}
+              Delete
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

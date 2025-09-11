@@ -1,16 +1,13 @@
 "use client";
 
 import { QrCode } from "lucide-react";
-import NextLink from "next/link";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { FC } from "react";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/dom";
+import BuyMeCaffeeButton from "@/components/common/BuyMeCaffeeButton";
 
 const Header: FC = () => {
-  const t = useTranslations("navigation");
-
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -25,10 +22,12 @@ const Header: FC = () => {
             <span className="text-2xl font-bold">Only Menu</span>
           </button>
           <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
-            <NextLink href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
-              <Button>{t("signIn")}</Button>
-            </NextLink>
+            <BuyMeCaffeeButton />
+            <Button asChild size="lg" variant="default" className="font-semibold">
+              <Link href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
+                Sign In
+              </Link>
+            </Button>
           </div>
         </nav>
       </div>

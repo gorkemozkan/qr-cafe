@@ -1,7 +1,6 @@
 "use client";
 
 import { RefreshCcw } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { FC, useEffect, useState } from "react";
 import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
@@ -15,8 +14,6 @@ interface Props {
 
 const RefreshButton: FC<Props> = (props) => {
   //#region Hooks
-
-  const tCommon = useTranslations("common");
 
   //#endregion
 
@@ -73,12 +70,12 @@ const RefreshButton: FC<Props> = (props) => {
 
   const getTooltipText = () => {
     if (blockedUntil && remainingTime > 0) {
-      return tCommon("refresh.tooManyAttempts", { remainingTime });
+      return `Too many refresh attempts. Try again in ${remainingTime}s`;
     }
     if (props.loading) {
-      return tCommon("refresh.refreshing");
+      return "Refreshing...";
     }
-    return tCommon("refresh.refresh", { attempt, maxAttempt: props.maxAttempt });
+    return `Refresh (${attempt}/${props.maxAttempt})`;
   };
 
   const isBlocked = blockedUntil !== null && remainingTime > 0;

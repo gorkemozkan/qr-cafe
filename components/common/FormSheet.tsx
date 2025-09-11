@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -14,8 +13,6 @@ interface Props {
 }
 
 const FormSheet: FC<Props> = (props) => {
-  const tCommon = useTranslations("common");
-
   return (
     <Sheet open onOpenChange={props.onOpenChange}>
       <SheetContent side="right">
@@ -27,7 +24,7 @@ const FormSheet: FC<Props> = (props) => {
         <SheetFooter>
           {props.footer}
           <Button variant="outline" onClick={() => props.onOpenChange(false)}>
-            {tCommon("cancel")}
+            Cancel
           </Button>
         </SheetFooter>
       </SheetContent>

@@ -2,7 +2,6 @@
 
 import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -19,8 +18,6 @@ interface Props {
 }
 
 const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
-  const t = useTranslations("cafe");
-
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -73,11 +70,11 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
 
     try {
       await navigator.clipboard.writeText(cafeUrl);
-      toast.success(t("qr.share.linkCopied"));
+      toast.success("Link copied to clipboard!");
     } catch (_error) {
-      toast.error(t("qr.share.copyFailed"));
+      toast.error("Failed to copy link");
     }
-  }, [cafeUrl, t]);
+  }, [cafeUrl]);
 
   const handleGoToMenu = useCallback(() => {
     if (cafeUrl && typeof window !== "undefined") {
@@ -108,7 +105,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
       ctx.fillStyle = "#000000";
       ctx.font = "bold 32px Arial";
       ctx.textAlign = "center";
-      ctx.fillText(t("qr.export.pdfTitle"), canvas.width / 2, 60);
+      ctx.fillText("QR Code for Cafe", canvas.width / 2, 60);
 
       // Add URL
       ctx.font = "18px Arial";
@@ -128,8 +125,8 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
         ctx.fillStyle = "#666666";
         ctx.font = "16px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(t("qr.export.pdfInstruction"), canvas.width / 2, 620);
-        ctx.fillText(t("qr.export.pdfGenerated", { date: new Date().toLocaleDateString() }), canvas.width / 2, 650);
+        ctx.fillText("Scan this QR code to visit the cafe page", canvas.width / 2, 620);
+        ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, 650);
 
         // Convert canvas to blob and download
         canvas.toBlob((blob) => {
@@ -142,13 +139,13 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            toast.success(t("qr.export.successMessage"));
+            toast.success("QR Code exported successfully!");
           }
         }, "image/png");
       };
       img.src = qrCodeDataUrl;
     } catch (_error) {
-      toast.error(t("qr.export.failedMessage"));
+      toast.error("Failed to export QR code");
     } finally {
       setIsExporting(false);
     }
@@ -160,15 +157,15 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
-            {t("qr.preview.title")}
+            QR Code Preview
           </DialogTitle>
-          <DialogDescription>{t("qr.preview.description")}</DialogDescription>
+          <DialogDescription>QR code - Scan to visit the cafe page</DialogDescription>
         </DialogHeader>
         <div>
           <div className="bg-background p-4 rounded-lg border">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
-                <p className="text-sm font-medium mb-1">{t("qr.preview.menuUrl")}:</p>
+                <p className="text-sm font-medium mb-1">Menu URL:</p>
                 <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
                   {cafeUrl}
                 </a>
@@ -198,33 +195,33 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                       <ContextMenuContent>
                         <ContextMenuItem onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl}>
                           <MessageCircle className="mr-2 h-4 w-4" />
-                          {t("qr.share.sendToWhatsApp")}
+                          Send to WhatsApp
                         </ContextMenuItem>
                         <ContextMenuItem onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting}>
                           <Download className="mr-2 h-4 w-4" />
-                          {t("qr.export.button")}
+                          Export
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                         <ContextMenuItem onClick={handleGoToMenu} disabled={!cafeUrl}>
                           <ExternalLink className="mr-2 h-4 w-4" />
-                          {t("qr.share.goToMenu")}
+                          Go to Menu
                         </ContextMenuItem>
                         <ContextMenuItem onClick={handleCopyLink} disabled={!cafeUrl}>
                           <Copy className="mr-2 h-4 w-4" />
-                          {t("qr.share.copyLink")}
+                          Copy Link
                         </ContextMenuItem>
                       </ContextMenuContent>
                     </ContextMenu>
                   </div>
                   <div className="text-center space-y-2">
-                    <p className="text-sm font-medium">{t("qr.preview.scanInstruction")}</p>
-                    <p className="text-xs text-muted-foreground">{t("qr.preview.scanDescription")}</p>
+                    <p className="text-sm font-medium">Scan this QR code</p>
+                    <p className="text-xs text-muted-foreground">Visitors can scan this code to access your cafe page</p>
                   </div>
                 </div>
               ) : (
                 <div className="w-[300px] h-[300px] flex items-center justify-center text-muted-foreground">
                   <div className="text-center space-y-2">
-                    <p className="text-sm font-medium text-red-500">{t("qr.preview.failedGeneration")}</p>
+                    <p className="text-sm font-medium text-red-500">Failed to generate QR code</p>
                   </div>
                 </div>
               )}
@@ -234,11 +231,11 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
             <div className="grid grid-cols-2 gap-2">
               <Button variant="outline" onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
                 <MessageCircle className="h-4 w-4" />
-                {t("qr.share.whatsApp")}
+                WhatsApp
               </Button>
               <Button variant="outline" onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting} className="flex items-center gap-2 w-full">
                 <Download className="h-4 w-4" />
-                {isExporting ? t("qr.export.exporting") : t("qr.export.button")}
+                {isExporting ? "Exporting..." : "Export"}
               </Button>
             </div>
           </div>

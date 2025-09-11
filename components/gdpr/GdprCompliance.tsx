@@ -2,7 +2,6 @@
 
 import { AlertTriangle, Download, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { GdprDataDeletionDialog } from "@/components/gdpr/GdprDataDeletionDialog";
 import { GdprDataExportDialog } from "@/components/gdpr/GdprDataExportDialog";
@@ -21,8 +20,6 @@ export function GdprCompliance() {
   const [showExportDialog, setShowExportDialog] = useState(false);
 
   const [showDeletionDialog, setShowDeletionDialog] = useState(false);
-
-  const tGdpr = useTranslations("gdpr");
 
   const handleDataExport = async () => {
     setIsExporting(true);
@@ -55,9 +52,9 @@ export function GdprCompliance() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
-      toast.success(tGdpr("export.successMessage"));
+      toast.success("Data export completed successfully");
     } catch (_error) {
-      toast.error(tGdpr("export.errorMessage"));
+      toast.error("Failed to export data. Please try again.");
     } finally {
       setIsExporting(false);
     }
@@ -71,7 +68,7 @@ export function GdprCompliance() {
       const result = await gdprRepository.deleteUserData(true);
 
       if (result.success) {
-        toast.success(tGdpr("delete.successMessage"));
+        toast.success("Your data has been permanently deleted");
 
         setTimeout(() => {
           window.location.href = "/admin/auth/login";
@@ -80,7 +77,7 @@ export function GdprCompliance() {
         throw new Error(result.message || "Failed to delete data");
       }
     } catch (_error) {
-      toast.error(tGdpr("delete.errorMessage"));
+      toast.error("Failed to delete data. Please try again.");
     } finally {
       setIsDeleting(false);
     }
@@ -88,27 +85,27 @@ export function GdprCompliance() {
 
   return (
     <div className=" space-y-12">
-      <PageTitle showBackButton title={tGdpr("title")} subtitle={tGdpr("subtitle")} />
+      <PageTitle showBackButton title="User Settings" subtitle="Manage your account and preferences" />
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Download className="h-5 w-5" />
-              {tGdpr("export.title")}
+              Export Your Data
             </CardTitle>
-            <CardDescription>{tGdpr("export.description")}</CardDescription>
+            <CardDescription>Download a complete copy of all your personal data in JSON format.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">{tGdpr("dataTypes.userAccount")}</Badge>
-              <Badge variant="secondary">{tGdpr("dataTypes.cafes")}</Badge>
-              <Badge variant="secondary">{tGdpr("dataTypes.categories")}</Badge>
-              <Badge variant="secondary">{tGdpr("dataTypes.products")}</Badge>
+              <Badge variant="secondary">User Account</Badge>
+              <Badge variant="secondary">Cafes</Badge>
+              <Badge variant="secondary">Categories</Badge>
+              <Badge variant="secondary">Products</Badge>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end mt-auto">
             <Button onClick={() => setShowExportDialog(true)} disabled={isExporting} className="w-full">
-              {isExporting ? tGdpr("export.exportingButton") : tGdpr("export.exportButton")}
+              {isExporting ? "Exporting..." : "Export Data"}
             </Button>
           </CardFooter>
         </Card>
@@ -116,18 +113,21 @@ export function GdprCompliance() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 ">
               <Trash2 className="h-5 w-5" />
-              {tGdpr("delete.title")}
+              Delete Your Data
             </CardTitle>
-            <CardDescription>{tGdpr("delete.description")}</CardDescription>
+            <CardDescription>Permanently delete all your data. This action cannot be undone.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
-                <AlertDescription>{tGdpr("delete.warningMessage")}</AlertDescription>
+                <AlertDescription>
+                  This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your
+                  account anymore.
+                </AlertDescription>
               </Alert>
               <Button onClick={() => setShowDeletionDialog(true)} disabled={isDeleting} className="w-full">
-                {isDeleting ? tGdpr("delete.deletingButton") : tGdpr("delete.deleteButton")}
+                {isDeleting ? "Deleting..." : "Delete All Data"}
               </Button>
             </div>
           </CardContent>
