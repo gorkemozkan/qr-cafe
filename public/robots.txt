@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+
+# Allow access to public menu pages
+Allow: /menu/
+
+# Sitemap
+Sitemap: /sitemap.xml

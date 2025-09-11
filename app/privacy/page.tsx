@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { nextPublicBaseUrl } from "@/lib/env";
 import BackButton from "@/components/common/BackButton";
 
 export const metadata: Metadata = {
@@ -7,6 +8,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  alternates: {
+    canonical: `${nextPublicBaseUrl}/privacy`,
   },
 };
 

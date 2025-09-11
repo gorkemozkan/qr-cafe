@@ -9,12 +9,12 @@ interface Params {
   params: Promise<{ slug: string }>;
 }
 
-function generateStructuredData(menu: PublicMenuData): string {
+function generateStructuredData(menu: PublicMenuData) {
   const baseUrl = nextPublicBaseUrl;
 
   const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
 
-  return JSON.stringify({
+  return {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     name: menu.cafe.name,
@@ -44,7 +44,7 @@ function generateStructuredData(menu: PublicMenuData): string {
       })),
     },
     servesCuisine: "Various",
-  });
+  };
 }
 
 function generateSEOTitle(menu: PublicMenuData): string {
@@ -109,7 +109,7 @@ export const generateMetadata = async ({ params }: Params): Promise<Metadata> =>
 
   const baseUrl = nextPublicBaseUrl as string;
 
-  const menuUrl = `${baseUrl}/${menu.cafe.slug}`;
+  const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
 
   return {
     title,
@@ -165,12 +165,10 @@ const Page: NextPage<Params> = async (props) => {
     notFound();
   }
 
-  const structuredData = generateStructuredData(menu);
-
   return (
     <>
       <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
-        {JSON.stringify(structuredData)}
+        {JSON.stringify(generateStructuredData(menu))}
       </Script>
       <SimpleMenu menu={menu} />
     </>
