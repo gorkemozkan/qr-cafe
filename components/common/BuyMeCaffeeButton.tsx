@@ -1,17 +1,16 @@
 "use client";
 
 import { Coffee } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import TooltipButton from "./TooltipButton";
 
 const BuyMeCaffeeButton = () => {
   return (
-    <Button size="lg" className="bg-[#FFDD04] text-gray-900 hover:bg-[#FFDD04]/90 font-semibold" asChild>
-      <Link href="https://buymeacoffee.com/twqsvs897st" target="_blank">
-        <Coffee className="h-4 w-4" />
-        Buy Me a Coffee
-      </Link>
-    </Button>
+    <TooltipButton onClick={() => window.open("https://buymeacoffee.com/twqsvs897st", "_blank")} tooltip="Buy Me a Coffee">
+      <Button size="lg" className="bg-[#FFDD04] text-gray-900 hover:bg-[#FFDD04]/90  cursor-pointer">
+        <Coffee className="h-5 w-5" />
+      </Button>
+    </TooltipButton>
   );
 };
 
