@@ -1,15 +1,15 @@
 "use client";
 
-import { Edit, Eye, Link, MoreHorizontal, Trash2 } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tooltip } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 interface Props {
   onEdit?: () => void;
   onDelete?: () => void;
-  onInspect?: () => void;
   to?: string;
   rowData?: any;
   additionalActions?: React.ReactNode;
@@ -20,9 +20,7 @@ const TableActions: FC<Props> = (props) => {
 
   const hasDelete = !!props.onDelete;
 
-  const hasInspect = !!props.onInspect;
-
-  const actionCount = [hasEdit, hasDelete, hasInspect].filter(Boolean).length;
+  const actionCount = [hasEdit, hasDelete].filter(Boolean).length;
 
   if (actionCount === 1) {
     if (hasEdit) {
@@ -40,16 +38,6 @@ const TableActions: FC<Props> = (props) => {
         </Button>
       );
     }
-
-    if (props.to) {
-      return (
-        <Button asChild variant="outline" size="sm" className="h-8 w-8 p-0">
-          <Link href={props.to}>
-            <Eye className="h-4 w-4" />
-          </Link>
-        </Button>
-      );
-    }
   }
 
   if (actionCount > 1) {
@@ -59,14 +47,22 @@ const TableActions: FC<Props> = (props) => {
           <div className="flex items-center space-x-2">
             {props.additionalActions && props.additionalActions}
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant="outline" size="lg">
+                <MoreHorizontal className="h-6 w-6" />
               </Button>
             </DropdownMenuTrigger>
           </div>
         </Tooltip>
 
         <DropdownMenuContent align="end">
+          {props.to && (
+            <DropdownMenuItem asChild>
+              <Link href={props.to}>
+                <Eye className="mr-2 h-4 w-4" />
+                View
+              </Link>
+            </DropdownMenuItem>
+          )}
           {hasEdit && (
             <DropdownMenuItem onClick={props.onEdit}>
               <Edit className="mr-2 h-4 w-4" />
@@ -74,12 +70,6 @@ const TableActions: FC<Props> = (props) => {
             </DropdownMenuItem>
           )}
 
-          {hasInspect && (
-            <DropdownMenuItem onClick={props.onInspect}>
-              <Eye className="mr-2 h-4 w-4" />
-              View
-            </DropdownMenuItem>
-          )}
           {hasDelete && (
             <DropdownMenuItem onClick={props.onDelete}>
               <Trash2 className="mr-2 h-4 w-4" />

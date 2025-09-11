@@ -81,10 +81,10 @@ const CafeEditSheet: FC<Props> = (props) => {
         ref={formRef}
         cafe={props.cafe}
         isLoading={isLoading}
+        onCancel={() => props.onClose?.(false)}
         onSubmit={async (data, logoFile) => {
           await execute({ data, logoFile });
         }}
-        onCancel={() => props.onClose?.(false)}
       />
     </FormSheet>
   );

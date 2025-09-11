@@ -84,7 +84,6 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
 
   //#region Methods
 
-  // Expose form methods via ref
   useImperativeHandle(ref, () => ({
     submitForm: () => {
       handleSubmit(onSubmitForm)();

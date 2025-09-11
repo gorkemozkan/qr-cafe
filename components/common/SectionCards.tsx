@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
-import FancyBackground from "@/components/landing/FancyBackground";
 import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface Item {
   title: string;
@@ -13,45 +13,41 @@ interface Props {
   items: Item[];
 }
 
-const AnimatedValue: FC<{ value: string; className: string }> = ({ value, className }) => {
-  const [displayValue, setDisplayValue] = useState(value);
-
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const prevValueRef = useRef(value);
-
-  useEffect(() => {
-    if (prevValueRef.current !== value) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => {
-        setDisplayValue(value);
-        setIsAnimating(false);
-      }, 150);
-      prevValueRef.current = value;
-      return () => clearTimeout(timer);
-    }
-  }, [value]);
-
-  return (
-    <div className="relative overflow-hidden">
-      <div className={`${className} transition-all duration-300 ${isAnimating ? "scale-110 text-primary" : "scale-100"}`}>{displayValue}</div>
-      {isAnimating && <div className="absolute inset-0 rounded animate-pulse" />}
-    </div>
-  );
-};
-
 const SectionCards: FC<Props> = (props) => {
   return (
-    <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 relative">
-      <FancyBackground />
+    <div className="grid grid-cols-1 gap-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 relative">
       {props.items.map((item) => (
-        <Card key={item.title} className="@container/card shadow-none bg-transparent p-3">
-          <CardHeader className="p-0">
-            <CardDescription>{item.title}</CardDescription>
-            <AnimatedValue value={item.value} className="text-3xl font-black tabular-nums @[250px]/card:text-3xl mt-3" />
+        <Card
+          key={item.title}
+          className={cn(
+            "@container/card relative overflow-hidden",
+            "bg-gradient-to-br from-card/50 to-card/80 backdrop-blur-sm",
+            "border border-border/50 shadow-lg shadow-black/5",
+            "hover:shadow-xl hover:shadow-primary/10 hover:border-primary/20",
+            "transition-all duration-300 ease-out",
+            "hover:-translate-y-1 hover:scale-[1.02]",
+            "group p-0",
+          )}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          <CardHeader className="relative p-4 pb-2">
+            <CardDescription className="text-sm font-medium text-muted-foreground/80 group-hover:text-muted-foreground transition-colors">
+              {item.title}
+            </CardDescription>
+            <div className="mt-3">
+              <p className="text-3xl font-black tabular-nums @[250px]/card:text-3xl bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                {item.value}
+              </p>
+            </div>
           </CardHeader>
-          <CardFooter className="flex-col items-start gap-1.5 p-0">
-            <p className="line-clamp-1 flex gap-2 text-xs text-muted-foreground">{item.description}</p>
+
+          <CardFooter className="relative flex-col items-start gap-2 p-4 pt-0">
+            <p className="line-clamp-2 text-xs text-muted-foreground/70 group-hover:text-muted-foreground/90 transition-colors leading-relaxed">
+              {item.description}
+            </p>
+
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-8 translate-x-8 group-hover:scale-110 transition-transform duration-300" />
           </CardFooter>
         </Card>
       ))}

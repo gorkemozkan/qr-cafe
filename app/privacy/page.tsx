@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
-import { nextPublicBaseUrl } from "@/lib/env";
 import BackButton from "@/components/common/BackButton";
+import { nextPublicBaseUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",

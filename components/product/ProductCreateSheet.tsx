@@ -66,7 +66,7 @@ const ProductCreateSheet: FC<Props> = (props) => {
   return (
     <>
       <TooltipButton onClick={handleCreateClick} tooltip="Create new product">
-        <Button variant="outline">
+        <Button size={"lg"} variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
       </TooltipButton>

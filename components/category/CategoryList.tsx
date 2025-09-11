@@ -59,10 +59,6 @@ const CategoryList: FC<Props> = (props) => {
     }
   };
 
-  const handleInspectClick = (category: Tables<"categories">) => {
-    router.push(`/admin/app/cafe/${props.cafeId}/categories/${category.id}`);
-  };
-
   //#endregion
 
   const columns = [
@@ -115,7 +111,11 @@ const CategoryList: FC<Props> = (props) => {
       header: "Actions",
       className: "flex justify-end",
       cell: (_: any, row: Tables<"categories">) => (
-        <TableActions onInspect={() => handleInspectClick(row)} onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />
+        <TableActions
+          onEdit={() => setCategoryToEdit(row)}
+          onDelete={() => handleDeleteClick(row)}
+          to={`/admin/app/cafe/${props.cafeId}/categories/${row.id}`}
+        />
       ),
     },
   ];
@@ -133,9 +133,9 @@ const CategoryList: FC<Props> = (props) => {
         <CategoryEditSheet onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />
       )}
       <QuestionDialog
+        confirmText="Delete"
         open={deleteDialogOpen}
         title="Delete Category"
-        confirmText="Delete"
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
         onOpenChange={setDeleteDialogOpen}

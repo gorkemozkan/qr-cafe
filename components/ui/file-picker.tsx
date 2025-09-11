@@ -1,13 +1,11 @@
 "use client";
 
-import { Image as ImageIcon, Upload, X } from "lucide-react";
-import Image from "next/image";
-import * as React from "react";
+import { cn } from "@/lib/utils";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import Spinner from "@/components/common/Spinner";
-import { Loader2 } from "lucide-react";
+import { Image as ImageIcon, Upload, X, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 interface FilePickerProps {
   id?: string;
@@ -35,10 +33,10 @@ const FilePicker = ({
 }: FilePickerProps) => {
   const label = "Choose file";
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = React.useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value) {
       const url = URL.createObjectURL(value);
       setPreview(url);

@@ -13,7 +13,7 @@ const Page: NextPage = () => {
   return (
     <div className="@container/main flex flex-1 flex-col gap-2">
       <PageTitleWithUser />
-      <div className="mt-20 space-y-8">
+      <div className="mt-12 space-y-8">
         <DashboardStatCards />
         <CafeList />
       </div>
