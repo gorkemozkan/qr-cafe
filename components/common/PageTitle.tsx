@@ -1,9 +1,7 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { FC, ReactNode } from "react";
+import BackButton from "@/components/common/BackButton";
 
 interface Props {
   subtitle?: string;
@@ -12,19 +10,14 @@ interface Props {
   showBackButton?: boolean;
 }
 
-const PageTitle = (props: Props) => {
-  const router = useRouter();
+const PageTitle: FC<Props> = (props) => {
   if (props.actions) {
     return (
       <div className="flex justify-between items-center flex-wrap gap-2">
         <div className="space-y-0.5">
           <h1 className="text-2xl font-bold">{props.title}</h1>
           {props.subtitle && <p className="text-sm text-muted-foreground">{props.subtitle}</p>}
-          {props.showBackButton && (
-            <Button variant="outline" size="sm" onClick={() => router.back()}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          )}
+          {props.showBackButton && <BackButton noText />}
         </div>
         {props.actions}
       </div>
@@ -34,11 +27,7 @@ const PageTitle = (props: Props) => {
   if (props.subtitle) {
     return (
       <div className="flex flex-col gap-4 items-start">
-        {props.showBackButton && (
-          <Button variant="outline" size="sm" onClick={() => router.back()}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        )}
+        {props.showBackButton && <BackButton noText />}
         <div className="space-y-0.5">
           <h1 className="text-2xl font-bold">{props.title}</h1>
           <p className="text-sm text-muted-foreground">{props.subtitle}</p>

@@ -1,5 +1,4 @@
 import { FC, useEffect, useRef, useState } from "react";
-import FancyBackground from "@/components/landing/FancyBackground";
 import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 
 interface Item {
@@ -43,7 +42,6 @@ const AnimatedValue: FC<{ value: string; className: string }> = ({ value, classN
 const SectionCards: FC<Props> = (props) => {
   return (
     <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 relative">
-      <FancyBackground />
       {props.items.map((item) => (
         <Card key={item.title} className="@container/card shadow-none bg-transparent p-3">
           <CardHeader className="p-0">

@@ -1,7 +1,6 @@
 "use client";
 
 import { QrCode } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { FC, useCallback, useMemo, useState } from "react";
 import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import CafeEditSheet from "@/components/cafe/CafeEditSheet";
@@ -24,8 +23,6 @@ import { Tables } from "@/types/db";
 const CafeList: FC = () => {
   //#region Hooks
 
-  const router = useRouter();
-
   //#endregion
 
   //#region States
@@ -43,6 +40,7 @@ const CafeList: FC = () => {
   //#endregion
 
   //#region Request
+
   const { isLoading: isDeleting, execute: deleteCafe } = useRequest({
     mutationFn: async (id: number) => {
       return await cafeRepository.remove(id);
@@ -73,13 +71,6 @@ const CafeList: FC = () => {
       await deleteCafe(cafeToDelete.id);
     }
   }, [cafeToDelete, deleteCafe]);
-
-  const handleCategoriesClick = useCallback(
-    (cafe: Tables<"cafes">) => {
-      router.push(`/admin/app/cafe/${cafe.id}/categories`);
-    },
-    [router],
-  );
 
   const handleQRCodeClick = useCallback((cafe: Tables<"cafes">) => {
     setCafeForQR(cafe);
@@ -157,13 +148,13 @@ const CafeList: FC = () => {
             <TableActions
               onEdit={() => setCafeToEdit(row)}
               onDelete={() => handleDeleteClick(row)}
-              onInspect={() => handleCategoriesClick(row)}
+              to={`/admin/app/cafe/${row.id}/categories`}
               additionalActions={
                 <div className="flex items-center gap-2">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="outline" size="sm" onClick={() => handleQRCodeClick(row)} className="p-2">
-                        <QrCode className="h-4 w-4" />
+                      <Button variant="outline" size="lg" onClick={() => handleQRCodeClick(row)} className="p-2">
+                        <QrCode className="h-6 w-6" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -178,7 +169,7 @@ const CafeList: FC = () => {
         ),
       },
     ],
-    [handleDeleteClick, handleCategoriesClick, handleQRCodeClick],
+    [handleDeleteClick, handleQRCodeClick],
   );
 
   return (

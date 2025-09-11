@@ -12,10 +12,10 @@ const CategoriesPage: NextPage<Props> = async (props) => {
   const cafeId = Number.parseInt(params.id as string, 10);
 
   return (
-    <div>
+    <>
       <PageTitle showBackButton title="Categories" subtitle="Manage categories for your cafe" />
       <CategoryList cafeId={cafeId} />
-    </div>
+    </>
   );
 };
 

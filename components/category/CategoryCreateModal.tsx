@@ -50,7 +50,7 @@ const CategoryCreateSheet: FC<Props> = (props) => {
   return (
     <>
       <TooltipButton onClick={() => setOpen(true)} tooltip="Create a new category">
-        <Button variant="outline">
+        <Button size={"lg"} variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
       </TooltipButton>

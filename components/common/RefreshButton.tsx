@@ -83,7 +83,7 @@ const RefreshButton: FC<Props> = (props) => {
   if (isBlocked) {
     return (
       <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
-        <Button variant="outline" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <Button size={"lg"} variant="outline" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           <RefreshCcw className="h-4 w-4" />
         </Button>
       </TooltipButton>
