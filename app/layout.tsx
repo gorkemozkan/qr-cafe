@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { nextPublicBaseUrl } from "@/lib/env";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: {
@@ -98,6 +99,7 @@ const RootLayout: FC<Props> = async (props) => {
           {JSON.stringify(getStructuredData(nextPublicBaseUrl || "/"))}
         </Script>
       </head>
+      <GoogleTagManager gtmId="GTM-TJ2XX28D" />
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <QueryProvider>{props.children}</QueryProvider>
