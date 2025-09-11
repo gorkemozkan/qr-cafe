@@ -1,6 +1,6 @@
 # Environment Variables Documentation
 
-This document provides comprehensive information about environment variables used in the QR Cafe application.
+This document provides comprehensive information about environment variables used in the Only Menu application.
 
 ## Overview
 
