@@ -13,35 +13,10 @@ interface Props {
   items: Item[];
 }
 
-const AnimatedValue: FC<{ value: string; className: string }> = ({ value, className }) => {
-  const [displayValue, setDisplayValue] = useState(value);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const prevValueRef = useRef(value);
-
-  useEffect(() => {
-    if (prevValueRef.current !== value) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => {
-        setDisplayValue(value);
-        setIsAnimating(false);
-      }, 200);
-      prevValueRef.current = value;
-      return () => clearTimeout(timer);
-    }
-  }, [value]);
-
-  return (
-    <div className="relative overflow-hidden">
-      <div className={cn(className, "transition-all duration-500 ease-out")}>{displayValue}</div>
-      {isAnimating && <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/20 via-primary/10 to-transparent animate-pulse" />}
-    </div>
-  );
-};
-
 const SectionCards: FC<Props> = (props) => {
   return (
     <div className="grid grid-cols-1 gap-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 relative">
-      {props.items.map((item, index) => (
+      {props.items.map((item) => (
         <Card
           key={item.title}
           className={cn(
@@ -53,11 +28,7 @@ const SectionCards: FC<Props> = (props) => {
             "hover:-translate-y-1 hover:scale-[1.02]",
             "group p-0",
           )}
-          style={{
-            animationDelay: `${index * 100}ms`,
-          }}
         >
-          {/* Subtle background gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           <CardHeader className="relative p-4 pb-2">
@@ -65,10 +36,9 @@ const SectionCards: FC<Props> = (props) => {
               {item.title}
             </CardDescription>
             <div className="mt-3">
-              <AnimatedValue
-                value={item.value}
-                className="text-3xl font-black tabular-nums @[250px]/card:text-3xl bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent"
-              />
+              <p className="text-3xl font-black tabular-nums @[250px]/card:text-3xl bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                {item.value}
+              </p>
             </div>
           </CardHeader>
 
