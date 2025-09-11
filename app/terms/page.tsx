@@ -3,7 +3,7 @@ import BackButton from "@/components/common/BackButton";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of Service for QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
+  description: "Terms of Service for Only Menu - Smart QR Menu Solutions for Cafes & Restaurants",
   robots: {
     index: true,
     follow: true,
@@ -19,16 +19,16 @@ export default function TermsPage() {
           <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            By accessing and using QR Cafe ("Service", "Platform", "we", "us", "our"), you agree to be bound by these Terms of Service ("Terms"). If
+            By accessing and using Only Menu ("Service", "Platform", "we", "us", "our"), you agree to be bound by these Terms of Service ("Terms"). If
             you do not agree to these Terms, please do not use our Service.
           </p>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            QR Cafe is a digital menu management platform that allows cafes and restaurants to create, manage, and display QR code-based menus for
+            Only Menu is a digital menu management platform that allows cafes and restaurants to create, manage, and display QR code-based menus for
             their customers.
           </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Description of Service</h2>
-          <p className="mb-4 leading-relaxed text-muted-foreground">QR Cafe provides:</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">Only Menu provides:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>Digital menu creation and management tools</li>
             <li>QR code generation for contactless menu access</li>
@@ -58,7 +58,7 @@ export default function TermsPage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">4. Acceptable Use</h2>
           <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">4.1 Permitted Uses</h3>
-          <p className="mb-4 leading-relaxed text-muted-foreground">You may use QR Cafe to:</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">You may use Only Menu to:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>Create and manage digital menus for your legitimate food service business</li>
             <li>Upload logos and product images that you own or have rights to use</li>
@@ -89,12 +89,12 @@ export default function TermsPage() {
           <p className="mb-4 leading-relaxed text-muted-foreground">For questions about these Terms, contact us at:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>Email: developer@ozgorkem.com</li>
-            <li>Service: QR Cafe Platform</li>
+            <li>Service: Only Menu Platform</li>
           </ul>
 
           <div className="border-t mt-8 pt-8">
             <p className="text-sm text-muted-foreground mt-2">
-              By using QR Cafe, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+              By using Only Menu, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
             </p>
           </div>
         </div>

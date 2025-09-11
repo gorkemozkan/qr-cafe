@@ -3,7 +3,7 @@ import BackButton from "@/components/common/BackButton";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy Policy for QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
+  description: "Privacy Policy for Only Menu - Smart QR Menu Solutions for Cafes & Restaurants",
   robots: {
     index: true,
     follow: true,
@@ -20,10 +20,12 @@ export default function PrivacyPage() {
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Introduction</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">
-            QR Cafe ("we", "us", "our") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains
+            Only Menu ("we", "us", "our") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains
             how we collect, use, disclose, and safeguard your information when you use our QR code menu management platform.
           </p>
-          <p className="mb-4 leading-relaxed text-muted-foreground">By using QR Cafe, you consent to the data practices described in this policy.</p>
+          <p className="mb-4 leading-relaxed text-muted-foreground">
+            By using Only Menu, you consent to the data practices described in this policy.
+          </p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Information We Collect</h2>
 
@@ -174,7 +176,7 @@ export default function PrivacyPage() {
           </ul>
           <p className="mb-4 leading-relaxed text-muted-foreground">To access these features:</p>
           <ol className="mb-4 space-y-2 text-muted-foreground list-decimal list-inside">
-            <li>Log in to your QR Cafe account</li>
+            <li>Log in to your Only Menu account</li>
             <li>Click on your user menu (top-right corner)</li>
             <li>Select "GDPR Compliance" from the dropdown menu</li>
             <li>Choose whether you want to export or delete your data</li>
@@ -196,7 +198,7 @@ export default function PrivacyPage() {
 
           <div className="border-t mt-8 pt-8">
             <p className="text-sm text-muted-foreground mt-2">
-              This Privacy Policy is part of our Terms of Service. By using QR Cafe, you acknowledge that you have read and understand this Privacy
+              This Privacy Policy is part of our Terms of Service. By using Only Menu, you acknowledge that you have read and understand this Privacy
               Policy.
             </p>
           </div>

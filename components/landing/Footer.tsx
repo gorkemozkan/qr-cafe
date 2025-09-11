@@ -15,7 +15,7 @@ const Footer: FC = () => {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
-              <span className="text-xl font-bold">QR Cafe</span>
+              <span className="text-xl font-bold">Only Menu</span>
             </div>
             <p className="text-muted-foreground">{t("description")}</p>
           </div>

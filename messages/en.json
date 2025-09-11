@@ -124,7 +124,7 @@
     },
     "cta": {
       "title": "Ready to <span>Transform</span> Your Cafe?",
-      "subtitle": "Join hundreds of cafes already using QR Cafe to create beautiful digital menus. <strong>Start your free trial today</strong> and see the difference in minutes.",
+      "subtitle": "Join hundreds of cafes already using Only Menu to create beautiful digital menus. <strong>Start your free trial today</strong> and see the difference in minutes.",
       "button": "Start Free Trial",
       "features": {
         "instantQR": "Instant QR Codes",
@@ -136,7 +136,7 @@
       "legal": "Legal",
       "product": "Product",
       "features": "Features",
-      "copyright": "QR Cafe - All rights reserved",
+      "copyright": "Only Menu - All rights reserved",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     }

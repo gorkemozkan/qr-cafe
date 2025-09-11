@@ -1,4 +1,4 @@
-# QR Cafe
+# Only Menu
 
 Manageable, multi-use QR Menu SaaS platform for cafes & restaurants.
 

@@ -13,8 +13,8 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | QR Cafe",
-    default: "QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
+    template: "%s | Only Menu",
+    default: "Only Menu - Smart QR Menu Solutions for Cafes & Restaurants",
   },
   category: "Technology",
   description:
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     "mobile-first menu",
     "restaurant digitization",
   ],
-  authors: [{ name: "QR Cafe Team" }],
-  creator: "QR Cafe",
-  publisher: "QR Cafe",
+  authors: [{ name: "Only Menu Team" }],
+  creator: "Only Menu",
+  publisher: "Only Menu",
   openGraph: {
-    title: "QR Cafe - Smart QR Menu Solutions for Cafes & Restaurants",
+    title: "Only Menu - Smart QR Menu Solutions for Cafes & Restaurants",
     description:
       "Create interactive digital menus with QR codes. Transform your cafe or restaurant with smart menu solutions that enhance customer experience and streamline operations.",
     url: nextPublicBaseUrl,
-    siteName: "QR Cafe",
+    siteName: "Only Menu",
     type: "website",
     locale: "en_US",
   },
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "QR Cafe",
+  name: "Only Menu",
   description: "Smart QR menu solutions for cafes and restaurants. Create interactive digital menus with QR codes.",
   url: "/",
   contactPoint: {
@@ -71,7 +71,7 @@ const structuredData = {
   },
   founder: {
     "@type": "Person",
-    name: "QR Cafe Team",
+    name: "Only Menu Team",
   },
   industry: "Technology",
   serviceArea: "Global",

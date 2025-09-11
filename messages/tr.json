@@ -124,7 +124,7 @@
     },
     "cta": {
       "title": "Kafenizi <span>Dönüştürmeye</span> Hazır mısınız?",
-      "subtitle": "Güzel dijital menüler oluşturmak için QR Cafe kullanan yüzlerce kafeye katılın. <strong>Ücretsiz deneme sürümünüzü bugün başlatın</strong> ve farkı dakikalar içinde görün.",
+      "subtitle": "Güzel dijital menüler oluşturmak için Only Menu kullanan yüzlerce kafeye katılın. <strong>Ücretsiz deneme sürümünüzü bugün başlatın</strong> ve farkı dakikalar içinde görün.",
       "button": "Ücretsiz Deneme Başlat",
       "features": {
         "instantQR": "Anında QR Kodlar",
@@ -136,7 +136,7 @@
       "legal": "Yasal",
       "product": "Ürün",
       "features": "Özellikler",
-      "copyright": "QR Cafe - Tüm hakları saklıdır",
+      "copyright": "Only Menu - Tüm hakları saklıdır",
       "privacy": "Gizlilik Politikası",
       "terms": "Hizmet Şartları"
     }

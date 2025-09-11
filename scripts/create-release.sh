@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Simple Release Script for QR Cafe
+# Simple Release Script for Only Menu
 # Usage: ./scripts/create-release.sh [version] [message]
 
 set -e

@@ -22,7 +22,7 @@ const Header: FC = () => {
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
           >
             <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
-            <span className="text-2xl font-bold">QR Cafe</span>
+            <span className="text-2xl font-bold">Only Menu</span>
           </button>
           <div className="flex items-center space-x-4">
             <LanguageSwitcher />
