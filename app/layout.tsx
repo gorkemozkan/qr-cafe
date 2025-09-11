@@ -54,16 +54,16 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "/",
+    canonical: nextPublicBaseUrl,
   },
 };
 
-const structuredData = {
+const getStructuredData = (baseUrl: string) => ({
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Only Menu",
   description: "Smart QR menu solutions for cafes and restaurants. Create interactive digital menus with QR codes.",
-  url: "/",
+  url: baseUrl,
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
@@ -80,7 +80,7 @@ const structuredData = {
     name: "QR Menu Solutions",
     description: "Digital menu creation and management for cafes and restaurants",
   },
-};
+});
 
 interface Props {
   children: ReactNode;
@@ -104,7 +104,7 @@ const RootLayout: FC<Props> = async (props) => {
         <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
         <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(structuredData)}
+          {JSON.stringify(getStructuredData(nextPublicBaseUrl || "/"))}
         </Script>
       </head>
       <body className="antialiased">
