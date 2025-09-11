@@ -192,6 +192,49 @@
     animation: pulse-slow 4s ease-in-out infinite;
   }
 
+  /* Dashboard background animations */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-30px);
+    }
+  }
+
+  @keyframes drawLine {
+    0% {
+      stroke-dasharray: 0, 100;
+    }
+    50% {
+      stroke-dasharray: 50, 50;
+    }
+    100% {
+      stroke-dasharray: 100, 0;
+    }
+  }
+
+  .animate-[float_6s_ease-in-out_infinite] {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-[float_8s_ease-in-out_infinite_reverse] {
+    animation: float 8s ease-in-out infinite reverse;
+  }
+
+  .animate-[float_10s_ease-in-out_infinite] {
+    animation: float 10s ease-in-out infinite;
+  }
+
+  .animate-[drawLine_4s_ease-in-out_infinite] {
+    animation: drawLine 4s ease-in-out infinite;
+  }
+
+  .animate-[drawLine_6s_ease-in-out_infinite_reverse] {
+    animation: drawLine 6s ease-in-out infinite reverse;
+  }
+
   /* Menu animations */
   @keyframes fadeInUp {
     from {
