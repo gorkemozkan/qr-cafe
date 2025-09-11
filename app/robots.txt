@@ -8,4 +8,4 @@ Disallow: /auth/
 Allow: /menu/
 
 # Sitemap
-Sitemap: /sitemap.xml
+Sitemap: https://www.only-menu.com/sitemap.xml
