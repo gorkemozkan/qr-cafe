@@ -135,7 +135,7 @@ export function OptimizedImage({
               height={300}
               className="max-w-full max-h-full object-contain rounded-lg"
               priority={true}
-              quality={90}
+              quality={100}
             />
           </div>
         </DrawerContent>
