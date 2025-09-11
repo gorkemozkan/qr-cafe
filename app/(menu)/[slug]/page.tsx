@@ -1,9 +1,9 @@
-import { NextPage, Metadata } from "next";
-import { notFound } from "next/navigation";
-import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import { publicMenuRepository, PublicMenuData } from "@/lib/repositories/public-menu-repository";
+import { notFound } from "next/navigation";
 import { nextPublicBaseUrl } from "@/lib/env";
+import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
 import Script from "next/script";
+import { NextPage, Metadata } from "next";
 
 interface Params {
   params: Promise<{ slug: string }>;
