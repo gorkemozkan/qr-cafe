@@ -4,6 +4,11 @@ import { nextPublicBaseUrl } from "@/lib/env";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = nextPublicBaseUrl as string;
 
+  if (!baseUrl) {
+    console.error("nextPublicBaseUrl is not set");
+    return [];
+  }
+
   return [
     {
       url: baseUrl,

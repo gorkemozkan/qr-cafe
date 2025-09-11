@@ -56,12 +56,12 @@ export const metadata: Metadata = {
   },
 };
 
-const getStructuredData = (baseUrl: string) => ({
+const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Only Menu",
   description: "Smart QR menu solutions for cafes and restaurants. Create interactive digital menus with QR codes.",
-  url: baseUrl,
+  url: nextPublicBaseUrl,
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
@@ -78,7 +78,7 @@ const getStructuredData = (baseUrl: string) => ({
     name: "QR Menu Solutions",
     description: "Digital menu creation and management for cafes and restaurants",
   },
-});
+};
 
 interface Props {
   children: ReactNode;
@@ -96,7 +96,7 @@ const RootLayout: FC<Props> = async (props) => {
         <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
         <Script id="structured-data" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(getStructuredData(nextPublicBaseUrl || "/"))}
+          {JSON.stringify(structuredData)}
         </Script>
       </head>
       <GoogleTagManager gtmId="GTM-TJ2XX28D" />
