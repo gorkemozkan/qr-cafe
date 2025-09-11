@@ -1,21 +1,16 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import UserDropdown from "@/components/auth/UserDropdown";
-import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import PageTitle from "@/components/common/PageTitle";
 import ThemeToggle from "@/components/common/ThemeToggle";
 
 const PageTitleWithUser = () => {
-  const t = useTranslations();
-
   return (
     <PageTitle
-      subtitle={t("dashboard.subtitle")}
-      title={`${t("dashboard.welcome")}`}
+      subtitle="You can manage your cafes and categories here."
+      title="Welcome back!"
       actions={
         <div className="flex items-center gap-2">
-          <LanguageSwitcher />
           <ThemeToggle />
           <UserDropdown />
         </div>

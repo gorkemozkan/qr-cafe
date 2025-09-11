@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
@@ -38,7 +37,6 @@ const CategoryListDropdown = ({
 }: Props) => {
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const t = useTranslations("category");
   useEffect(() => {
     const loadCategories = async () => {
       if (!cafeId) {
@@ -51,22 +49,18 @@ const CategoryListDropdown = ({
         const categoriesData = await categoryRepository.listByCafe(cafeId);
         setCategories(categoriesData);
       } catch (_error) {
-        toast.error(t("messages.loadFailed"));
+        toast.error("Failed to load categories");
       } finally {
         setIsLoading(false);
       }
     };
 
     loadCategories();
-  }, [cafeId, t]);
+  }, [cafeId]);
 
   const isDisabled = disabled || !cafeId || isLoading;
 
-  const displayPlaceholder = !cafeId
-    ? t("dropdown.selectCafeFirst")
-    : isLoading
-      ? t("dropdown.loadingCategories")
-      : placeholder || t("dropdown.selectCategory");
+  const displayPlaceholder = !cafeId ? "Select a cafe first" : isLoading ? "Loading categories..." : placeholder || "Select a category";
 
   return (
     <div className="space-y-2">
@@ -89,7 +83,7 @@ const CategoryListDropdown = ({
             ))
           ) : (
             <div className="flex flex-col items-center justify-center gap-2 px-4 py-2 space-y-2">
-              <p className="text-sm text-muted-foreground text-center">{t("noCategories")}</p>
+              <p className="text-sm text-muted-foreground text-center">No categories found</p>
               <Button asChild variant="secondary" size="sm" className="w-full">
                 <Link href={`/admin/app/cafe/${cafeId}/categories`}>Create Category</Link>
               </Button>

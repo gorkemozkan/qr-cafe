@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+
 import "./globals.css";
 import { type FC, type ReactNode } from "react";
 import QueryProvider from "@/components/providers/QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { defaultLocale } from "@/i18n";
 import { nextPublicBaseUrl } from "@/lib/env";
 import Script from "next/script";
 
@@ -87,14 +84,8 @@ interface Props {
 }
 
 const RootLayout: FC<Props> = async (props) => {
-  const cookieStore = await cookies();
-
-  const locale = cookieStore.get("locale")?.value || defaultLocale;
-
-  const messages = await getMessages();
-
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -108,12 +99,10 @@ const RootLayout: FC<Props> = async (props) => {
         </Script>
       </head>
       <body className="antialiased">
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <QueryProvider>{props.children}</QueryProvider>
-            <Toaster />
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <QueryProvider>{props.children}</QueryProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

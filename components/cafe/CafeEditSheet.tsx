@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { FC, useRef, useState } from "react";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import FormSheet from "@/components/common/FormSheet";
@@ -24,8 +23,6 @@ interface UpdateMutationPayload {
 
 const CafeEditSheet: FC<Props> = (props) => {
   //#region Hooks
-
-  const t = useTranslations("cafe");
 
   const [isUploading, setIsUploading] = useState(false);
 
@@ -60,21 +57,21 @@ const CafeEditSheet: FC<Props> = (props) => {
     onSuccess: (cafe) => {
       props.onSuccess?.(cafe);
     },
-    successMessage: t("messages.updateSuccess"),
+    successMessage: "Cafe updated successfully!",
     invalidateQueries: [QueryKeys.stats, QueryKeys.cafes],
   });
 
   return (
     <FormSheet
-      title={t("edit.title")}
+      title="Edit Cafe"
       onOpenChange={props.onClose}
-      description={t("edit.description")}
+      description="Update the cafe information below."
       footer={
         <SubmitButton
           isLoading={isLoading}
-          text={t("edit.button")}
+          text="Update Cafe"
           disabled={isLoading || isUploading}
-          loadingText={t("edit.loadingButton")}
+          loadingText="Updating..."
           onClick={() => formRef.current?.submitForm()}
         />
       }

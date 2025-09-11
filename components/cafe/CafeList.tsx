@@ -2,7 +2,6 @@
 
 import { QrCode } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { FC, useCallback, useMemo, useState } from "react";
 import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
 import CafeEditSheet from "@/components/cafe/CafeEditSheet";
@@ -26,10 +25,6 @@ const CafeList: FC = () => {
   //#region Hooks
 
   const router = useRouter();
-
-  const t = useTranslations("cafe");
-
-  const tCommon = useTranslations("common");
 
   //#endregion
 
@@ -56,7 +51,7 @@ const CafeList: FC = () => {
       setDeleteDialogOpen(false);
       setCafeToDelete(null);
     },
-    successMessage: t("delete.successMessage"),
+    successMessage: "Cafe deleted successfully!",
     optimisticUpdate: {
       queryKey: QueryKeys.cafes,
       updateFn: (oldData: Tables<"cafes">[], cafeId: number) => oldData.filter((cafe) => cafe.id !== cafeId),
@@ -97,7 +92,7 @@ const CafeList: FC = () => {
     () => [
       {
         key: "logo",
-        header: t("table.headers.logo"),
+        header: "Logo",
         cell: (_: any, row: Tables<"cafes">) => (
           <>
             {row.logo_url ? (
@@ -114,7 +109,7 @@ const CafeList: FC = () => {
               />
             ) : (
               <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-                <span className="text-[8px] text-center text-muted-foreground">{t("table.logo.noLogo")}</span>
+                <span className="text-[8px] text-center text-muted-foreground">No Logo</span>
               </div>
             )}
           </>
@@ -122,7 +117,7 @@ const CafeList: FC = () => {
       },
       {
         key: "name",
-        header: t("table.headers.name"),
+        header: "Name",
         cell: (value: any) => (
           <div className="w-24">
             <Tooltip>
@@ -138,24 +133,24 @@ const CafeList: FC = () => {
       },
       {
         key: "currency",
-        header: t("table.headers.currency"),
+        header: "Currency",
         cell: (value: any) => value || "-",
       },
       {
         key: "is_active",
-        header: t("table.headers.status"),
-        tooltipText: t("table.status.activeTooltip"),
-        cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? t("table.status.active") : t("table.status.inactive")}</Badge>,
+        header: "Status",
+        tooltipText: "Status of the cafe, used for visibility",
+        cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
       },
       {
         key: "created_at",
-        header: t("table.headers.created"),
-        tooltipText: t("table.status.createdTooltip"),
+        header: "Created",
+        tooltipText: "Date and time when the cafe was created",
         cell: (value: any) => <DateView date={value} format="detailed" />,
       },
       {
         key: "actions",
-        header: t("table.headers.actions"),
+        header: "Actions",
         className: "flex justify-end",
         cell: (_: any, row: Tables<"cafes">) => (
           <div className="flex justify-end">
@@ -172,7 +167,7 @@ const CafeList: FC = () => {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{t("qr.preview.viewTooltip")}</p>
+                      <p>View QR Code</p>
                     </TooltipContent>
                   </Tooltip>
                   <ExternalLinkButton url={`${nextPublicBaseUrl}/${row.slug}`} />
@@ -183,30 +178,30 @@ const CafeList: FC = () => {
         ),
       },
     ],
-    [t, handleDeleteClick, handleCategoriesClick, handleQRCodeClick],
+    [handleDeleteClick, handleCategoriesClick, handleQRCodeClick],
   );
 
   return (
     <div>
       <DataTable
-        title={t("title")}
+        title="Cafes"
         actions={<CafeCreateSheet />}
         columns={columns}
         queryKey={QueryKeys.cafes}
         queryFn={async () => await cafeRepository.list()}
-        emptyMessage={t("noCafes")}
+        emptyMessage="No cafes found"
       />
       {cafeToEdit && <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title={t("delete.title")}
-        description={t("delete.confirmMessage", { slug: cafeToDelete?.slug || "" })}
-        confirmText={t("deleteCafe")}
-        confirmLoadingText={tCommon("deleting")}
+        title="Delete Cafe"
+        description={`Are you sure you want to delete "${cafeToDelete?.slug || ""}"? This action cannot be undone.`}
+        confirmText="Delete Cafe"
+        confirmLoadingText="Deleting..."
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
-        cancelText={tCommon("cancel")}
+        cancelText="Cancel"
       />
       {cafeForQR && (
         <QRPreviewDialog

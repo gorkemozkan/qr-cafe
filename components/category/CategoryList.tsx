@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { FC, useState } from "react";
 import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 import CategoryEditSheet from "@/components/category/CategoryEditModal";
@@ -21,12 +20,6 @@ interface Props {
 }
 
 const CategoryList: FC<Props> = (props) => {
-  //#region Hooks
-
-  const t = useTranslations("category");
-
-  const tCommon = useTranslations("common");
-
   //#endregion
 
   //#region States
@@ -51,7 +44,7 @@ const CategoryList: FC<Props> = (props) => {
       setDeleteDialogOpen(false);
       setCategoryToDelete(null);
     },
-    successMessage: t("delete.successMessage"),
+    successMessage: "Category deleted successfully!",
     invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
@@ -75,7 +68,7 @@ const CategoryList: FC<Props> = (props) => {
   const columns = [
     {
       key: "image",
-      header: t("table.headers.image"),
+      header: "Image",
       cell: (_: any, row: Tables<"categories">) => (
         <>
           {row.image_url ? (
@@ -91,7 +84,7 @@ const CategoryList: FC<Props> = (props) => {
             />
           ) : (
             <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">{t("table.status.noImage")}</span>
+              <span className="text-[8px] text-center text-muted-foreground">No Image</span>
             </div>
           )}
         </>
@@ -99,27 +92,27 @@ const CategoryList: FC<Props> = (props) => {
     },
     {
       key: "name",
-      header: t("table.headers.name"),
+      header: "Name",
       cell: (value: any) => <span className="font-medium">{value}</span>,
     },
     {
       key: "sort_order",
-      header: t("table.headers.sortOrder"),
+      header: "Sort Order",
       cell: (value: any) => value || "-",
     },
     {
       key: "is_active",
-      header: t("table.headers.status"),
-      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? t("table.status.active") : t("table.status.inactive")}</Badge>,
+      header: "Status",
+      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Active" : "Inactive"}</Badge>,
     },
     {
       key: "created_at",
-      header: t("table.headers.created"),
+      header: "Created",
       cell: (value: any) => <DateView date={value} format="detailed" />,
     },
     {
       key: "actions",
-      header: t("table.headers.actions"),
+      header: "Actions",
       className: "flex justify-end",
       cell: (_: any, row: Tables<"categories">) => (
         <TableActions onInspect={() => handleInspectClick(row)} onEdit={() => setCategoryToEdit(row)} onDelete={() => handleDeleteClick(row)} />
@@ -134,19 +127,19 @@ const CategoryList: FC<Props> = (props) => {
         actions={<CategoryCreateSheet cafeId={props.cafeId} />}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
         queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}
-        emptyMessage={t("noCategories")}
+        emptyMessage="No categories found"
       />
       {categoryToEdit && (
         <CategoryEditSheet onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />
       )}
       <QuestionDialog
         open={deleteDialogOpen}
-        title={t("delete.title")}
-        confirmText={tCommon("delete")}
+        title="Delete Category"
+        confirmText="Delete"
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
         onOpenChange={setDeleteDialogOpen}
-        description={t("delete.confirmMessage", { name: categoryToDelete?.name || "" })}
+        description={`Are you sure you want to delete "${categoryToDelete?.name || ""}"? This action cannot be undone.`}
       />
     </div>
   );
