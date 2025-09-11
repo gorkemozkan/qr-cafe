@@ -136,15 +136,15 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
 
   const scriptSrc =
     environment === "development"
-      ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
-      : `'self' 'unsafe-inline' https://challenges.cloudflare.com ${vercelLive}`.trim();
+      ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com"
+      : `'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com ${vercelLive}`.trim();
 
   const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
 
   const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
 
   const connectSrc =
-    `'self' ${supabaseHosts} https://challenges.cloudflare.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
+    `'self' ${supabaseHosts} https://challenges.cloudflare.com https://www.google-analytics.com https://googletagmanager.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
 
   const directives = [
     "default-src 'self'",
