@@ -2,7 +2,6 @@
 
 import { Image as ImageIcon, Upload, X } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -34,9 +33,7 @@ const FilePicker = ({
   disabled = false,
   loading = false,
 }: FilePickerProps) => {
-  const tCommon = useTranslations("common");
-
-  const label = tCommon("chooseFile");
+  const label = "Choose file";
 
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -132,9 +129,9 @@ const FilePicker = ({
                 {loading ? <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" /> : <Upload className="h-6 w-6 text-muted-foreground" />}
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">{tCommon("clickToBrowseFiles")}</p>
+                <p className="text-sm font-medium">Click to browse files</p>
                 <p className="text-xs text-muted-foreground">
-                  {accept === "image/*" ? "PNG, JPG, GIF " : tCommon("fileUpTo")} {Math.round(maxSize / 1024 / 1024)}MB
+                  {accept === "image/*" ? "PNG, JPG, GIF " : "File up to "} {Math.round(maxSize / 1024 / 1024)}MB
                 </p>
               </div>
             </div>
@@ -151,9 +148,7 @@ const FilePicker = ({
               )}
               <div>
                 <p className="text-sm font-medium">{value.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {(value.size / 1024 / 1024).toFixed(2)} {tCommon("mb")}
-                </p>
+                <p className="text-xs text-muted-foreground">{(value.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
             </div>
             <Button type="button" variant="ghost" size="sm" onClick={handleRemove} disabled={disabled} className="h-8 w-8 p-0">

@@ -1,8 +1,7 @@
 "use client";
 
 import { format as formatDate, formatDistance, isValid } from "date-fns";
-import { de, enUS, tr } from "date-fns/locale";
-import { useLocale, useTranslations } from "next-intl";
+import { enUS } from "date-fns/locale";
 import { FC } from "react";
 import { cn } from "@/lib/utils";
 
@@ -14,27 +13,13 @@ interface DateViewProps {
 }
 
 const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTime = false }) => {
-  const t = useTranslations("date");
-  const locale = useLocale();
-
   const dateObj = new Date(date);
 
   if (!isValid(dateObj)) {
-    return <span className={cn("inline-block", className)}>{t("invalid")}</span>;
+    return <span className={cn("inline-block", className)}>Invalid date</span>;
   }
 
-  const getDateLocale = () => {
-    switch (locale) {
-      case "tr":
-        return tr;
-      case "en":
-        return enUS;
-      case "de":
-        return de;
-    }
-  };
-
-  const dateLocale = getDateLocale();
+  const dateLocale = enUS;
 
   const getFormattedDate = () => {
     switch (format) {

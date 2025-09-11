@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { FC, useRef, useState } from "react";
 import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
@@ -21,12 +20,6 @@ interface CreateMutationPayload {
 }
 
 const CafeCreateSheet: FC = () => {
-  //#region Hooks
-
-  const t = useTranslations("cafe");
-
-  //#endregion
-
   //#region States
 
   const [open, setOpen] = useState(false);
@@ -66,16 +59,14 @@ const CafeCreateSheet: FC = () => {
       setShowQRDialog(true);
       setOpen(false);
     },
-    successMessage: t("messages.createSuccess"),
-    errorMessage: t("messages.createFailed"),
+    successMessage: "Cafe created successfully!",
+    errorMessage: "Failed to create cafe",
     invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
   });
 
-  //#endregion
-
   return (
     <>
-      <TooltipButton onClick={() => setOpen(true)} tooltip={t("create.tooltip")}>
+      <TooltipButton onClick={() => setOpen(true)} tooltip="Create new cafe">
         <Button size={"lg"} variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
@@ -83,12 +74,12 @@ const CafeCreateSheet: FC = () => {
       {open && (
         <FormSheet
           onOpenChange={setOpen}
-          title={t("create.title")}
-          description={t("create.description")}
+          title="Create New Cafe"
+          description="Fill in the details below to create a new cafe."
           footer={
             <SubmitButton
-              text={t("create.button")}
-              loadingText={t("create.loadingButton")}
+              text="Create Cafe"
+              loadingText="Creating..."
               isLoading={createCafeMutation.isLoading}
               onClick={() => formRef.current?.submitForm()}
               disabled={createCafeMutation.isLoading || isUploading}

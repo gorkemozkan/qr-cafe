@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -35,8 +34,6 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [isUploading, setIsUploading] = useState(false);
-
-  const t = useTranslations("product");
 
   const router = useRouter();
 
@@ -82,8 +79,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
   };
 
   const onSubmit = async (data: ProductSchemaType) => {
-    if (!selectedCafeId) return toast.error(t("quickCreate.selectCafe"));
-    if (!data.category_id) return toast.error(t("quickCreate.selectCategory"));
+    if (!selectedCafeId) return toast.error("Please select a cafe");
+    if (!data.category_id) return toast.error("Please select a category");
 
     try {
       setIsUploading(true);
@@ -94,11 +91,11 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
       if (imageFile) {
         const cafe = await cafeRepository.getById(selectedCafeId);
 
-        if (!cafe) throw new Error(t("quickCreate.cafeNotFound"));
+        if (!cafe) throw new Error("Selected cafe not found");
 
         const uploadResult = await storageRepository.uploadFile(imageFile, cafe.slug, BUCKET_NAMES.PRODUCT_IMAGE);
         if (!uploadResult.success) {
-          const errorMessage = `${t("quickCreate.uploadFailed")}: ${uploadResult.error?.message || t("quickCreate.unknownError")}`;
+          const errorMessage = `Upload failed: ${uploadResult.error?.message || "Unknown error"}`;
           setUploadError(errorMessage);
           toast.error(errorMessage);
           return;
@@ -108,7 +105,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
       await productRepository.create(selectedCafeId, { ...data, image_url: imageUrl });
 
-      toast.success(t("quickCreate.successMessage"));
+      toast.success("Product created successfully");
       onOpenChange(false);
       reset();
       setSelectedCafeId(null);
@@ -117,7 +114,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
       router.push(`/admin/app/cafe/${selectedCafeId}/categories/${data.category_id}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : t("quickCreate.failedMessage");
+      const errorMessage = error instanceof Error ? error.message : "Failed to create product";
       toast.error(errorMessage);
       setUploadError(errorMessage);
     } finally {
@@ -129,8 +126,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
   return (
     <FormSheet
-      title={t("quickCreate.title")}
-      description={t("quickCreate.description")}
+      title="Create New Product"
+      description="Quickly create a new product for your cafe menu."
       onOpenChange={onOpenChange}
       footer={
         <SubmitButton
@@ -138,8 +135,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
           form="product-form"
           disabled={isSubmitting || isUploading}
           isLoading={isSubmitting || isUploading}
-          text={t("quickCreate.createButton")}
-          loadingText={t("quickCreate.creatingButton")}
+          text="Create"
+          loadingText="Creating..."
         />
       }
     >
@@ -147,42 +144,42 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         <CafeListDropdown
           required
           id="cafe"
-          label={t("form.labels.cafe")}
-          placeholder={t("quickCreate.selectCafePlaceholder")}
+          label="Cafe"
+          placeholder="Select a cafe"
           onValueChange={handleCafeChange}
           value={selectedCafeId || undefined}
         />
         <CategoryListDropdown
           id="category"
-          label={t("form.labels.category")}
+          label="Category"
           value={selectedCategoryId || undefined}
           onValueChange={handleCategoryChange}
           cafeId={selectedCafeId}
-          placeholder={t("placeholders.selectCategory")}
+          placeholder="Select a category"
           error={errors.category_id?.message}
           required
         />
         <div className="space-y-2">
           <Label htmlFor="name">
-            {t("form.labels.name")}
+            Product Name
             <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input id="name" {...register("name")} placeholder={t("placeholders.productName")} className={errors.name ? "border-red-500" : ""} />
+          <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
           <InputErrorMessage>{errors.name?.message}</InputErrorMessage>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="description">{t("form.labels.description")}</Label>
+          <Label htmlFor="description">Description</Label>
           <Textarea
             id="description"
             {...register("description")}
-            placeholder={t("placeholders.productDescription")}
+            placeholder="Describe your product..."
             rows={3}
             className={errors.description ? "border-red-500" : ""}
           />
           <InputErrorMessage>{errors.description?.message}</InputErrorMessage>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="price">{t("form.labels.price")}</Label>
+          <Label htmlFor="price">Price</Label>
           <Input
             id="price"
             type="number"
@@ -192,7 +189,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
               valueAsNumber: true,
               setValueAs: (value) => (value === "" ? undefined : parseFloat(value)),
             })}
-            placeholder={t("placeholders.price")}
+            placeholder="0.00"
             className={errors.price ? "border-red-500" : ""}
           />
           <InputErrorMessage>{errors.price?.message}</InputErrorMessage>
@@ -201,7 +198,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         <div className="space-y-2">
           <FilePicker
             id="image"
-            label={t("form.labels.image")}
+            label="Product Image"
             accept="image/*"
             maxSize={5 * 1024 * 1024} // 5MB
             value={imageFile}
@@ -213,9 +210,9 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         </div>
         <div className="flex items-center space-x-2">
           <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-          <Label htmlFor="is_available">{isAvailable ? t("form.status.active") : t("form.status.inactive")}</Label>
+          <Label htmlFor="is_available">{isAvailable ? "Active" : "Inactive"}</Label>
           <p className="text-xs text-muted-foreground ml-2">
-            {isAvailable ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}
+            {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
           </p>
         </div>
       </form>

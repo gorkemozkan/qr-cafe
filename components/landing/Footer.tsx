@@ -2,12 +2,9 @@
 
 import { QrCode } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { FC } from "react";
 
 const Footer: FC = () => {
-  const t = useTranslations("landing.footer");
-
   return (
     <footer className="border-t py-2 px-4">
       <div className="container mx-auto">
@@ -17,38 +14,36 @@ const Footer: FC = () => {
               <QrCode className="h-6 w-6 text-primary" aria-hidden="true" />
               <span className="text-xl font-bold">Only Menu</span>
             </div>
-            <p className="text-muted-foreground">{t("description")}</p>
+            <p className="text-muted-foreground">Transforming cafes with smart QR menu solutions.</p>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">{t("legal")}</h3>
+            <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
                 <Link href="/terms" className="hover:text-foreground transition-colors">
-                  {t("terms")}
+                  Terms of Service
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="hover:text-foreground transition-colors">
-                  {t("privacy")}
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">{t("product")}</h3>
+            <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
                 <Link href="/#features" className="hover:text-foreground transition-colors">
-                  {t("features")}
+                  Features
                 </Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="border-t py-4 flex flex-col md:flex-row justify-between items-center text-muted-foreground">
-          <p>
-            &copy; {new Date().getFullYear()} {t("copyright")}
-          </p>
+          <p>&copy; {new Date().getFullYear()} Only Menu - All rights reserved</p>
         </div>
       </div>
     </footer>

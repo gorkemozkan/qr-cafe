@@ -2,7 +2,6 @@
 
 import { AlertTriangle } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   AlertDialog,
@@ -26,8 +25,6 @@ interface Props {
 export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoading }: Props) {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  const tGdpr = useTranslations("gdpr");
-
   const handleConfirm = () => {
     if (isConfirmed) {
       onConfirm(true);
@@ -46,21 +43,21 @@ export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoadin
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center gap-2 ">
             <AlertTriangle className="h-5 w-5" />
-            {tGdpr("delete.dialogTitle")}
+            Delete All Data
           </AlertDialogTitle>
-          <AlertDialogDescription>{tGdpr("delete.dialogDescription")}</AlertDialogDescription>
+          <AlertDialogDescription>This action will permanently delete all your data. This cannot be undone.</AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="space-y-4">
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              <strong>{tGdpr("delete.whatWillBeDeleted")}</strong>
+              <strong>What will be deleted:</strong>
               <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>{tGdpr("delete.deletedItems.cafes")}</li>
-                <li>{tGdpr("delete.deletedItems.categories")}</li>
-                <li>{tGdpr("delete.deletedItems.products")}</li>
-                <li>{tGdpr("delete.deletedItems.account")}</li>
+                <li>All your cafes and their settings</li>
+                <li>All categories and menu organization</li>
+                <li>All products and menu items</li>
+                <li>Your account and profile data</li>
               </ul>
             </AlertDescription>
           </Alert>
@@ -73,17 +70,17 @@ export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoadin
               disabled={isLoading}
             />
             <label htmlFor="confirm-deletion" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              {tGdpr("delete.confirmationText")}
+              I understand that this action is permanent and cannot be undone
             </label>
           </div>
         </div>
 
         <AlertDialogFooter>
           <AlertDialogCancel onClick={handleCancel} disabled={isLoading}>
-            {tGdpr("buttons.cancel")}
+            Cancel
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} disabled={!isConfirmed || isLoading}>
-            {isLoading ? tGdpr("delete.deletingButton") : tGdpr("delete.deleteButton")}
+            {isLoading ? "Deleting..." : "Delete All Data"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

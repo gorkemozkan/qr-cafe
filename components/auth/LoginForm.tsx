@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import BackButton from "@/components/common/BackButton";
 import Captcha from "@/components/common/Captcha";
@@ -26,12 +25,6 @@ const LoginForm = () => {
 
   const router = useRouter();
 
-  const t = useTranslations();
-
-  const tAuth = useTranslations("auth.login");
-
-  const tCommon = useTranslations("common");
-
   const {
     register,
     handleSubmit,
@@ -47,7 +40,7 @@ const LoginForm = () => {
   //#region Requests
 
   const { isLoading, execute } = useRequest({
-    successMessage: tAuth("successMessage"),
+    successMessage: "Login successful!",
     onSuccess: () => router.replace("/admin/app/dashboard"),
     mutationFn: (payload: LoginSchema) => authRepository.login(payload),
   });
@@ -59,19 +52,19 @@ const LoginForm = () => {
       <BackButton href="/" />
       <Card className="bg-background">
         <CardHeader>
-          <CardTitle id="login-title">{tAuth("title")}</CardTitle>
-          <CardDescription id="login-description">{tAuth("description")}</CardDescription>
+          <CardTitle id="login-title">Login to your account</CardTitle>
+          <CardDescription id="login-description">Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form id="login-form" onSubmit={handleSubmit(execute)} aria-labelledby="login-title" aria-describedby="login-description" noValidate>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="email">{tCommon("email")}</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   {...register("email")}
                   id="email"
                   type="email"
-                  placeholder={tAuth("emailPlaceholder")}
+                  placeholder="m@example.com"
                   disabled={isLoading}
                   className={errors.email ? "border-red-500" : ""}
                   aria-required="true"
@@ -82,13 +75,13 @@ const LoginForm = () => {
                 <InputErrorMessage id="email-error">{errors.email?.message}</InputErrorMessage>
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="password">{tCommon("password")}</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   {...register("password")}
                   id="password"
                   type="password"
                   disabled={isLoading}
-                  placeholder={tAuth("passwordPlaceholder")}
+                  placeholder="*********"
                   className={errors.password ? "border-red-500" : ""}
                   aria-required="true"
                   aria-invalid={!!errors.password}
@@ -98,7 +91,7 @@ const LoginForm = () => {
                 <InputErrorMessage id="password-error">{errors.password?.message}</InputErrorMessage>
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="captcha">{tAuth("securityVerification")}</Label>
+                <Label htmlFor="captcha">Security Verification</Label>
                 <Captcha
                   onError={() => setValue("captchaToken", "")}
                   onExpire={() => setValue("captchaToken", "")}
@@ -106,16 +99,10 @@ const LoginForm = () => {
                 />
                 <InputErrorMessage id="captcha-error">{errors.captchaToken?.message}</InputErrorMessage>
               </div>
-              <SubmitButton
-                isLoading={isLoading}
-                text={tAuth("loginButton")}
-                onClick={handleSubmit(execute)}
-                disabled={isLoading}
-                loadingText={tAuth("loggingIn")}
-              />
+              <SubmitButton isLoading={isLoading} text="Login" onClick={handleSubmit(execute)} disabled={isLoading} loadingText="Logging in..." />
               {isLoading && (
                 <div id="loading-status" className="sr-only" aria-live="polite">
-                  {tAuth("processingRequest")}
+                  Processing login request
                 </div>
               )}
             </div>

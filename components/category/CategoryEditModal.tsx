@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { FC, useRef } from "react";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/common/FormSheet";
@@ -21,8 +20,6 @@ interface Props {
 const CategoryEditSheet: FC<Props> = (props) => {
   //#region Hooks
 
-  const t = useTranslations("category");
-
   const { cafeSlug } = useCafeData(props.category.cafe_id);
 
   //#endregion
@@ -40,7 +37,7 @@ const CategoryEditSheet: FC<Props> = (props) => {
     onSuccess: (category) => {
       props.onSuccess?.(category);
     },
-    successMessage: t("messages.updateSuccess"),
+    successMessage: "Category updated successfully!",
     invalidateQueries: [QueryKeys.stats],
     optimisticUpdate: {
       queryKey: QueryKeys.categoriesByCafe(props.category.cafe_id.toString()),
@@ -51,16 +48,16 @@ const CategoryEditSheet: FC<Props> = (props) => {
 
   return (
     <FormSheet
-      title={t("edit.title")}
-      description={t("edit.description")}
+      title="Edit Category"
+      description="Update the category information below."
       onOpenChange={props.onClose}
       footer={
         <SubmitButton
           onClick={() => formRef.current?.submitForm()}
           disabled={isLoading}
           isLoading={isLoading}
-          text={t("edit.button")}
-          loadingText={t("edit.loadingButton")}
+          text="Update Category"
+          loadingText="Updating..."
         />
       }
     >

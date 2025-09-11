@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { FC, useRef, useState } from "react";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/common/FormSheet";
@@ -23,8 +22,6 @@ interface Props {
 const CategoryCreateSheet: FC<Props> = (props) => {
   //#region Hooks
 
-  const t = useTranslations("category");
-
   const { cafeSlug } = useCafeData(props.cafeId);
 
   //#endregion
@@ -43,8 +40,8 @@ const CategoryCreateSheet: FC<Props> = (props) => {
       props.onSuccess?.(data);
       setOpen(false);
     },
-    successMessage: t("messages.createSuccess"),
-    errorMessage: t("messages.createFailed"),
+    successMessage: "Category created successfully!",
+    errorMessage: "Failed to create category",
     invalidateQueries: [QueryKeys.categoriesByCafe(props.cafeId.toString()), QueryKeys.stats],
   });
 
@@ -52,7 +49,7 @@ const CategoryCreateSheet: FC<Props> = (props) => {
 
   return (
     <>
-      <TooltipButton onClick={() => setOpen(true)} tooltip={t("create.tooltip")}>
+      <TooltipButton onClick={() => setOpen(true)} tooltip="Create a new category">
         <Button variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
@@ -64,12 +61,12 @@ const CategoryCreateSheet: FC<Props> = (props) => {
               onClick={() => formRef.current?.submitForm()}
               disabled={isLoading}
               isLoading={isLoading}
-              text={t("create.button")}
-              loadingText={t("create.loadingButton")}
+              text="Create Category"
+              loadingText="Creating..."
             />
           }
-          title={t("create.title")}
-          description={t("create.description")}
+          title="Create New Category"
+          description="Fill in the details below to create a new category."
           onOpenChange={setOpen}
         >
           <CategoryForm

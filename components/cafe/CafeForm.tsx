@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CurrencySelect } from "@/components/common/CurrencySelect";
@@ -30,12 +29,6 @@ interface Props {
 }
 
 const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
-  //#region Hooks
-
-  const t = useTranslations("cafe");
-
-  //#endregion
-
   //#region States
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -148,10 +141,10 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">{t("form.labels.cafeName")} *</Label>
+        <Label htmlFor="name">Cafe Name *</Label>
         <Input
           id="name"
-          placeholder={t("form.placeholders.cafeName")}
+          placeholder="Enter your cafe's name"
           {...register("name")}
           className={errors.name || submitError ? "border-red-500" : ""}
           onChange={(e) => {
@@ -162,14 +155,14 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">{t("form.labels.description")}</Label>
-        <Textarea id="description" placeholder={t("form.placeholders.description")} {...register("description")} rows={3} />
+        <Label htmlFor="description">Description</Label>
+        <Textarea id="description" placeholder="Describe your cafe..." {...register("description")} rows={3} />
         <InputErrorMessage id="description-error">{errors.description?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
         <FilePicker
           id="logo"
-          label={t("form.labels.cafeLogo")}
+          label="Cafe Logo"
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={selectedFile}
@@ -190,21 +183,21 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">{t("form.logo.currentLogoNote")}</p>
+            <p className="text-sm text-muted-foreground">Current logo will be replaced if you select a new file</p>
           </div>
         )}
       </div>
       <CurrencySelect
         id="currency"
-        label={t("form.labels.currency")}
+        label="Currency"
         value={selectedCurrency}
         onValueChange={(value) => setValue("currency", value)}
         error={errors.currency?.message}
       />
       <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">{watch("is_active") ? t("form.status.active") : t("form.status.inactive")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("form.status.activeDescription") : t("form.status.inactiveDescription")}</p>
+        <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
+        <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
       </div>
       {submitError && <InputErrorMessage id="submit-error">{submitError}</InputErrorMessage>}
     </form>

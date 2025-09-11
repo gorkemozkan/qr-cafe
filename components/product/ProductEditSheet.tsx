@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useRef } from "react";
-import { useTranslations } from "next-intl";
 
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
@@ -28,8 +27,6 @@ const ProductEditSheet: FC<Props> = (props) => {
 
   const { cafeSlug } = useCafeData(props.cafeId);
 
-  const t = useTranslations("product");
-
   //#endregion
 
   //#region Hooks
@@ -42,7 +39,7 @@ const ProductEditSheet: FC<Props> = (props) => {
       props.onClose();
       props.onSuccess?.();
     },
-    successMessage: t("edit.successMessage"),
+    successMessage: "Product updated successfully!",
     invalidateQueries: [
       QueryKeys.productsByCafe(props.cafeId.toString()),
       QueryKeys.productsByCategory(props.categoryId.toString()),
@@ -58,16 +55,16 @@ const ProductEditSheet: FC<Props> = (props) => {
 
   return (
     <FormSheet
-      title={t("edit.title")}
-      description={t("edit.description")}
+      title="Edit Product"
+      description="Update the product details below."
       onOpenChange={props.onClose}
       footer={
         <SubmitButton
           onClick={() => formRef.current?.submitForm()}
           disabled={isLoading}
           isLoading={isLoading}
-          text={t("edit.button")}
-          loadingText={t("edit.loadingButton")}
+          text="Update Product"
+          loadingText="Updating..."
         />
       }
     >
