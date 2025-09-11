@@ -13,7 +13,7 @@ interface Props {
 const ExternalLinkButton: FC<Props> = (props) => {
   return (
     <TooltipButton onClick={() => window.open(props.url, "_blank")} tooltip="Open in new tab">
-      <Button asChild variant="outline" size="lg">
+      <Button asChild variant="outline">
         <Link href={props.url} target="_blank" rel="noopener noreferrer">
           <ExternalLink className="h-4 w-4" />
         </Link>

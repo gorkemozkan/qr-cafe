@@ -16,6 +16,9 @@ import QueryKeys from "@/lib/query";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
+import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
+import { QrCode } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CafeList: FC = () => {
   //#region Hooks
@@ -142,7 +145,25 @@ const CafeList: FC = () => {
         header: "Actions",
         className: "flex justify-end",
         cell: (_: any, row: Tables<"cafes">) => (
-          <TableActions onEdit={() => setCafeToEdit(row)} onDelete={() => handleDeleteClick(row)} to={`/admin/app/cafe/${row.id}/categories`} />
+          <TableActions
+            onEdit={() => setCafeToEdit(row)}
+            onDelete={() => handleDeleteClick(row)}
+            to={`/admin/app/cafe/${row.id}/categories`}
+            additionalActions={
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleQRCodeClick(row);
+                }}
+                className="h-8 w-8 p-0"
+              >
+                <QrCode className="h-4 w-4" />
+                <span className="sr-only">QR Code</span>
+              </Button>
+            }
+          />
         ),
       },
     ],
@@ -151,6 +172,7 @@ const CafeList: FC = () => {
 
   return (
     <div>
+      {cafeForQR && <CafeQRPreviewDialog key="qr-preview" open={qrPreviewOpen} slug={cafeForQR?.slug} onOpenChange={setQRPreviewOpen} />}
       <DataTable
         onRowClick={(row) => {
           router.push(`/admin/app/cafe/${row.id}/categories`);

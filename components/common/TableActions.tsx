@@ -12,7 +12,7 @@ interface Props {
   onDelete?: () => void;
   to?: string;
   rowData?: any;
-  additionalActions?: React.ReactNode[];
+  additionalActions?: React.ReactNode;
 }
 
 const TableActions: FC<Props> = (props) => {
@@ -32,63 +32,49 @@ const TableActions: FC<Props> = (props) => {
     props.onDelete?.();
   };
 
-  if (actionCount === 1) {
-    if (hasEdit) {
-      return (
-        <Button variant="outline" size="sm" onClick={handleEdit} className="h-8 w-8 p-0">
-          <Edit className="h-4 w-4" />
-        </Button>
-      );
-    }
-
-    if (hasDelete) {
-      return (
-        <Button variant="outline" size="sm" onClick={handleDelete} className="h-8 w-8 p-0">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      );
-    }
-  }
-
   if (actionCount > 1) {
     return (
-      <DropdownMenu>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="lg" onClick={(e) => e.stopPropagation()}>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Actions</p>
-          </TooltipContent>
-        </Tooltip>
+      <div className="flex items-center gap-2">
+        {props.additionalActions}
+        <DropdownMenu>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()} className="h-8 w-8 p-0">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+            </TooltipTrigger>
 
-        <DropdownMenuContent align="end">
-          {props.to && (
-            <DropdownMenuItem asChild>
-              <Link href={props.to} onClick={(e) => e.stopPropagation()}>
-                <Eye className="mr-2 h-4 w-4" />
-                View
-              </Link>
-            </DropdownMenuItem>
-          )}
-          {hasEdit && (
-            <DropdownMenuItem onClick={handleEdit}>
-              <Edit className="mr-2 h-4 w-4" />
-              Edit
-            </DropdownMenuItem>
-          )}
-          {hasDelete && (
-            <DropdownMenuItem onClick={handleDelete}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <TooltipContent>
+              <p>Actions</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <DropdownMenuContent align="end">
+            {props.to && (
+              <DropdownMenuItem asChild>
+                <Link href={props.to} onClick={(e) => e.stopPropagation()}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {hasEdit && (
+              <DropdownMenuItem onClick={handleEdit}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+            )}
+            {hasDelete && (
+              <DropdownMenuItem onClick={handleDelete}>
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     );
   }
 
