@@ -1,11 +1,10 @@
 "use client";
 
 import { QrCode } from "lucide-react";
-import Link from "next/link";
 import { FC } from "react";
-import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/dom";
 import BuyMeCaffeeButton from "@/components/common/BuyMeCaffeeButton";
+import SignInButton from "@/components/common/SignInButton";
 
 const Header: FC = () => {
   return (
@@ -23,11 +22,7 @@ const Header: FC = () => {
           </button>
           <div className="flex items-center space-x-4">
             <BuyMeCaffeeButton />
-            <Button asChild size="lg" variant="default" className="font-semibold">
-              <Link href="/admin/auth/login" className="hidden md:inline-flex" target="_blank">
-                Sign In
-              </Link>
-            </Button>
+            <SignInButton />
           </div>
         </nav>
       </div>
