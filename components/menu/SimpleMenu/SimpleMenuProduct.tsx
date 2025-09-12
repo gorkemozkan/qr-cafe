@@ -1,8 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import { formatPrice } from "@/lib/format";
-import { OptimizedImage } from "@/components/common/OptimizedImage";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -21,11 +20,6 @@ interface Props {
 }
 
 const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  const hasValidImage = product.image_url && !imageError;
-
   return (
     <div
       key={product.id}
@@ -43,30 +37,19 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
               )}
             </div>
 
-            <div className="h-32 w-32 bg-gray-100 rounded-lg my-6 overflow-hidden relative flex-shrink-0">
-              {hasValidImage ? (
-                <>
-                  {!imageLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />}
-                  {product.image_url && (
-                    <Image
-                      src={product.image_url}
-                      alt={product.name}
-                      fill
-                      className={cn("object-cover rounded-lg transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
-                      onLoad={() => setImageLoaded(true)}
-                      onError={() => setImageError(true)}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority={false}
-                      quality={100}
-                    />
-                  )}
-                </>
-              ) : (
-                <div className="h-full w-full bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-[8px] text-center text-muted-foreground">Kategori Görseli Buraya Gelecek</span>
-                </div>
-              )}
-            </div>
+            {product.image_url && (
+              <div className="h-32 w-32 bg-gray-100 rounded-lg my-6 overflow-hidden relative flex-shrink-0">
+                <Image
+                  src={product.image_url}
+                  alt={product.name}
+                  fill
+                  className={cn("object-cover rounded-lg transition-opacity duration-300")}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={false}
+                  quality={100}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

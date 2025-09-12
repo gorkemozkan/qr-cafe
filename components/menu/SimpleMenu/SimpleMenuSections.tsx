@@ -21,7 +21,7 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
 
   return (
     <main className="max-w-4xl mx-auto px-4 pb-8 mt-8">
-      <div className="space-y-12">
+      <div className="space-y-6">
         {activeCategories.map((category) => (
           <section key={category.id}>
             <SimpleMenuCategoryHeader category={category} />
