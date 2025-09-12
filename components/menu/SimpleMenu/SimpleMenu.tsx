@@ -13,10 +13,16 @@ interface Params {
 
 const SimpleMenu: FC<Params> = (props) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+
   const [isAutoActivation, setIsAutoActivation] = useState(false);
+
   const [hasUserScrolled, setHasUserScrolled] = useState(false);
+
   const isUserScrolling = useRef(false);
+
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const orderedCategories = props.menu.categories.sort((a, b) => a.sort_order - b.sort_order);
 
   const scrollToCategory = useCallback((categoryId: number | null) => {
     if (categoryId === null) {
@@ -97,12 +103,12 @@ const SimpleMenu: FC<Params> = (props) => {
       <div className="max-w-2xl mx-auto px-2 py-6">
         <SimpleMenuHeader logoUrl={props.menu.cafe.logo_url} />
         <SimpleMenuStickyTabs
-          categories={props.menu.categories}
+          categories={orderedCategories}
           selectedCategoryId={selectedCategoryId}
           isAutoActivation={isAutoActivation}
           onCategoryChange={handleCategoryChange}
         />
-        <SimpleMenuSections categories={props.menu.categories} currency={props.menu.cafe.currency} onCategoryInView={handleCategoryInView} />
+        <SimpleMenuSections categories={orderedCategories} currency={props.menu.cafe.currency} onCategoryInView={handleCategoryInView} />
       </div>
       <ScrollToTop />
     </div>

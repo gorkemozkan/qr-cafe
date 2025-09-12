@@ -14,7 +14,7 @@ export interface PublicCategory {
   id: number;
   name: string;
   description: string;
-  sort_order: number | null;
+  sort_order: number;
   image_url: string | null;
   products: PublicProduct[];
 }

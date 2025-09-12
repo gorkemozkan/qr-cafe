@@ -17,6 +17,7 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
   const activeCategories = props.categories.filter((category) => category.products.length > 0);
 
   const categoryRefs = useRef<Map<number, HTMLElement>>(new Map());
+
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Set up intersection observer
@@ -49,7 +50,7 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
         {
           root: null,
           rootMargin: "-100px 0px -20% 0px",
-          threshold: 0.3, // Single threshold for better performance
+          threshold: 0.3,
         },
       );
 
