@@ -195,7 +195,11 @@
       "categoryActive": "Category is active and visible",
       "categoryInactive": "Category is inactive and hidden",
       "uploadFailed": "Upload failed",
-      "operationFailed": "Operation failed"
+      "operationFailed": "Operation failed",
+      "isActive": "Active",
+      "isInactive": "Inactive",
+      "activeDescription": "Category is active and visible",
+      "inactiveDescription": "Category is inactive and hidden"
     },
     "createSheet": {
       "tooltip": "Create a new category",
