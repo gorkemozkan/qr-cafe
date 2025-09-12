@@ -1,14 +1,15 @@
 import { HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Column } from "./types";
+import { BaseEntity } from "./types";
 
-interface MobileCardProps<T> {
+interface MobileCardProps<T extends BaseEntity> {
   item: T;
   columns: Column<T>[];
   onRowClick?: (row: T) => void;
 }
 
-export function MobileCard<T>({ item, columns, onRowClick }: MobileCardProps<T>) {
+export function MobileCard<T extends BaseEntity>({ item, columns, onRowClick }: MobileCardProps<T>) {
   const handleClick = () => onRowClick?.(item);
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {

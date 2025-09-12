@@ -2,6 +2,7 @@
 
 import { AlertTriangle } from "lucide-react";
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -23,13 +24,14 @@ const QuestionDialog: FC<QuestionDialogProps> = ({
   onOpenChange,
   title,
   description,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  confirmText,
+  cancelText,
   onConfirm,
   onCancel,
   isLoading = false,
   confirmLoadingText,
 }) => {
+  const t = useTranslations("components.questionDialog");
   const handleCancel = () => {
     onCancel?.();
     onOpenChange(false);
@@ -47,10 +49,10 @@ const QuestionDialog: FC<QuestionDialogProps> = ({
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={handleCancel} disabled={isLoading}>
-            {cancelText}
+            {cancelText || t("cancel")}
           </Button>
           <Button variant="destructive" onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? confirmLoadingText || "Loading..." : confirmText}
+            {isLoading ? confirmLoadingText || t("loading") : confirmText || t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

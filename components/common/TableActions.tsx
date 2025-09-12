@@ -2,6 +2,7 @@
 
 import { FC } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const TableActions: FC<Props> = (props) => {
+  const t = useTranslations("common");
+
   const hasEdit = !!props.onEdit;
 
   const hasDelete = !!props.onDelete;
@@ -47,20 +50,20 @@ const TableActions: FC<Props> = (props) => {
               <DropdownMenuItem asChild>
                 <Link href={props.to} onClick={(e) => e.stopPropagation()}>
                   <Eye className="mr-2 h-4 w-4" />
-                  View
+                  {t("view")}
                 </Link>
               </DropdownMenuItem>
             )}
             {hasEdit && (
               <DropdownMenuItem onClick={handleEdit}>
                 <Edit className="mr-2 h-4 w-4" />
-                Edit
+                {t("edit")}
               </DropdownMenuItem>
             )}
             {hasDelete && (
               <DropdownMenuItem onClick={handleDelete}>
                 <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                {t("delete")}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>

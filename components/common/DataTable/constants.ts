@@ -2,7 +2,7 @@
 export const DEFAULT_STALE_TIME = 5 * 60 * 1000; // 5 minutes
 export const DEFAULT_GC_TIME = 10 * 60 * 1000; // 10 minutes
 export const DEFAULT_MOBILE_BREAKPOINT = 768; // px
-export const DEFAULT_EMPTY_MESSAGE = "No data available";
+export const DEFAULT_EMPTY_MESSAGE = "common.noDataAvailable";
 
 // Drag and drop constants
 export const DRAG_RESET_DELAY = 100; // ms

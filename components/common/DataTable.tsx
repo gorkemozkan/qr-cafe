@@ -1,6 +1,7 @@
 "use client";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
+import { useTranslations } from "next-intl";
 import { useDataTable } from "@/hooks/useDataTable";
 import { useResponsive } from "@/hooks/useResponsive";
 import { useSorting } from "@/hooks/useSorting";
@@ -23,6 +24,17 @@ function DataTable<T extends { id?: number | string }>({
   sortConfig,
   onSortOrderChange,
 }: DataTableProps<T>) {
+  const t = useTranslations();
+
+  // Resolve translation key for emptyMessage
+  const resolvedEmptyMessage =
+    emptyMessage.startsWith("common.") ||
+    emptyMessage.startsWith("product.") ||
+    emptyMessage.startsWith("category.") ||
+    emptyMessage.startsWith("cafe.")
+      ? t(emptyMessage)
+      : emptyMessage;
+
   // Use extracted hooks for cleaner logic separation
   const { data, isLoading, refetch, isRefetching } = useDataTable({
     queryKey,
@@ -51,7 +63,7 @@ function DataTable<T extends { id?: number | string }>({
             columns={columns}
             isLoading={isLoading}
             isRefetching={isRefetching}
-            emptyMessage={emptyMessage}
+            emptyMessage={resolvedEmptyMessage}
             isMobile={isMobile}
             onRowClick={onRowClick}
             enableSorting={enableSorting}
@@ -63,7 +75,7 @@ function DataTable<T extends { id?: number | string }>({
           columns={columns}
           isLoading={isLoading}
           isRefetching={isRefetching}
-          emptyMessage={emptyMessage}
+          emptyMessage={resolvedEmptyMessage}
           isMobile={isMobile}
           onRowClick={onRowClick}
           enableSorting={false}

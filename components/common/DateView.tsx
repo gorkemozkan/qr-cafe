@@ -3,6 +3,7 @@
 import { format as formatDate, formatDistance, isValid } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface DateViewProps {
@@ -13,10 +14,12 @@ interface DateViewProps {
 }
 
 const DateView: FC<DateViewProps> = ({ date, format = "short", className, showTime = false }) => {
+  const t = useTranslations("common");
+
   const dateObj = new Date(date);
 
   if (!isValid(dateObj)) {
-    return <span className={cn("inline-block", className)}>Invalid date</span>;
+    return <span className={cn("inline-block", className)}>{t("invalidDate")}</span>;
   }
 
   const dateLocale = enUS;

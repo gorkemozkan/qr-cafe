@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import DataTable from "@/components/common/DataTable";
 import DateView from "@/components/common/DateView";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
@@ -21,6 +22,9 @@ interface Props {
 }
 
 const ProductList: FC<Props> = (props) => {
+  const t = useTranslations();
+  const tProduct = useTranslations("product");
+
   //#region States
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -41,7 +45,7 @@ const ProductList: FC<Props> = (props) => {
       setDeleteDialogOpen(false);
       setProductToDelete(null);
     },
-    successMessage: "Product deleted successfully!",
+    successMessage: tProduct("productDeleted"),
     invalidateQueries: [
       QueryKeys.productsByCafe(props.cafeId.toString()),
       QueryKeys.stats,
@@ -69,7 +73,7 @@ const ProductList: FC<Props> = (props) => {
   const columns = [
     {
       key: "image",
-      header: "Image",
+      header: tProduct("table.image"),
       cell: (_: any, row: Tables<"products">) => (
         <>
           {row.image_url ? (
@@ -85,7 +89,7 @@ const ProductList: FC<Props> = (props) => {
             />
           ) : (
             <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">No Image</span>
+              <span className="text-[8px] text-center text-muted-foreground">{tProduct("table.noImage")}</span>
             </div>
           )}
         </>
@@ -93,12 +97,12 @@ const ProductList: FC<Props> = (props) => {
     },
     {
       key: "name",
-      header: "Name",
+      header: tProduct("table.name"),
       cell: (value: any) => <span className="font-mono text-sm block truncate ">{value}</span>,
     },
     {
       key: "description",
-      header: "Description",
+      header: tProduct("table.description"),
       cell: (value: any) => (
         <div className="w-max max-w-xs">
           {value ? (
@@ -118,22 +122,24 @@ const ProductList: FC<Props> = (props) => {
     },
     {
       key: "price",
-      header: "Price",
+      header: tProduct("table.price"),
       cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
       key: "is_available",
-      header: "Status",
-      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? "Available" : "Unavailable"}</Badge>,
+      header: tProduct("table.status"),
+      cell: (value: any) => (
+        <Badge variant={value ? "active" : "inactive"}>{value ? tProduct("table.available") : tProduct("table.unavailable")}</Badge>
+      ),
     },
     {
       key: "created_at",
-      header: "Created",
+      header: tProduct("table.created"),
       cell: (value: any) => <DateView date={value} format="relative" />,
     },
     {
       key: "actions",
-      header: "Actions",
+      header: tProduct("table.actions"),
       className: "flex justify-end",
       cell: (_: any, row: Tables<"products">) => <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
     },
@@ -158,7 +164,7 @@ const ProductList: FC<Props> = (props) => {
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
-        emptyMessage="No products found"
+        emptyMessage={tProduct("noProducts")}
       />
       {productToEdit && (
         <ProductEditSheet
@@ -172,9 +178,9 @@ const ProductList: FC<Props> = (props) => {
       <QuestionDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        title="Delete Product"
-        description={`Are you sure you want to delete "${productToDelete?.name || ""}"? This action cannot be undone.`}
-        confirmText="Delete Product"
+        title={tProduct("deleteProduct")}
+        description={t("product.deleteDialog.description", { name: productToDelete?.name || "" })}
+        confirmText={tProduct("deleteProduct")}
         onConfirm={handleDeleteConfirm}
         isLoading={isDeleting}
       />

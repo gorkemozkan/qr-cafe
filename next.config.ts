@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 import { isNextDevelopment, isNextProduction, nextEnvironment, supabaseConfig } from "./lib/env";
 import { commonHeaders, createCSP, productionOnlyHeaders } from "./lib/security";
 
+const withNextIntl = createNextIntlPlugin("./i18n.ts");
+
 const nextConfig: NextConfig = {
   images: {
-    qualities: [25, 50, 75, 100],
     remotePatterns: [
       {
         protocol: "https",
@@ -55,4 +57,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

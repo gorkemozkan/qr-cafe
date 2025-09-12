@@ -4,6 +4,7 @@ import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-reac
 import Image from "next/image";
 import QRCode from "qrcode";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import CopyButton from "@/components/common/CopyButton";
 import ExternalLinkButton from "@/components/common/ExternalLinkButton";
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
+  const t = useTranslations("cafe.qrCode");
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -70,11 +72,11 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
 
     try {
       await navigator.clipboard.writeText(cafeUrl);
-      toast.success("Link copied to clipboard!");
+      toast.success(t("linkCopied"));
     } catch (_error) {
-      toast.error("Failed to copy link");
+      toast.error(t("failedToCopy"));
     }
-  }, [cafeUrl]);
+  }, [cafeUrl, t]);
 
   const handleGoToMenu = useCallback(() => {
     if (cafeUrl && typeof window !== "undefined") {
@@ -105,7 +107,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
       ctx.fillStyle = "#000000";
       ctx.font = "bold 32px Arial";
       ctx.textAlign = "center";
-      ctx.fillText("QR Code for Cafe", canvas.width / 2, 60);
+      ctx.fillText(t("qrCodeForCafe"), canvas.width / 2, 60);
 
       // Add URL
       ctx.font = "18px Arial";
@@ -125,8 +127,8 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
         ctx.fillStyle = "#666666";
         ctx.font = "16px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("Scan this QR code to visit the cafe page", canvas.width / 2, 620);
-        ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, 650);
+        ctx.fillText(t("scanToVisit"), canvas.width / 2, 620);
+        ctx.fillText(`${t("generatedOn")} ${new Date().toLocaleDateString()}`, canvas.width / 2, 650);
 
         // Convert canvas to blob and download
         canvas.toBlob((blob) => {
@@ -139,13 +141,13 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            toast.success("QR Code exported successfully!");
+            toast.success(t("exportSuccess"));
           }
         }, "image/png");
       };
       img.src = qrCodeDataUrl;
     } catch (_error) {
-      toast.error("Failed to export QR code");
+      toast.error(t("exportFailed"));
     } finally {
       setIsExporting(false);
     }
@@ -157,15 +159,15 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
-            QR Code Preview
+            {t("title")}
           </DialogTitle>
-          <DialogDescription>QR code - Scan to visit the cafe page</DialogDescription>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
         <div>
           <div className="bg-background p-4 rounded-lg border">
             <div className="flex items-start justify-between flex-wrap gap-2">
               <div>
-                <p className="text-sm font-medium mb-1">Menu URL:</p>
+                <p className="text-sm font-medium mb-1">{t("menuUrl")}</p>
                 <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
                   {cafeUrl}
                 </a>
@@ -195,33 +197,33 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                       <ContextMenuContent>
                         <ContextMenuItem onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl}>
                           <MessageCircle className="mr-2 h-4 w-4" />
-                          Send to WhatsApp
+                          {t("sendToWhatsApp")}
                         </ContextMenuItem>
                         <ContextMenuItem onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting}>
                           <Download className="mr-2 h-4 w-4" />
-                          Export
+                          {t("export")}
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                         <ContextMenuItem onClick={handleGoToMenu} disabled={!cafeUrl}>
                           <ExternalLink className="mr-2 h-4 w-4" />
-                          Go to Menu
+                          {t("goToMenu")}
                         </ContextMenuItem>
                         <ContextMenuItem onClick={handleCopyLink} disabled={!cafeUrl}>
                           <Copy className="mr-2 h-4 w-4" />
-                          Copy Link
+                          {t("copyLink")}
                         </ContextMenuItem>
                       </ContextMenuContent>
                     </ContextMenu>
                   </div>
                   <div className="text-center space-y-2">
-                    <p className="text-sm font-medium">Scan this QR code</p>
-                    <p className="text-xs text-muted-foreground">Visitors can scan this code to access your cafe page</p>
+                    <p className="text-sm font-medium">{t("scanThisQrCode")}</p>
+                    <p className="text-xs text-muted-foreground">{t("qrCodeDescription")}</p>
                   </div>
                 </div>
               ) : (
                 <div className="w-[300px] h-[300px] flex items-center justify-center text-muted-foreground">
                   <div className="text-center space-y-2">
-                    <p className="text-sm font-medium text-red-500">Failed to generate QR code</p>
+                    <p className="text-sm font-medium text-red-500">{t("failedToGenerate")}</p>
                   </div>
                 </div>
               )}
@@ -237,7 +239,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                 className="flex items-center gap-2 w-full"
               >
                 <MessageCircle className="h-4 w-4" />
-                WhatsApp
+                {t("sendToWhatsApp")}
               </Button>
               <Button
                 size="lg"
@@ -247,7 +249,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                 className="flex items-center gap-2 w-full"
               >
                 <Download className="h-4 w-4" />
-                {isExporting ? "Exporting..." : "Export"}
+                {isExporting ? t("exporting") : t("export")}
               </Button>
             </div>
           </div>

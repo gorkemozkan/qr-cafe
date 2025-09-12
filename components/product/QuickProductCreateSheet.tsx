@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import CafeListDropdown from "@/components/cafe/CafeListDropdown";
 import CategoryListDropdown from "@/components/category/CategoryListDropdown";
@@ -27,6 +28,8 @@ interface QuickProductCreateSheetProps {
 }
 
 const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheetProps) => {
+  const t = useTranslations("product.quickCreate");
+  const tForm = useTranslations("product.form");
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -79,8 +82,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
   };
 
   const onSubmit = async (data: ProductSchemaType) => {
-    if (!selectedCafeId) return toast.error("Please select a cafe");
-    if (!data.category_id) return toast.error("Please select a category");
+    if (!selectedCafeId) return toast.error(t("selectCafeError"));
+    if (!data.category_id) return toast.error(t("selectCategoryError"));
 
     try {
       setIsUploading(true);
@@ -105,7 +108,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
       await productRepository.create(selectedCafeId, { ...data, image_url: imageUrl });
 
-      toast.success("Product created successfully");
+      toast.success(t("createSuccess"));
       onOpenChange(false);
       reset();
       setSelectedCafeId(null);
@@ -114,7 +117,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
       router.push(`/admin/app/cafe/${selectedCafeId}/categories/${data.category_id}`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to create product";
+      const errorMessage = error instanceof Error ? error.message : t("createFailed");
       toast.error(errorMessage);
       setUploadError(errorMessage);
     } finally {
@@ -126,8 +129,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
 
   return (
     <FormSheet
-      title="Create New Product"
-      description="Quickly create a new product for your cafe menu."
+      title={t("title")}
+      description={t("description")}
       onOpenChange={onOpenChange}
       footer={
         <SubmitButton
@@ -135,8 +138,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
           form="product-form"
           disabled={isSubmitting || isUploading}
           isLoading={isSubmitting || isUploading}
-          text="Create"
-          loadingText="Creating..."
+          text={t("create")}
+          loadingText={t("creating")}
         />
       }
     >
@@ -144,42 +147,42 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         <CafeListDropdown
           required
           id="cafe"
-          label="Cafe"
-          placeholder="Select a cafe"
+          label={t("cafeLabel")}
+          placeholder={t("cafePlaceholder")}
           onValueChange={handleCafeChange}
           value={selectedCafeId || undefined}
         />
         <CategoryListDropdown
           id="category"
-          label="Category"
+          label={t("categoryLabel")}
           value={selectedCategoryId || undefined}
           onValueChange={handleCategoryChange}
           cafeId={selectedCafeId}
-          placeholder="Select a category"
+          placeholder={t("categoryPlaceholder")}
           error={errors.category_id?.message}
           required
         />
         <div className="space-y-2">
           <Label htmlFor="name">
-            Product Name
+            {tForm("name")}
             <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+          <Input id="name" {...register("name")} placeholder={tForm("namePlaceholder")} className={errors.name ? "border-red-500" : ""} />
           <InputErrorMessage>{errors.name?.message}</InputErrorMessage>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">{tForm("description")}</Label>
           <Textarea
             id="description"
             {...register("description")}
-            placeholder="Describe your product..."
+            placeholder={tForm("descriptionPlaceholder")}
             rows={3}
             className={errors.description ? "border-red-500" : ""}
           />
           <InputErrorMessage>{errors.description?.message}</InputErrorMessage>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="price">Price</Label>
+          <Label htmlFor="price">{tForm("price")}</Label>
           <Input
             id="price"
             type="number"
@@ -198,7 +201,7 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         <div className="space-y-2">
           <FilePicker
             id="image"
-            label="Product Image"
+            label={tForm("productImage")}
             accept="image/*"
             maxSize={5 * 1024 * 1024} // 5MB
             value={imageFile}
@@ -210,10 +213,8 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
         </div>
         <div className="flex items-center space-x-2">
           <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-          <Label htmlFor="is_available">{isAvailable ? "Active" : "Inactive"}</Label>
-          <p className="text-xs text-muted-foreground ml-2">
-            {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
-          </p>
+          <Label htmlFor="is_available">{isAvailable ? tForm("isAvailable") : tForm("isUnavailable")}</Label>
+          <p className="text-xs text-muted-foreground ml-2">{isAvailable ? tForm("availableDescription") : tForm("unavailableDescription")}</p>
         </div>
       </form>
     </FormSheet>
