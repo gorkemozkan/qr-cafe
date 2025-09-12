@@ -10,69 +10,111 @@ import { PublicCategory } from "@/lib/repositories/public-menu-repository";
 interface Props {
   categories: PublicCategory[];
   currency: string | null;
-  selectedCategoryId?: number | null;
   onCategoryInView?: (categoryId: number) => void;
 }
 
-const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null, selectedCategoryId: null }) => {
+const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null }) => {
   const activeCategories = props.categories.filter((category) => category.products.length > 0);
-
-  // Filter categories based on selected category
-  const filteredCategories = props.selectedCategoryId
-    ? activeCategories.filter((category) => category.id === props.selectedCategoryId)
-    : activeCategories;
 
   // Refs for category sections
   const categoryRefs = useRef<Map<number, HTMLElement>>(new Map());
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
+  // Set up intersection observer
   useEffect(() => {
-    if (!props.onCategoryInView) return;
+    if (!props.onCategoryInView) {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find the entry with the highest intersection ratio
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-        if (visibleEntries.length === 0) return;
+    // Disconnect existing observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
 
-        const mostVisible = visibleEntries.reduce((prev, current) => (prev.intersectionRatio > current.intersectionRatio ? prev : current));
+    // Add a small delay to prevent immediate triggering on page load
+    const timeoutId = setTimeout(() => {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          // Find the entry with the highest intersection ratio
+          const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+          if (visibleEntries.length === 0) return;
 
-        // Extract category ID from the element's data attribute
-        const categoryId = parseInt(mostVisible.target.getAttribute("data-category-id") || "0");
-        if (categoryId && props.onCategoryInView) {
-          props.onCategoryInView(categoryId);
+          const mostVisible = visibleEntries.reduce((prev, current) => (prev.intersectionRatio > current.intersectionRatio ? prev : current));
+
+          // Extract category ID from the element's data attribute
+          const categoryId = parseInt(mostVisible.target.getAttribute("data-category-id") || "0");
+          if (categoryId && props.onCategoryInView) {
+            props.onCategoryInView(categoryId);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "-100px 0px -20% 0px", // Trigger when category is near the top, with more conservative margins
+          threshold: 0.3, // Single threshold for better performance
+        },
+      );
+
+      // Observe all current refs
+      categoryRefs.current.forEach((ref) => {
+        if (ref && observerRef.current) {
+          observerRef.current.observe(ref);
         }
-      },
-      {
-        root: null,
-        rootMargin: "-80px 0px -50% 0px", // Trigger when category is near the top
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-      },
-    );
-
-    // Observe all category sections
-    categoryRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
+      });
+    }, 100); // Small delay to prevent immediate triggering on page load
 
     return () => {
-      observer.disconnect();
+      clearTimeout(timeoutId);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
     };
-  }, [props.onCategoryInView, filteredCategories]);
+  }, [props.onCategoryInView]);
 
-  if (filteredCategories.length === 0) {
+  // Update observer when refs change
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    // Disconnect all current observations
+    observerRef.current.disconnect();
+
+    // Re-observe all current refs
+    categoryRefs.current.forEach((ref) => {
+      if (ref && observerRef.current) {
+        observerRef.current.observe(ref);
+      }
+    });
+  }, [activeCategories]);
+
+  if (activeCategories.length === 0) {
     return <SimpleMenuNullCase />;
   }
 
   return (
     <main className="max-w-4xl mx-auto px-4 pb-8 mt-8">
       <div className="space-y-6">
-        {filteredCategories.map((category) => (
+        {activeCategories.map((category) => (
           <section
             key={category.id}
             ref={(el) => {
               if (el) {
                 categoryRefs.current.set(category.id, el);
+
+                if (observerRef.current) {
+                  observerRef.current.observe(el);
+                }
               } else {
+                // Stop observing when element is removed
+                if (observerRef.current && categoryRefs.current.has(category.id)) {
+                  const element = categoryRefs.current.get(category.id);
+                  if (element) {
+                    observerRef.current.unobserve(element);
+                  }
+                }
                 categoryRefs.current.delete(category.id);
               }
             }}

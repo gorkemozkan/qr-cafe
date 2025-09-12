@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useRef, useCallback } from "react";
+import { FC, useState, useRef, useCallback, useEffect } from "react";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import SimpleMenuHeader from "@/components/menu/SimpleMenu/SimpleMenuHeader";
 import SimpleMenuSections from "@/components/menu/SimpleMenu/SimpleMenuSections";
@@ -13,44 +13,96 @@ interface Params {
 
 const SimpleMenu: FC<Params> = (props) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [isAutoActivation, setIsAutoActivation] = useState(false);
+  const [hasUserScrolled, setHasUserScrolled] = useState(false);
   const isUserScrolling = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleCategoryChange = useCallback((categoryId: number | null) => {
-    // Mark that this is a user-initiated change, not scroll-triggered
-    isUserScrolling.current = true;
-    setSelectedCategoryId(categoryId);
-
-    // Clear the scroll flag after a short delay
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
+  const scrollToCategory = useCallback((categoryId: number | null) => {
+    if (categoryId === null) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
     }
-    scrollTimeoutRef.current = setTimeout(() => {
-      isUserScrolling.current = false;
-    }, 1000); // 1 second delay to prevent immediate auto-activation
+
+    const categoryElement = document.querySelector(`[data-category-id="${categoryId}"]`);
+    if (categoryElement) {
+      const headerOffset = 120;
+      const elementPosition = categoryElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
   }, []);
+
+  const handleCategoryChange = useCallback(
+    (categoryId: number | null) => {
+      isUserScrolling.current = true;
+      setIsAutoActivation(false);
+      setSelectedCategoryId(categoryId);
+
+      if (!hasUserScrolled) {
+        setHasUserScrolled(true);
+      }
+
+      scrollToCategory(categoryId);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        isUserScrolling.current = false;
+      }, 1000);
+    },
+    [hasUserScrolled, scrollToCategory],
+  );
 
   const handleCategoryInView = useCallback(
     (categoryId: number) => {
-      // Only auto-activate if user is not currently interacting with tabs
-      if (!isUserScrolling.current && selectedCategoryId !== categoryId) {
+      if (hasUserScrolled && !isUserScrolling.current && selectedCategoryId !== categoryId) {
+        setIsAutoActivation(true);
         setSelectedCategoryId(categoryId);
       }
     },
-    [selectedCategoryId],
+    [selectedCategoryId, hasUserScrolled],
   );
+
+  useEffect(() => {
+    if (isAutoActivation) {
+      const timeout = setTimeout(() => {
+        setIsAutoActivation(false);
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [isAutoActivation]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!hasUserScrolled) {
+        setHasUserScrolled(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [hasUserScrolled]);
 
   return (
     <div className="min-h-screen bg-white text-foreground">
       <div className="max-w-2xl mx-auto px-2 py-6">
         <SimpleMenuHeader logoUrl={props.menu.cafe.logo_url} />
-        <SimpleMenuStickyTabs categories={props.menu.categories} onCategoryChange={handleCategoryChange} />
-        <SimpleMenuSections
+        <SimpleMenuStickyTabs
           categories={props.menu.categories}
-          currency={props.menu.cafe.currency}
           selectedCategoryId={selectedCategoryId}
-          onCategoryInView={handleCategoryInView}
+          isAutoActivation={isAutoActivation}
+          onCategoryChange={handleCategoryChange}
         />
+        <SimpleMenuSections categories={props.menu.categories} currency={props.menu.cafe.currency} onCategoryInView={handleCategoryInView} />
       </div>
       <ScrollToTop />
     </div>
