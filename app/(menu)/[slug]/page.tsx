@@ -2,6 +2,7 @@ import { publicMenuRepository, PublicMenuData } from "@/lib/repositories/public-
 import { notFound } from "next/navigation";
 import { nextPublicBaseUrl } from "@/lib/env";
 import SimpleMenu from "@/components/menu/SimpleMenu/SimpleMenu";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 import Script from "next/script";
 import { NextPage, Metadata } from "next";
 
@@ -170,7 +171,9 @@ const Page: NextPage<Params> = async (props) => {
       <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
         {JSON.stringify(generateStructuredData(menu))}
       </Script>
-      <SimpleMenu menu={menu} />
+      <ErrorBoundary>
+        <SimpleMenu menu={menu} />
+      </ErrorBoundary>
     </>
   );
 };
