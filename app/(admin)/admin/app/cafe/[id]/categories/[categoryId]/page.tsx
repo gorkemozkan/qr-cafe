@@ -4,6 +4,7 @@ import { AlertCircle } from "lucide-react";
 import { NextPage } from "next";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import CategoryEditModal from "@/components/category/CategoryEditModal";
 import PageTitle from "@/components/common/PageTitle";
 import Spinner from "@/components/common/Spinner";
@@ -14,6 +15,7 @@ import { categoryRepository } from "@/lib/repositories/category-repository";
 
 const Page: NextPage = () => {
   const params = useParams();
+  const t = useTranslations("category.page");
 
   const cafeId = parseInt(params.id as string, 10);
 
@@ -37,7 +39,7 @@ const Page: NextPage = () => {
       <div className="container mx-auto py-6">
         <div className="flex items-center space-x-2 text-destructive">
           <AlertCircle className="h-5 w-5" />
-          <span>Category not found</span>
+          <span>{t("notFound")}</span>
         </div>
       </div>
     );
@@ -45,7 +47,7 @@ const Page: NextPage = () => {
 
   return (
     <div>
-      <PageTitle showBackButton title={category.name} subtitle="Manage products for your category" />
+      <PageTitle showBackButton title={category.name} subtitle={t("categoryDetailSubtitle")} />
       <ProductList cafeId={cafeId} categoryId={categoryId} />
       {showEditModal && (
         <CategoryEditModal

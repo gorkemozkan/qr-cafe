@@ -1,571 +1,358 @@
 {
   "common": {
-    "back": "Back",
     "loading": "Loading...",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "save": "Save",
+    "error": "Error",
+    "success": "Success",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
     "create": "Create",
-    "update": "Update",
+    "save": "Save",
+    "submit": "Submit",
     "close": "Close",
-    "yes": "Yes",
-    "no": "No",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
     "search": "Search",
     "filter": "Filter",
     "sort": "Sort",
+    "actions": "Actions",
     "name": "Name",
     "description": "Description",
-    "actions": "Actions",
     "status": "Status",
-    "date": "Date",
-    "price": "Price",
-    "category": "Category",
-    "image": "Image",
-    "required": "Required",
-    "optional": "Optional",
-    "refresh": {
-      "tooManyAttempts": "Too many refresh attempts. Try again in {remainingTime}s",
-      "refreshing": "Refreshing...",
-      "refresh": "Refresh ({attempt}/{maxAttempt})"
-    },
-    "view": "View",
-    "openInNewTab": "Open in new tab",
-    "clickToBrowseFiles": "Click to browse files",
-    "fileUpTo": "File up to",
-    "mb": "MB",
+    "active": "Active",
+    "inactive": "Inactive",
+    "created": "Created",
+    "updated": "Updated",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "areYouSure": "Are you sure?",
+    "noData": "No data found",
+    "noResults": "No results found",
+    "preview": "Preview",
     "chooseFile": "Choose file",
-    "loggedOutSuccessfully": "Logged out successfully",
-    "userMenu": "User menu",
-    "account": "Account",
-    "loggingOut": "Logging out...",
-    "logout": "Logout",
-    "new": "New",
-    "profile": "Profile",
-    "theme": "Theme",
-    "language": "Language",
-    "quickActions": "Quick Actions",
-    "searchCommands": "Search commands...",
-    "noResults": "No results found.",
-    "navigation": "Navigation",
-    "creation": "Creation",
-    "user": "User",
-    "preferences": "Preferences",
-    "settings": "Settings",
-    "loadingCafes": "Loading cafes...",
-    "deleting": "Deleting...",
-    "copiedToClipboard": "Copied to clipboard!",
-    "failedToCopyToClipboard": "Failed to copy to clipboard"
-  },
-  "navigation": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "login": "Login",
-    "logout": "Logout",
-    "dashboard": "Dashboard",
-    "cafes": "Cafes",
-    "categories": "Categories",
-    "products": "Products",
+    "clickToBrowse": "Click to browse files",
+    "fileSizeLimit": "File up to",
+    "scrollToTop": "Scroll to top",
+    "createProductInstantly": "Create Product Instantly",
+    "buyMeCoffee": "Buy Me a Coffee",
+    "noDataAvailable": "No data available",
+    "logo": "Logo",
     "menu": "Menu",
-    "settings": "Settings",
-    "profile": "Profile"
+    "invalidDate": "Invalid date",
+    "view": "View",
+    "tooManyRefreshAttempts": "Too many refresh attempts. Try again in {remainingTime}s",
+    "refreshing": "Refreshing...",
+    "refresh": "Refresh ({attempt}/{maxAttempt})"
   },
-  "landing": {
-    "hero": {
-      "badge": "Transform Your Cafe Today",
-      "title": "Digital QR Menu",
-      "subtitle": "for Modern Cafes",
-      "description": "Create stunning digital menus with QR codes, organize products by categories, and deliver an exceptional mobile dining experience that your customers will love.",
-      "cta": "Create Your QR Menu",
-      "features": {
-        "instant": "Instant",
-        "instantSub": "QR Generation",
-        "mobile": "Mobile",
-        "mobileSub": "Optimized",
-        "realtime": "Real-time",
-        "realtimeSub": "Updates",
-        "cafe": "Cafe",
-        "cafeSub": "Focused"
-      }
-    },
-    "features": {
-      "title": "Powerful Features for Modern Cafes",
-      "subtitle": "Transform your cafe with our all-in-one platform. Generate QR codes instantly, manage your entire menu effortlessly, and push updates in real-time. Everything you need to go digital, simplified.",
-      "items": {
-        "qrGeneration": {
-          "title": "QR Code Generation",
-          "description": "Generate QR codes for each cafe with preview and PDF export capabilities. Share your digital menu instantly."
-        },
-        "menuManagement": {
-          "title": "Complete Menu Management",
-          "description": "Create, edit, and manage your entire menu structure effortlessly. Add cafes, organize categories, and showcase products with intuitive drag-and-drop organization."
-        },
-        "mediaManagement": {
-          "title": "Media Management",
-          "description": "Upload and manage cafe logos and product images with secure cloud storage. Show off your dishes with high-quality visuals."
-        },
-        "mobileFirst": {
-          "title": "Mobile-First Experience",
-          "description": "Responsive design optimized for mobile devices. Your customers get a seamless experience on any screen size."
-        },
-        "multiCurrency": {
-          "title": "Multi-Currency Support",
-          "description": "Support for different currencies across cafes. Perfect for international businesses or franchises."
-        },
-        "cafeFocused": {
-          "title": "Cafe-Focused Features",
-          "description": "Designed specifically for cafes and restaurants with industry-specific workflows and optimizations."
-        }
-      },
-      "comingSoon": "Coming Soon"
-    },
-    "cta": {
-      "title": "Ready to <span>Transform</span> Your Cafe?",
-      "subtitle": "Join hundreds of cafes already using Only Menu to create beautiful digital menus. <strong>Start your free trial today</strong> and see the difference in minutes.",
-      "button": "Start Free Trial",
-      "features": {
-        "instantQR": "Instant QR Codes",
-        "mobileOptimized": "Mobile Optimized"
-      }
-    },
-    "footer": {
-      "description": "Transforming cafes with smart QR menu solutions.",
-      "legal": "Legal",
-      "product": "Product",
-      "features": "Features",
-      "copyright": "Only Menu - All rights reserved",
-      "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
-    }
+  "language": {
+    "selectLanguage": "Select Language"
   },
   "auth": {
     "login": {
       "title": "Login to your account",
       "description": "Enter your email below to login to your account",
+      "email": "Email",
       "emailPlaceholder": "m@example.com",
+      "password": "Password",
       "passwordPlaceholder": "*********",
       "securityVerification": "Security Verification",
       "loginButton": "Login",
       "loggingIn": "Logging in...",
-      "processingRequest": "Processing login request",
-      "successMessage": "Login successful!"
+      "successMessage": "Login successful!",
+      "processing": "Processing login request"
     },
-    "signup": {
-      "title": "Create your account",
-      "description": "Enter your details below to create your account",
-      "confirmPasswordLabel": "Confirm Password",
-      "createAccountButton": "Create Account",
-      "creatingAccount": "Creating account...",
-      "processingRequest": "Processing account creation request",
-      "successMessage": "Account created successfully!",
-      "alreadyHaveAccount": "Already have an account?",
-      "loginLink": "Log in"
-    },
-    "skipToForm": "Skip to {form} form",
-    "goBackHome": "Go back to home page"
+    "userMenu": {
+      "userMenu": "User menu",
+      "settings": "Settings",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutSuccess": "Logged out successfully"
+    }
+  },
+  "dashboard": {
+    "title": "Welcome back!",
+    "subtitle": "You can manage your cafes and categories here.",
+    "stats": {
+      "title": "Statistics",
+      "totalCafes": "Total Cafes",
+      "totalCafesDescription": "Active cafe locations across all regions",
+      "totalCategories": "Total Categories",
+      "totalCategoriesDescription": "Menu categories added",
+      "totalProducts": "Total Products",
+      "totalProductsDescription": "Individual menu items across all cafes",
+      "activeProducts": "Active Products",
+      "activeProductsDescription": "Available products ready for customers"
+    }
   },
   "cafe": {
-    "cafe": "Cafe",
     "title": "Cafes",
-    "createNew": "Create New Cafe",
+    "noCafes": "No cafes found",
+    "createCafe": "Create Cafe",
     "editCafe": "Edit Cafe",
     "deleteCafe": "Delete Cafe",
-    "noCafes": "No cafes found",
-    "fields": {
-      "name": "Cafe Name",
-      "slug": "URL Slug",
-      "description": "Description",
-      "address": "Address",
-      "phone": "Phone",
-      "website": "Website",
-      "logo": "Logo"
-    },
+    "cafeDeleted": "Cafe deleted successfully!",
+    "cafeCreated": "Cafe created successfully!",
+    "createFailed": "Failed to create cafe",
     "table": {
-      "headers": {
-        "logo": "Logo",
-        "name": "Name",
-        "currency": "Currency",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      },
-      "status": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "activeTooltip": "Status of the cafe, used for visibility",
-        "createdTooltip": "Date and time when the cafe was created"
-      },
-      "logo": {
-        "noLogo": "No Logo"
-      }
+      "logo": "Logo",
+      "name": "Name",
+      "currency": "Currency",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions",
+      "noLogo": "No Logo",
+      "qrCode": "QR Code",
+      "statusTooltip": "Status of the cafe, used for visibility",
+      "createdTooltip": "Date and time when the cafe was created"
     },
     "form": {
-      "labels": {
-        "cafeName": "Cafe Name",
-        "description": "Description",
-        "cafeLogo": "Cafe Logo",
-        "currency": "Currency",
-        "cafe": "Cafe",
-        "category": "Category",
-        "name": "Product Name",
-        "price": "Price",
-        "image": "Product Image"
-      },
-      "placeholders": {
-        "cafeName": "Enter your cafe's name",
-        "description": "Describe your cafe...",
-        "name": "Enter product name",
-        "category": "Select a category"
-      },
-      "status": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "activeDescription": "Cafe is active and visible",
-        "inactiveDescription": "Cafe is inactive and hidden"
-      },
-      "logo": {
-        "currentLogoNote": "Current logo will be replaced if you select a new file"
-      }
+      "name": "Cafe Name",
+      "namePlaceholder": "Enter your cafe's name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your cafe...",
+      "logo": "Cafe Logo",
+      "currency": "Currency",
+      "isActive": "Active",
+      "isInactive": "Inactive",
+      "activeDescription": "Cafe is active and visible",
+      "inactiveDescription": "Cafe is inactive and hidden",
+      "currentLogoText": "Current logo will be replaced if you select a new file",
+      "uploadFailed": "Upload failed"
     },
-    "create": {
+    "deleteDialog": {
+      "title": "Delete Cafe",
+      "description": "Are you sure you want to delete \"{slug}\"? This action cannot be undone.",
+      "confirmText": "Delete Cafe",
+      "deleting": "Deleting..."
+    },
+    "createSheet": {
+      "tooltip": "Create new cafe",
       "title": "Create New Cafe",
       "description": "Fill in the details below to create a new cafe.",
-      "button": "Create Cafe",
-      "loadingButton": "Creating...",
-      "tooltip": "Create a new cafe"
+      "createButton": "Create Cafe",
+      "creating": "Creating...",
+      "cafeUpdated": "Cafe updated successfully!"
     },
-    "edit": {
+    "editSheet": {
       "title": "Edit Cafe",
       "description": "Update the cafe information below.",
-      "button": "Update Cafe",
-      "loadingButton": "Updating..."
+      "updateButton": "Update Cafe",
+      "updating": "Updating..."
     },
-    "delete": {
-      "title": "Delete Cafe",
-      "confirmMessage": "Are you sure you want to delete \"{slug}\"? This action cannot be undone.",
-      "successMessage": "Cafe deleted successfully!"
-    },
-    "qr": {
-      "preview": {
-        "title": "QR Code Preview",
-        "description": "QR code - Scan to visit the cafe page",
-        "menuUrl": "Menu URL:",
-        "scanInstruction": "Scan this QR code",
-        "scanDescription": "Visitors can scan this code to access your cafe page",
-        "failedGeneration": "Failed to generate QR code",
-        "viewTooltip": "View QR Code"
-      },
-      "export": {
-        "pdfTitle": "QR Code for Cafe",
-        "pdfInstruction": "Scan this QR code to visit the cafe page",
-        "pdfGenerated": "Generated on {date}",
-        "successMessage": "QR Code exported successfully!",
-        "failedMessage": "Failed to export QR code",
-        "button": "Export",
-        "exporting": "Exporting..."
-      },
-      "share": {
-        "whatsApp": "WhatsApp",
-        "sendToWhatsApp": "Send to WhatsApp",
-        "copyLink": "Copy Link",
-        "goToMenu": "Go to Menu",
-        "linkCopied": "Link copied to clipboard!",
-        "copyFailed": "Failed to copy link"
-      }
-    },
-    "messages": {
-      "createSuccess": "Cafe created successfully!",
-      "updateSuccess": "Cafe updated successfully!",
-      "createFailed": "Failed to create cafe"
+    "qrCode": {
+      "title": "QR Code Preview",
+      "description": "QR code - Scan to visit the cafe page",
+      "menuUrl": "Menu URL:",
+      "scanThisQrCode": "Scan this QR code",
+      "qrCodeDescription": "Visitors can scan this code to access your cafe page",
+      "failedToGenerate": "Failed to generate QR code",
+      "sendToWhatsApp": "Send to WhatsApp",
+      "export": "Export",
+      "exporting": "Exporting...",
+      "goToMenu": "Go to Menu",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied to clipboard!",
+      "failedToCopy": "Failed to copy link",
+      "exportSuccess": "QR Code exported successfully!",
+      "exportFailed": "Failed to export QR code",
+      "qrCodeForCafe": "QR Code for Cafe",
+      "scanToVisit": "Scan this QR code to visit the cafe page",
+      "generatedOn": "Generated on"
     }
   },
   "category": {
-    "category": "Category",
     "title": "Categories",
-    "createNew": "Create New Category",
+    "noCategories": "No categories found",
+    "createCategory": "Create Category",
     "editCategory": "Edit Category",
     "deleteCategory": "Delete Category",
-    "noCategories": "No categories found",
-    "manageCategories": "Manage categories for your cafe",
-    "manageProducts": "Manage products for your category",
-    "notFound": "Category not found",
-    "fields": {
-      "name": "Category Name",
-      "description": "Description",
-      "sortOrder": "Sort Order"
-    },
+    "categoryDeleted": "Category deleted successfully!",
+    "categoryCreated": "Category created successfully!",
+    "categoryUpdated": "Category updated successfully!",
+    "createFailed": "Failed to create category",
+    "reorderSuccess": "Categories reordered successfully!",
     "table": {
-      "headers": {
-        "image": "Image",
-        "name": "Name",
-        "sortOrder": "Sort Order",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      },
-      "status": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "noImage": "No Image"
-      }
+      "image": "Image",
+      "name": "Name",
+      "order": "Order",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions",
+      "noImage": "No Image"
     },
     "form": {
-      "labels": {
-        "categoryName": "Category Name",
-        "description": "Description",
-        "sortOrder": "Sort Order",
-        "image": "Category Image"
-      },
-      "placeholders": {
-        "categoryName": "Enter category name",
-        "description": "Describe this category..."
-      },
-      "image": {
-        "currentImageAlt": "Current category image",
-        "currentImageNote": "Current image will be replaced if you select a new file",
-        "uploadFailed": "Upload failed",
-        "operationFailed": "Operation failed"
-      },
-      "status": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "activeDescription": "Category is active and visible",
-        "inactiveDescription": "Category is inactive and hidden"
-      }
+      "name": "Category Name",
+      "namePlaceholder": "Enter category name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe this category...",
+      "sortOrder": "Sort Order",
+      "optional": "Optional",
+      "categoryImage": "Category Image",
+      "currentImageText": "Current image will be replaced if you select a new file",
+      "currentCategoryImage": "Current category image",
+      "categoryActive": "Category is active and visible",
+      "categoryInactive": "Category is inactive and hidden",
+      "uploadFailed": "Upload failed",
+      "operationFailed": "Operation failed"
     },
-    "create": {
+    "createSheet": {
+      "tooltip": "Create a new category",
       "title": "Create New Category",
       "description": "Fill in the details below to create a new category.",
-      "button": "Create Category",
-      "loadingButton": "Creating...",
-      "tooltip": "Create a new category"
+      "createButton": "Create Category",
+      "creating": "Creating..."
     },
-    "edit": {
+    "editSheet": {
       "title": "Edit Category",
       "description": "Update the category information below.",
-      "button": "Update Category",
-      "loadingButton": "Updating..."
+      "updateButton": "Update Category",
+      "updating": "Updating...",
+      "categoryUpdated": "Category updated successfully!"
     },
-    "delete": {
+    "deleteDialog": {
       "title": "Delete Category",
-      "confirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
-      "successMessage": "Category deleted successfully!"
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "confirmText": "Delete Category",
+      "deleting": "Deleting..."
     },
-    "messages": {
-      "createSuccess": "Category created successfully!",
-      "updateSuccess": "Category updated successfully!",
-      "createFailed": "Failed to create category",
-      "loadFailed": "Failed to load categories"
-    },
-    "dropdown": {
-      "selectCafeFirst": "Select a cafe first",
-      "loadingCategories": "Loading categories...",
-      "createCategory": "Create Category",
-      "selectCategory": "Select a category"
+    "page": {
+      "title": "Categories",
+      "subtitle": "Manage categories for your cafe",
+      "categoryDetailSubtitle": "Manage products for your category",
+      "notFound": "Category not found"
     }
   },
   "product": {
-    "product": "Product",
     "title": "Products",
-    "createNew": "Create New Product",
+    "noProducts": "No products found",
+    "createProduct": "Create Product",
     "editProduct": "Edit Product",
     "deleteProduct": "Delete Product",
-    "noProducts": "No products found",
-    "fields": {
-      "name": "Product Name",
+    "productDeleted": "Product deleted successfully!",
+    "productCreated": "Product created successfully!",
+    "productUpdated": "Product updated successfully!",
+    "createFailed": "Failed to create product",
+    "table": {
+      "image": "Image",
+      "name": "Name",
       "description": "Description",
       "price": "Price",
-      "image": "Image",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions",
+      "noImage": "No Image",
       "available": "Available",
-      "category": "Category"
-    },
-    "table": {
-      "headers": {
-        "image": "Image",
-        "name": "Name",
-        "description": "Description",
-        "price": "Price",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      },
-      "status": {
-        "available": "Available",
-        "unavailable": "Unavailable",
-        "noImage": "No Image"
-      }
+      "unavailable": "Unavailable"
     },
     "form": {
-      "labels": {
-        "cafe": "Cafe",
-        "category": "Category",
-        "name": "Product Name",
-        "description": "Description",
-        "price": "Price",
-        "image": "Product Image",
-        "available": "Available"
-      },
-      "placeholders": {
-        "productName": "Enter product name",
-        "productDescription": "Describe your product...",
-        "price": "0.00"
-      },
-      "status": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "activeDescription": "Product is available and can be ordered",
-        "inactiveDescription": "Product is unavailable and cannot be ordered",
-        "availableDescription": "Product is available for purchase",
-        "unavailableDescription": "Product is not available for purchase"
-      },
-      "image": {
-        "currentImageAlt": "Current product image",
-        "currentImageNote": "Current image will be replaced if you select a new file",
-        "uploadFailed": "Upload failed",
-        "operationFailed": "Operation failed"
-      }
+      "name": "Product Name",
+      "namePlaceholder": "Enter product name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your product...",
+      "price": "Price",
+      "pricePlaceholder": "0.00",
+      "productImage": "Product Image",
+      "currentImageText": "Current image will be replaced if you select a new file",
+      "currentProductImage": "Current product image",
+      "isAvailable": "Available",
+      "availableDescription": "Product is available for purchase",
+      "unavailableDescription": "Product is not available for purchase",
+      "uploadFailed": "Upload failed",
+      "operationFailed": "Operation failed"
     },
-    "create": {
+    "createSheet": {
+      "tooltip": "Create new product",
       "title": "Create New Product",
       "description": "Fill in the details below to create a new product.",
-      "button": "Create Product",
-      "loadingButton": "Creating...",
-      "tooltip": "Create new product",
-      "successMessage": "Product created successfully!"
-    },
-    "edit": {
-      "title": "Edit Product",
-      "description": "Update the product details below.",
-      "button": "Update Product",
-      "loadingButton": "Updating...",
-      "successMessage": "Product updated successfully!"
-    },
-    "delete": {
-      "title": "Delete Product",
-      "confirmMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
-      "successMessage": "Product deleted successfully!"
-    },
-    "messages": {
-      "selectCafe": "Please select a cafe",
-      "selectCategory": "Please select a category",
-      "cafeNotFound": "Selected cafe not found",
-      "uploadFailed": "Upload failed",
-      "createSuccess": "Product created successfully",
-      "createFailed": "Failed to create product"
-    },
-    "placeholders": {
-      "selectCafe": "Select a cafe",
-      "selectCategory": "Select a category",
-      "productName": "Enter product name",
-      "productDescription": "Describe your product...",
-      "productImage": "Product Image",
-      "price": "0.00"
+      "createButton": "Create Product",
+      "creating": "Creating...",
+      "productCreated": "Product created successfully!"
     },
     "quickCreate": {
       "title": "Create New Product",
       "description": "Quickly create a new product for your cafe menu.",
-      "createButton": "Create",
-      "creatingButton": "Creating...",
-      "selectCafe": "Please select a cafe",
-      "selectCategory": "Please select a category",
-      "cafeNotFound": "Selected cafe not found",
-      "uploadFailed": "Upload failed",
-      "unknownError": "Unknown error",
-      "successMessage": "Product created successfully",
-      "failedMessage": "Failed to create product",
-      "selectCafePlaceholder": "Select a cafe"
+      "cafeLabel": "Cafe",
+      "cafePlaceholder": "Select a cafe",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select a category",
+      "create": "Create",
+      "creating": "Creating...",
+      "selectCafeError": "Please select a cafe",
+      "selectCategoryError": "Please select a category",
+      "createSuccess": "Product created successfully",
+      "createFailed": "Failed to create product"
+    },
+    "editSheet": {
+      "title": "Edit Product",
+      "description": "Update the product details below.",
+      "updateButton": "Update Product",
+      "updating": "Updating..."
+    },
+    "deleteDialog": {
+      "title": "Delete Product",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "confirmText": "Delete Product",
+      "deleting": "Deleting..."
     }
   },
-  "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back!",
-    "subtitle": "You can manage your cafes and categories here.",
-    "stats": {
-      "totalCafes": "Total Cafes",
-      "totalCategories": "Total Categories",
-      "totalProducts": "Total Products",
-      "activeProducts": "Active Products",
-      "cafesDescription": "Active cafe locations across all regions",
-      "categoriesDescription": "Menu categories added",
-      "productsDescription": "Individual menu items across all cafes",
-      "activeProductsDescription": "Available products ready for customers",
-      "thisMonth": "This Month"
+  "components": {
+    "questionDialog": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "loading": "Loading..."
+    },
+    "dataTable": {
+      "noData": "No data available"
     }
-  },
-  "menu": {
-    "viewMenu": "View Menu",
-    "qrCode": "QR Code",
-    "downloadQR": "Download QR",
-    "printQR": "Print QR"
-  },
-  "validation": {
-    "required": "This field is required",
-    "email": "Please enter a valid email address",
-    "minLength": "Must be at least {count} characters",
-    "maxLength": "Must be no more than {count} characters",
-    "passwordMismatch": "Passwords do not match",
-    "invalidFormat": "Invalid format"
-  },
-  "language": {
-    "english": "English",
-    "turkish": "Türkçe",
-    "selectLanguage": "Select Language"
-  },
-  "date": {
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "tomorrow": "Tomorrow",
-    "daysAgo": "{{count}} days ago",
-    "inDays": "In {{count}} days",
-    "invalid": "Invalid Date",
-    "at": "at"
   },
   "gdpr": {
-    "title": "User Settings",
-    "subtitle": "Manage your account and preferences",
+    "title": "GDPR Compliance",
+    "dataExport": "Export Data",
+    "dataDeletion": "Delete Data",
+    "page": {
+      "title": "User Settings",
+      "subtitle": "Manage your account and preferences"
+    },
     "export": {
       "title": "Export Your Data",
       "description": "Download a complete copy of all your personal data in JSON format.",
+      "badgeAccount": "User Account",
+      "badgeCafes": "Cafes",
+      "badgeCategories": "Categories",
+      "badgeProducts": "Products",
+      "exporting": "Exporting...",
       "exportButton": "Export Data",
-      "exportingButton": "Exporting...",
-      "successMessage": "Data export completed successfully",
-      "errorMessage": "Failed to export data. Please try again.",
-      "failedToExport": "Failed to export data",
       "dialogTitle": "Export Your Data",
       "dialogDescription": "You are about to download a complete copy of all your personal data. This includes your account information, cafes, categories, and products. The file will be downloaded in JSON format.",
-      "downloadButton": "Download Data"
+      "cancel": "Cancel",
+      "downloading": "Exporting...",
+      "downloadData": "Download Data",
+      "exportSuccess": "Data export completed successfully",
+      "exportFailed": "Failed to export data. Please try again.",
+      "exportError": "Failed to export data"
     },
     "delete": {
       "title": "Delete Your Data",
       "description": "Permanently delete all your data. This action cannot be undone.",
-      "deleteButton": "Delete All Data",
-      "deletingButton": "Deleting...",
-      "successMessage": "Your data has been permanently deleted",
-      "errorMessage": "Failed to delete data. Please try again.",
-      "failedToDelete": "Failed to delete data",
-      "warningMessage": "This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your account anymore.",
+      "alertDescription": "This will permanently delete all your cafes, categories, products, and account data. You will be logged out and cannot access your account anymore.",
+      "deleting": "Deleting...",
+      "deleteAllData": "Delete All Data",
       "dialogTitle": "Delete All Data",
       "dialogDescription": "This action will permanently delete all your data. This cannot be undone.",
       "whatWillBeDeleted": "What will be deleted:",
-      "deletedItems": {
-        "cafes": "All your cafes and their settings",
-        "categories": "All categories and menu organization",
-        "products": "All products and menu items",
-        "account": "Your account and profile data"
-      },
-      "confirmationText": "I understand that this action is permanent and cannot be undone"
-    },
-    "dataTypes": {
-      "userAccount": "User Account",
-      "cafes": "Cafes",
-      "categories": "Categories",
-      "products": "Products"
-    },
-    "buttons": {
-      "cancel": "Cancel"
+      "deleteCafes": "All your cafes and their settings",
+      "deleteCategories": "All categories and menu organization",
+      "deleteProducts": "All products and menu items",
+      "deleteAccount": "Your account and profile data",
+      "confirmationText": "I understand that this action is permanent and cannot be undone",
+      "cancel": "Cancel",
+      "deletingButton": "Deleting...",
+      "deleteAllDataButton": "Delete All Data",
+      "deleteSuccess": "Your data has been permanently deleted",
+      "deleteFailed": "Failed to delete data. Please try again.",
+      "deleteError": "Failed to delete data"
     }
   }
 }

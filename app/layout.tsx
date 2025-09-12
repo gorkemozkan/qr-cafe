@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { nextPublicBaseUrl } from "@/lib/env";
 import Script from "next/script";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: {
@@ -85,6 +87,8 @@ interface Props {
 }
 
 const RootLayout: FC<Props> = async (props) => {
+  const messages = await getMessages();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -101,10 +105,12 @@ const RootLayout: FC<Props> = async (props) => {
       </head>
       <GoogleTagManager gtmId="GTM-TJ2XX28D" />
       <body className="antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <QueryProvider>{props.children}</QueryProvider>
-          <Toaster />
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <QueryProvider>{props.children}</QueryProvider>
+            <Toaster />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

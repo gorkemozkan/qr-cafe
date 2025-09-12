@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Image as ImageIcon, Upload, X, Loader2 } from "lucide-react";
@@ -31,7 +32,8 @@ const FilePicker = ({
   disabled = false,
   loading = false,
 }: FilePickerProps) => {
-  const label = "Choose file";
+  const t = useTranslations("common");
+  const label = t("chooseFile");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -127,9 +129,9 @@ const FilePicker = ({
                 {loading ? <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" /> : <Upload className="h-6 w-6 text-muted-foreground" />}
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium">Click to browse files</p>
+                <p className="text-sm font-medium">{t("clickToBrowse")}</p>
                 <p className="text-xs text-muted-foreground">
-                  {accept === "image/*" ? "PNG, JPG, GIF " : "File up to "} {Math.round(maxSize / 1024 / 1024)}MB
+                  {accept === "image/*" ? "PNG, JPG, GIF " : t("fileSizeLimit")} {Math.round(maxSize / 1024 / 1024)}MB
                 </p>
               </div>
             </div>
@@ -138,7 +140,7 @@ const FilePicker = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {preview && accept === "image/*" ? (
-                <Image width={48} height={48} src={preview} alt="Preview" className="h-12 w-12 rounded object-cover" />
+                <Image width={48} height={48} src={preview} alt={t("preview")} className="h-12 w-12 rounded object-cover" />
               ) : (
                 <div className="h-12 w-12 rounded bg-muted flex items-center justify-center">
                   <ImageIcon className="h-6 w-6 text-muted-foreground" />

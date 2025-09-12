@@ -1,11 +1,11 @@
 "use client";
 
-import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { FC } from "react";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface Props {
   onEdit?: () => void;
@@ -16,68 +16,59 @@ interface Props {
 }
 
 const TableActions: FC<Props> = (props) => {
+  const t = useTranslations("common");
+
   const hasEdit = !!props.onEdit;
 
   const hasDelete = !!props.onDelete;
 
   const actionCount = [hasEdit, hasDelete].filter(Boolean).length;
 
-  if (actionCount === 1) {
-    if (hasEdit) {
-      return (
-        <Button variant="outline" size="sm" onClick={props.onEdit} className="h-8 w-8 p-0">
-          <Edit className="h-4 w-4" />
-        </Button>
-      );
-    }
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    props.onEdit?.();
+  };
 
-    if (hasDelete) {
-      return (
-        <Button variant="outline" size="sm" onClick={props.onDelete} className="h-8 w-8 p-0 ">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      );
-    }
-  }
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    props.onDelete?.();
+  };
 
   if (actionCount > 1) {
     return (
-      <DropdownMenu>
-        <Tooltip>
-          <div className="flex items-center space-x-2">
-            {props.additionalActions && props.additionalActions}
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="lg">
-                <MoreHorizontal className="h-6 w-6" />
-              </Button>
-            </DropdownMenuTrigger>
-          </div>
-        </Tooltip>
+      <div className="flex items-center gap-2">
+        {props.additionalActions}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()} className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end">
-          {props.to && (
-            <DropdownMenuItem asChild>
-              <Link href={props.to}>
-                <Eye className="mr-2 h-4 w-4" />
-                View
-              </Link>
-            </DropdownMenuItem>
-          )}
-          {hasEdit && (
-            <DropdownMenuItem onClick={props.onEdit}>
-              <Edit className="mr-2 h-4 w-4" />
-              Edit
-            </DropdownMenuItem>
-          )}
-
-          {hasDelete && (
-            <DropdownMenuItem onClick={props.onDelete}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <DropdownMenuContent align="end">
+            {props.to && (
+              <DropdownMenuItem asChild>
+                <Link href={props.to} onClick={(e) => e.stopPropagation()}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  {t("view")}
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {hasEdit && (
+              <DropdownMenuItem onClick={handleEdit}>
+                <Edit className="mr-2 h-4 w-4" />
+                {t("edit")}
+              </DropdownMenuItem>
+            )}
+            {hasDelete && (
+              <DropdownMenuItem onClick={handleDelete}>
+                <Trash2 className="mr-2 h-4 w-4" />
+                {t("delete")}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     );
   }
 

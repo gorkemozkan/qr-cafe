@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Your dashboard for managing your cafes and categories",
 };
 
+// TODO: Add translations for metadata when next-intl supports metadata translation
+
 const Page: NextPage = () => {
   return (
     <div className="@container/main flex flex-1 flex-col gap-2">
