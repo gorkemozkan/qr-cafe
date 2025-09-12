@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, Rocket, Sparkles } from "lucide-react";
-import NextLink from "next/link";
 import { FC } from "react";
-import FancyBackground from "@/components/landing/FancyBackground";
+import NextLink from "next/link";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, Rocket, Sparkles } from "lucide-react";
+import FancyBackground from "@/components/landing/FancyBackground";
 
 const CTASection: FC = () => {
   return (
@@ -27,12 +27,10 @@ const CTASection: FC = () => {
             </span>{" "}
             Your Cafe?
           </h2>
-
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
             Join hundreds of cafes already using Only Menu to create beautiful digital menus.{" "}
             <strong className="text-foreground">Start your free trial today</strong> and see the difference in minutes.
           </p>
-
           <div className="flex flex-wrap justify-center gap-4 mb-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
@@ -43,7 +41,6 @@ const CTASection: FC = () => {
               <span>Mobile Optimized</span>
             </div>
           </div>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               asChild

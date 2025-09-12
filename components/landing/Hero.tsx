@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, Coffee, QrCode, Smartphone, Sparkles } from "lucide-react";
-import NextLink from "next/link";
 import { FC } from "react";
-import FancyBackground from "@/components/landing/FancyBackground";
+import NextLink from "next/link";
 import { Button } from "@/components/ui/button";
+import FancyBackground from "@/components/landing/FancyBackground";
+import { ArrowRight, Coffee, QrCode, Smartphone, Sparkles } from "lucide-react";
 
 const Hero: FC = () => {
   return (
@@ -66,8 +66,8 @@ const Hero: FC = () => {
               <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Sparkles className="h-8 w-8 text-orange-500" />
               </div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Real-time</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">Updates</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Simplified</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">Experience</div>
             </div>
             <div className="text-center group">
               <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">

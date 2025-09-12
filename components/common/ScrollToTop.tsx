@@ -35,10 +35,12 @@ const ScrollToTop: FC = () => {
   return (
     <Button
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 w-12 h-12 p-0 rounded-full bg-orange-500 hover:bg-orange-500/90 dark:bg-orange-500 dark:hover:bg-orange-500/90 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-3"
+      className="fixed bottom-6 right-6 pb-safe-area-inset-bottom pr-safe-area-inset-right z-50 w-12 h-12 p-0 rounded-full bg-orange-500 hover:bg-orange-500/90 dark:bg-orange-500 dark:hover:bg-orange-500/90 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 min-h-[44px] min-w-[44px]"
       aria-label={t("scrollToTop")}
+      type="button"
     >
-      <ArrowUp className="w-8 h-8 text-white" />
+      <ArrowUp className="w-6 h-6 text-white" aria-hidden="true" />
+      <span className="sr-only">{t("scrollToTop")}</span>
     </Button>
   );
 };
