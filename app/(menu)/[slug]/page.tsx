@@ -50,7 +50,7 @@ interface Params {
   params: Promise<{ slug: string }>;
 }
 
-function generateStructuredData(menu: PublicMenuData) {
+/* function generateStructuredData(menu: PublicMenuData) {
   const baseUrl = nextPublicBaseUrl;
 
   const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
@@ -86,7 +86,7 @@ function generateStructuredData(menu: PublicMenuData) {
     },
     servesCuisine: "Various",
   };
-}
+} */
 
 /* function generateSEOTitle(menu: PublicMenuData): string {
   const cafeName = menu.cafe.name;
@@ -233,9 +233,9 @@ const Page: NextPage<Params> = async (props) => {
 
     return (
       <>
-        <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
+        {/*  <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(generateStructuredData(menu))}
-        </Script>
+        </Script> */}
         <ErrorBoundary>
           <SimpleMenu menu={menu} />
         </ErrorBoundary>
