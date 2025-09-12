@@ -8,6 +8,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const rateLimitResult = publicRateLimiter.check(request);
 
+    console.log("rateLimitResult", rateLimitResult);
+
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         {
@@ -22,6 +24,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { slug } = await params;
 
+    console.log("slug", slug);
+
     if (!slug) {
       return NextResponse.json({ error: "Slug is required" }, { status: http.BAD_REQUEST.status });
     }
@@ -32,6 +36,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     try {
       const cachedData = await redis.get(cacheKey);
+
+      console.log("cachedData", cachedData);
 
       if (cachedData && typeof cachedData === "string") {
         return NextResponse.json(JSON.parse(cachedData));
@@ -46,6 +52,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .eq("slug", slug)
       .eq("is_active", true)
       .single();
+
+    console.log("cafe", cafe);
 
     if (cafeError) {
       console.error("Cafe fetch error:", cafeError);
@@ -78,6 +86,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         .order("created_at", { ascending: true }),
     ]);
 
+    console.log("categoriesResult", categoriesResult);
+    console.log("productsResult", productsResult);
+
     if (categoriesResult.error) {
       console.error("Categories fetch error:", categoriesResult.error);
       return NextResponse.json(
@@ -108,11 +119,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       },
       {} as Record<string, any[]>,
     );
+    console.log("productsByCategory", productsByCategory);
 
     const categoriesWithProducts = (categoriesResult.data || []).map((category) => ({
       ...category,
       products: productsByCategory[category.id] || [],
     }));
+
+    console.log("categoriesWithProducts", categoriesWithProducts);
 
     const publicCafeData = {
       cafe: {
@@ -126,6 +140,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       categories: categoriesWithProducts,
       generated_at: new Date().toISOString(),
     };
+
+    console.log("publicCafeData", publicCafeData);
 
     try {
       await redis.setex(cacheKey, 900, JSON.stringify(publicCafeData));
