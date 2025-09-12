@@ -102,7 +102,6 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
       let imageUrl = data.image_url;
 
       if (removeImage) {
-        // Remove the image by setting to empty string
         imageUrl = "";
       } else if (imageFile && props.cafeSlug) {
         setIsUploading(true);

@@ -11,7 +11,7 @@ interface Props {
 
 const ExternalLinkButton: FC<Props> = (props) => {
   return (
-    <Button asChild variant="outline">
+    <Button size="icon" asChild variant="outline">
       <Link href={props.url} target="_blank" rel="noopener noreferrer">
         <ExternalLink className="h-4 w-4" />
       </Link>

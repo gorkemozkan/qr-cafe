@@ -16,7 +16,6 @@ interface Props {
 const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null }) => {
   const activeCategories = props.categories.filter((category) => category.products.length > 0);
 
-  // Refs for category sections
   const categoryRefs = useRef<Map<number, HTMLElement>>(new Map());
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -30,22 +29,18 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
       return;
     }
 
-    // Disconnect existing observer
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
 
-    // Add a small delay to prevent immediate triggering on page load
     const timeoutId = setTimeout(() => {
       observerRef.current = new IntersectionObserver(
         (entries) => {
-          // Find the entry with the highest intersection ratio
           const visibleEntries = entries.filter((entry) => entry.isIntersecting);
           if (visibleEntries.length === 0) return;
 
           const mostVisible = visibleEntries.reduce((prev, current) => (prev.intersectionRatio > current.intersectionRatio ? prev : current));
 
-          // Extract category ID from the element's data attribute
           const categoryId = parseInt(mostVisible.target.getAttribute("data-category-id") || "0");
           if (categoryId && props.onCategoryInView) {
             props.onCategoryInView(categoryId);
@@ -53,18 +48,17 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
         },
         {
           root: null,
-          rootMargin: "-100px 0px -20% 0px", // Trigger when category is near the top, with more conservative margins
+          rootMargin: "-100px 0px -20% 0px",
           threshold: 0.3, // Single threshold for better performance
         },
       );
 
-      // Observe all current refs
       categoryRefs.current.forEach((ref) => {
         if (ref && observerRef.current) {
           observerRef.current.observe(ref);
         }
       });
-    }, 100); // Small delay to prevent immediate triggering on page load
+    }, 100);
 
     return () => {
       clearTimeout(timeoutId);
@@ -75,14 +69,11 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
     };
   }, [props.onCategoryInView]);
 
-  // Update observer when refs change
   useEffect(() => {
     if (!observerRef.current) return;
 
-    // Disconnect all current observations
     observerRef.current.disconnect();
 
-    // Re-observe all current refs
     categoryRefs.current.forEach((ref) => {
       if (ref && observerRef.current) {
         observerRef.current.observe(ref);
@@ -108,7 +99,6 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
                   observerRef.current.observe(el);
                 }
               } else {
-                // Stop observing when element is removed
                 if (observerRef.current && categoryRefs.current.has(category.id)) {
                   const element = categoryRefs.current.get(category.id);
                   if (element) {

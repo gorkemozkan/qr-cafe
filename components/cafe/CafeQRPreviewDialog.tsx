@@ -34,7 +34,6 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
 
       const cafeUrl = `${window.location.origin}/${slug}`;
 
-      // Generate QR code as data URL
       const qrDataUrl = await QRCode.toDataURL(cafeUrl, {
         width: 300,
         margin: 2,
@@ -52,7 +51,6 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
     }
   }, [slug]);
 
-  // Generate QR code when cafe data changes
   useEffect(() => {
     if (slug && open) {
       generateQRCode();
@@ -90,47 +88,38 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
     try {
       setIsExporting(true);
 
-      // Create a canvas element to draw the QR code
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // Set canvas size
       canvas.width = 800;
       canvas.height = 1000;
 
-      // Fill background
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add title
       ctx.fillStyle = "#000000";
       ctx.font = "bold 32px Arial";
       ctx.textAlign = "center";
       ctx.fillText(t("qrCodeForCafe"), canvas.width / 2, 60);
 
-      // Add URL
       ctx.font = "18px Arial";
       ctx.fillText(cafeUrl, canvas.width / 2, 130);
 
-      // Load and draw QR code image
       const img = new window.Image();
       img.onload = () => {
-        // Calculate position to center the QR code
         const qrSize = 400;
         const x = (canvas.width - qrSize) / 2;
         const y = 180;
 
         ctx.drawImage(img, x, y, qrSize, qrSize);
 
-        // Add instructions
         ctx.fillStyle = "#666666";
         ctx.font = "16px Arial";
         ctx.textAlign = "center";
         ctx.fillText(t("scanToVisit"), canvas.width / 2, 620);
         ctx.fillText(`${t("generatedOn")} ${new Date().toLocaleDateString()}`, canvas.width / 2, 650);
 
-        // Convert canvas to blob and download
         canvas.toBlob((blob) => {
           if (blob) {
             const url = URL.createObjectURL(blob);

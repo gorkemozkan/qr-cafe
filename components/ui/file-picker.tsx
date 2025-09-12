@@ -12,7 +12,7 @@ interface FilePickerProps {
   id?: string;
   label?: string;
   accept?: string;
-  maxSize?: number; // in bytes
+  maxSize?: number;
   value?: File | null;
   onChange?: (file: File | null) => void;
   onError?: (error: string) => void;

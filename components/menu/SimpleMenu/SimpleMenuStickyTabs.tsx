@@ -25,7 +25,6 @@ const SimpleMenuStickyTabs: FC<Props> = ({
     onCategoryChange?.(categoryId);
   };
 
-  // Scroll active tab into view when it changes due to auto-activation
   useEffect(() => {
     if (!isAutoActivation || !scrollContainerRef.current) return;
 

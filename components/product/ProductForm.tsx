@@ -73,7 +73,6 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     defaultValues: getDefaultValues(),
   });
 
-  // Expose form methods via ref
   useImperativeHandle(ref, () => ({
     submitForm: () => {
       handleSubmit(onSubmitForm)();
@@ -88,7 +87,6 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       let imageUrl = data.image_url;
 
       if (removeImage) {
-        // Remove the image by setting to empty string
         imageUrl = "";
       } else if (imageFile && props.cafeSlug) {
         setIsUploading(true);
@@ -121,7 +119,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
 
   const handleImageUpload = (file: File | null) => {
     setImageFile(file);
-    setRemoveImage(false); // Reset remove state when a new file is selected
+    setRemoveImage(false);
     setUploadError(null);
   };
 

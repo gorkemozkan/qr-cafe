@@ -103,7 +103,6 @@ export const validateFileType = (file: File): { isValid: boolean; error?: string
     return { isValid: false, error: "File too large. Maximum size is 5MB" };
   }
 
-  // Sanitize the filename
   const sanitizedName = sanitizeFilename(file.name);
 
   return { isValid: true, sanitizedName };
