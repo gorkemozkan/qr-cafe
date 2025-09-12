@@ -26,7 +26,6 @@ function DataTable<T extends { id?: number | string }>({
 }: DataTableProps<T>) {
   const t = useTranslations();
 
-  // Resolve translation key for emptyMessage
   const resolvedEmptyMessage =
     emptyMessage.startsWith("common.") ||
     emptyMessage.startsWith("product.") ||
@@ -35,7 +34,6 @@ function DataTable<T extends { id?: number | string }>({
       ? t(emptyMessage)
       : emptyMessage;
 
-  // Use extracted hooks for cleaner logic separation
   const { data, isLoading, refetch, isRefetching } = useDataTable({
     queryKey,
     queryFn,

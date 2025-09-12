@@ -21,7 +21,6 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
   const [sortedData, setSortedData] = useState<T[]>([]);
   const lastDragRef = useRef<string>("");
 
-  // Update sorted data when original data changes
   useEffect(() => {
     if (data) {
       setSortedData(data);
@@ -29,17 +28,14 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
     }
   }, [data]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       lastDragRef.current = "";
     };
   }, []);
 
-  // Sensors for drag and drop
   const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
 
-  // Internal sorting function
   const handleInternalSort = useCallback(
     async (items: T[]) => {
       if (sortConfig?.apiUrl) {
@@ -53,10 +49,9 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
         onSortOrderChange?.(items);
       }
     },
-    [sortConfig], // Remove onSortOrderChange from dependencies to prevent unnecessary re-renders
+    [sortConfig],
   );
 
-  // Handle drag end - memoized to prevent unnecessary re-renders
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
@@ -64,7 +59,6 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
       if (over && active.id !== over.id) {
         const dragKey = `${active.id}-${over.id}`;
 
-        // Prevent duplicate drag operations within the same session
         if (lastDragRef.current === dragKey) {
           return;
         }
@@ -82,12 +76,10 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
 
           const newItems = arrayMove(items, oldIndex, newIndex);
 
-          // Trigger sort callback - handleInternalSort handles both API and non-API cases
           handleInternalSort(newItems).catch((error) => {
             console.error("Failed to update sort order:", error);
           });
 
-          // Reset after a short delay to allow new operations
           setTimeout(() => {
             lastDragRef.current = "";
           }, 100);
