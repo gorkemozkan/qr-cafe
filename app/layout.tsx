@@ -12,6 +12,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(nextPublicBaseUrl || ""),
   title: {
     template: "%s | Only Menu",
     default: "Only Menu - Smart QR Menu Solutions for Cafes & Restaurants",
