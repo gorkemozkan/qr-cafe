@@ -199,7 +199,9 @@
       "isActive": "Active",
       "isInactive": "Inactive",
       "activeDescription": "Category is active and visible",
-      "inactiveDescription": "Category is inactive and hidden"
+      "inactiveDescription": "Category is inactive and hidden",
+      "removeImage": "Remove Image",
+      "imageWillBeRemoved": "Image will be removed when you save"
     },
     "createSheet": {
       "tooltip": "Create a new category",
@@ -264,7 +266,9 @@
       "availableDescription": "Product is available for purchase",
       "unavailableDescription": "Product is not available for purchase",
       "uploadFailed": "Upload failed",
-      "operationFailed": "Operation failed"
+      "operationFailed": "Operation failed",
+      "removeImage": "Remove Image",
+      "imageWillBeRemoved": "Image will be removed when you save"
     },
     "createSheet": {
       "tooltip": "Create new product",

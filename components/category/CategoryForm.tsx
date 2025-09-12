@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import FilePicker from "@/components/ui/file-picker";
@@ -35,6 +37,7 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [removeImage, setRemoveImage] = useState(false);
 
   const getDefaultValues = (): CategorySchema => {
     if (props.mode === "edit" && props.category) {
@@ -71,11 +74,18 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
 
   const handleImageUpload = (file: File | null) => {
     setImageFile(file);
+    setRemoveImage(false); // Reset remove state when a new file is selected
     setUploadError(null);
   };
 
   const handleImageError = (error: string) => {
     setUploadError(error);
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setRemoveImage(true);
+    setUploadError(null);
   };
 
   useImperativeHandle(ref, () => ({
@@ -91,7 +101,10 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
     try {
       let imageUrl = data.image_url;
 
-      if (imageFile && props.cafeSlug) {
+      if (removeImage) {
+        // Remove the image by setting to empty string
+        imageUrl = "";
+      } else if (imageFile && props.cafeSlug) {
         setIsUploading(true);
         setUploadError(null);
 
@@ -156,8 +169,8 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
           disabled={isUploading}
         />
         <InputErrorMessage id="upload-error">{uploadError}</InputErrorMessage>
-        {props.mode === "edit" && props.category?.image_url && !imageFile && (
-          <div className="flex items-center space-x-2">
+        {props.mode === "edit" && props.category?.image_url && !imageFile && !removeImage && (
+          <div className="flex items-start space-x-2">
             <OptimizedImage
               src={props.category.image_url}
               alt={t("currentCategoryImage")}
@@ -167,7 +180,12 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">{t("currentImageText")}</p>
+            <div className="flex items-start">
+              <p className="text-sm text-muted-foreground">{t("currentImageText")}</p>
+              <Button type="button" variant="outline" size="sm" onClick={handleRemoveImage}>
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
           </div>
         )}
       </div>
