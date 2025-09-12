@@ -55,7 +55,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     return {
       name: "",
       description: "",
-      price: undefined,
+      price: 0,
       image_url: "",
       is_available: true,
       category_id: props.categoryId,
