@@ -1,6 +1,5 @@
 import { Check, Copy } from "lucide-react";
 import { FC, ReactNode } from "react";
-import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { cn } from "@/lib/utils";
@@ -21,11 +20,9 @@ const CopyButton: FC<Props> = (props) => {
   };
 
   return (
-    <TooltipButton onClick={handleCopy} tooltip="Copy to clipboard">
-      <Button variant="outline" size="sm" onClick={handleCopy} className={cn("flex items-center gap-2", props.className)}>
-        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-      </Button>
-    </TooltipButton>
+    <Button variant="outline" size="sm" onClick={handleCopy} className={cn("flex items-center gap-2", props.className)}>
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    </Button>
   );
 };
 

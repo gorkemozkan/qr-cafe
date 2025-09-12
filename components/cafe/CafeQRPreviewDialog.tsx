@@ -163,7 +163,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
         </DialogHeader>
         <div>
           <div className="bg-background p-4 rounded-lg border">
-            <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-start justify-between flex-wrap gap-2">
               <div>
                 <p className="text-sm font-medium mb-1">Menu URL:</p>
                 <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
@@ -229,11 +229,23 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
           </div>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" onClick={() => shareWhatsApp(cafeUrl)} disabled={!cafeUrl} className="flex items-center gap-2 w-full">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => shareWhatsApp(cafeUrl)}
+                disabled={!cafeUrl}
+                className="flex items-center gap-2 w-full"
+              >
                 <MessageCircle className="h-4 w-4" />
                 WhatsApp
               </Button>
-              <Button variant="outline" onClick={handleExportPDF} disabled={!qrCodeDataUrl || isExporting} className="flex items-center gap-2 w-full">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleExportPDF}
+                disabled={!qrCodeDataUrl || isExporting}
+                className="flex items-center gap-2 w-full"
+              >
                 <Download className="h-4 w-4" />
                 {isExporting ? "Exporting..." : "Export"}
               </Button>

@@ -1,11 +1,10 @@
 "use client";
 
-import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import { FC } from "react";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface Props {
   onEdit?: () => void;
@@ -37,19 +36,11 @@ const TableActions: FC<Props> = (props) => {
       <div className="flex items-center gap-2">
         {props.additionalActions}
         <DropdownMenu>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()} className="h-8 w-8 p-0">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-            </TooltipTrigger>
-
-            <TooltipContent>
-              <p>Actions</p>
-            </TooltipContent>
-          </Tooltip>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()} className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
             {props.to && (
