@@ -88,7 +88,7 @@ function generateStructuredData(menu: PublicMenuData) {
   };
 }
 
-function generateSEOTitle(menu: PublicMenuData): string {
+/* function generateSEOTitle(menu: PublicMenuData): string {
   const cafeName = menu.cafe.name;
 
   const categoryCount = menu.categories.length;
@@ -104,9 +104,9 @@ function generateSEOTitle(menu: PublicMenuData): string {
     .map((cat) => cat.name)
     .join(", ");
   return `${cafeName} Menü - ${categoryNames}${categoryCount > 3 ? " & More" : ""} (${productCount} items)`;
-}
+} */
 
-function generateSEODescription(menu: PublicMenuData): string {
+/* function generateSEODescription(menu: PublicMenuData): string {
   const cafeName = menu.cafe.name;
   const description = menu.cafe.description;
 
@@ -126,9 +126,9 @@ function generateSEODescription(menu: PublicMenuData): string {
   const truncatedDesc = description.length > 120 ? description.substring(0, 120) + "..." : description;
 
   return `${truncatedDesc} | ${cafeName} Menu`;
-}
+} */
 
-export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
+/* export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
   try {
     const { slug } = await params;
 
@@ -208,7 +208,7 @@ export const generateMetadata = async ({ params }: Params): Promise<Metadata> =>
       description: "View our menu",
     };
   }
-};
+}; */
 
 const Page: NextPage<Params> = async (props) => {
   try {
