@@ -1,4 +1,3 @@
-import { nextPublicBaseUrl } from "@/lib/env";
 import { BaseRepository } from "@/lib/repositories/base-repository";
 
 export interface PublicProduct {
@@ -35,11 +34,9 @@ export interface PublicMenuData {
 }
 
 export class PublicMenuRepository extends BaseRepository {
-  protected readonly baseUrl = `${nextPublicBaseUrl}/api/public/cafe`;
+  protected readonly baseUrl = `/api/public/cafe`;
 
   async getMenuBySlug(slug: string) {
-    console.log("Base URL", this.baseUrl);
-
     return await this.get<PublicMenuData>(`/${slug}`);
   }
 }
