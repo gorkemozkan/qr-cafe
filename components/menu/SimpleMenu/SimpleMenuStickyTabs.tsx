@@ -18,10 +18,11 @@ const SimpleMenuStickyTabs: FC<Props> = ({
 }) => {
   const activeCategories = categories.filter((category) => category.products.length > 0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const tabRefs = useRef<Map<number | string, HTMLButtonElement>>(new Map());
 
   const handleTabChange = (value: string) => {
-    const categoryId = value === "all" ? null : parseInt(value);
+    const categoryId = value === "all" ? null : Number.parseInt(value);
     onCategoryChange?.(categoryId);
   };
 
