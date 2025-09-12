@@ -1,22 +1,25 @@
 import Image from "next/image";
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 
 interface Props {
   logoUrl: string | null;
 }
 
 const SimpleMenuHeader: FC<Props> = (props) => {
+  const t = useTranslations("common");
+
   return (
     <header className="relative mb-8">
       <div className="flex flex-col sm:flex-row items-center justify-center w-full">
         {props.logoUrl ? (
-          <Image src={props.logoUrl} alt="Logo" width={120} height={120} quality={100} priority />
+          <Image src={props.logoUrl} alt={t("logo")} width={120} height={120} quality={100} priority />
         ) : (
           <h1
             className="text-7xl font-light italic text-[#8B1538] dark:text-[#A61E4D] tracking-wide leading-none text-center"
             style={{ fontFamily: "'Dancing Script', 'Brush Script MT', cursive" }}
           >
-            Menu
+            {t("menu")}
           </h1>
         )}
       </div>

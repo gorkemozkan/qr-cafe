@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import SectionCards from "@/components/common/SectionCards";
 import { useQueryRequest } from "@/hooks/useRequest";
 import { apiClient } from "@/lib/api-client";
@@ -7,6 +8,7 @@ import QueryKeys from "@/lib/query";
 import type { DashboardStats } from "@/lib/repositories/stats-repository";
 
 const DashboardStatCards = () => {
+  const t = useTranslations("dashboard.stats");
   const { data: stats, isLoading } = useQueryRequest<DashboardStats>({
     queryKey: QueryKeys.stats,
     queryFn: () => apiClient.get<DashboardStats>("/api/stats"),
@@ -14,24 +16,24 @@ const DashboardStatCards = () => {
 
   const statConfigs = [
     {
-      title: "Total Cafes",
+      title: t("totalCafes"),
       key: "totalCafes" as keyof DashboardStats,
-      description: "Active cafe locations across all regions",
+      description: t("totalCafesDescription"),
     },
     {
-      title: "Total Categories",
+      title: t("totalCategories"),
       key: "totalCategories" as keyof DashboardStats,
-      description: "Menu categories added",
+      description: t("totalCategoriesDescription"),
     },
     {
-      title: "Total Products",
+      title: t("totalProducts"),
       key: "totalProducts" as keyof DashboardStats,
-      description: "Individual menu items across all cafes",
+      description: t("totalProductsDescription"),
     },
     {
-      title: "Active Products",
+      title: t("activeProducts"),
       key: "activeProducts" as keyof DashboardStats,
-      description: "Available products ready for customers",
+      description: t("activeProductsDescription"),
     },
   ];
 

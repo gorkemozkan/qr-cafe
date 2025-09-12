@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { FC, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import CategoryForm, { CategoryFormRef } from "@/components/category/CategoryForm";
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const CategoryCreateSheet: FC<Props> = (props) => {
+  const t = useTranslations("category");
+
   //#region Hooks
 
   const { cafeSlug } = useCafeData(props.cafeId);
@@ -49,7 +52,7 @@ const CategoryCreateSheet: FC<Props> = (props) => {
 
   return (
     <>
-      <TooltipButton onClick={() => setOpen(true)} tooltip="Create a new category">
+      <TooltipButton onClick={() => setOpen(true)} tooltip={t("createSheet.tooltip")}>
         <Button size={"lg"} variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
@@ -61,12 +64,12 @@ const CategoryCreateSheet: FC<Props> = (props) => {
               onClick={() => formRef.current?.submitForm()}
               disabled={isLoading}
               isLoading={isLoading}
-              text="Create Category"
-              loadingText="Creating..."
+              text={t("createSheet.createButton")}
+              loadingText={t("createSheet.creating")}
             />
           }
-          title="Create New Category"
-          description="Fill in the details below to create a new category."
+          title={t("createSheet.title")}
+          description={t("createSheet.description")}
           onOpenChange={setOpen}
         >
           <CategoryForm

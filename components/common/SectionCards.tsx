@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +14,23 @@ interface Props {
 }
 
 const SectionCards: FC<Props> = (props) => {
+  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      props.items.forEach((_, index) => {
+        setTimeout(() => {
+          setVisibleCards((prev) => new Set([...prev, index]));
+        }, index * 150); // 150ms delay between each card
+      });
+    }, 100); // Initial delay before starting animation
+
+    return () => clearTimeout(timer);
+  }, [props.items]);
+
   return (
     <div className="grid grid-cols-1 gap-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 relative">
-      {props.items.map((item) => (
+      {props.items.map((item, index) => (
         <Card
           key={item.title}
           className={cn(
@@ -24,9 +38,11 @@ const SectionCards: FC<Props> = (props) => {
             "bg-gradient-to-br from-card/50 to-card/80 backdrop-blur-sm",
             "border border-border/50 shadow-lg shadow-black/5",
             "hover:shadow-xl hover:shadow-primary/10 hover:border-primary/20",
-            "transition-all duration-300 ease-out",
+            "transition-all duration-500 ease-out",
             "hover:-translate-y-1 hover:scale-[1.02]",
             "group p-0",
+            // Animation classes
+            visibleCards.has(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
           )}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

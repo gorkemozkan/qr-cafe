@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { CurrencySelect } from "@/components/common/CurrencySelect";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
@@ -29,6 +30,8 @@ interface Props {
 }
 
 const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
+  const t = useTranslations("cafe.form");
+
   //#region States
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -109,7 +112,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           const uploadResult = await uploadCafeLogo(selectedFile, slug);
 
           if (!uploadResult.success) {
-            const errorMessage = `Upload failed: ${uploadResult.error.message}`;
+            const errorMessage = `${t("uploadFailed")}: ${uploadResult.error.message}`;
             setUploadError(errorMessage);
             return;
           }
@@ -140,10 +143,10 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Cafe Name *</Label>
+        <Label htmlFor="name">{t("name")} *</Label>
         <Input
           id="name"
-          placeholder="Enter your cafe's name"
+          placeholder={t("namePlaceholder")}
           {...register("name")}
           className={errors.name || submitError ? "border-red-500" : ""}
           onChange={(e) => {
@@ -154,14 +157,14 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea id="description" placeholder="Describe your cafe..." {...register("description")} rows={3} />
+        <Label htmlFor="description">{t("description")}</Label>
+        <Textarea id="description" placeholder={t("descriptionPlaceholder")} {...register("description")} rows={3} />
         <InputErrorMessage id="description-error">{errors.description?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
         <FilePicker
           id="logo"
-          label="Cafe Logo"
+          label={t("logo")}
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={selectedFile}
@@ -175,28 +178,28 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           <div className="flex items-center space-x-2">
             <OptimizedImage
               src={props.cafe.logo_url}
-              alt="Current logo"
+              alt={t("logo")}
               width={48}
               height={48}
               className="h-12 w-12 rounded object-cover"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">Current logo will be replaced if you select a new file</p>
+            <p className="text-sm text-muted-foreground">{t("currentLogoText")}</p>
           </div>
         )}
       </div>
       <CurrencySelect
         id="currency"
-        label="Currency"
+        label={t("currency")}
         value={selectedCurrency}
         onValueChange={(value) => setValue("currency", value)}
         error={errors.currency?.message}
       />
       <div className="flex items-center space-x-2">
         <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
-        <Label htmlFor="is_active">{watch("is_active") ? "Active" : "Inactive"}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? "Cafe is active and visible" : "Cafe is inactive and hidden"}</p>
+        <Label htmlFor="is_active">{watch("is_active") ? t("isActive") : t("isInactive")}</Label>
+        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("activeDescription") : t("inactiveDescription")}</p>
       </div>
       {submitError && <InputErrorMessage id="submit-error">{submitError}</InputErrorMessage>}
     </form>

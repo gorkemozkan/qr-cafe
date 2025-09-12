@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from "react";
 import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface Props {
   loading: boolean;
@@ -14,6 +15,8 @@ interface Props {
 
 const RefreshButton: FC<Props> = (props) => {
   //#region Hooks
+
+  const t = useTranslations("common");
 
   //#endregion
 
@@ -70,12 +73,12 @@ const RefreshButton: FC<Props> = (props) => {
 
   const getTooltipText = () => {
     if (blockedUntil && remainingTime > 0) {
-      return `Too many refresh attempts. Try again in ${remainingTime}s`;
+      return t("tooManyRefreshAttempts", { remainingTime });
     }
     if (props.loading) {
-      return "Refreshing...";
+      return t("refreshing");
     }
-    return `Refresh (${attempt}/${props.maxAttempt})`;
+    return t("refresh", { attempt, maxAttempt: props.maxAttempt });
   };
 
   const isBlocked = blockedUntil !== null && remainingTime > 0;
@@ -91,11 +94,9 @@ const RefreshButton: FC<Props> = (props) => {
   }
 
   return (
-    <TooltipButton onClick={handleClick} tooltip={getTooltipText()}>
-      <Button size={"lg"} variant="outline" disabled={props.loading || isBlocked} className="text-sm">
-        <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />{" "}
-      </Button>
-    </TooltipButton>
+    <Button size={"lg"} variant="outline" disabled={props.loading || isBlocked} className="text-sm">
+      <RefreshCcw className={cn("h-4 w-4", props.loading && "animate-spin")} />{" "}
+    </Button>
   );
 };
 

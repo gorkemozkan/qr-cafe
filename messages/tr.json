@@ -1,0 +1,408 @@
+{
+  "dashboard": {
+    "title": "Tekrar hoş geldiniz!",
+    "subtitle": "Buradan kafelerinizi ve kategorilerinizi yönetebilirsiniz.",
+    "stats": {
+      "title": "İstatistikler",
+      "totalCafes": "Toplam Kafe",
+      "totalCafesDescription": "Tüm bölgelerdeki aktif kafe konumları",
+      "totalCategories": "Toplam Kategori",
+      "totalCategoriesDescription": "Eklenen menü kategorileri",
+      "totalProducts": "Toplam Ürün",
+      "totalProductsDescription": "Tüm kaferlerdeki bireysel menü öğeleri",
+      "activeProducts": "Aktif Ürünler",
+      "activeProductsDescription": "Müşteriler için hazır olan mevcut ürünler"
+    }
+  },
+  "cafe": {
+    "title": "Kafeler",
+    "noCafes": "Kafe bulunamadı",
+    "createCafe": "Kafe Oluştur",
+    "editCafe": "Kafe Düzenle",
+    "deleteCafe": "Kafe Sil",
+    "cafeDeleted": "Kafe başarıyla silindi!",
+    "cafeCreated": "Kafe başarıyla oluşturuldu!",
+    "createFailed": "Kafe oluşturulamadı",
+    "table": {
+      "logo": "Logo",
+      "name": "İsim",
+      "currency": "Para Birimi",
+      "status": "Durum",
+      "created": "Oluşturulma",
+      "actions": "İşlemler",
+      "noLogo": "Logo Yok",
+      "qrCode": "QR Kod",
+      "statusTooltip": "Kafenin durumu, görünürlük için kullanılır",
+      "createdTooltip": "Kafenin oluşturulduğu tarih ve saat"
+    },
+    "form": {
+      "name": "Kafe Adı",
+      "namePlaceholder": "Kafenizin adını girin",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "Kafenizi tanımlayın...",
+      "logo": "Kafe Logosu",
+      "currency": "Para Birimi",
+      "isActive": "Aktif",
+      "isInactive": "Pasif",
+      "activeDescription": "Kafe aktif ve görünür",
+      "inactiveDescription": "Kafe pasif ve gizli",
+      "currentLogoText": "Yeni dosya seçerseniz mevcut logo değiştirilecek",
+      "uploadFailed": "Yükleme başarısız"
+    },
+    "deleteDialog": {
+      "title": "Kafe Sil",
+      "description": "\"{slug}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "confirmText": "Kafe Sil",
+      "deleting": "Siliniyor..."
+    },
+    "createSheet": {
+      "tooltip": "Yeni kafe oluştur",
+      "title": "Yeni Kafe Oluştur",
+      "description": "Yeni bir kafe oluşturmak için aşağıdaki bilgileri doldurun.",
+      "createButton": "Kafe Oluştur",
+      "creating": "Oluşturuluyor..."
+    },
+    "editSheet": {
+      "title": "Kafe Düzenle",
+      "description": "Kafe bilgilerini aşağıda güncelleyin.",
+      "updateButton": "Kafe Güncelle",
+      "updating": "Güncelleniyor...",
+      "cafeUpdated": "Kafe başarıyla güncellendi!"
+    },
+    "qrCode": {
+      "title": "QR Kod Önizlemesi",
+      "description": "QR kod - Kafe sayfasına gitmek için tarayın",
+      "menuUrl": "Menü URL'si:",
+      "scanThisQrCode": "Bu QR kodu tarayın",
+      "qrCodeDescription": "Ziyaretçiler kafe sayfasına erişmek için bu kodu tarayabilir",
+      "failedToGenerate": "QR kod oluşturulamadı",
+      "sendToWhatsApp": "WhatsApp'a Gönder",
+      "export": "Dışa Aktar",
+      "exporting": "Dışa aktarılıyor...",
+      "goToMenu": "Menüye Git",
+      "copyLink": "Bağlantıyı Kopyala",
+      "linkCopied": "Bağlantı panoya kopyalandı!",
+      "failedToCopy": "Bağlantı kopyalanamadı",
+      "exportSuccess": "QR Kod başarıyla dışa aktarıldı!",
+      "exportFailed": "QR kod dışa aktarılamadı",
+      "qrCodeForCafe": "Kafe İçin QR Kod",
+      "scanToVisit": "Kafe sayfasına gitmek için bu QR kodu tarayın",
+      "generatedOn": "Oluşturulma tarihi"
+    }
+  },
+  "category": {
+    "title": "Kategoriler",
+    "noCategories": "Kategori bulunamadı",
+    "createCategory": "Kategori Oluştur",
+    "editCategory": "Kategori Düzenle",
+    "deleteCategory": "Kategori Sil",
+    "categoryDeleted": "Kategori başarıyla silindi!",
+    "categoryCreated": "Kategori başarıyla oluşturuldu!",
+    "categoryUpdated": "Kategori başarıyla güncellendi!",
+    "createFailed": "Kategori oluşturulamadı",
+    "reorderSuccess": "Kategoriler yeniden sıralandı!",
+    "table": {
+      "image": "Resim",
+      "name": "İsim",
+      "order": "Sıra",
+      "status": "Durum",
+      "created": "Oluşturulma",
+      "actions": "İşlemler",
+      "noImage": "Resim Yok"
+    },
+    "form": {
+      "name": "Kategori Adı",
+      "namePlaceholder": "Kategori adını girin",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "Bu kategoriyi tanımlayın...",
+      "sortOrder": "Sıralama Düzeni",
+      "optional": "İsteğe bağlı",
+      "categoryImage": "Kategori Resmi",
+      "currentImageText": "Yeni dosya seçerseniz mevcut resim değiştirilecek",
+      "currentCategoryImage": "Mevcut kategori resmi",
+      "isActive": "Aktif",
+      "isInactive": "Pasif",
+      "activeDescription": "Kategori aktif ve görünür",
+      "inactiveDescription": "Kategori pasif ve gizli",
+      "uploadFailed": "Yükleme başarısız",
+      "operationFailed": "İşlem başarısız"
+    },
+    "createSheet": {
+      "tooltip": "Yeni kategori oluştur",
+      "title": "Yeni Kategori Oluştur",
+      "description": "Yeni bir kategori oluşturmak için aşağıdaki bilgileri doldurun.",
+      "createButton": "Kategori Oluştur",
+      "creating": "Oluşturuluyor..."
+    },
+    "editSheet": {
+      "title": "Kategori Düzenle",
+      "description": "Kategori bilgilerini aşağıda güncelleyin.",
+      "updateButton": "Kategori Güncelle",
+      "updating": "Güncelleniyor...",
+      "categoryUpdated": "Kategori başarıyla güncellendi!"
+    },
+    "deleteDialog": {
+      "title": "Kategori Sil",
+      "description": "\"{name}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "confirmText": "Kategori Sil",
+      "deleting": "Siliniyor..."
+    },
+    "page": {
+      "title": "Kategoriler",
+      "subtitle": "Kafeniz için kategorileri yönetin",
+      "categoryDetailSubtitle": "Kategoriniz için ürünleri yönetin",
+      "notFound": "Kategori bulunamadı"
+    }
+  },
+  "product": {
+    "title": "Ürünler",
+    "noProducts": "Ürün bulunamadı",
+    "createProduct": "Ürün Oluştur",
+    "editProduct": "Ürün Düzenle",
+    "deleteProduct": "Ürün Sil",
+    "productDeleted": "Ürün başarıyla silindi!",
+    "productCreated": "Ürün başarıyla oluşturuldu!",
+    "productUpdated": "Ürün başarıyla güncellendi!",
+    "createFailed": "Ürün oluşturulamadı",
+    "table": {
+      "image": "Resim",
+      "name": "İsim",
+      "description": "Açıklama",
+      "price": "Fiyat",
+      "status": "Durum",
+      "created": "Oluşturulma",
+      "actions": "İşlemler",
+      "noImage": "Resim Yok",
+      "available": "Mevcut",
+      "unavailable": "Mevcut Değil"
+    },
+    "form": {
+      "name": "Ürün Adı",
+      "namePlaceholder": "Ürün adını girin",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "Ürününüzü tanımlayın...",
+      "price": "Fiyat",
+      "pricePlaceholder": "0.00",
+      "productImage": "Ürün Resmi",
+      "currentImageText": "Yeni dosya seçerseniz mevcut resim değiştirilecek",
+      "currentProductImage": "Mevcut ürün resmi",
+      "isAvailable": "Mevcut",
+      "availableDescription": "Ürün satın alınabilir durumda",
+      "unavailableDescription": "Ürün satın alınabilir durumda değil",
+      "uploadFailed": "Yükleme başarısız",
+      "operationFailed": "İşlem başarısız"
+    },
+    "createSheet": {
+      "tooltip": "Yeni ürün oluştur",
+      "title": "Yeni Ürün Oluştur",
+      "description": "Yeni bir ürün oluşturmak için aşağıdaki bilgileri doldurun.",
+      "createButton": "Ürün Oluştur",
+      "creating": "Oluşturuluyor...",
+      "productCreated": "Ürün başarıyla oluşturuldu!"
+    },
+    "editSheet": {
+      "title": "Ürün Düzenle",
+      "description": "Ürün detaylarını aşağıda güncelleyin.",
+      "updateButton": "Ürün Güncelle",
+      "updating": "Güncelleniyor...",
+      "productUpdated": "Ürün başarıyla güncellendi!"
+    },
+    "quickCreate": {
+      "title": "Yeni Ürün Oluştur",
+      "description": "Kafe menünüze hızlıca yeni bir ürün ekleyin.",
+      "cafeLabel": "Kafe",
+      "cafePlaceholder": "Bir kafe seçin",
+      "categoryLabel": "Kategori",
+      "categoryPlaceholder": "Bir kategori seçin",
+      "create": "Oluştur",
+      "creating": "Oluşturuluyor...",
+      "selectCafeError": "Lütfen bir kafe seçin",
+      "selectCategoryError": "Lütfen bir kategori seçin",
+      "createSuccess": "Ürün başarıyla oluşturuldu",
+      "createFailed": "Ürün oluşturulamadı"
+    },
+    "deleteDialog": {
+      "title": "Ürün Sil",
+      "description": "\"{name}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+      "confirmText": "Ürün Sil",
+      "deleting": "Siliniyor..."
+    }
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "create": "Oluştur",
+    "save": "Kaydet",
+    "submit": "Gönder",
+    "close": "Kapat",
+    "back": "Geri",
+    "next": "İleri",
+    "previous": "Önceki",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "sort": "Sırala",
+    "actions": "İşlemler",
+    "name": "İsim",
+    "description": "Açıklama",
+    "status": "Durum",
+    "active": "Aktif",
+    "inactive": "Pasif",
+    "created": "Oluşturulma",
+    "updated": "Güncelleme",
+    "yes": "Evet",
+    "no": "Hayır",
+    "confirm": "Onayla",
+    "areYouSure": "Emin misiniz?",
+    "noData": "Veri bulunamadı",
+    "noResults": "Sonuç bulunamadı",
+    "preview": "Önizleme",
+    "chooseFile": "Dosya seç",
+    "clickToBrowse": "Göz atmak için tıklayın",
+    "fileSizeLimit": "Dosya boyutu",
+    "scrollToTop": "Yukarı kaydır",
+    "createProductInstantly": "Ürünü Hemen Oluştur",
+    "buyMeCoffee": "Bana Kahve Ismarla",
+    "noDataAvailable": "Veri bulunmuyor",
+    "logo": "Logo",
+    "menu": "Menü",
+    "invalidDate": "Geçersiz tarih",
+    "view": "Görüntüle",
+    "tooManyRefreshAttempts": "Çok fazla yenileme denemesi. {remainingTime}s sonra tekrar deneyin",
+    "refreshing": "Yenileniyor...",
+    "refresh": "Yenile ({attempt}/{maxAttempt})"
+  },
+  "components": {
+    "questionDialog": {
+      "confirm": "Onayla",
+      "cancel": "İptal",
+      "loading": "Yükleniyor..."
+    },
+    "dataTable": {
+      "noData": "Veri bulunamadı"
+    }
+  },
+  "gdpr": {
+    "title": "KVKK Uyumluluğu",
+    "dataExport": "Veri Dışa Aktar",
+    "dataDeletion": "Veri Sil",
+    "page": {
+      "title": "Kullanıcı Ayarları",
+      "subtitle": "Hesabınızı ve tercihlerinizi yönetin"
+    },
+    "export": {
+      "title": "Verilerinizi Dışa Aktarın",
+      "description": "Tüm kişisel verilerinizin eksiksiz bir kopyasını JSON formatında indirin.",
+      "badgeAccount": "Kullanıcı Hesabı",
+      "badgeCafes": "Kafeler",
+      "badgeCategories": "Kategoriler",
+      "badgeProducts": "Ürünler",
+      "exporting": "Dışa aktarılıyor...",
+      "exportButton": "Veri Dışa Aktar",
+      "dialogTitle": "Verilerinizi Dışa Aktarın",
+      "dialogDescription": "Hesap bilgileriniz, kafeleriniz, kategorileriniz ve ürünleriniz dahil olmak üzere tüm kişisel verilerinizin eksiksiz bir kopyasını indirmek üzeresiniz. Dosya JSON formatında indirilecektir.",
+      "cancel": "İptal",
+      "downloading": "Dışa aktarılıyor...",
+      "downloadData": "Veri İndir",
+      "exportSuccess": "Veri dışa aktarma başarıyla tamamlandı",
+      "exportFailed": "Veri dışa aktarılamadı. Lütfen tekrar deneyin.",
+      "exportError": "Veri dışa aktarılamadı"
+    },
+    "delete": {
+      "title": "Verilerinizi Silin",
+      "description": "Tüm verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.",
+      "alertDescription": "Bu işlem tüm kafeleriniz, kategorileriniz, ürünleriniz ve hesap verilerinizi kalıcı olarak silecektir. Çıkış yapacaksınız ve hesabınıza artık erişemeyeceksiniz.",
+      "deleting": "Siliniyor...",
+      "deleteAllData": "Tüm Verileri Sil",
+      "dialogTitle": "Tüm Verileri Sil",
+      "dialogDescription": "Bu işlem tüm verilerinizi kalıcı olarak silecektir. Bu işlem geri alınamaz.",
+      "whatWillBeDeleted": "Ne silinecek:",
+      "deleteCafes": "Tüm kafeleriniz ve ayarları",
+      "deleteCategories": "Tüm kategoriler ve menü organizasyonu",
+      "deleteProducts": "Tüm ürünler ve menü öğeleri",
+      "deleteAccount": "Hesabınız ve profil verileriniz",
+      "confirmationText": "Bu işlemin kalıcı olduğunu ve geri alınamayacağını anlıyorum",
+      "cancel": "İptal",
+      "deletingButton": "Siliniyor...",
+      "deleteAllDataButton": "Tüm Verileri Sil",
+      "deleteSuccess": "Verileriniz kalıcı olarak silindi",
+      "deleteFailed": "Veri silinemedi. Lütfen tekrar deneyin.",
+      "deleteError": "Veri silinemedi"
+    }
+  },
+  "language": {
+    "selectLanguage": "Dil Seç"
+  },
+  "auth": {
+    "login": {
+      "title": "Hesabınıza giriş yapın",
+      "description": "Hesabınıza giriş yapmak için aşağıya e-posta adresinizi girin",
+      "email": "E-posta",
+      "emailPlaceholder": "m@example.com",
+      "password": "Şifre",
+      "passwordPlaceholder": "*********",
+      "securityVerification": "Güvenlik Doğrulaması",
+      "loginButton": "Giriş Yap",
+      "loggingIn": "Giriş yapılıyor...",
+      "successMessage": "Giriş başarılı!",
+      "processing": "Giriş isteği işleniyor"
+    },
+    "userMenu": {
+      "userMenu": "Kullanıcı menüsü",
+      "settings": "Ayarlar",
+      "logout": "Çıkış",
+      "loggingOut": "Çıkış yapılıyor...",
+      "logoutSuccess": "Başarıyla çıkış yapıldı"
+    }
+  },
+  "title": "Kafeler",
+  "noCafes": "Kafe bulunamadı",
+  "createCafe": "Kafe Oluştur",
+  "editCafe": "Kafe Düzenle",
+  "deleteCafe": "Kafe Sil",
+  "cafeDeleted": "Kafe başarıyla silindi!",
+  "cafeCreated": "Kafe başarıyla oluşturuldu!",
+  "createFailed": "Kafe oluşturulamadı",
+  "table": {
+    "logo": "Logo",
+    "name": "İsim",
+    "currency": "Para Birimi",
+    "status": "Durum",
+    "created": "Oluşturulma",
+    "actions": "İşlemler",
+    "noLogo": "Logo Yok",
+    "qrCode": "QR Kod",
+    "statusTooltip": "Kafenin durumu, görünürlük için kullanılır",
+    "createdTooltip": "Kafenin oluşturulduğu tarih ve saat"
+  },
+  "form": {
+    "name": "Kafe Adı",
+    "namePlaceholder": "Kafenizin adını girin",
+    "description": "Açıklama",
+    "descriptionPlaceholder": "Kafenizi tanımlayın...",
+    "logo": "Kafe Logosu",
+    "currency": "Para Birimi",
+    "isActive": "Aktif",
+    "isInactive": "Pasif",
+    "activeDescription": "Kafe aktif ve görünür",
+    "inactiveDescription": "Kafe pasif ve gizli",
+    "currentLogoText": "Yeni dosya seçerseniz mevcut logo değiştirilecek",
+    "uploadFailed": "Yükleme başarısız"
+  },
+  "deleteDialog": {
+    "title": "Kafe Sil",
+    "description": "\"{slug}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "confirmText": "Kafe Sil",
+    "deleting": "Siliniyor..."
+  },
+  "createSheet": {
+    "tooltip": "Yeni kafe oluştur",
+    "title": "Yeni Kafe Oluştur",
+    "description": "Yeni bir kafe oluşturmak için aşağıdaki bilgileri doldurun.",
+    "createButton": "Kafe Oluştur",
+    "creating": "Oluşturuluyor..."
+  }
+}

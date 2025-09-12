@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import FilePicker from "@/components/ui/file-picker";
@@ -31,6 +32,7 @@ interface Props {
 }
 
 const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
+  const t = useTranslations("product.form");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -89,7 +91,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         const uploadResult = await storageRepository.uploadFile(imageFile, props.cafeSlug, BUCKET_NAMES.PRODUCT_IMAGE);
 
         if (!uploadResult.success) {
-          const errorMessage = `Upload failed: ${uploadResult.error?.message || "Operation failed"}`;
+          const errorMessage = `${t("uploadFailed")}: ${uploadResult.error?.message || t("operationFailed")}`;
           setUploadError(errorMessage);
           return;
         }
@@ -102,7 +104,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         image_url: imageUrl,
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Operation failed";
+      const errorMessage = error instanceof Error ? error.message : t("operationFailed");
       setUploadError(errorMessage);
     } finally {
       setIsUploading(false);
@@ -123,17 +125,17 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Product Name *</Label>
-        <Input id="name" {...register("name")} placeholder="Enter product name" className={errors.name ? "border-red-500" : ""} />
+        <Label htmlFor="name">{t("name")} *</Label>
+        <Input id="name" {...register("name")} placeholder={t("namePlaceholder")} className={errors.name ? "border-red-500" : ""} />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("description")}</Label>
         <Textarea
           id="description"
           {...register("description")}
-          placeholder="Describe your product..."
+          placeholder={t("descriptionPlaceholder")}
           rows={3}
           className={errors.description ? "border-red-500" : ""}
         />
@@ -141,7 +143,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="price">Price</Label>
+        <Label htmlFor="price">{t("price")}</Label>
         <Input
           id="price"
           type="number"
@@ -156,7 +158,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       <div className="space-y-2">
         <FilePicker
           id="image"
-          label="Product Image"
+          label={t("productImage")}
           accept="image/*"
           maxSize={5 * 1024 * 1024} // 5MB
           value={imageFile}
@@ -169,24 +171,22 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
           <div className="flex items-center space-x-2">
             <OptimizedImage
               src={props.product.image_url}
-              alt="Current product image"
+              alt={t("currentProductImage")}
               width={48}
               height={48}
               className="h-12 w-12 rounded object-cover"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />
-            <p className="text-sm text-muted-foreground">Current image will be replaced if you select a new file</p>
+            <p className="text-sm text-muted-foreground">{t("currentImageText")}</p>
           </div>
         )}
       </div>
 
       <div className="flex items-center space-x-2">
         <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
-        <Label htmlFor="is_available">Available</Label>
-        <p className="text-xs text-muted-foreground ml-2">
-          {isAvailable ? "Product is available for purchase" : "Product is not available for purchase"}
-        </p>
+        <Label htmlFor="is_available">{t("isAvailable")}</Label>
+        <p className="text-xs text-muted-foreground ml-2">{isAvailable ? t("availableDescription") : t("unavailableDescription")}</p>
       </div>
     </form>
   );

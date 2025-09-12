@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,20 +20,19 @@ interface Props {
 }
 
 export function GdprDataExportDialog({ open, onOpenChange, onConfirm, isLoading }: Props) {
+  const t = useTranslations("gdpr.export");
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Export Your Data</AlertDialogTitle>
-          <AlertDialogDescription>
-            You are about to download a complete copy of all your personal data. This includes your account information, cafes, categories, and
-            products. The file will be downloaded in JSON format.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{t("dialogTitle")}</AlertDialogTitle>
+          <AlertDialogDescription>{t("dialogDescription")}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isLoading}>{t("cancel")}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? "Exporting..." : "Download Data"}
+            {isLoading ? t("downloading") : t("downloadData")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
