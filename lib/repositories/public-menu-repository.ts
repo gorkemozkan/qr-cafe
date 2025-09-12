@@ -38,7 +38,9 @@ export class PublicMenuRepository extends BaseRepository {
   protected readonly baseUrl = `${nextPublicBaseUrl}/api/public/cafe`;
 
   async getMenuBySlug(slug: string) {
-    console.log("Base URL", this.baseUrl);
+    console.log("PublicMenuRepository - Base URL:", this.baseUrl);
+    const fullUrl = `${this.baseUrl}/${slug}`;
+    console.log("PublicMenuRepository - Full request URL:", fullUrl);
 
     return await this.get<PublicMenuData>(`/${slug}`);
   }
