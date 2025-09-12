@@ -47,7 +47,18 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .eq("is_active", true)
       .single();
 
-    if (cafeError || !cafe) {
+    if (cafeError) {
+      console.error("Cafe fetch error:", cafeError);
+      return NextResponse.json(
+        {
+          error: "Database error while fetching cafe",
+          details: cafeError.message,
+        },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
+    }
+
+    if (!cafe) {
       return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
     }
 
@@ -68,11 +79,25 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     ]);
 
     if (categoriesResult.error) {
-      return NextResponse.json({ error: "Failed to fetch categories" }, { status: http.INTERNAL_SERVER_ERROR.status });
+      console.error("Categories fetch error:", categoriesResult.error);
+      return NextResponse.json(
+        {
+          error: "Database error while fetching categories",
+          details: categoriesResult.error.message,
+        },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
     }
 
     if (productsResult.error) {
-      return NextResponse.json({ error: "Failed to fetch products" }, { status: http.INTERNAL_SERVER_ERROR.status });
+      console.error("Products fetch error:", productsResult.error);
+      return NextResponse.json(
+        {
+          error: "Database error while fetching products",
+          details: productsResult.error.message,
+        },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
     }
 
     const productsByCategory = (productsResult.data || []).reduce(
@@ -109,7 +134,47 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     return NextResponse.json(publicCafeData);
-  } catch (_error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: http.INTERNAL_SERVER_ERROR.status });
+  } catch (error) {
+    console.error("Public cafe API error:", error);
+
+    if (error instanceof Error) {
+      if (error.message.includes("NEXT_PUBLIC")) {
+        return NextResponse.json(
+          {
+            error: "Configuration error",
+            details: "Environment variables not properly configured",
+          },
+          { status: http.INTERNAL_SERVER_ERROR.status },
+        );
+      }
+
+      if (error.message.includes("Redis")) {
+        return NextResponse.json(
+          {
+            error: "Cache service unavailable",
+            details: "Menu data may load slower than usual",
+          },
+          { status: http.INTERNAL_SERVER_ERROR.status },
+        );
+      }
+
+      if (error.message.includes("Supabase")) {
+        return NextResponse.json(
+          {
+            error: "Database connection error",
+            details: "Unable to fetch menu data",
+          },
+          { status: http.INTERNAL_SERVER_ERROR.status },
+        );
+      }
+    }
+
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

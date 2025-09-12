@@ -6,6 +6,46 @@ import ErrorBoundary from "@/components/common/ErrorBoundary";
 import Script from "next/script";
 import { NextPage, Metadata } from "next";
 
+function validateMenuData(menu: any): menu is PublicMenuData {
+  if (!menu || typeof menu !== "object") {
+    return false;
+  }
+
+  if (!menu.cafe || typeof menu.cafe !== "object") {
+    return false;
+  }
+
+  if (!menu.cafe.name || typeof menu.cafe.name !== "string") {
+    return false;
+  }
+
+  if (!menu.cafe.slug || typeof menu.cafe.slug !== "string") {
+    return false;
+  }
+
+  if (!Array.isArray(menu.categories)) {
+    return false;
+  }
+
+  // Validate categories structure
+  for (const category of menu.categories) {
+    if (!category || typeof category !== "object") {
+      return false;
+    }
+    if (!category.name || typeof category.name !== "string") {
+      return false;
+    }
+    if (typeof category.id !== "number") {
+      return false;
+    }
+    if (!Array.isArray(category.products)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 interface Params {
   params: Promise<{ slug: string }>;
 }
@@ -89,93 +129,122 @@ function generateSEODescription(menu: PublicMenuData): string {
 }
 
 export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
-  const { slug } = await params;
+  try {
+    const { slug } = await params;
 
-  if (!slug) {
-    notFound();
-  }
+    if (!slug) {
+      notFound();
+    }
 
-  const menu = await publicMenuRepository.getMenuBySlug(slug);
+    const menu = await publicMenuRepository.getMenuBySlug(slug);
 
-  if (!menu) {
+    if (!menu) {
+      return {
+        title: "Menu Not Found",
+        description: "The requested menu could not be found.",
+      };
+    }
+
+    if (!validateMenuData(menu)) {
+      console.error("Invalid menu data structure:", menu);
+      return {
+        title: "Menu Error",
+        description: "There was an issue loading the menu.",
+      };
+    }
+
+    const title = generateSEOTitle(menu);
+
+    const description = generateSEODescription(menu);
+
+    const baseUrl = nextPublicBaseUrl as string;
+
+    const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
+
     return {
-      title: "Menu Not Found",
-      description: "The requested menu could not be found.",
-    };
-  }
-
-  const title = generateSEOTitle(menu);
-
-  const description = generateSEODescription(menu);
-
-  const baseUrl = nextPublicBaseUrl as string;
-
-  const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
-
-  return {
-    title,
-    description,
-    keywords: [
-      menu.cafe.name,
-      "menu",
-      "restaurant",
-      "food",
-      "cafe",
-      ...menu.categories.map((cat) => cat.name.toLowerCase()),
-      "dining",
-      "cuisine",
-    ].join(", "),
-    authors: [{ name: menu.cafe.name }],
-    creator: menu.cafe.name,
-    publisher: menu.cafe.name,
-    formatDetection: {
-      email: false,
-      address: false,
-      telephone: false,
-    },
-    metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: menuUrl,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
+      title,
+      description,
+      keywords: [
+        menu.cafe.name,
+        "menu",
+        "restaurant",
+        "food",
+        "cafe",
+        ...menu.categories.map((cat) => cat.name.toLowerCase()),
+        "dining",
+        "cuisine",
+      ].join(", "),
+      authors: [{ name: menu.cafe.name }],
+      creator: menu.cafe.name,
+      publisher: menu.cafe.name,
+      formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+      },
+      metadataBase: new URL(baseUrl),
+      alternates: {
+        canonical: menuUrl,
+      },
+      robots: {
         index: true,
         follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-video-preview": -1,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
       },
-    },
-    other: {
-      "article:author": menu.cafe.name,
-    },
-  };
+      other: {
+        "article:author": menu.cafe.name,
+      },
+    };
+  } catch (error) {
+    console.error("Error generating metadata for menu:", error);
+    return {
+      title: "Menu",
+      description: "View our menu",
+    };
+  }
 };
 
 const Page: NextPage<Params> = async (props) => {
-  const { slug } = await props.params;
+  try {
+    const { slug } = await props.params;
 
-  if (!slug) {
+    if (!slug) {
+      console.error("Menu page: No slug provided");
+      notFound();
+    }
+
+    const menu = await publicMenuRepository.getMenuBySlug(slug);
+    if (!menu) {
+      console.error(`Menu page: No menu found for slug: ${slug}`);
+      notFound();
+    }
+
+    // Validate menu structure
+    if (!validateMenuData(menu)) {
+      console.error(`Menu page: Invalid menu data structure for slug: ${slug}`, menu);
+      notFound();
+    }
+
+    return (
+      <>
+        <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
+          {JSON.stringify(generateStructuredData(menu))}
+        </Script>
+        <ErrorBoundary>
+          <SimpleMenu menu={menu} />
+        </ErrorBoundary>
+      </>
+    );
+  } catch (error) {
+    console.error("Menu page error:", error);
     notFound();
   }
-
-  const menu = await publicMenuRepository.getMenuBySlug(slug);
-  if (!menu) {
-    notFound();
-  }
-
-  return (
-    <>
-      <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
-        {JSON.stringify(generateStructuredData(menu))}
-      </Script>
-      <ErrorBoundary>
-        <SimpleMenu menu={menu} />
-      </ErrorBoundary>
-    </>
-  );
 };
 
 export default Page;

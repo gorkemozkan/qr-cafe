@@ -13,16 +13,30 @@ export const isNextDevelopment = process.env.NEXT_PUBLIC_ENV === "development";
 
 export const getNextPublicBaseUrl = () => {
   if (isNextProduction) {
-    return process.env.NEXT_PUBLIC_BASE_URL_PROD;
+    const url = process.env.NEXT_PUBLIC_BASE_URL_PROD;
+    if (!url) {
+      throw new Error("NEXT_PUBLIC_BASE_URL_PROD environment variable is not set");
+    }
+    return url;
   }
 
   if (isNextStaging) {
-    return process.env.NEXT_PUBLIC_BASE_URL_STAGING;
+    const url = process.env.NEXT_PUBLIC_BASE_URL_STAGING;
+    if (!url) {
+      throw new Error("NEXT_PUBLIC_BASE_URL_STAGING environment variable is not set");
+    }
+    return url;
   }
 
   if (isNextDevelopment) {
-    return process.env.NEXT_PUBLIC_APP_URL;
+    const url = process.env.NEXT_PUBLIC_APP_URL;
+    if (!url) {
+      throw new Error("NEXT_PUBLIC_APP_URL environment variable is not set");
+    }
+    return url;
   }
+
+  throw new Error("Unable to determine base URL: NEXT_PUBLIC_ENV is not set to a valid environment");
 };
 
 export const getSupabaseEnvironment = () => {
