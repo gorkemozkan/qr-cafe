@@ -48,30 +48,30 @@ const Hero: FC = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto animate-fade-in-up">
             <div className="text-center group">
-              <div className="bg-gradient-to-br from-orange-500 to-amber-500 w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <QrCode className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <QrCode className="h-8 w-8 text-orange-500" />
               </div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Instant</div>
               <div className="text-sm text-slate-600 dark:text-slate-400">QR Generation</div>
             </div>
             <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-500 to-cyan-500 w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <Smartphone className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Smartphone className="h-8 w-8 text-orange-500" />
               </div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Mobile</div>
               <div className="text-sm text-slate-600 dark:text-slate-400">Optimized</div>
             </div>
 
             <div className="text-center group">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-500 w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <Sparkles className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Sparkles className="h-8 w-8 text-orange-500" />
               </div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Real-time</div>
               <div className="text-sm text-slate-600 dark:text-slate-400">Updates</div>
             </div>
             <div className="text-center group">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <Coffee className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <Coffee className="h-8 w-8 text-orange-500" />
               </div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">Cafe</div>
               <div className="text-sm text-slate-600 dark:text-slate-400">Focused</div>
