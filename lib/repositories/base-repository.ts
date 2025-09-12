@@ -4,6 +4,7 @@ export abstract class BaseRepository {
   protected abstract readonly baseUrl: string;
 
   protected async get<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    console.log("Base URL", this.baseUrl);
     return apiClient.get<T>(`${this.baseUrl}${endpoint}`, options);
   }
 
