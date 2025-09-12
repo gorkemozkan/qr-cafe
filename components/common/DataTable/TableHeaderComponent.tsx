@@ -1,14 +1,14 @@
 import { HelpCircle } from "lucide-react";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Column } from "./types";
+import { Column, BaseEntity } from "./types";
 
-interface TableHeaderComponentProps<T> {
+interface TableHeaderComponentProps<T extends BaseEntity> {
   columns: Column<T>[];
   enableSorting?: boolean;
 }
 
-export function TableHeaderComponent<T>({ columns, enableSorting }: TableHeaderComponentProps<T>) {
+export function TableHeaderComponent<T extends BaseEntity>({ columns, enableSorting }: TableHeaderComponentProps<T>) {
   return (
     <TableHeader>
       <TableRow>

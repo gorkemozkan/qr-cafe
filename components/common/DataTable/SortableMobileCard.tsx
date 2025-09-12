@@ -2,16 +2,16 @@ import { GripVertical, HelpCircle } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Column } from "./types";
+import { Column, BaseEntity } from "./types";
 
-interface SortableMobileCardProps<T> {
+interface SortableMobileCardProps<T extends BaseEntity> {
   item: T;
   columns: Column<T>[];
   onRowClick?: (row: T) => void;
   enableSorting?: boolean;
 }
 
-export function SortableMobileCard<T extends { id?: number | string }>({ item, columns, onRowClick, enableSorting }: SortableMobileCardProps<T>) {
+export function SortableMobileCard<T extends BaseEntity>({ item, columns, onRowClick, enableSorting }: SortableMobileCardProps<T>) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: String(item.id || Math.random()),
   });

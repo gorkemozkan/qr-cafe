@@ -1,10 +1,10 @@
-import { Column } from "./types";
+import { BaseEntity, Column } from "./types";
 import { KEYBOARD_KEYS } from "./constants";
 
 /**
  * Filters columns based on mobile visibility
  */
-export function getVisibleColumns<T>(columns: Column<T>[], isMobile: boolean): Column<T>[] {
+export function getVisibleColumns<T extends BaseEntity>(columns: Column<T>[], isMobile: boolean): Column<T>[] {
   return isMobile ? columns.filter((col) => !col.hideOnMobile) : columns;
 }
 
@@ -43,16 +43,16 @@ export function handleRowInteraction<T>(event: React.KeyboardEvent | React.Mouse
 /**
  * Gets a safe string representation of an item ID
  */
-export function getItemId<T extends { id?: number | string }>(item: T): string {
+export function getItemId<T extends BaseEntity>(item: T): string {
   return String(item.id || Math.random());
 }
 
 /**
  * Safely gets a display value from a column
  */
-export function getColumnDisplayValue<T>(item: T, column: Column<T>): string {
+export function getColumnDisplayValue<T extends BaseEntity>(item: T, column: Column<T>): string {
   const value = item[column.key as keyof T];
-  return column.cell ? column.cell(value, item) : String(value ?? "-");
+  return column.cell ? (column.cell(value, item) as string) : String(value ?? "-");
 }
 
 /**
