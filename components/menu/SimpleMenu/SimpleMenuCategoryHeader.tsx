@@ -10,8 +10,10 @@ interface Props {
 const SimpleMenuCategoryHeader: FC<Props> = ({ category }) => {
   return (
     <div>
-      <h2 className="text-xl font-black text-gray-800 ">{category.name.toLocaleUpperCase("tr-TR")}</h2>
-      {category.description && <p className="text-gray-500 text-sm">{category.description}</p>}
+      <div className="border-b border-gray-300/50 dark:border-gray-300/50 pb-2">
+        <h2 className="text-2xl font-black text-gray-800 ">{category.name.toLocaleUpperCase("tr-TR")}</h2>
+        {category.description && <p className="text-gray-600 text-sm mt-0.5">{category.description}</p>}
+      </div>
       {category.image_url && (
         <div className="h-54 lg:h-80 w-full bg-gray-100 rounded-lg my-6 overflow-hidden relative">
           <Image

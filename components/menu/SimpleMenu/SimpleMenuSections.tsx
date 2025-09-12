@@ -10,19 +10,25 @@ import { PublicCategory } from "@/lib/repositories/public-menu-repository";
 interface Props {
   categories: PublicCategory[];
   currency: string | null;
+  selectedCategoryId?: number | null;
 }
 
-const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null }) => {
+const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null, selectedCategoryId: null }) => {
   const activeCategories = props.categories.filter((category) => category.products.length > 0);
 
-  if (activeCategories.length === 0) {
+  // Filter categories based on selected category
+  const filteredCategories = props.selectedCategoryId
+    ? activeCategories.filter((category) => category.id === props.selectedCategoryId)
+    : activeCategories;
+
+  if (filteredCategories.length === 0) {
     return <SimpleMenuNullCase />;
   }
 
   return (
     <main className="max-w-4xl mx-auto px-4 pb-8 mt-8">
       <div className="space-y-6">
-        {activeCategories.map((category) => (
+        {filteredCategories.map((category) => (
           <section key={category.id}>
             <SimpleMenuCategoryHeader category={category} />
             <div>

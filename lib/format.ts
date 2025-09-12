@@ -16,5 +16,14 @@ export const slugify = (input: string, options?: { delimiter?: string; maxLength
 };
 
 export function formatPrice(price: number, currency: string) {
+  if (currency === "TRY") {
+    return `${price.toFixed(2)} ₺`;
+  }
+  if (currency === "USD") {
+    return `${price.toFixed(2)} $`;
+  }
+  if (currency === "EUR") {
+    return `${price.toFixed(2)} €`;
+  }
   return `${price.toFixed(2)} ${currency}`;
 }
