@@ -6,51 +6,11 @@ import ErrorBoundary from "@/components/common/ErrorBoundary";
 import Script from "next/script";
 import { NextPage, Metadata } from "next";
 
-function validateMenuData(menu: any): menu is PublicMenuData {
-  if (!menu || typeof menu !== "object") {
-    return false;
-  }
-
-  if (!menu.cafe || typeof menu.cafe !== "object") {
-    return false;
-  }
-
-  if (!menu.cafe.name || typeof menu.cafe.name !== "string") {
-    return false;
-  }
-
-  if (!menu.cafe.slug || typeof menu.cafe.slug !== "string") {
-    return false;
-  }
-
-  if (!Array.isArray(menu.categories)) {
-    return false;
-  }
-
-  // Validate categories structure
-  for (const category of menu.categories) {
-    if (!category || typeof category !== "object") {
-      return false;
-    }
-    if (!category.name || typeof category.name !== "string") {
-      return false;
-    }
-    if (typeof category.id !== "number") {
-      return false;
-    }
-    if (!Array.isArray(category.products)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 interface Params {
   params: Promise<{ slug: string }>;
 }
 
-/* function generateStructuredData(menu: PublicMenuData) {
+function generateStructuredData(menu: PublicMenuData) {
   const baseUrl = nextPublicBaseUrl;
 
   const menuUrl = `${baseUrl}/menu/${menu.cafe.slug}`;
@@ -86,9 +46,9 @@ interface Params {
     },
     servesCuisine: "Various",
   };
-} */
+}
 
-/* function generateSEOTitle(menu: PublicMenuData): string {
+function generateSEOTitle(menu: PublicMenuData): string {
   const cafeName = menu.cafe.name;
 
   const categoryCount = menu.categories.length;
@@ -104,9 +64,9 @@ interface Params {
     .map((cat) => cat.name)
     .join(", ");
   return `${cafeName} Menü - ${categoryNames}${categoryCount > 3 ? " & More" : ""} (${productCount} items)`;
-} */
+}
 
-/* function generateSEODescription(menu: PublicMenuData): string {
+function generateSEODescription(menu: PublicMenuData): string {
   const cafeName = menu.cafe.name;
   const description = menu.cafe.description;
 
@@ -126,9 +86,9 @@ interface Params {
   const truncatedDesc = description.length > 120 ? description.substring(0, 120) + "..." : description;
 
   return `${truncatedDesc} | ${cafeName} Menu`;
-} */
+}
 
-/* export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Params): Promise<Metadata> => {
   try {
     const { slug } = await params;
 
@@ -142,14 +102,6 @@ interface Params {
       return {
         title: "Menu Not Found",
         description: "The requested menu could not be found.",
-      };
-    }
-
-    if (!validateMenuData(menu)) {
-      console.error("Invalid menu data structure:", menu);
-      return {
-        title: "Menu Error",
-        description: "There was an issue loading the menu.",
       };
     }
 
@@ -208,43 +160,31 @@ interface Params {
       description: "View our menu",
     };
   }
-}; */
+};
 
 const Page: NextPage<Params> = async (props) => {
-  try {
-    const { slug } = await props.params;
+  const { slug } = await props.params;
 
-    if (!slug) {
-      console.error("Menu page: No slug provided");
-      notFound();
-    }
-
-    const menu = await publicMenuRepository.getMenuBySlug(slug);
-    if (!menu) {
-      console.error(`Menu page: No menu found for slug: ${slug}`);
-      notFound();
-    }
-
-    // Validate menu structure
-    if (!validateMenuData(menu)) {
-      console.error(`Menu page: Invalid menu data structure for slug: ${slug}`, menu);
-      notFound();
-    }
-
-    return (
-      <>
-        {/*  <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(generateStructuredData(menu))}
-        </Script> */}
-        <ErrorBoundary>
-          <SimpleMenu menu={menu} />
-        </ErrorBoundary>
-      </>
-    );
-  } catch (error) {
-    console.error("Menu page error:", error);
+  if (!slug) {
     notFound();
   }
+
+  const menu = await publicMenuRepository.getMenuBySlug(slug);
+
+  if (!menu) {
+    notFound();
+  }
+
+  return (
+    <>
+      <Script id="menu-structured-data" type="application/ld+json" strategy="beforeInteractive">
+        {JSON.stringify(generateStructuredData(menu))}
+      </Script>
+      <ErrorBoundary>
+        <SimpleMenu menu={menu} />
+      </ErrorBoundary>
+    </>
+  );
 };
 
 export default Page;

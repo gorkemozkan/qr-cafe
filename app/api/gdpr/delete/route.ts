@@ -64,8 +64,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (_error) {
       return NextResponse.json({ error: "Failed to delete user data", success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
-  } catch (error) {
-    console.error("GDPR data deletion error:", error);
+  } catch (_error) {
     return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
   }
 }
