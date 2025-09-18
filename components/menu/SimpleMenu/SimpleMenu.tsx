@@ -1,7 +1,7 @@
 "use client";
 
-import { FC, useState, useRef, useCallback, useEffect } from "react";
 import ScrollToTop from "@/components/common/ScrollToTop";
+import { FC, useState, useRef, useCallback, useEffect } from "react";
 import SimpleMenuHeader from "@/components/menu/SimpleMenu/SimpleMenuHeader";
 import SimpleMenuSections from "@/components/menu/SimpleMenu/SimpleMenuSections";
 import SimpleMenuStickyTabs from "@/components/menu/SimpleMenu/SimpleMenuStickyTabs";

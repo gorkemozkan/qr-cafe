@@ -17,6 +17,7 @@ const SimpleMenuStickyTabs: FC<Props> = ({
   onCategoryChange,
 }) => {
   const activeCategories = categories.filter((category) => category.products.length > 0);
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const tabRefs = useRef<Map<number | string, HTMLButtonElement>>(new Map());

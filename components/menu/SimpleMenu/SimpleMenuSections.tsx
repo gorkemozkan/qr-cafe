@@ -20,7 +20,6 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
 
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Set up intersection observer
   useEffect(() => {
     if (!props.onCategoryInView) {
       if (observerRef.current) {
@@ -43,6 +42,7 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
           const mostVisible = visibleEntries.reduce((prev, current) => (prev.intersectionRatio > current.intersectionRatio ? prev : current));
 
           const categoryId = parseInt(mostVisible.target.getAttribute("data-category-id") || "0");
+
           if (categoryId && props.onCategoryInView) {
             props.onCategoryInView(categoryId);
           }
