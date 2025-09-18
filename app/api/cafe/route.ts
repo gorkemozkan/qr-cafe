@@ -37,9 +37,7 @@ export async function GET(request: NextRequest) {
         if (cachedCafes) {
           return NextResponse.json(cachedCafes);
         }
-      } catch (cacheError) {
-        console.warn("Redis cache read failed:", cacheError);
-      }
+      } catch (_error) {}
     }
 
     const { data: cafes, error } = await supabase.from("cafes").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
@@ -53,9 +51,7 @@ export async function GET(request: NextRequest) {
     if (!isNextDevelopment) {
       try {
         await redis.setex(cacheKey, CACHE_EXPIRATION, cafesData);
-      } catch (cacheError) {
-        console.warn("Redis cache write failed:", cacheError);
-      }
+      } catch (_error) {}
     }
 
     return NextResponse.json(cafesData);

@@ -31,7 +31,6 @@ export const SortingService = {
 
       await response.json();
     } catch (error) {
-      console.error("Sort API call failed:", error);
       throw error;
     }
   },

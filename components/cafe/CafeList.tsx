@@ -99,8 +99,7 @@ const CafeList: FC = () => {
                 alt={`${row.slug} logo`}
                 width={40}
                 height={40}
-                className="rounded-md border border-border w-10 h-10 "
-                objectFit="cover"
+                className="rounded-md border border-border"
                 fallbackSrc="/placeholder-logo.svg"
                 showSkeleton={true}
               />

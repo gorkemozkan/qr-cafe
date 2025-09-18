@@ -181,7 +181,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
               alt={t("logo")}
               width={48}
               height={48}
-              className="h-12 w-12 rounded object-cover"
+              className="rounded"
               fallbackSrc="/placeholder-logo.svg"
               showSkeleton={false}
             />

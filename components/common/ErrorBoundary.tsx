@@ -1,7 +1,8 @@
 "use client";
 
-import { Component, ErrorInfo, ReactNode } from "react";
+import { isDevelopment } from "@/lib/env";
 import { Button } from "@/components/ui/button";
+import { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 
 interface Props {
@@ -57,8 +58,7 @@ class ErrorBoundary extends Component<Props, State> {
               Reload Page
             </Button>
           </div>
-
-          {process.env.NODE_ENV === "development" && this.state.error && (
+          {isDevelopment && this.state.error && (
             <details className="mt-8 text-left max-w-2xl w-full">
               <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">Error Details (Development Only)</summary>
               <pre className="mt-2 p-4 bg-muted rounded text-xs overflow-auto">{this.state.error.stack}</pre>

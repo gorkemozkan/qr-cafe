@@ -140,7 +140,7 @@ const FilePicker = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {preview && accept === "image/*" ? (
-                <Image width={48} height={48} src={preview} alt={t("preview")} className="h-12 w-12 rounded object-cover" />
+                <Image width={48} height={48} src={preview} alt={t("preview")} className="rounded" />
               ) : (
                 <div className="h-12 w-12 rounded bg-muted flex items-center justify-center">
                   <ImageIcon className="h-6 w-6 text-muted-foreground" />

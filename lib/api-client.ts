@@ -1,4 +1,4 @@
-export interface ApiClientOptions {
+export interface Options {
   baseUrl?: string;
   headers?: Record<string, string>;
 }
@@ -7,7 +7,7 @@ class ApiClient {
   private baseUrl: string;
   private defaultHeaders: Record<string, string>;
 
-  constructor(options: ApiClientOptions = {}) {
+  constructor(options: Options = {}) {
     this.baseUrl = options.baseUrl || "";
 
     this.defaultHeaders = {
@@ -30,18 +30,17 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
-      const contentType = response.headers.get("content-type");
-
       let data: any;
 
-      if (contentType?.includes("application/json")) {
+      if (response.headers.get("content-type")?.includes("application/json")) {
         try {
           data = await response.json();
         } catch (jsonError) {
-          throw new Error(`Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error"}`);
+          throw new Error(`Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error while parsing response"}`);
         }
       } else {
         const text = await response.text();
+
         if (text) {
           data = { error: text };
         } else {
@@ -50,9 +49,8 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        const errorMessage = data.error || `HTTP ${response.status}: ${response.statusText}`;
-        const detailedMessage = data.details ? `${errorMessage} (${data.details})` : errorMessage;
-        throw new Error(detailedMessage);
+        const errorMessage = data?.error || data?.message || data?.details || `HTTP ${response.status}: ${response.statusText}`;
+        throw new Error(errorMessage);
       }
 
       return data;
@@ -60,6 +58,7 @@ class ApiClient {
       if (error instanceof Error) {
         throw error;
       }
+
       throw new Error("Network error occurred");
     }
   }

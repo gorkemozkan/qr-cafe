@@ -4,8 +4,5 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /auth/
 
-# Allow access to public menu pages
-Allow: /menu/
-
 # Sitemap
 Sitemap: https://www.only-menu.com/sitemap.xml

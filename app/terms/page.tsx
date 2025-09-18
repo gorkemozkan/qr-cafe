@@ -18,7 +18,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-16 max-w-4xl">
-        <BackButton />
+        <BackButton href="/" />
         <div className="prose prose-gray dark:prose-invert max-w-none">
           <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Agreement to Terms</h2>

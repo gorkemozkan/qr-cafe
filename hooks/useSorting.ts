@@ -42,7 +42,6 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
         try {
           await SortingService.updateSortOrder(items, sortConfig);
         } catch (error) {
-          console.error("Sort API call failed:", error);
           throw error;
         }
       } else {
@@ -76,9 +75,7 @@ export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrder
 
           const newItems = arrayMove(items, oldIndex, newIndex);
 
-          handleInternalSort(newItems).catch((error) => {
-            console.error("Failed to update sort order:", error);
-          });
+          handleInternalSort(newItems).catch((_error) => {});
 
           setTimeout(() => {
             lastDragRef.current = "";
