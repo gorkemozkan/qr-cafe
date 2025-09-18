@@ -8,6 +8,7 @@ export const redis = new Redis({
 export const getCacheKeys = {
   cafes: (userId: string) => `cafes:user:${userId}`,
   publicCafe: (slug: string) => `public:cafe:${slug}`,
+  publicCafeSlugs: () => `public:cafe:slugs`,
 };
 
 export async function invalidateUserCafesCache(userId: string) {

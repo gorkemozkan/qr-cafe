@@ -40,6 +40,10 @@ export class PublicMenuRepository extends BaseRepository {
   async getMenuBySlug(slug: string) {
     return await this.get<PublicMenuData>(`/${slug}`);
   }
+
+  async getAllMenuSlugs() {
+    return await this.get<string[]>(`/`);
+  }
 }
 
 export const publicMenuRepository = new PublicMenuRepository();
