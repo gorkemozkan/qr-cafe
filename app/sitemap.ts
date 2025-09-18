@@ -7,7 +7,12 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = nextPublicBaseUrl as string;
 
-  const menuSlugs = await publicMenuRepository.getAllMenuSlugs();
+  let menuSlugs: string[] = [];
+  try {
+    menuSlugs = await publicMenuRepository.getAllMenuSlugs();
+  } catch (_error) {
+    // console.error("Error fetching menu slugs:", _error);
+  }
 
   return [
     {
