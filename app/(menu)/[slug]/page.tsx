@@ -33,8 +33,8 @@ const generateStructuredData = (menu: PublicMenuData) => {
           offers: product.price
             ? {
                 "@type": "Offer",
-                price: product.price,
-                priceCurrency: menu.cafe.currency,
+                price: product.price.toString(),
+                priceCurrency: menu.cafe.currency || "TRY",
                 availability: product.is_available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               }
             : undefined,
