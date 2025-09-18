@@ -30,10 +30,6 @@ class ApiClient {
     try {
       const response = await fetch(url, config);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
       let data: any;
 
       if (response.headers.get("content-type")?.includes("application/json")) {
@@ -50,6 +46,11 @@ class ApiClient {
         } else {
           data = { error: "Empty response" };
         }
+      }
+
+      if (!response.ok) {
+        const errorMessage = data?.error || data?.message || data?.details || `HTTP ${response.status}: ${response.statusText}`;
+        throw new Error(errorMessage);
       }
 
       return data;
