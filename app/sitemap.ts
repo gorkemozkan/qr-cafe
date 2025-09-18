@@ -2,6 +2,8 @@ import { MetadataRoute } from "next";
 import { nextPublicBaseUrl } from "@/lib/env";
 import { publicMenuRepository } from "@/lib/repositories/public-menu-repository";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = nextPublicBaseUrl as string;
 
