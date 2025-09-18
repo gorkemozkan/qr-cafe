@@ -95,7 +95,6 @@
     @apply bg-background text-foreground;
   }
 
-  /* Accessibility: Respect user's motion preferences */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -107,13 +106,11 @@
     }
   }
 
-  /* Accessibility: Ensure focus is always visible */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
 
-  /* Accessibility: High contrast mode support */
   @media (prefers-contrast: high) {
     :root {
       --border: oklch(0 0 0);
@@ -143,7 +140,6 @@
     animation: shine 3s ease-in-out infinite 1.5s;
   }
 
-  /* Hero specific animations */
   @keyframes float {
     0%,
     100% {
@@ -192,7 +188,6 @@
     animation: pulse-slow 4s ease-in-out infinite;
   }
 
-  /* Dashboard background animations */
   @keyframes float {
     0%,
     100% {
@@ -235,7 +230,6 @@
     animation: drawLine 6s ease-in-out infinite reverse;
   }
 
-  /* Page title entrance animations */
   @keyframes slide-in-from-left-2 {
     from {
       transform: translateX(-0.5rem);
@@ -303,7 +297,6 @@
     animation-delay: 300ms;
   }
 
-  /* Menu animations */
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -349,7 +342,6 @@
     animation: scaleIn 0.4s ease-out forwards;
   }
 
-  /* Text utilities */
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -357,7 +349,6 @@
     overflow: hidden;
   }
 
-  /* Custom modal fade animations */
   @keyframes modalFadeIn {
     from {
       opacity: 0;
@@ -418,7 +409,6 @@
     animation: modalSlideOut 0.3s ease-in forwards;
   }
 
-  /* Accessibility: Screen reader only content */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -431,12 +421,10 @@
     border: 0;
   }
 
-  /* Accessibility: Focus management */
   .focus-visible:not(:focus-visible) {
     outline: none;
   }
 
-  /* Accessibility: Skip link positioning */
   .skip-link {
     position: absolute;
     top: -40px;
@@ -455,7 +443,6 @@
     top: 6px;
   }
 
-  /* Scrollbar utilities */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
