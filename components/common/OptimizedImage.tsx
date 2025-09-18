@@ -103,14 +103,14 @@ export function OptimizedImage({
       <Image
         src={currentSrc}
         alt={alt}
-        width={width}
-        height={height}
+        width={fill ? undefined : width}
+        height={fill ? undefined : height}
         className={imageClasses}
         priority={priority}
         quality={quality}
         sizes={sizes}
         fill={fill}
-        style={fill ? undefined : { objectFit }}
+        style={fill ? { objectFit } : undefined}
         onLoad={handleLoad}
         onError={handleError}
         onClick={clickable ? handleImageClick : undefined}
