@@ -145,7 +145,6 @@ const CategoryList: FC<Props> = (props) => {
         actions={<CategoryCreateSheet cafeId={props.cafeId} />}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
         queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}
-        emptyMessage={tCategory("noCategories")}
       />
       {categoryToEdit && (
         <CategoryEditSheet onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />

@@ -1,9 +1,10 @@
 "use client";
 
+import { slugify } from "@/lib/format";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
-import { Input } from "@/components/ui/input";
 import { Tables, Enums } from "@/types/db";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +16,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { CurrencySelect } from "@/components/common/CurrencySelect";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
+import { MAX_FILE_SIZE_FOR_STORAGE } from "@/components/common/DataTable/constants";
 
 export interface CafeFormRef {
   submitForm: () => void;
@@ -57,8 +59,8 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
   const getDefaultValues = (): CafeSchema => {
     if (props.cafe) {
       return {
-        is_active: props.cafe.is_active,
         name: props.cafe.name,
+        is_active: props.cafe.is_active,
         logo_url: props.cafe.logo_url || "",
         description: props.cafe.description || "",
         currency: props.cafe.currency || DEFAULT_CURRENCY,
@@ -67,10 +69,10 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
 
     return {
       name: "",
-      description: "",
       logo_url: "",
-      currency: DEFAULT_CURRENCY,
+      description: "",
       is_active: true,
+      currency: DEFAULT_CURRENCY,
     };
   };
 
@@ -106,27 +108,25 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
     },
   }));
 
-  const onSubmitForm = async (data: CafeSchema) => {
+  const onSubmitForm = async (payload: CafeSchema) => {
     try {
       if (isEdit) {
-        await props.onSubmit(data, selectedFile ? selectedFile : undefined);
+        await props.onSubmit(payload, selectedFile ? selectedFile : undefined);
       } else {
         if (selectedFile) {
           setStatus(Status.IS_UPLOADING);
 
-          const slug = props.cafe?.slug || `temp-${Date.now()}`;
-
-          const uploadResult = await uploadCafeLogo(selectedFile, slug);
+          const uploadResult = await uploadCafeLogo(selectedFile, `${slugify(payload.name)}-${Date.now()}`);
 
           if (!uploadResult.success) {
             setStatus(Status.IS_UPLOAD_ERROR);
             return;
           }
 
-          data.logo_url = uploadResult.data.url;
+          payload.logo_url = uploadResult.data.url;
         }
 
-        await props.onSubmit(data);
+        await props.onSubmit(payload);
       }
     } catch (_error) {
       setStatus(Status.IS_SUBMIT_ERROR);
@@ -153,8 +153,7 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           placeholder={t("namePlaceholder")}
           {...register("name")}
           className={errors.name || status === Status.IS_SUBMIT_ERROR ? "border-red-500" : ""}
-          onChange={(e) => {
-            register("name").onChange(e);
+          onChange={() => {
             setStatus(Status.IS_NOT_UPLOADED);
           }}
         />
@@ -168,12 +167,12 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
       <div className="space-y-2">
         <FilePicker
           id="logo"
-          label={t("logo")}
           accept="image/*"
-          maxSize={5 * 1024 * 1024} // 5MB
+          label={t("logo")}
           value={selectedFile}
           onChange={handleFileChange}
           onError={handleFileError}
+          maxSize={MAX_FILE_SIZE_FOR_STORAGE}
           disabled={status === Status.IS_UPLOADING}
           loading={status === Status.IS_UPLOADING}
         />

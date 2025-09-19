@@ -156,7 +156,6 @@ const ProductList: FC<Props> = (props) => {
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
-        emptyMessage={tProduct("noProducts")}
       />
       {productToEdit && (
         <ProductEditSheet

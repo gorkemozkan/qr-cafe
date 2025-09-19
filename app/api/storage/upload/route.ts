@@ -1,11 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
-import { validatePayloadSize } from "@/lib/payload-validation";
-import { uploadRateLimiter } from "@/lib/rate-limiter";
-import { validateBucketName, validateFileType, verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { NextRequest, NextResponse } from "next/server";
+import { validatePayloadSize } from "@/lib/payload-validation";
+import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
+import { validateBucketName, validateFileType, verifyCsrfToken } from "@/lib/security";
+import { MAX_FILE_SIZE_FOR_STORAGE } from "@/components/common/DataTable/constants";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +43,6 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file") as File;
     const cafeSlug = formData.get("cafeSlug") as string;
     const bucketName = formData.get("bucketName") as string;
-    const skipOwnershipCheck = formData.get("skipOwnershipCheck") === "true";
 
     if (!file || !cafeSlug || !bucketName) {
       return NextResponse.json({ error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") }, { status: http.BAD_REQUEST.status });
@@ -59,16 +57,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: fileValidation.error }, { status: http.BAD_REQUEST.status });
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > MAX_FILE_SIZE_FOR_STORAGE) {
       return NextResponse.json({ error: errorMessages.FILE_TOO_LARGE("5MB") }, { status: http.BAD_REQUEST.status });
-    }
-
-    if (!skipOwnershipCheck) {
-      const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("slug", cafeSlug).eq("user_id", user.id).single();
-
-      if (cafeError || !cafe) {
-        return NextResponse.json({ error: errorMessages.RESOURCE_ACCESS_DENIED("cafe") }, { status: http.FORBIDDEN.status });
-      }
     }
 
     const sanitizedName = fileValidation.sanitizedName || file.name;

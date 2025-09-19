@@ -167,7 +167,6 @@ const CafeList: FC = () => {
         title={tCafe("title")}
         queryKey={QueryKeys.cafes}
         actions={<CafeCreateSheet />}
-        emptyMessage={tCafe("noCafes")}
         queryFn={async () => await cafeRepository.list()}
       />
       {cafeToEdit && <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
