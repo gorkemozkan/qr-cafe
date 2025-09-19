@@ -28,10 +28,6 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    if (Number.isNaN(categoryId)) {
-      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
-    }
-
     const { data: category, error: fetchError } = await supabase
       .from("categories")
       .select("*")
