@@ -17,7 +17,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -35,7 +38,10 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch (_error) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("request body") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("request body") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const validationResult = cafeSchema.safeParse(body);
@@ -55,7 +61,10 @@ export async function POST(request: NextRequest) {
     const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", slug).single();
 
     if (existingCafe) {
-      return NextResponse.json({ error: errorMessages.RESOURCE_ALREADY_EXISTS("cafe") }, { status: http.CONFLICT.status });
+      return NextResponse.json(
+        { error: errorMessages.RESOURCE_ALREADY_EXISTS("cafe") },
+        { status: http.CONFLICT.status },
+      );
     }
 
     const cafeData: TablesInsert<"cafes"> = {

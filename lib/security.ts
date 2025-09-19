@@ -26,24 +26,23 @@ const xssPatterns = [
 
 export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
+
   const referer = request.headers.get("referer");
-  const host = request.headers.get("host");
 
   if (isDevelopment) {
     return true;
   }
 
   if (origin) {
-    const allowedOrigins = [`https://${host}`, `http://${host}`];
-    return allowedOrigins.includes(origin);
+    return process.env.ALLOWED_ORIGINS?.split(",").includes(origin);
   }
 
   if (referer) {
     try {
       const refererUrl = new URL(referer);
-      const allowedOrigins = [`https://${host}`, `http://${host}`];
+      const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((origin) => `${origin}`);
       const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
-      return allowedOrigins.includes(refererOrigin);
+      return allowedOrigins?.includes(refererOrigin);
     } catch {
       return false;
     }
@@ -124,7 +123,9 @@ export const commonHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
 ];
 
-export const productionOnlyHeaders = [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" }];
+export const productionOnlyHeaders = [
+  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+];
 
 export const createCSP = (environment: string, supabaseUrl?: string, allowedOrigins: string[] = []) => {
   const supabaseHosts = supabaseUrl
@@ -138,9 +139,11 @@ export const createCSP = (environment: string, supabaseUrl?: string, allowedOrig
       ? "'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com"
       : `'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com ${vercelLive}`.trim();
 
-  const devConnections = environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
+  const devConnections =
+    environment === "development" ? "ws://localhost:* wss://localhost:* http://localhost:* https://localhost:*" : "";
 
-  const vercelConnections = environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
+  const vercelConnections =
+    environment === "staging" || environment === "production" ? "https://vercel.live wss://*.pusher.com" : "";
 
   const connectSrc =
     `'self' ${supabaseHosts} https://challenges.cloudflare.com https://www.google-analytics.com https://googletagmanager.com ${devConnections} ${vercelConnections} ${allowedOrigins.join(" ")}`.trim();
