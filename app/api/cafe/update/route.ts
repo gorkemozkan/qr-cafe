@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { slugify } from "@/lib/format";
 import { http } from "@/lib/http";
-import { invalidatePublicCafeCache, invalidateUserCafesCache } from "@/lib/redis";
+import { slugify } from "@/lib/format";
 import { cafeSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { invalidatePublicCafeCache, invalidateUserCafesCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -32,6 +32,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const validationResult = cafeSchema.safeParse(updateData);
+
     if (!validationResult.success) {
       return NextResponse.json(
         {
@@ -53,6 +54,7 @@ export async function PUT(request: NextRequest) {
     }
 
     let finalSlug = existingCafe.slug;
+
     if (validationResult.data.name && validationResult.data.name !== existingCafe.name) {
       finalSlug = slugify(validationResult.data.name, { maxLength: 50 });
 

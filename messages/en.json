@@ -139,7 +139,8 @@
       "title": "Edit Cafe",
       "description": "Update the cafe information below.",
       "updateButton": "Update Cafe",
-      "updating": "Updating..."
+      "updating": "Updating...",
+      "cafeUpdated": "Cafe updated successfully!"
     },
     "qrCode": {
       "title": "QR Code Preview",

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+
     const supabase = await createClient();
 
     const {
@@ -30,6 +31,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       if (fetchError.code === "PGRST116") {
         return NextResponse.json({ error: "Category not found" }, { status: http.NOT_FOUND.status });
       }
+
       return NextResponse.json({ error: "Failed to fetch category" }, { status: 500 });
     }
 

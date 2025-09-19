@@ -7,7 +7,6 @@ import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
-import TooltipButton from "@/components/common/TooltipButton";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";

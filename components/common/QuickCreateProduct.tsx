@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const PageTitleWithUser = () => {
   const t = useTranslations("common");
+
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
 
   return (

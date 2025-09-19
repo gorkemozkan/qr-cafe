@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
-import { invalidatePublicCafeCache } from "@/lib/redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -11,6 +11,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const supabase = await createClient();
+
     const {
       data: { user },
       error: authError,

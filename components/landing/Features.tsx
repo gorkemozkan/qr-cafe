@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Coffee, FolderTree, Globe, Image, QrCode, RefreshCw, Smartphone } from "lucide-react";
+import { FolderTree, Globe, Image, QrCode, RefreshCw, Smartphone } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
