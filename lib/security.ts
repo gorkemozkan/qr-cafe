@@ -33,16 +33,21 @@ export const verifyCsrfToken = (request: NextRequest) => {
     return true;
   }
 
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",");
+
+  if (!allowedOrigins) {
+    return false;
+  }
+
   if (origin) {
-    return process.env.ALLOWED_ORIGINS?.split(",").includes(origin);
+    return allowedOrigins.includes(origin);
   }
 
   if (referer) {
     try {
       const refererUrl = new URL(referer);
-      const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((origin) => `${origin}`);
       const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
-      return allowedOrigins?.includes(refererOrigin);
+      return allowedOrigins.includes(refererOrigin);
     } catch {
       return false;
     }

@@ -20,11 +20,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<Pa
 
     const { id } = await params;
 
-    if (Number.isNaN(id)) {
+    let cafeId: number;
+
+    try {
+      cafeId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
-
-    const cafeId = parseNumericId(id);
 
     const supabase = await createClient();
 
@@ -68,11 +70,12 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     const { id } = await params;
 
-    if (Number.isNaN(id)) {
+    let cafeId: number;
+    try {
+      cafeId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
-
-    const cafeId = parseNumericId(id);
 
     const supabase = await createClient();
 

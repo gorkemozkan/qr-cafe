@@ -7,7 +7,10 @@ import { parseNumericId } from "@/lib/utils";
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -22,9 +25,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const { id } = await params;
 
-    const cafeId = parseNumericId(id);
+    let cafeId: number;
 
-    if (Number.isNaN(cafeId)) {
+    try {
+      cafeId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 

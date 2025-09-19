@@ -5,6 +5,7 @@ import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { invalidatePublicCafeCache, invalidateUserCafesCache } from "@/lib/redis";
+import { parseNumericId } from "@/lib/utils";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -28,17 +29,19 @@ export async function PUT(request: NextRequest) {
 
     const body = await request.json();
 
-    if (Number.isNaN(body.id)) {
+    if (!body.id) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { id, ...updateData } = body;
+    let cafeId: number;
 
-    if (!id) {
+    try {
+      cafeId = parseNumericId(body.id.toString());
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const validationResult = cafeSchema.safeParse(updateData);
+    const validationResult = cafeSchema.safeParse(body);
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -53,7 +56,7 @@ export async function PUT(request: NextRequest) {
     const { data: existingCafe, error: fetchError } = await supabase
       .from("cafes")
       .select("id, user_id, slug, name")
-      .eq("id", id)
+      .eq("id", cafeId)
       .single();
 
     if (fetchError || !existingCafe) {
@@ -73,7 +76,7 @@ export async function PUT(request: NextRequest) {
         .from("cafes")
         .select("id")
         .eq("slug", finalSlug)
-        .neq("id", id)
+        .neq("id", cafeId)
         .single();
 
       if (slugExists) {
@@ -91,7 +94,7 @@ export async function PUT(request: NextRequest) {
         currency: validationResult.data.currency,
         is_active: validationResult.data.is_active,
       })
-      .eq("id", id)
+      .eq("id", cafeId)
       .select()
       .single();
 
