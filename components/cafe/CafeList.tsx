@@ -119,7 +119,9 @@ const CafeList: FC = () => {
         key: "is_active",
         header: tCafe("table.status"),
         tooltipText: tCafe("table.statusTooltip"),
-        cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>,
+        cell: (value: any) => (
+          <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>
+        ),
       },
       {
         key: "created_at",
@@ -158,7 +160,14 @@ const CafeList: FC = () => {
 
   return (
     <>
-      {cafeForQR && <CafeQRPreviewDialog key="qr-preview" open={qrPreviewOpen} slug={cafeForQR?.slug} onOpenChange={setQRPreviewOpen} />}
+      {cafeForQR && (
+        <CafeQRPreviewDialog
+          key="qr-preview"
+          open={qrPreviewOpen}
+          slug={cafeForQR?.slug}
+          onOpenChange={setQRPreviewOpen}
+        />
+      )}
       <DataTable
         onRowClick={(row) => {
           router.push(`/admin/app/cafe/${row.id}/categories`);
@@ -169,7 +178,9 @@ const CafeList: FC = () => {
         actions={<CafeCreateSheet />}
         queryFn={async () => await cafeRepository.list()}
       />
-      {cafeToEdit && <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
+      {cafeToEdit && (
+        <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />
+      )}
       <QuestionDialog
         isLoading={isDeleting}
         open={deleteDialogOpen}

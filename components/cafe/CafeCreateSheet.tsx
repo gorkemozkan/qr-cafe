@@ -19,20 +19,30 @@ interface CreateMutationPayload {
   logoFile?: File;
 }
 
+enum UIStatus {
+  SET_UPLOADING = "SET_UPLOADING",
+  SHOW_QR_DIALOG = "SHOW_QR_DIALOG",
+  SHOW_CREATE_DIALOG = "SHOW_CREATE_DIALOG",
+}
+
 const CafeCreateSheet: FC = () => {
+  //#region Hooks
+
   const t = useTranslations("cafe");
 
-  //#region States
+  //#endregion
+
+  //#region Refs
 
   const formRef = useRef<CafeFormRef>(null);
 
-  const [open, setOpen] = useState(false);
+  //#endregion
 
-  const [showQRDialog, setShowQRDialog] = useState(false);
+  //#region States
 
-  const [isUploading, setIsUploading] = useState(false);
+  const [status, setStatus] = useState<UIStatus | null>();
 
-  const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>(null);
+  const [createdCafe, setCreatedCafe] = useState<Tables<"cafes"> | null>();
 
   //#endregion
 
@@ -41,7 +51,7 @@ const CafeCreateSheet: FC = () => {
       let cafe = await cafeRepository.create(payload.data);
 
       if (payload.logoFile) {
-        setIsUploading(true);
+        setStatus(UIStatus.SET_UPLOADING);
 
         const { uploadCafeLogo } = await import("@/lib/supabase/storage");
 
@@ -51,30 +61,29 @@ const CafeCreateSheet: FC = () => {
           cafe = await cafeRepository.update(cafe.id, { ...payload.data, logo_url: uploadResult.data.url });
         }
 
-        setIsUploading(false);
+        setStatus(null);
       }
 
       return cafe;
     },
     onSuccess: (cafe) => {
       setCreatedCafe(cafe);
-      setShowQRDialog(true);
-      setOpen(false);
+      setStatus(UIStatus.SHOW_QR_DIALOG);
     },
-    successMessage: t("cafeCreated"),
     errorMessage: t("createFailed"),
+    successMessage: t("cafeCreated"),
     invalidateQueries: [QueryKeys.cafes, QueryKeys.stats],
   });
 
   return (
     <>
-      <Button size={"lg"} variant="outline" onClick={() => setOpen(true)}>
+      <Button size={"lg"} variant="outline" onClick={() => setStatus(UIStatus.SHOW_CREATE_DIALOG)}>
         <Plus className="h-4 w-4" />
       </Button>
-      {open && (
+      {status === UIStatus.SHOW_CREATE_DIALOG && (
         <FormSheet
-          onOpenChange={setOpen}
           title={t("createSheet.title")}
+          onOpenChange={() => setStatus(null)}
           description={t("createSheet.description")}
           footer={
             <SubmitButton
@@ -82,13 +91,13 @@ const CafeCreateSheet: FC = () => {
               loadingText={t("createSheet.creating")}
               isLoading={createCafeMutation.isLoading}
               onClick={() => formRef.current?.submitForm()}
-              disabled={createCafeMutation.isLoading || isUploading}
+              disabled={createCafeMutation.isLoading}
             />
           }
         >
           <CafeForm
             ref={formRef}
-            onCancel={() => setOpen(false)}
+            onCancel={() => setStatus(null)}
             isLoading={createCafeMutation.isLoading}
             onSubmit={async (data, logoFile) => {
               await createCafeMutation.execute({ data, logoFile });
@@ -96,7 +105,13 @@ const CafeCreateSheet: FC = () => {
           />
         </FormSheet>
       )}
-      {createdCafe && <CafeQRPreviewDialog slug={createdCafe.slug} open={showQRDialog} onOpenChange={setShowQRDialog} />}
+      {createdCafe && (
+        <CafeQRPreviewDialog
+          slug={createdCafe.slug}
+          open={status === UIStatus.SHOW_QR_DIALOG}
+          onOpenChange={() => setStatus(null)}
+        />
+      )}
     </>
   );
 };

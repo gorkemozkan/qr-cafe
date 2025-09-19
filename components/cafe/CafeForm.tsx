@@ -176,7 +176,9 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
           disabled={status === Status.IS_UPLOADING}
           loading={status === Status.IS_UPLOADING}
         />
-        {status === Status.IS_UPLOAD_ERROR && <InputErrorMessage id="upload-error">{t("uploadFailed")}</InputErrorMessage>}
+        {status === Status.IS_UPLOAD_ERROR && (
+          <InputErrorMessage id="upload-error">{t("uploadFailed")}</InputErrorMessage>
+        )}
         {props.cafe?.logo_url && !selectedFile && (
           <div className="flex items-center space-x-2">
             <OptimizedImage
@@ -200,11 +202,19 @@ const CafeForm = forwardRef<CafeFormRef, Props>((props, ref) => {
         onValueChange={(value) => setValue("currency", value)}
       />
       <div className="flex items-center space-x-2">
-        <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
+        <Switch
+          id="is_active"
+          checked={isActive}
+          onCheckedChange={(checked: boolean) => setValue("is_active", checked)}
+        />
         <Label htmlFor="is_active">{watch("is_active") ? t("isActive") : t("isInactive")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("activeDescription") : t("inactiveDescription")}</p>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isActive ? t("activeDescription") : t("inactiveDescription")}
+        </p>
       </div>
-      {status === Status.IS_SUBMIT_ERROR && <InputErrorMessage id="submit-error">{t("uploadFailed")}</InputErrorMessage>}
+      {status === Status.IS_SUBMIT_ERROR && (
+        <InputErrorMessage id="submit-error">{t("uploadFailed")}</InputErrorMessage>
+      )}
     </form>
   );
 });

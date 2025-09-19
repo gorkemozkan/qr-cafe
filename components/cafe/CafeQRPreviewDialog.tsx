@@ -1,15 +1,21 @@
 "use client";
 
-import Image from "next/image";
 import QRCode from "qrcode";
 import { toast } from "sonner";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import CopyButton from "@/components/common/CopyButton";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import ExternalLinkButton from "@/components/common/ExternalLinkButton";
 import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-react";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Props {
@@ -58,7 +64,11 @@ const CafeQRPreviewDialog: FC<Props> = (props) => {
     }
   }, [props.slug, props.open, generateQRCode]);
 
-  const cafeUrl = props.slug ? (typeof window !== "undefined" ? `${window.location.origin}/${props.slug}` : `/${props.slug}`) : "";
+  const cafeUrl = props.slug
+    ? typeof window !== "undefined"
+      ? `${window.location.origin}/${props.slug}`
+      : `/${props.slug}`
+    : "";
 
   const shareWhatsApp = (text: string) => {
     const message = `Check out this cafe menu: ${text}`;
@@ -160,7 +170,12 @@ const CafeQRPreviewDialog: FC<Props> = (props) => {
             <div className="flex items-start justify-between flex-wrap gap-2">
               <div>
                 <p className="text-sm font-medium mb-1">{t("menuUrl")}</p>
-                <a href={cafeUrl} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline underline-offset-4 line-clamp-2 ">
+                <a
+                  href={cafeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm hover:underline underline-offset-4 line-clamp-2 "
+                >
                   {cafeUrl}
                 </a>
               </div>
@@ -183,7 +198,13 @@ const CafeQRPreviewDialog: FC<Props> = (props) => {
                     <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <div>
-                          <Image src={qrCodeDataUrl} alt={`QR Code for ${props.slug}`} fill className="object-contain" unoptimized />
+                          <Image
+                            src={qrCodeDataUrl}
+                            alt={`QR Code for ${props.slug}`}
+                            fill
+                            className="object-contain"
+                            unoptimized
+                          />
                         </div>
                       </ContextMenuTrigger>
                       <ContextMenuContent>
