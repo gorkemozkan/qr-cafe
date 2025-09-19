@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { parseNumericId } from "@/lib/utils";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import PageTitle from "@/components/common/PageTitle";
 import CategoryList from "@/components/category/CategoryList";
@@ -13,7 +13,11 @@ const CategoriesPage: NextPage<Props> = async (props) => {
 
   const t = await getTranslations("category.page");
 
-  const cafeId = parseNumericId(params.id);
+  const cafeId = parseInt(params.id, 10);
+
+  if (Number.isNaN(cafeId)) {
+    return notFound();
+  }
 
   return (
     <>

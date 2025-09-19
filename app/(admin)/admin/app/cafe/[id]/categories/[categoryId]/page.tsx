@@ -15,6 +15,7 @@ import { categoryRepository } from "@/lib/repositories/category-repository";
 
 const Page: NextPage = () => {
   const params = useParams();
+
   const t = useTranslations("category.page");
 
   const cafeId = parseInt(params.id as string, 10);
