@@ -1,11 +1,11 @@
 import { http } from "@/lib/http";
 import { slugify } from "@/lib/format";
 import { cafeSchema } from "@/lib/schema";
+import { parseNumericId } from "@/lib/utils";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { invalidatePublicCafeCache, invalidateUserCafesCache } from "@/lib/redis";
-import { parseNumericId } from "@/lib/utils";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -62,11 +62,11 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (fetchError || !existingCafe) {
-      return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
+      return NextResponse.json({ error: http.NOT_FOUND.message }, { status: http.NOT_FOUND.status });
     }
 
     if (existingCafe.user_id !== user.id) {
-      return NextResponse.json({ error: "Unauthorized to update this cafe" }, { status: http.FORBIDDEN.status });
+      return NextResponse.json({ error: http.FORBIDDEN.message }, { status: http.FORBIDDEN.status });
     }
 
     let finalSlug = existingCafe.slug;
@@ -82,7 +82,7 @@ export async function PUT(request: NextRequest) {
         .single();
 
       if (slugExists) {
-        return NextResponse.json({ error: "A cafe with this name already exists" }, { status: http.CONFLICT.status });
+        return NextResponse.json({ error: http.CONFLICT.message }, { status: http.CONFLICT.status });
       }
     }
 
@@ -101,7 +101,10 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: "Failed to update cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
+      return NextResponse.json(
+        { error: http.INTERNAL_SERVER_ERROR.message },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
     }
 
     invalidateUserCafesCache(user.id);

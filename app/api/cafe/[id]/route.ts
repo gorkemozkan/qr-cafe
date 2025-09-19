@@ -47,7 +47,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<Pa
       .single();
 
     if (fetchError || !cafe) {
-      return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
+      return NextResponse.json({ error: http.NOT_FOUND.message }, { status: http.NOT_FOUND.status });
     }
 
     return NextResponse.json(cafe);
@@ -95,21 +95,18 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       .single();
 
     if (fetchError || !existingCafe) {
-      return NextResponse.json({ error: "Cafe not found" }, { status: http.NOT_FOUND.status });
+      return NextResponse.json({ error: http.NOT_FOUND.message }, { status: http.NOT_FOUND.status });
     }
 
     if (existingCafe.user_id !== user.id) {
-      return NextResponse.json(
-        { error: "Forbidden: You can only delete your own cafes" },
-        { status: http.FORBIDDEN.status },
-      );
+      return NextResponse.json({ error: http.FORBIDDEN.message }, { status: http.FORBIDDEN.status });
     }
 
     const { error: deleteProductsError } = await supabase.from("products").delete().eq("cafe_id", cafeId);
 
     if (deleteProductsError) {
       return NextResponse.json(
-        { error: "Failed to delete related products" },
+        { error: http.INTERNAL_SERVER_ERROR.message },
         { status: http.INTERNAL_SERVER_ERROR.status },
       );
     }
@@ -118,7 +115,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     if (deleteCategoriesError) {
       return NextResponse.json(
-        { error: "Failed to delete related categories" },
+        { error: http.INTERNAL_SERVER_ERROR.message },
         { status: http.INTERNAL_SERVER_ERROR.status },
       );
     }
@@ -126,12 +123,15 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const { error: deleteError } = await supabase.from("cafes").delete().eq("id", cafeId);
 
     if (deleteError) {
-      return NextResponse.json({ error: "Failed to delete cafe" }, { status: http.INTERNAL_SERVER_ERROR.status });
+      return NextResponse.json(
+        { error: http.INTERNAL_SERVER_ERROR.message },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
     }
 
     invalidateUserCafesCache(user.id);
 
-    return NextResponse.json({ success: true, message: "Cafe deleted successfully" }, { status: http.SUCCESS.status });
+    return NextResponse.json({ success: true, message: http.SUCCESS.message }, { status: http.SUCCESS.status });
   } catch (_error) {
     return NextResponse.json(
       { error: http.INTERNAL_SERVER_ERROR.message },
