@@ -1,18 +1,18 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { FC, useRef, useState } from "react";
+import QueryKeys from "@/lib/query";
+import { Tables } from "@/types/db";
+import { CafeSchema } from "@/lib/schema";
 import { useTranslations } from "next-intl";
-import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
-import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
-import FormSheet from "@/components/common/FormSheet";
-import SubmitButton from "@/components/common/SubmitButton";
+import { FC, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
-import QueryKeys from "@/lib/query";
+import FormSheet from "@/components/common/FormSheet";
+import SubmitButton from "@/components/common/SubmitButton";
+import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
-import { CafeSchema } from "@/lib/schema";
-import { Tables } from "@/types/db";
+import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 
 interface CreateMutationPayload {
   data: CafeSchema;
@@ -24,9 +24,9 @@ const CafeCreateSheet: FC = () => {
 
   //#region States
 
-  const [open, setOpen] = useState(false);
-
   const formRef = useRef<CafeFormRef>(null);
+
+  const [open, setOpen] = useState(false);
 
   const [showQRDialog, setShowQRDialog] = useState(false);
 

@@ -1,15 +1,15 @@
 "use client";
 
-import { FC, useRef, useState } from "react";
+import QueryKeys from "@/lib/query";
+import { Tables } from "@/types/db";
+import { CafeSchema } from "@/lib/schema";
 import { useTranslations } from "next-intl";
-import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
+import { FC, useRef, useState } from "react";
+import { useRequest } from "@/hooks/useRequest";
 import FormSheet from "@/components/common/FormSheet";
 import SubmitButton from "@/components/common/SubmitButton";
-import { useRequest } from "@/hooks/useRequest";
-import QueryKeys from "@/lib/query";
+import CafeForm, { CafeFormRef } from "@/components/cafe/CafeForm";
 import { cafeRepository } from "@/lib/repositories/cafe-repository";
-import { CafeSchema } from "@/lib/schema";
-import { Tables } from "@/types/db";
 
 interface Props {
   cafe: Tables<"cafes">;
@@ -23,15 +23,15 @@ interface UpdateMutationPayload {
 }
 
 const CafeEditSheet: FC<Props> = (props) => {
-  const t = useTranslations("cafe");
-
   //#region Hooks
+
+  const t = useTranslations("cafe");
 
   const [isUploading, setIsUploading] = useState(false);
 
   //#endregion
 
-  //#region States
+  //#region Refs
 
   const formRef = useRef<CafeFormRef>(null);
 

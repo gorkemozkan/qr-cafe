@@ -1,14 +1,14 @@
 "use client";
 
-import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import CopyButton from "@/components/common/CopyButton";
-import ExternalLinkButton from "@/components/common/ExternalLinkButton";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import CopyButton from "@/components/common/CopyButton";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
+import ExternalLinkButton from "@/components/common/ExternalLinkButton";
+import { Copy, Download, ExternalLink, MessageCircle, QrCode } from "lucide-react";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -18,8 +18,9 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
+const CafeQRPreviewDialog: FC<Props> = (props) => {
   const t = useTranslations("cafe.qrCode");
+
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -32,7 +33,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
     try {
       setIsGenerating(true);
 
-      const cafeUrl = `${window.location.origin}/${slug}`;
+      const cafeUrl = `${window.location.origin}/${props.slug}`;
 
       const qrDataUrl = await QRCode.toDataURL(cafeUrl, {
         width: 300,
@@ -49,15 +50,15 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
     } finally {
       setIsGenerating(false);
     }
-  }, [slug]);
+  }, [props.slug]);
 
   useEffect(() => {
-    if (slug && open) {
+    if (props.slug && props.open) {
       generateQRCode();
     }
-  }, [slug, open, generateQRCode]);
+  }, [props.slug, props.open, generateQRCode]);
 
-  const cafeUrl = slug ? (typeof window !== "undefined" ? `${window.location.origin}/${slug}` : `/${slug}`) : "";
+  const cafeUrl = props.slug ? (typeof window !== "undefined" ? `${window.location.origin}/${props.slug}` : `/${props.slug}`) : "";
 
   const shareWhatsApp = (text: string) => {
     const message = `Check out this cafe menu: ${text}`;
@@ -70,6 +71,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
 
     try {
       await navigator.clipboard.writeText(cafeUrl);
+
       toast.success(t("linkCopied"));
     } catch (_error) {
       toast.error(t("failedToCopy"));
@@ -90,6 +92,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
 
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
+
       if (!ctx) return;
 
       canvas.width = 800;
@@ -125,7 +128,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `qr-code-${slug}.png`;
+            a.download = `qr-code-${props.slug}.png`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -143,7 +146,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -180,7 +183,7 @@ const CafeQRPreviewDialog: FC<Props> = ({ slug, open, onOpenChange }) => {
                     <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <div>
-                          <Image src={qrCodeDataUrl} alt={`QR Code for ${slug}`} fill className="object-contain" unoptimized />
+                          <Image src={qrCodeDataUrl} alt={`QR Code for ${props.slug}`} fill className="object-contain" unoptimized />
                         </div>
                       </ContextMenuTrigger>
                       <ContextMenuContent>
