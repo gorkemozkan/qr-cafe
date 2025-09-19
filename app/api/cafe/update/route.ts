@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest) {
     if (!validationResult.success) {
       return NextResponse.json(
         {
-          error: "Validation failed",
+          error: http.BAD_REQUEST.message,
           details: validationResult.error.issues,
         },
         { status: http.BAD_REQUEST.status },

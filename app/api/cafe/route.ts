@@ -51,7 +51,10 @@ export async function GET(request: NextRequest) {
       .order("created_at", { ascending: false });
 
     if (error) {
-      return NextResponse.json({ error: "Failed to fetch cafes" }, { status: http.INTERNAL_SERVER_ERROR.status });
+      return NextResponse.json(
+        { error: http.INTERNAL_SERVER_ERROR.message },
+        { status: http.INTERNAL_SERVER_ERROR.status },
+      );
     }
 
     const cafesData = cafes || [];

@@ -5,8 +5,8 @@ import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 import { invalidateUserCafesCache } from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
+import { createSafeErrorResponse, http } from "@/lib/http";
 import { validatePayloadSize } from "@/lib/payload-validation";
-import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,10 +39,7 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch (_error) {
-      return NextResponse.json(
-        { error: errorMessages.INVALID_FORMAT("request body") },
-        { status: http.BAD_REQUEST.status },
-      );
+      return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
     const validationResult = cafeSchema.safeParse(body);
@@ -50,7 +47,7 @@ export async function POST(request: NextRequest) {
     if (!validationResult.success) {
       return NextResponse.json(
         {
-          error: "Validation failed",
+          error: http.BAD_REQUEST.message,
           details: validationResult.error.issues,
         },
         { status: http.BAD_REQUEST.status },
@@ -62,10 +59,7 @@ export async function POST(request: NextRequest) {
     const { data: existingCafe } = await supabase.from("cafes").select("id").eq("slug", slug).single();
 
     if (existingCafe) {
-      return NextResponse.json(
-        { error: errorMessages.RESOURCE_ALREADY_EXISTS("cafe") },
-        { status: http.CONFLICT.status },
-      );
+      return NextResponse.json({ error: http.CONFLICT.message }, { status: http.CONFLICT.status });
     }
 
     const cafeData: TablesInsert<"cafes"> = {
@@ -88,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     invalidateUserCafesCache(user.id);
 
-    return NextResponse.json(data, { status: 201 });
+    return NextResponse.json(data, { status: http.CREATED.status });
   } catch (error) {
     const safeError = createSafeErrorResponse(error);
     return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
