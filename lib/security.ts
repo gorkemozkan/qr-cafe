@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { BUCKET_NAMES } from "../config";
-import { isDevelopment } from "./env";
+import { isDevelopment, getNextPublicBaseUrl } from "./env";
 
 const xssPatterns = [
   /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
@@ -33,10 +33,15 @@ export const verifyCsrfToken = (request: NextRequest) => {
     return true;
   }
 
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",");
+  let allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",");
 
-  if (!allowedOrigins) {
-    return false;
+  if (!allowedOrigins || allowedOrigins.length === 0) {
+    try {
+      const baseUrl = new URL(getNextPublicBaseUrl());
+      allowedOrigins = [`${baseUrl.protocol}//${baseUrl.host}`];
+    } catch {
+      return false;
+    }
   }
 
   if (origin) {
