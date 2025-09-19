@@ -41,7 +41,9 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const validationResult = cafeSchema.safeParse(body);
+    const { id: _, ...cafeData } = body;
+
+    const validationResult = cafeSchema.safeParse(cafeData);
 
     if (!validationResult.success) {
       return NextResponse.json(
