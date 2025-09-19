@@ -98,6 +98,7 @@ const CafeList: FC = () => {
             width={40}
             height={40}
             src={row.logo_url}
+            sizes="40px"
             showSkeleton={true}
             alt={`${row.slug} logo`}
             className="rounded border border-border"
