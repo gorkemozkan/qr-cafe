@@ -1,23 +1,22 @@
 "use client";
 
 import { forwardRef } from "react";
+import { Enums } from "@/types/db";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-export type SupportedCurrency = "TRY" | "USD" | "EUR";
 
 interface CurrencySelectProps {
   id?: string;
   label?: string;
-  value?: SupportedCurrency;
-  onValueChange: (value: SupportedCurrency) => void;
+  value?: Enums<"currency_type">;
+  onValueChange: (value: Enums<"currency_type">) => void;
   placeholder?: string;
   disabled?: boolean;
   error?: string;
   className?: string;
 }
 
-const CURRENCY_OPTIONS: Array<{ value: SupportedCurrency; label: string; symbol: string }> = [
+const CURRENCY_OPTIONS: Array<{ value: Enums<"currency_type">; label: string; symbol: string }> = [
   { value: "TRY", label: "Turkish Lira", symbol: "₺" },
   { value: "USD", label: "US Dollar", symbol: "$" },
   { value: "EUR", label: "Euro", symbol: "€" },

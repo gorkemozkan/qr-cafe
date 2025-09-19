@@ -80,7 +80,6 @@ const CafeEditSheet: FC<Props> = (props) => {
       }
     >
       <CafeForm
-        mode="edit"
         ref={formRef}
         cafe={props.cafe}
         isLoading={isLoading}

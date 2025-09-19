@@ -88,7 +88,6 @@ const CafeCreateSheet: FC = () => {
         >
           <CafeForm
             ref={formRef}
-            mode="create"
             onCancel={() => setOpen(false)}
             isLoading={createCafeMutation.isLoading}
             onSubmit={async (data, logoFile) => {
