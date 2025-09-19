@@ -1,7 +1,8 @@
 import { NextPage } from "next";
+import { parseNumericId } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
-import CategoryList from "@/components/category/CategoryList";
 import PageTitle from "@/components/common/PageTitle";
+import CategoryList from "@/components/category/CategoryList";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -9,9 +10,10 @@ interface Props {
 
 const CategoriesPage: NextPage<Props> = async (props) => {
   const params = await props.params;
+
   const t = await getTranslations("category.page");
 
-  const cafeId = Number.parseInt(params.id as string, 10);
+  const cafeId = parseNumericId(params.id);
 
   return (
     <>
