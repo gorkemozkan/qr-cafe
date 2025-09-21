@@ -75,24 +75,16 @@ const ProductList: FC<Props> = (props) => {
       key: "image",
       header: tProduct("table.image"),
       cell: (_: any, row: Tables<"products">) => (
-        <>
-          {row.image_url ? (
-            <OptimizedImage
-              src={row.image_url}
-              alt={`${row.name} image`}
-              width={40}
-              height={40}
-              className="rounded-md border border-border w-10 h-10 "
-              objectFit="cover"
-              fallbackSrc="/placeholder-logo.svg"
-              showSkeleton={true}
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">{tProduct("table.noImage")}</span>
-            </div>
-          )}
-        </>
+        <OptimizedImage
+          fill
+          width={40}
+          height={40}
+          src={row.image_url}
+          sizes="40px"
+          showSkeleton={true}
+          alt={`${row.name} image`}
+          className="rounded border border-border"
+        />
       ),
     },
     {
@@ -164,7 +156,6 @@ const ProductList: FC<Props> = (props) => {
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
-        emptyMessage={tProduct("noProducts")}
       />
       {productToEdit && (
         <ProductEditSheet

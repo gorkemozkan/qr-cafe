@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
-import { validatePayloadSize } from "@/lib/payload-validation";
-import { authRateLimiter } from "@/lib/rate-limiter";
 import { loginSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
+import { authRateLimiter } from "@/lib/rate-limiter";
 import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { validatePayloadSize } from "@/lib/payload-validation";
+import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {

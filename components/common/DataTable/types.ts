@@ -38,7 +38,6 @@ export interface DataTableProps<T extends BaseEntity = BaseEntity> {
   columns: Column<T>[];
   queryKey: string[];
   queryFn: () => Promise<T[]>;
-  emptyMessage?: string;
   staleTime?: number;
   gcTime?: number;
   actions?: ReactNode;

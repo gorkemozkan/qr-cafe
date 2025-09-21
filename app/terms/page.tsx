@@ -30,7 +30,6 @@ export default function TermsPage() {
             Only Menu is a digital menu management platform that allows cafes and restaurants to create, manage, and display QR code-based menus for
             their customers.
           </p>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Description of Service</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">Only Menu provides:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
@@ -42,7 +41,6 @@ export default function TermsPage() {
             <li>Real-time menu updates (when available)</li>
             <li>Analytics and reporting (when available)</li>
           </ul>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">3. User Accounts</h2>
           <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">3.1 Account Creation</h3>
           <ul className="mb-4 space-y-2 text-muted-foreground">
@@ -51,7 +49,6 @@ export default function TermsPage() {
             <li>You are responsible for maintaining the confidentiality of your account credentials</li>
             <li>You must immediately notify us of any unauthorized use of your account</li>
           </ul>
-
           <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">3.2 Account Responsibilities</h3>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>You are solely responsible for all activities that occur under your account</li>
@@ -59,7 +56,6 @@ export default function TermsPage() {
             <li>You must use a strong password that meets our security requirements</li>
             <li>You must not create multiple accounts for the same business entity</li>
           </ul>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">4. Acceptable Use</h2>
           <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">4.1 Permitted Uses</h3>
           <p className="mb-4 leading-relaxed text-muted-foreground">You may use Only Menu to:</p>
@@ -69,7 +65,6 @@ export default function TermsPage() {
             <li>Generate QR codes for your menu displays</li>
             <li>Manage multiple cafe locations under your account</li>
           </ul>
-
           <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">4.2 Prohibited Uses</h3>
           <p className="mb-4 leading-relaxed text-muted-foreground">You may not:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
@@ -81,21 +76,18 @@ export default function TermsPage() {
             <li>Upload copyrighted material without permission</li>
             <li>Use the Service to compete with or replicate our platform</li>
           </ul>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">5. Limitation of Liability</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">TO THE MAXIMUM EXTENT PERMITTED BY LAW:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>WE PROVIDE THE SERVICE "AS IS" WITHOUT WARRANTIES</li>
             <li>WE ARE NOT LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES</li>
           </ul>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">6. Contact Information</h2>
           <p className="mb-4 leading-relaxed text-muted-foreground">For questions about these Terms, contact us at:</p>
           <ul className="mb-4 space-y-2 text-muted-foreground">
             <li>Email: developer@ozgorkem.com</li>
             <li>Service: Only Menu Platform</li>
           </ul>
-
           <div className="border-t mt-8 pt-8">
             <p className="text-sm text-muted-foreground mt-2">
               By using Only Menu, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.

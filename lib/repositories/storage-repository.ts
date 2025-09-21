@@ -15,16 +15,12 @@ export class StorageRepository {
     file: File,
     cafeSlug: string,
     bucketName: string,
-    skipOwnershipCheck = false,
   ): Promise<{ success: true; data: UploadResult } | { success: false; error: StorageError }> {
     try {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("cafeSlug", cafeSlug);
       formData.append("bucketName", bucketName);
-      if (skipOwnershipCheck) {
-        formData.append("skipOwnershipCheck", "true");
-      }
 
       const response = await fetch(`${this.baseUrl}/upload`, {
         method: "POST",

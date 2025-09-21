@@ -1,9 +1,9 @@
 import { NextPage } from "next";
-import CTASection from "@/components/landing/CTASection";
-import Features from "@/components/landing/Features";
+import Hero from "@/components/landing/Hero";
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
-import Hero from "@/components/landing/Hero";
+import Features from "@/components/landing/Features";
+import CTASection from "@/components/landing/CTASection";
 
 const Page: NextPage = () => {
   return (

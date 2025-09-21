@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { parseNumericId } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -15,8 +16,11 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     }
 
     const { id } = await params;
-    const categoryId = parseInt(id, 10);
-    if (Number.isNaN(categoryId)) {
+
+    let categoryId: number;
+    try {
+      categoryId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 

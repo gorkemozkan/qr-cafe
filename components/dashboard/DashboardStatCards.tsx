@@ -1,45 +1,49 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import SectionCards from "@/components/common/SectionCards";
-import { useQueryRequest } from "@/hooks/useRequest";
-import { apiClient } from "@/lib/api-client";
 import QueryKeys from "@/lib/query";
-import type { DashboardStats } from "@/lib/repositories/stats-repository";
+import { useTranslations } from "next-intl";
+import { apiClient } from "@/lib/api-client";
+import { useQueryRequest } from "@/hooks/useRequest";
+import SectionCards from "@/components/common/SectionCards";
 
 const DashboardStatCards = () => {
+  //#region Hooks
+
   const t = useTranslations("dashboard.stats");
-  const { data: stats, isLoading } = useQueryRequest<DashboardStats>({
+
+  const { data: stats, isLoading } = useQueryRequest({
     queryKey: QueryKeys.stats,
-    queryFn: () => apiClient.get<DashboardStats>("/api/stats"),
+    queryFn: () => apiClient.get("/api/stats"),
   });
+
+  //#endregion
 
   const statConfigs = [
     {
       title: t("totalCafes"),
-      key: "totalCafes" as keyof DashboardStats,
+      key: "totalCafes",
       description: t("totalCafesDescription"),
     },
     {
       title: t("totalCategories"),
-      key: "totalCategories" as keyof DashboardStats,
+      key: "totalCategories",
       description: t("totalCategoriesDescription"),
     },
     {
       title: t("totalProducts"),
-      key: "totalProducts" as keyof DashboardStats,
+      key: "totalProducts",
       description: t("totalProductsDescription"),
     },
     {
       title: t("activeProducts"),
-      key: "activeProducts" as keyof DashboardStats,
+      key: "activeProducts",
       description: t("activeProductsDescription"),
     },
   ];
 
   const items = statConfigs.map((item) => ({
     title: item.title,
-    value: isLoading ? "..." : (stats?.[item.key] || 0).toString(),
+    value: isLoading ? "..." : (stats?.[item.key as keyof typeof stats] || 0).toString(),
     description: item.description,
   }));
 

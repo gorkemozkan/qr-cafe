@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
+import { parseNumericId } from "@/lib/utils";
 import { invalidatePublicCafeCache } from "@/lib/redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
@@ -17,12 +18,21 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     }
 
     const { id } = await params;
-    const productId = parseInt(id, 10);
-    if (Number.isNaN(productId)) {
+
+    let productId: number;
+
+    try {
+      productId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: product, error: fetchError } = await supabase.from("products").select("*").eq("id", productId).eq("user_id", user.id).single();
+    const { data: product, error: fetchError } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", productId)
+      .eq("user_id", user.id)
+      .single();
 
     if (fetchError) {
       return NextResponse.json({ error: "Failed to fetch product" }, { status: http.INTERNAL_SERVER_ERROR.status });
@@ -41,7 +51,10 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -55,8 +68,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     }
 
     const { id } = await params;
-    const productId = parseInt(id, 10);
-    if (Number.isNaN(productId)) {
+
+    let productId: number;
+    try {
+      productId = parseNumericId(id);
+    } catch (_error) {
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 

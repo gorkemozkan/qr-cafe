@@ -49,6 +49,10 @@ export const http = {
     message: "Payload too large",
     status: 413,
   },
+  CREATED: {
+    message: "Created",
+    status: 201,
+  },
 };
 
 export const errorMessages = {
@@ -58,7 +62,8 @@ export const errorMessages = {
   SESSION_EXPIRED: "Your session has expired. Please log in again.",
 
   INVALID_EMAIL: "Please provide a valid email address.",
-  INVALID_PASSWORD: "Password must be at least 6 characters long and contain uppercase, lowercase, number, and special character.",
+  INVALID_PASSWORD:
+    "Password must be at least 6 characters long and contain uppercase, lowercase, number, and special character.",
   PASSWORD_TOO_WEAK: "Password is too weak. Please choose a stronger password.",
   REQUIRED_FIELD: (field: string) => `${field} is required.`,
   INVALID_FORMAT: (field: string) => `${field} has an invalid format.`,
