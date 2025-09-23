@@ -85,6 +85,8 @@ const sanitaizedString = (property: string) => {
   });
 };
 
+export const currencyEnum = z.enum(["TRY", "USD", "EUR"]);
+
 export const cafeSchema = z.object({
   name: sanitaizedString("name")
     .min(1, "Name is required")
@@ -92,7 +94,7 @@ export const cafeSchema = z.object({
     .max(100, "Name must be no more than 100 characters"),
   description: sanitaizedString("description").optional(),
   logo_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
-  currency: z.enum(["TRY", "USD", "EUR"]),
+  currency: currencyEnum,
   is_active: z.boolean(),
 });
 
@@ -111,6 +113,9 @@ export const productSchema = z.object({
   image_url: z.url("Please enter a valid URL").optional().or(z.literal("")),
   is_available: z.boolean(),
   category_id: z.number().min(1, "Category is required"),
+  calory: z.number().min(0, "Calory must be non-negative").optional(),
+  preparation_time: z.number().min(0, "Preparation time must be non-negative").optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
@@ -118,3 +123,4 @@ export type SignupSchema = z.infer<typeof signupSchema>;
 export type CafeSchema = z.infer<typeof cafeSchema>;
 export type CategorySchema = z.infer<typeof categorySchema>;
 export type ProductSchema = z.infer<typeof productSchema>;
+export type CurrencyEnum = z.infer<typeof currencyEnum>;

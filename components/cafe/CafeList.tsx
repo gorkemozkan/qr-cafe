@@ -1,46 +1,47 @@
 "use client";
 
-import { FC, useCallback, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
-import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
-import CafeEditSheet from "@/components/cafe/CafeEditSheet";
-import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
-import DataTable from "@/components/common/DataTable";
-import DateView from "@/components/common/DateView";
-import { OptimizedImage } from "@/components/common/OptimizedImage";
-import QuestionDialog from "@/components/common/QuestionDialog";
-import TableActions from "@/components/common/TableActions";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useRequest } from "@/hooks/useRequest";
-import QueryKeys from "@/lib/query";
-import { cafeRepository } from "@/lib/repositories/cafe-repository";
 import { Tables } from "@/types/db";
-import { useRouter } from "next/navigation";
-import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
+import QueryKeys from "@/lib/query";
 import { QrCode } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useRequest } from "@/hooks/useRequest";
+import DateView from "@/components/common/DateView";
+import DataTable from "@/components/common/DataTable";
+import { FC, useCallback, useMemo, useState } from "react";
+import CafeEditSheet from "@/components/cafe/CafeEditSheet";
+import TableActions from "@/components/common/TableActions";
+import CafeCreateSheet from "@/components/cafe/CafeCreateSheet";
+import QuestionDialog from "@/components/common/QuestionDialog";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import QRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
+import { cafeRepository } from "@/lib/repositories/cafe-repository";
+import CafeQRPreviewDialog from "@/components/cafe/CafeQRPreviewDialog";
 
 const CafeList: FC = () => {
-  const t = useTranslations();
-  const tCafe = useTranslations("cafe");
-  const tCommon = useTranslations("common");
-
   //#region Hooks
 
   const router = useRouter();
 
+  const t = useTranslations();
+
+  const tCafe = useTranslations("cafe");
+
+  const tCommon = useTranslations("common");
+
   //#endregion
 
   //#region States
+
+  const [qrPreviewOpen, setQRPreviewOpen] = useState(false);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const [cafeToDelete, setCafeToDelete] = useState<Tables<"cafes"> | null>(null);
 
   const [cafeToEdit, setCafeToEdit] = useState<Tables<"cafes"> | null>(null);
-
-  const [qrPreviewOpen, setQRPreviewOpen] = useState(false);
 
   const [cafeForQR, setCafeForQR] = useState<Tables<"cafes"> | null>(null);
 
@@ -92,57 +93,41 @@ const CafeList: FC = () => {
         key: "logo",
         header: tCafe("table.logo"),
         cell: (_: any, row: Tables<"cafes">) => (
-          <>
-            {row.logo_url ? (
-              <OptimizedImage
-                src={row.logo_url}
-                alt={`${row.slug} logo`}
-                width={40}
-                height={40}
-                className="rounded-md border border-border"
-                fallbackSrc="/placeholder-logo.svg"
-                showSkeleton={true}
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-                <span className="text-[8px] text-center text-muted-foreground">{tCafe("table.noLogo")}</span>
-              </div>
-            )}
-          </>
+          <OptimizedImage
+            fill
+            width={40}
+            height={40}
+            src={row.logo_url}
+            sizes="40px"
+            showSkeleton={true}
+            alt={`${row.slug} logo`}
+            className="rounded border border-border"
+          />
         ),
       },
       {
         key: "name",
         header: tCafe("table.name"),
-        cell: (value: any) => (
-          <div className="w-24">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <p className="truncate text-sm">{value}</p>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{value}</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        ),
+        cell: (value) => <p className="font-mono text-sm">{value}</p>,
       },
       {
         key: "currency",
         header: tCafe("table.currency"),
-        cell: (value: any) => value || "-",
+        cell: (value) => <p className="font-mono text-sm">{value}</p>,
       },
       {
         key: "is_active",
         header: tCafe("table.status"),
         tooltipText: tCafe("table.statusTooltip"),
-        cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>,
+        cell: (value: any) => (
+          <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>
+        ),
       },
       {
         key: "created_at",
         header: tCafe("table.created"),
         tooltipText: tCafe("table.createdTooltip"),
-        cell: (value: any) => <DateView date={value} format="relative" />,
+        cell: (value: any) => <DateView date={value} format="detailed" />,
       },
       {
         key: "actions",
@@ -152,16 +137,15 @@ const CafeList: FC = () => {
           <TableActions
             onEdit={() => setCafeToEdit(row)}
             onDelete={() => handleDeleteClick(row)}
-            to={`/admin/app/cafe/${row.id}/categories`}
             additionalActions={
               <Button
                 variant="outline"
                 size="sm"
+                className="h-8 w-8 p-0"
                 onClick={(event) => {
                   event.stopPropagation();
                   handleQRCodeClick(row);
                 }}
-                className="h-8 w-8 p-0"
               >
                 <QrCode className="h-4 w-4" />
                 <span className="sr-only">{tCafe("table.qrCode")}</span>
@@ -175,30 +159,38 @@ const CafeList: FC = () => {
   );
 
   return (
-    <div>
-      {cafeForQR && <CafeQRPreviewDialog key="qr-preview" open={qrPreviewOpen} slug={cafeForQR?.slug} onOpenChange={setQRPreviewOpen} />}
+    <>
+      {cafeForQR && (
+        <CafeQRPreviewDialog
+          key="qr-preview"
+          open={qrPreviewOpen}
+          slug={cafeForQR?.slug}
+          onOpenChange={setQRPreviewOpen}
+        />
+      )}
       <DataTable
         onRowClick={(row) => {
           router.push(`/admin/app/cafe/${row.id}/categories`);
         }}
-        title={tCafe("title")}
-        actions={<CafeCreateSheet />}
         columns={columns}
+        title={tCafe("title")}
         queryKey={QueryKeys.cafes}
+        actions={<CafeCreateSheet />}
         queryFn={async () => await cafeRepository.list()}
-        emptyMessage={tCafe("noCafes")}
       />
-      {cafeToEdit && <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />}
+      {cafeToEdit && (
+        <CafeEditSheet onClose={() => setCafeToEdit(null)} cafe={cafeToEdit} onSuccess={() => setCafeToEdit(null)} />
+      )}
       <QuestionDialog
+        isLoading={isDeleting}
         open={deleteDialogOpen}
+        cancelText={tCommon("cancel")}
+        onConfirm={handleDeleteConfirm}
         onOpenChange={setDeleteDialogOpen}
         title={tCafe("deleteDialog.title")}
-        description={tCafe("deleteDialog.description", { slug: cafeToDelete?.slug || "" })}
         confirmText={tCafe("deleteDialog.confirmText")}
         confirmLoadingText={tCafe("deleteDialog.deleting")}
-        onConfirm={handleDeleteConfirm}
-        isLoading={isDeleting}
-        cancelText={tCommon("cancel")}
+        description={tCafe("deleteDialog.description", { slug: cafeToDelete?.slug || "" })}
       />
       {cafeForQR && (
         <QRPreviewDialog
@@ -212,7 +204,7 @@ const CafeList: FC = () => {
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 

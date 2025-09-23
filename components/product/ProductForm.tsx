@@ -5,7 +5,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import InputErrorMessage from "@/components/common/InputErrorMessage";
 import { OptimizedImage } from "@/components/common/OptimizedImage";
 import FilePicker from "@/components/ui/file-picker";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { BUCKET_NAMES } from "@/config";
 import { storageRepository } from "@/lib/repositories/storage-repository";
 import { type ProductSchema as ProductSchemaType, productSchema } from "@/lib/schema";
@@ -39,6 +40,9 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [removeImage, setRemoveImage] = useState(false);
+  const [customTagInput, setCustomTagInput] = useState("");
+
+  const predefinedTags = ["New", "Favorites", "Chef Special"];
 
   const getDefaultValues = (): ProductSchemaType => {
     if (props.mode === "edit" && props.product) {
@@ -49,6 +53,9 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         image_url: props.product.image_url || "",
         is_available: props.product.is_available,
         category_id: props.categoryId,
+        calory: props.product.calory || undefined,
+        preparation_time: props.product.preparation_time || undefined,
+        tags: props.product.tags || [],
       };
     }
 
@@ -59,6 +66,9 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       image_url: "",
       is_available: true,
       category_id: props.categoryId,
+      calory: undefined,
+      preparation_time: undefined,
+      tags: [],
     };
   };
 
@@ -72,6 +82,42 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     resolver: zodResolver(productSchema),
     defaultValues: getDefaultValues(),
   });
+
+  const selectedTags = watch("tags") || [];
+
+  const toggleTag = (tag: string) => {
+    const currentTags = selectedTags;
+    if (currentTags.includes(tag)) {
+      setValue(
+        "tags",
+        currentTags.filter((t) => t !== tag),
+      );
+    } else {
+      setValue("tags", [...currentTags, tag]);
+    }
+  };
+
+  const addCustomTag = () => {
+    const trimmedTag = customTagInput.trim();
+    if (trimmedTag && !selectedTags.includes(trimmedTag)) {
+      setValue("tags", [...selectedTags, trimmedTag]);
+      setCustomTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setValue(
+      "tags",
+      selectedTags.filter((tag) => tag !== tagToRemove),
+    );
+  };
+
+  const handleCustomTagKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addCustomTag();
+    }
+  };
 
   useImperativeHandle(ref, () => ({
     submitForm: () => {
@@ -137,7 +183,12 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">{t("name")} *</Label>
-        <Input id="name" {...register("name")} placeholder={t("namePlaceholder")} className={errors.name ? "border-red-500" : ""} />
+        <Input
+          id="name"
+          {...register("name")}
+          placeholder={t("namePlaceholder")}
+          className={errors.name ? "border-red-500" : ""}
+        />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
 
@@ -166,6 +217,98 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         />
         <InputErrorMessage id="price-error">{errors.price?.message}</InputErrorMessage>
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="calory">{t("calory")}</Label>
+        <Input
+          id="calory"
+          type="number"
+          min="0"
+          {...register("calory", {
+            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+          })}
+          placeholder="0"
+          className={errors.calory ? "border-red-500" : ""}
+        />
+        <InputErrorMessage id="calory-error">{errors.calory?.message}</InputErrorMessage>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="preparation_time">{t("preparation_time")}</Label>
+        <Input
+          id="preparation_time"
+          type="number"
+          min="0"
+          {...register("preparation_time", {
+            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+          })}
+          placeholder="0"
+          className={errors.preparation_time ? "border-red-500" : ""}
+        />
+        <InputErrorMessage id="preparation_time-error">{errors.preparation_time?.message}</InputErrorMessage>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t("tags")}</Label>
+
+        {/* Predefined Tags */}
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">{t("predefinedTags")}</p>
+          <div className="flex flex-wrap gap-2">
+            {predefinedTags.map((tag) => (
+              <Badge
+                key={tag}
+                variant={selectedTags.includes(tag) ? "default" : "outline"}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => toggleTag(tag)}
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom Tag Input */}
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">{t("customTags")}</p>
+          <div className="flex gap-2">
+            <Input
+              placeholder={t("addCustomTag")}
+              value={customTagInput}
+              onChange={(e) => setCustomTagInput(e.target.value)}
+              onKeyPress={handleCustomTagKeyPress}
+              className="flex-1"
+            />
+            <Button type="button" variant="outline" size="sm" onClick={addCustomTag} disabled={!customTagInput.trim()}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Selected Tags */}
+        {selectedTags.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">{t("selectedTags")}</p>
+            <div className="flex flex-wrap gap-2">
+              {selectedTags.map((tag) => (
+                <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="ml-1 hover:bg-secondary-foreground/20 rounded-full p-0.5"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <InputErrorMessage id="tags-error">{errors.tags?.message}</InputErrorMessage>
+      </div>
+
       <div className="space-y-2">
         <FilePicker
           id="image"
@@ -200,9 +343,15 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
+        <Switch
+          id="is_available"
+          checked={isAvailable}
+          onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
+        />
         <Label htmlFor="is_available">{t("isAvailable")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isAvailable ? t("availableDescription") : t("unavailableDescription")}</p>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isAvailable ? t("availableDescription") : t("unavailableDescription")}
+        </p>
       </div>
     </form>
   );

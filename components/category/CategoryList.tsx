@@ -1,31 +1,36 @@
 "use client";
 
-import { FC, useState, useCallback } from "react";
-import { useTranslations } from "next-intl";
-import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
-import CategoryEditSheet from "@/components/category/CategoryEditModal";
-import DataTable from "@/components/common/DataTable";
-import DateView from "@/components/common/DateView";
-import { OptimizedImage } from "@/components/common/OptimizedImage";
-import QuestionDialog from "@/components/common/QuestionDialog";
-import TableActions from "@/components/common/TableActions";
-import { Badge } from "@/components/ui/badge";
-import { useRequest } from "@/hooks/useRequest";
 import QueryKeys from "@/lib/query";
-import { categoryRepository } from "@/lib/repositories/category-repository";
 import { Tables } from "@/types/db";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Badge } from "@/components/ui/badge";
+import { useRequest } from "@/hooks/useRequest";
+import { FC, useState, useCallback } from "react";
+import DateView from "@/components/common/DateView";
+import DataTable from "@/components/common/DataTable";
+import TableActions from "@/components/common/TableActions";
+import QuestionDialog from "@/components/common/QuestionDialog";
+import { OptimizedImage } from "@/components/common/OptimizedImage";
+import CategoryEditSheet from "@/components/category/CategoryEditModal";
+import { categoryRepository } from "@/lib/repositories/category-repository";
+import CategoryCreateSheet from "@/components/category/CategoryCreateModal";
 
 interface Props {
   cafeId: number;
 }
 
 const CategoryList: FC<Props> = (props) => {
+  //#region Hooks
+
   const t = useTranslations();
-  const tCategory = useTranslations("category");
-  const tCommon = useTranslations("common");
 
   const router = useRouter();
+
+  const tCategory = useTranslations("category");
+
+  const tCommon = useTranslations("common");
+
   //#endregion
 
   //#region States
@@ -87,40 +92,34 @@ const CategoryList: FC<Props> = (props) => {
       key: "image",
       header: tCategory("table.image"),
       cell: (_: any, row: Tables<"categories">) => (
-        <>
-          {row.image_url ? (
-            <OptimizedImage
-              src={row.image_url}
-              alt={`${row.name} image`}
-              width={40}
-              height={40}
-              className="rounded-md border border-border w-10 h-10 "
-              objectFit="cover"
-              fallbackSrc="/placeholder-logo.svg"
-              showSkeleton={true}
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">{tCategory("table.noImage")}</span>
-            </div>
-          )}
-        </>
+        <OptimizedImage
+          fill
+          width={40}
+          height={40}
+          src={row.image_url}
+          sizes="40px"
+          showSkeleton={true}
+          alt={`${row.name} image`}
+          className="rounded border border-border"
+        />
       ),
     },
     {
       key: "name",
       header: tCategory("table.name"),
-      cell: (value: any) => <span className="font-medium">{value}</span>,
+      cell: (value: any) => <p className="font-medium">{value}</p>,
     },
     {
       key: "sort_order",
       header: tCategory("table.order"),
-      cell: (value: any) => <span className="font-medium ">{value}</span>,
+      cell: (value: any) => <p className="font-medium ">{value}</p>,
     },
     {
       key: "is_active",
       header: tCategory("table.status"),
-      cell: (value: any) => <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>,
+      cell: (value: any) => (
+        <Badge variant={value ? "active" : "inactive"}>{value ? tCommon("active") : tCommon("inactive")}</Badge>
+      ),
     },
     {
       key: "created_at",
@@ -153,18 +152,21 @@ const CategoryList: FC<Props> = (props) => {
         actions={<CategoryCreateSheet cafeId={props.cafeId} />}
         queryKey={QueryKeys.categoriesByCafe(props.cafeId.toString())}
         queryFn={async () => await categoryRepository.listByCafe(props.cafeId)}
-        emptyMessage={tCategory("noCategories")}
       />
       {categoryToEdit && (
-        <CategoryEditSheet onClose={() => setCategoryToEdit(null)} category={categoryToEdit} onSuccess={() => setCategoryToEdit(null)} />
+        <CategoryEditSheet
+          category={categoryToEdit}
+          onClose={() => setCategoryToEdit(null)}
+          onSuccess={() => setCategoryToEdit(null)}
+        />
       )}
       <QuestionDialog
-        confirmText={tCommon("delete")}
         open={deleteDialogOpen}
-        title={tCategory("deleteCategory")}
         isLoading={isDeleting}
         onConfirm={handleDeleteConfirm}
+        confirmText={tCommon("delete")}
         onOpenChange={setDeleteDialogOpen}
+        title={tCategory("deleteCategory")}
         description={t("category.deleteDialog.description", { name: categoryToDelete?.name || "" })}
       />
     </div>

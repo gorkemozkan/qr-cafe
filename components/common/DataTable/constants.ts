@@ -16,3 +16,5 @@ export const KEYBOARD_KEYS = {
   ENTER: "Enter",
   SPACE: " ",
 } as const;
+
+export const MAX_FILE_SIZE_FOR_STORAGE = 5 * 1024 * 1024; // 5MB

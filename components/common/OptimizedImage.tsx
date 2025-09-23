@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +18,6 @@ interface OptimizedImageProps {
   sizes?: string;
   fill?: boolean;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
-  clickable?: boolean;
 }
 
 export function OptimizedImage({
@@ -35,7 +33,6 @@ export function OptimizedImage({
   sizes,
   fill = false,
   objectFit = "cover",
-  clickable = false,
 }: OptimizedImageProps) {
   const isValidSrc = src && src.trim().length > 0;
 
@@ -46,8 +43,6 @@ export function OptimizedImage({
   const [hasError, setHasError] = useState(false);
 
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
-
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -63,22 +58,15 @@ export function OptimizedImage({
     }
   };
 
-  const handleImageClick = () => {
-    if (clickable && currentSrc) {
-      setIsPreviewOpen(true);
-    }
-  };
+  const imageClasses = cn("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100", className);
 
-  const imageClasses = cn("transition-opacity duration-300", isLoading ? "opacity-0" : "opacity-100", clickable && "cursor-pointer", className);
-
-  // If no valid src is provided and no fallback, render fallback UI
   if (!currentSrc || currentSrc.trim().length === 0) {
     return (
       <div
-        className={cn("flex items-center justify-center bg-muted text-muted-foreground", className)}
+        className={cn("flex items-center justify-center bg-muted text-muted-foreground text-center", className)}
         style={{ width: width || 100, height: height || 100 }}
       >
-        <span className="text-xs">Image unavailable</span>
+        <span>-</span>
       </div>
     );
   }
@@ -93,9 +81,8 @@ export function OptimizedImage({
       </div>
     );
   }
-
-  const imageElement = (
-    <div className="relative">
+  return (
+    <div className="relative" style={{ width: width || 100, height: height || 100 }}>
       {showSkeleton && isLoading && (
         <Skeleton className={cn("absolute inset-0", className)} style={fill ? undefined : { width: width || 100, height: height || 100 }} />
       )}
@@ -113,34 +100,8 @@ export function OptimizedImage({
         style={fill ? { objectFit } : undefined}
         onLoad={handleLoad}
         onError={handleError}
-        onClick={clickable ? handleImageClick : undefined}
       />
     </div>
-  );
-
-  return (
-    <>
-      {imageElement}
-
-      <Drawer open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DrawerContent className="max-w-none w-full h-[90vh]">
-          <DrawerHeader>
-            <DrawerTitle>{alt}</DrawerTitle>
-          </DrawerHeader>
-          <div className="flex items-center justify-center p-4">
-            <Image
-              src={currentSrc}
-              alt={alt}
-              width={300}
-              height={300}
-              className="max-w-full max-h-full object-contain rounded-lg"
-              priority={true}
-              quality={100}
-            />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    </>
   );
 }
 

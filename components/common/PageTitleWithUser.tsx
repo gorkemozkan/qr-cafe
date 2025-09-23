@@ -1,13 +1,17 @@
 "use client";
 
-import UserDropdown from "@/components/auth/UserDropdown";
+import { useTranslations } from "next-intl";
 import PageTitle from "@/components/common/PageTitle";
+import UserDropdown from "@/components/auth/UserDropdown";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
-import { useTranslations } from "next-intl";
 
 const PageTitleWithUser = () => {
+  //#region Hooks
+
   const t = useTranslations("dashboard");
+
+  //#endregion
 
   return (
     <PageTitle

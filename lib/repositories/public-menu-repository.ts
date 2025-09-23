@@ -8,6 +8,9 @@ export interface PublicProduct {
   price: number | null;
   image_url: string | null;
   is_available: boolean;
+  calory: number | null;
+  preparation_time: number | null;
+  tags: string[] | null;
 }
 
 export interface PublicCategory {

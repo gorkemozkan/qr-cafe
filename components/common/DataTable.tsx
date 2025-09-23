@@ -5,15 +5,15 @@ import { useTranslations } from "next-intl";
 import { useDataTable } from "@/hooks/useDataTable";
 import { useResponsive } from "@/hooks/useResponsive";
 import { useSorting } from "@/hooks/useSorting";
-import { DataTableHeader } from "./DataTable/DataTableHeader";
+import { DataTableHeader } from "@/components/common/DataTable/DataTableHeader";
 import { DataTableContent } from "./DataTable/DataTableContent";
 import { DataTableProps } from "./DataTable/types";
-import { DEFAULT_EMPTY_MESSAGE, DEFAULT_MOBILE_BREAKPOINT, DEFAULT_STALE_TIME, DEFAULT_GC_TIME } from "./DataTable/constants";
+import { DEFAULT_MOBILE_BREAKPOINT, DEFAULT_STALE_TIME, DEFAULT_GC_TIME } from "./DataTable/constants";
+
 function DataTable<T extends { id?: number | string }>({
   columns,
   queryKey,
   queryFn,
-  emptyMessage = DEFAULT_EMPTY_MESSAGE,
   staleTime = DEFAULT_STALE_TIME,
   gcTime = DEFAULT_GC_TIME,
   actions,
@@ -24,17 +24,9 @@ function DataTable<T extends { id?: number | string }>({
   sortConfig,
   onSortOrderChange,
 }: DataTableProps<T>) {
-  const t = useTranslations();
+  const tCommon = useTranslations("common");
 
-  const resolvedEmptyMessage =
-    emptyMessage.startsWith("common.") ||
-    emptyMessage.startsWith("product.") ||
-    emptyMessage.startsWith("category.") ||
-    emptyMessage.startsWith("cafe.")
-      ? t(emptyMessage)
-      : emptyMessage;
-
-  const { data, isLoading, refetch, isRefetching } = useDataTable({
+  const { data, isLoading, isRefetching } = useDataTable({
     queryKey,
     queryFn,
     staleTime,
@@ -52,8 +44,7 @@ function DataTable<T extends { id?: number | string }>({
 
   return (
     <div className="space-y-4">
-      <DataTableHeader title={title} actions={actions} isRefetching={isRefetching} onRefetch={refetch} />
-
+      <DataTableHeader title={title} actions={actions} />
       {enableSorting ? (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <DataTableContent
@@ -61,7 +52,7 @@ function DataTable<T extends { id?: number | string }>({
             columns={columns}
             isLoading={isLoading}
             isRefetching={isRefetching}
-            emptyMessage={resolvedEmptyMessage}
+            emptyMessage={tCommon("noDataAvailable")}
             isMobile={isMobile}
             onRowClick={onRowClick}
             enableSorting={enableSorting}
@@ -73,7 +64,7 @@ function DataTable<T extends { id?: number | string }>({
           columns={columns}
           isLoading={isLoading}
           isRefetching={isRefetching}
-          emptyMessage={resolvedEmptyMessage}
+          emptyMessage={tCommon("noDataAvailable")}
           isMobile={isMobile}
           onRowClick={onRowClick}
           enableSorting={false}

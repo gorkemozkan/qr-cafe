@@ -3,7 +3,7 @@
 import { Turnstile } from "@marsidev/react-turnstile";
 import { FC, useEffect } from "react";
 import { Alert } from "@/components/ui/alert";
-import { isDevelopment } from "@/lib/env";
+import { isNextDevelopment, isNextStaging } from "@/lib/env";
 
 interface Props {
   onError: () => void;
@@ -12,20 +12,21 @@ interface Props {
 }
 
 const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+const paypassCaptcha = isNextDevelopment || isNextStaging;
 
 const Captcha: FC<Props> = (props) => {
   //#region Effects
 
   useEffect(() => {
-    if (isDevelopment) {
+    if (paypassCaptcha) {
       props.onVerify("dev-bypass-token");
     }
   }, []);
 
   //#endregion
 
-  if (isDevelopment) {
-    return <Alert variant="success">✓ CAPTCHA verification bypassed (development mode)</Alert>;
+  if (paypassCaptcha) {
+    return <Alert variant="success">✓ CAPTCHA verification bypassed</Alert>;
   }
 
   if (!siteKey) {

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
-import { invalidatePublicCafeCache } from "@/lib/redis";
 import { categorySchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
+import { invalidatePublicCafeCache } from "@/lib/redis";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -12,6 +12,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const supabase = await createClient();
+
     const {
       data: { user },
       error: authError,
@@ -22,6 +23,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
+
     const { id, ...updateData } = body;
 
     if (!id) {
@@ -29,6 +31,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const validationResult = categorySchema.partial().safeParse(updateData);
+
     if (!validationResult.success) {
       return NextResponse.json({ error: "Invalid data", details: validationResult.error.format() }, { status: http.BAD_REQUEST.status });
     }

@@ -34,9 +34,13 @@ interface Props {
 
 const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
   const t = useTranslations("category.form");
+
   const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [uploadError, setUploadError] = useState<string | null>(null);
+
   const [isUploading, setIsUploading] = useState(false);
+
   const [removeImage, setRemoveImage] = useState(false);
 
   const getDefaultValues = (): CategorySchema => {

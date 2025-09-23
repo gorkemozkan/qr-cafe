@@ -31,7 +31,7 @@ export type Database = {
       cafes: {
         Row: {
           created_at: string;
-          currency: string | null;
+          currency: Database["public"]["Enums"]["currency_type"];
           description: string | null;
           id: number;
           is_active: boolean;
@@ -42,7 +42,7 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
-          currency?: string | null;
+          currency: Database["public"]["Enums"]["currency_type"];
           description?: string | null;
           id?: number;
           is_active?: boolean;
@@ -53,7 +53,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          currency?: string | null;
+          currency?: Database["public"]["Enums"]["currency_type"];
           description?: string | null;
           id?: number;
           is_active?: boolean;
@@ -111,6 +111,7 @@ export type Database = {
       products: {
         Row: {
           cafe_id: number;
+          calory: number | null;
           category_id: number;
           created_at: string;
           description: string | null;
@@ -118,11 +119,14 @@ export type Database = {
           image_url: string | null;
           is_available: boolean;
           name: string;
+          preparation_time: number | null;
           price: number | null;
+          tags: string[] | null;
           user_id: string;
         };
         Insert: {
           cafe_id: number;
+          calory?: number | null;
           category_id: number;
           created_at?: string;
           description?: string | null;
@@ -130,11 +134,14 @@ export type Database = {
           image_url?: string | null;
           is_available?: boolean;
           name: string;
+          preparation_time?: number | null;
           price?: number | null;
+          tags?: string[] | null;
           user_id: string;
         };
         Update: {
           cafe_id?: number;
+          calory?: number | null;
           category_id?: number;
           created_at?: string;
           description?: string | null;
@@ -142,7 +149,9 @@ export type Database = {
           image_url?: string | null;
           is_available?: boolean;
           name?: string;
+          preparation_time?: number | null;
           price?: number | null;
+          tags?: string[] | null;
           user_id?: string;
         };
         Relationships: [
@@ -170,7 +179,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      currency_type: "TRY" | "USD" | "EUR";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -183,7 +192,9 @@ type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
-  DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"]) | { schema: keyof DatabaseWithoutInternals },
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -269,7 +280,9 @@ export type Enums<
     : never;
 
 export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
@@ -288,6 +301,8 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      currency_type: ["TRY", "USD", "EUR"],
+    },
   },
 } as const;

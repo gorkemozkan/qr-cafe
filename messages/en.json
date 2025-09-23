@@ -139,7 +139,8 @@
       "title": "Edit Cafe",
       "description": "Update the cafe information below.",
       "updateButton": "Update Cafe",
-      "updating": "Updating..."
+      "updating": "Updating...",
+      "cafeUpdated": "Cafe updated successfully!"
     },
     "qrCode": {
       "title": "QR Code Preview",
@@ -245,6 +246,8 @@
       "name": "Name",
       "description": "Description",
       "price": "Price",
+      "calory": "Calories",
+      "preparation_time": "Prep Time",
       "status": "Status",
       "created": "Created",
       "actions": "Actions",
@@ -259,6 +262,13 @@
       "descriptionPlaceholder": "Describe your product...",
       "price": "Price",
       "pricePlaceholder": "0.00",
+      "calory": "Calories",
+      "preparation_time": "Preparation Time (min)",
+      "tags": "Tags",
+      "predefinedTags": "Predefined Tags",
+      "customTags": "Custom Tags",
+      "addCustomTag": "Add custom tag...",
+      "selectedTags": "Selected Tags",
       "productImage": "Product Image",
       "currentImageText": "Current image will be replaced if you select a new file",
       "currentProductImage": "Current product image",

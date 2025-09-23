@@ -75,24 +75,16 @@ const ProductList: FC<Props> = (props) => {
       key: "image",
       header: tProduct("table.image"),
       cell: (_: any, row: Tables<"products">) => (
-        <>
-          {row.image_url ? (
-            <OptimizedImage
-              src={row.image_url}
-              alt={`${row.name} image`}
-              width={40}
-              height={40}
-              className="rounded-md border border-border w-10 h-10 "
-              objectFit="cover"
-              fallbackSrc="/placeholder-logo.svg"
-              showSkeleton={true}
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-md border border-border flex items-center justify-center ">
-              <span className="text-[8px] text-center text-muted-foreground">{tProduct("table.noImage")}</span>
-            </div>
-          )}
-        </>
+        <OptimizedImage
+          fill
+          width={40}
+          height={40}
+          src={row.image_url}
+          sizes="40px"
+          showSkeleton={true}
+          alt={`${row.name} image`}
+          className="rounded border border-border"
+        />
       ),
     },
     {
@@ -126,10 +118,22 @@ const ProductList: FC<Props> = (props) => {
       cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
+      key: "calory",
+      header: tProduct("table.calory"),
+      cell: (value: any) => <span className="font-mono">{value ? `${value} kcal` : "-"}</span>,
+    },
+    {
+      key: "preparation_time",
+      header: tProduct("table.preparation_time"),
+      cell: (value: any) => <span className="font-mono">{value ? `${value} min` : "-"}</span>,
+    },
+    {
       key: "is_available",
       header: tProduct("table.status"),
       cell: (value: any) => (
-        <Badge variant={value ? "active" : "inactive"}>{value ? tProduct("table.available") : tProduct("table.unavailable")}</Badge>
+        <Badge variant={value ? "active" : "inactive"}>
+          {value ? tProduct("table.available") : tProduct("table.unavailable")}
+        </Badge>
       ),
     },
     {
@@ -141,11 +145,15 @@ const ProductList: FC<Props> = (props) => {
       key: "actions",
       header: tProduct("table.actions"),
       className: "flex justify-end",
-      cell: (_: any, row: Tables<"products">) => <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
+      cell: (_: any, row: Tables<"products">) => (
+        <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />
+      ),
     },
   ];
 
-  const queryKey = props.categoryId ? QueryKeys.productsByCategory(props.categoryId.toString()) : QueryKeys.productsByCafe(props.cafeId.toString());
+  const queryKey = props.categoryId
+    ? QueryKeys.productsByCategory(props.categoryId.toString())
+    : QueryKeys.productsByCafe(props.cafeId.toString());
 
   const queryFn = useCallback(async () => {
     if (props.categoryId) {
@@ -164,7 +172,6 @@ const ProductList: FC<Props> = (props) => {
         columns={columns}
         queryKey={queryKey}
         queryFn={queryFn}
-        emptyMessage={tProduct("noProducts")}
       />
       {productToEdit && (
         <ProductEditSheet

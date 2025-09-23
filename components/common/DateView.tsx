@@ -3,7 +3,6 @@
 import { format as formatDate, formatDistance, isValid } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { tr } from "date-fns/locale";
-import { de } from "date-fns/locale";
 import { FC } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
