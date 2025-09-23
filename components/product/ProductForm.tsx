@@ -49,6 +49,8 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         image_url: props.product.image_url || "",
         is_available: props.product.is_available,
         category_id: props.categoryId,
+        calory: props.product.calory || undefined,
+        preparation_time: props.product.preparation_time || undefined,
       };
     }
 
@@ -59,6 +61,8 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       image_url: "",
       is_available: true,
       category_id: props.categoryId,
+      calory: undefined,
+      preparation_time: undefined,
     };
   };
 
@@ -137,7 +141,12 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">{t("name")} *</Label>
-        <Input id="name" {...register("name")} placeholder={t("namePlaceholder")} className={errors.name ? "border-red-500" : ""} />
+        <Input
+          id="name"
+          {...register("name")}
+          placeholder={t("namePlaceholder")}
+          className={errors.name ? "border-red-500" : ""}
+        />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
 
@@ -165,6 +174,36 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
           className={errors.price ? "border-red-500" : ""}
         />
         <InputErrorMessage id="price-error">{errors.price?.message}</InputErrorMessage>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="calory">{t("calory")}</Label>
+        <Input
+          id="calory"
+          type="number"
+          min="0"
+          {...register("calory", {
+            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+          })}
+          placeholder="0"
+          className={errors.calory ? "border-red-500" : ""}
+        />
+        <InputErrorMessage id="calory-error">{errors.calory?.message}</InputErrorMessage>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="preparation_time">{t("preparation_time")}</Label>
+        <Input
+          id="preparation_time"
+          type="number"
+          min="0"
+          {...register("preparation_time", {
+            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+          })}
+          placeholder="0"
+          className={errors.preparation_time ? "border-red-500" : ""}
+        />
+        <InputErrorMessage id="preparation_time-error">{errors.preparation_time?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
         <FilePicker
@@ -200,9 +239,15 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
+        <Switch
+          id="is_available"
+          checked={isAvailable}
+          onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
+        />
         <Label htmlFor="is_available">{t("isAvailable")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isAvailable ? t("availableDescription") : t("unavailableDescription")}</p>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isAvailable ? t("availableDescription") : t("unavailableDescription")}
+        </p>
       </div>
     </form>
   );
