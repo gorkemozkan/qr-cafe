@@ -62,7 +62,7 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
           <div className="flex justify-between items-start w-full gap-4 ">
             <div>
               <div className="flex items-start gap-2 mb-2">
-                <p className="font-semibold flex-shrink-0 text-gray-900 dark:text-gray-100">{product.name}</p>
+                <p className="font-semibold flex-shrink-0 text-gray-900">{product.name}</p>
                 {product.tags && product.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-0.5">
                     {product.tags.map((tag) => {
