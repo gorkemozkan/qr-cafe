@@ -115,6 +115,7 @@ export const productSchema = z.object({
   category_id: z.number().min(1, "Category is required"),
   calory: z.number().min(0, "Calory must be non-negative").optional(),
   preparation_time: z.number().min(0, "Preparation time must be non-negative").optional(),
+  tags: z.array(z.string()).optional(),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

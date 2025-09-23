@@ -111,6 +111,7 @@ export type Database = {
       products: {
         Row: {
           cafe_id: number;
+          calory: number | null;
           category_id: number;
           created_at: string;
           description: string | null;
@@ -118,13 +119,14 @@ export type Database = {
           image_url: string | null;
           is_available: boolean;
           name: string;
-          price: number | null;
-          user_id: string;
-          calory: number | null;
           preparation_time: number | null;
+          price: number | null;
+          tags: string[] | null;
+          user_id: string;
         };
         Insert: {
           cafe_id: number;
+          calory?: number | null;
           category_id: number;
           created_at?: string;
           description?: string | null;
@@ -132,13 +134,14 @@ export type Database = {
           image_url?: string | null;
           is_available?: boolean;
           name: string;
-          price?: number | null;
-          user_id: string;
-          calory?: number | null;
           preparation_time?: number | null;
+          price?: number | null;
+          tags?: string[] | null;
+          user_id: string;
         };
         Update: {
           cafe_id?: number;
+          calory?: number | null;
           category_id?: number;
           created_at?: string;
           description?: string | null;
@@ -146,10 +149,10 @@ export type Database = {
           image_url?: string | null;
           is_available?: boolean;
           name?: string;
-          price?: number | null;
-          user_id?: string;
-          calory?: number | null;
           preparation_time?: number | null;
+          price?: number | null;
+          tags?: string[] | null;
+          user_id?: string;
         };
         Relationships: [
           {

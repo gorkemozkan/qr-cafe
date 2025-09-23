@@ -5,6 +5,7 @@ import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Clock, Flame } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface PublicProduct {
   id: number;
@@ -15,6 +16,7 @@ interface PublicProduct {
   is_available: boolean;
   calory: number | null;
   preparation_time: number | null;
+  tags: string[] | null;
 }
 
 interface Props {
@@ -23,6 +25,31 @@ interface Props {
 }
 
 const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
+  const getTagVariant = (tag: string) => {
+    switch (tag.toLowerCase()) {
+      case "new":
+        return "default";
+      case "favorites":
+        return "secondary";
+      case "chef special":
+        return "destructive";
+      default:
+        return "outline";
+    }
+  };
+
+  const getTagStyle = (tag: string) => {
+    const predefinedTags = ["new", "favorites", "chef special"];
+    const isPredefined = predefinedTags.includes(tag.toLowerCase());
+    
+    if (isPredefined) {
+      return "";
+    }
+    
+    // Custom tags get a special style
+    return "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-700";
+  };
+
   return (
     <div
       key={product.id}
@@ -34,7 +61,27 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
         >
           <div className="flex justify-between items-start w-full gap-4 ">
             <div>
-              <p className="font-semibold flex-shrink-0">{product.name}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="font-semibold flex-shrink-0">{product.name}</p>
+                {product.tags && product.tags.length > 0 && (
+                  <div className="flex gap-1">
+                    {product.tags.map((tag) => {
+                      const predefinedTags = ["new", "favorites", "chef special"];
+                      const isPredefined = predefinedTags.includes(tag.toLowerCase());
+                      
+                      return (
+                        <Badge
+                          key={tag}
+                          variant={isPredefined ? getTagVariant(tag) as any : "outline"}
+                          className={`text-xs ${!isPredefined ? getTagStyle(tag) : ""}`}
+                        >
+                          {tag}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
               {product.description && (
                 <p className="text-gray-500  text-xs mt-1 leading-relaxed font-normal italic">{product.description}</p>
               )}
