@@ -25,31 +25,6 @@ interface Props {
 }
 
 const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
-  const getTagVariant = (tag: string) => {
-    switch (tag.toLowerCase()) {
-      case "new":
-        return "default";
-      case "favorites":
-        return "secondary";
-      case "chef special":
-        return "destructive";
-      default:
-        return "outline";
-    }
-  };
-
-  const getTagStyle = (tag: string) => {
-    const predefinedTags = ["new", "favorites", "chef special"];
-    const isPredefined = predefinedTags.includes(tag.toLowerCase());
-
-    if (isPredefined) {
-      return "";
-    }
-
-    // Custom tags get a special style
-    return "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-700";
-  };
-
   return (
     <div
       key={product.id}
@@ -66,14 +41,11 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                 {product.tags && product.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-0.5">
                     {product.tags.map((tag) => {
-                      const predefinedTags = ["new", "favorites", "chef special"];
-                      const isPredefined = predefinedTags.includes(tag.toLowerCase());
-
                       return (
                         <Badge
                           key={tag}
-                          variant={isPredefined ? (getTagVariant(tag) as any) : "outline"}
-                          className={`text-xs px-2 py-0.5 rounded-full transition-all duration-200 hover:scale-105 ${!isPredefined ? getTagStyle(tag) : ""}`}
+                          variant="outline"
+                          className={`text-xs px-2 py-0.5 rounded-full transition-all duration-200 hover:scale-105`}
                         >
                           {tag}
                         </Badge>
@@ -95,7 +67,7 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
               {(product.calory && product.calory > 0) || (product.preparation_time && product.preparation_time > 0) ? (
                 <div className="flex items-center gap-2.5 mt-3">
                   {product.calory && product.calory > 0 && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-full border border-orange-200/60 dark:border-orange-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-orange-300/70 dark:hover:border-orange-700/60">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5  rounded-full border border-orange-200/60 dark:border-orange-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-orange-300/70 dark:hover:border-orange-700/60">
                       <Flame className="w-3.5 h-3.5 text-orange-500 dark:text-orange-400 transition-colors duration-200" />
                       <span className="text-xs font-semibold text-orange-700 dark:text-orange-300 transition-colors duration-200">
                         {product.calory} kcal
@@ -104,7 +76,7 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                   )}
 
                   {product.preparation_time && product.preparation_time > 0 && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-full border border-blue-200/60 dark:border-blue-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-blue-300/70 dark:hover:border-blue-700/60">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-blue-200/60 dark:border-blue-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-blue-300/70 dark:hover:border-blue-700/60">
                       <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 transition-colors duration-200" />
                       <span className="text-xs font-semibold text-blue-700 dark:text-blue-300 transition-colors duration-200">
                         {product.preparation_time} dk
