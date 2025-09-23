@@ -118,10 +118,22 @@ const ProductList: FC<Props> = (props) => {
       cell: (value: any) => <span className="font-mono">{value ? `${parseFloat(value).toFixed(2)}` : "-"}</span>,
     },
     {
+      key: "calory",
+      header: tProduct("table.calory"),
+      cell: (value: any) => <span className="font-mono">{value ? `${value} kcal` : "-"}</span>,
+    },
+    {
+      key: "preparation_time",
+      header: tProduct("table.preparation_time"),
+      cell: (value: any) => <span className="font-mono">{value ? `${value} min` : "-"}</span>,
+    },
+    {
       key: "is_available",
       header: tProduct("table.status"),
       cell: (value: any) => (
-        <Badge variant={value ? "active" : "inactive"}>{value ? tProduct("table.available") : tProduct("table.unavailable")}</Badge>
+        <Badge variant={value ? "active" : "inactive"}>
+          {value ? tProduct("table.available") : tProduct("table.unavailable")}
+        </Badge>
       ),
     },
     {
@@ -133,11 +145,15 @@ const ProductList: FC<Props> = (props) => {
       key: "actions",
       header: tProduct("table.actions"),
       className: "flex justify-end",
-      cell: (_: any, row: Tables<"products">) => <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />,
+      cell: (_: any, row: Tables<"products">) => (
+        <TableActions onEdit={() => setProductToEdit(row)} onDelete={() => handleDeleteClick(row)} />
+      ),
     },
   ];
 
-  const queryKey = props.categoryId ? QueryKeys.productsByCategory(props.categoryId.toString()) : QueryKeys.productsByCafe(props.cafeId.toString());
+  const queryKey = props.categoryId
+    ? QueryKeys.productsByCategory(props.categoryId.toString())
+    : QueryKeys.productsByCafe(props.cafeId.toString());
 
   const queryFn = useCallback(async () => {
     if (props.categoryId) {
