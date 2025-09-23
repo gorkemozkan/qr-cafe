@@ -59,13 +59,17 @@ export const getSupabaseEnvironment = () => {
     },
   };
 
-  const environmentConfig = isNextProduction
-    ? environments.main
-    : isNextStaging
-      ? environments.staging
-      : isNextDevelopment
-        ? environments.development
-        : environments.development;
+  const environmentConfig = (() => {
+    if (isNextProduction) {
+      return environments.main;
+    }
+
+    if (isNextStaging) {
+      return environments.staging;
+    }
+
+    return environments.development;
+  })();
 
   if (!environmentConfig.supabaseUrl || !environmentConfig.supabaseAnonKey) {
     throw new Error(`
