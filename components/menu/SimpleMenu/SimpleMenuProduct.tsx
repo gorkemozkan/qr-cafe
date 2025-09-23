@@ -44,7 +44,7 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                       return (
                         <Badge
                           key={tag}
-                          variant="outline"
+                          variant="secondary"
                           className={`text-xs px-2 py-0.5 rounded-full transition-all duration-200 hover:scale-105`}
                         >
                           {tag}
