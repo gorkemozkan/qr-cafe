@@ -10,10 +10,9 @@ drop policy "Enable update for users based on user_id" on "public"."categories";
 
 drop policy "Enable update for users based on user_id" on "public"."products";
 
-CREATE INDEX cafes_user_id_idx ON public.cafes USING btree (user_id);
+CREATE INDEX IF NOT EXISTS cafes_user_id_idx ON public.cafes USING btree (user_id);
 
 CREATE INDEX idx_categories_cafe_id ON public.categories USING btree (cafe_id);
-
 
   create policy "Delete own cafes"
   on "public"."cafes"
