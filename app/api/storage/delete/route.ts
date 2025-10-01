@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
-import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { checkUploadRateLimit } from "@/lib/rate-limiter-redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
@@ -10,7 +10,8 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Invalid request origin" }, { status: http.INVALID_REQUEST_ORIGIN.status });
     }
 
-    if (!uploadRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkUploadRateLimit(request);
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
         { error: "Too many delete attempts. Please try again later." },
         { status: http.TOO_MANY_REQUESTS.status },

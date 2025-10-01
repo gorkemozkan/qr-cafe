@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
-import { authRateLimiter } from "@/lib/rate-limiter";
+import { checkAuthRateLimit } from "@/lib/rate-limiter-redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
@@ -13,9 +13,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    if (!authRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkAuthRateLimit(request);
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
-        { error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 900000), success: false },
+        { error: errorMessages.RATE_LIMIT_EXCEEDED(rateLimitResult.resetTime), success: false },
         { status: http.TOO_MANY_REQUESTS.status },
       );
     }
