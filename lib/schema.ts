@@ -127,6 +127,18 @@ export const productSchema = z.object({
       }, "Tag contains potentially dangerous content"),
     )
     .optional(),
+  allergens: z
+    .array(
+      z.string().refine((val) => {
+        try {
+          sanitizeXSS(val);
+          return true;
+        } catch {
+          return false;
+        }
+      }, "Allergen contains potentially dangerous content"),
+    )
+    .optional(),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

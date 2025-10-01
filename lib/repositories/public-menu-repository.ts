@@ -11,6 +11,7 @@ export interface PublicProduct {
   calory: number | null;
   preparation_time: number | null;
   tags: string[] | null;
+  allergens: string[] | null;
 }
 
 export interface PublicCategory {

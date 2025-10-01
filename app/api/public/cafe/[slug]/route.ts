@@ -70,7 +70,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         .order("created_at", { ascending: true }),
       supabase
         .from("products")
-        .select("id, name, description, price, image_url, is_available, category_id, calory, preparation_time, tags")
+        .select(
+          "id, name, description, price, image_url, is_available, category_id, calory, preparation_time, tags, allergens",
+        )
         .eq("cafe_id", cafe.id)
         .eq("is_available", true)
         .order("created_at", { ascending: true }),

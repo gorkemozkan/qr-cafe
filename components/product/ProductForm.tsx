@@ -43,6 +43,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   const [customTagInput, setCustomTagInput] = useState("");
 
   const predefinedTags = ["New", "Favorites", "Chef Special"];
+  const predefinedAllergens = ["Nuts", "Dairy", "Gluten", "Eggs", "Soy", "Fish", "Shellfish", "Sesame"];
 
   const getDefaultValues = (): ProductSchemaType => {
     if (props.mode === "edit" && props.product) {
@@ -56,6 +57,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         calory: props.product.calory || undefined,
         preparation_time: props.product.preparation_time || undefined,
         tags: props.product.tags || [],
+        allergens: props.product.allergens || [],
       };
     }
 
@@ -69,6 +71,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       calory: undefined,
       preparation_time: undefined,
       tags: [],
+      allergens: [],
     };
   };
 
@@ -84,6 +87,7 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
   });
 
   const selectedTags = watch("tags") || [];
+  const selectedAllergens = watch("allergens") || [];
 
   const toggleTag = (tag: string) => {
     const currentTags = selectedTags;
@@ -94,6 +98,18 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
       );
     } else {
       setValue("tags", [...currentTags, tag]);
+    }
+  };
+
+  const toggleAllergen = (allergen: string) => {
+    const currentAllergens = selectedAllergens;
+    if (currentAllergens.includes(allergen)) {
+      setValue(
+        "allergens",
+        currentAllergens.filter((a) => a !== allergen),
+      );
+    } else {
+      setValue("allergens", [...currentAllergens, allergen]);
     }
   };
 
@@ -109,6 +125,13 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
     setValue(
       "tags",
       selectedTags.filter((tag) => tag !== tagToRemove),
+    );
+  };
+
+  const removeAllergen = (allergenToRemove: string) => {
+    setValue(
+      "allergens",
+      selectedAllergens.filter((allergen) => allergen !== allergenToRemove),
     );
   };
 
@@ -307,6 +330,50 @@ const ProductForm = forwardRef<ProductFormRef, Props>((props, ref) => {
         )}
 
         <InputErrorMessage id="tags-error">{errors.tags?.message}</InputErrorMessage>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t("allergens")}</Label>
+
+        {/* Predefined Allergens */}
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground">{t("commonAllergens")}</p>
+          <div className="flex flex-wrap gap-2">
+            {predefinedAllergens.map((allergen) => (
+              <Badge
+                key={allergen}
+                variant={selectedAllergens.includes(allergen) ? "destructive" : "outline"}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => toggleAllergen(allergen)}
+              >
+                {allergen}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Allergens */}
+        {selectedAllergens.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">{t("selectedAllergens")}</p>
+            <div className="flex flex-wrap gap-2">
+              {selectedAllergens.map((allergen) => (
+                <Badge key={allergen} variant="destructive" className="flex items-center gap-1">
+                  {allergen}
+                  <button
+                    type="button"
+                    onClick={() => removeAllergen(allergen)}
+                    className="ml-1 hover:bg-destructive-foreground/20 rounded-full p-0.5"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <InputErrorMessage id="allergens-error">{errors.allergens?.message}</InputErrorMessage>
       </div>
 
       <div className="space-y-2">
