@@ -44,7 +44,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/(.*)",
-        headers: [{ key: "Content-Security-Policy", value: csp }, ...commonHeaders, ...(isNextProduction ? productionOnlyHeaders : [])],
+        headers: [
+          { key: "Content-Security-Policy", value: csp },
+          ...commonHeaders,
+          ...(isNextProduction ? productionOnlyHeaders : []),
+        ],
       },
       {
         source: "/api/(.*)",

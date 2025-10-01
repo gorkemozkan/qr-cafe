@@ -26,28 +26,43 @@ const xssPatterns = [
 
 export const verifyCsrfToken = (request: NextRequest) => {
   const origin = request.headers.get("origin");
-
   const referer = request.headers.get("referer");
 
+  // Build allowed origins list
+  let allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) || [];
+
+  // Add base URL to allowed origins
+  try {
+    const baseUrl = new URL(getNextPublicBaseUrl());
+    allowedOrigins.push(`${baseUrl.protocol}//${baseUrl.host}`);
+  } catch {
+    // If base URL can't be parsed, continue with existing origins
+  }
+
+  // In development, also allow localhost variants
   if (isDevelopment) {
-    return true;
+    allowedOrigins.push(
+      "http://localhost:3000",
+      "https://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://127.0.0.1:3000",
+    );
   }
 
-  let allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",");
+  // Remove duplicates and empty strings
+  allowedOrigins = [...new Set(allowedOrigins.filter((o) => o))];
 
-  if (!allowedOrigins || allowedOrigins.length === 0) {
-    try {
-      const baseUrl = new URL(getNextPublicBaseUrl());
-      allowedOrigins = [`${baseUrl.protocol}//${baseUrl.host}`];
-    } catch {
-      return false;
-    }
+  // If no allowed origins configured, fail securely
+  if (allowedOrigins.length === 0) {
+    return false;
   }
 
+  // Check origin header
   if (origin) {
     return allowedOrigins.includes(origin);
   }
 
+  // Check referer header as fallback
   if (referer) {
     try {
       const refererUrl = new URL(referer);
@@ -58,6 +73,7 @@ export const verifyCsrfToken = (request: NextRequest) => {
     }
   }
 
+  // No origin or referer header - reject
   return false;
 };
 

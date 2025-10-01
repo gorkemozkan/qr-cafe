@@ -6,7 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -15,6 +18,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: http.SUCCESS.status });
   } catch (_error) {
-    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

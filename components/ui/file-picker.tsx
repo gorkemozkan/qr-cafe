@@ -126,7 +126,11 @@ const FilePicker = ({
           <div className="text-center">
             <div className="flex flex-col items-center space-y-2">
               <div className="rounded-full bg-muted p-3">
-                {loading ? <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" /> : <Upload className="h-6 w-6 text-muted-foreground" />}
+                {loading ? (
+                  <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
+                ) : (
+                  <Upload className="h-6 w-6 text-muted-foreground" />
+                )}
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium">{t("clickToBrowse")}</p>
@@ -151,7 +155,14 @@ const FilePicker = ({
                 <p className="text-xs text-muted-foreground">{(value.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
             </div>
-            <Button type="button" variant="ghost" size="sm" onClick={handleRemove} disabled={disabled} className="h-8 w-8 p-0">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleRemove}
+              disabled={disabled}
+              className="h-8 w-8 p-0"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>

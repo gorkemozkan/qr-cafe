@@ -22,10 +22,13 @@ const NotFound = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-muted-foreground leading-relaxed">
-              Oops! We couldn't find the menu you're looking for. It might have been moved, deleted, or the QR code might be outdated.
+              Oops! We couldn't find the menu you're looking for. It might have been moved, deleted, or the QR code
+              might be outdated.
             </p>
             <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">Try scanning a different QR code or contact the restaurant staff.</p>
+              <p className="text-sm text-muted-foreground">
+                Try scanning a different QR code or contact the restaurant staff.
+              </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild className="animate-fade-in-up delay-100">
                   <Link href="/" className="flex items-center gap-2">
@@ -33,7 +36,11 @@ const NotFound = () => {
                     Back to Home
                   </Link>
                 </Button>
-                <Button variant="outline" onClick={() => window.history.back()} className="animate-fade-in-up delay-200">
+                <Button
+                  variant="outline"
+                  onClick={() => window.history.back()}
+                  className="animate-fade-in-up delay-200"
+                >
                   Go Back
                 </Button>
               </div>

@@ -11,7 +11,12 @@ interface SortableMobileCardProps<T extends BaseEntity> {
   enableSorting?: boolean;
 }
 
-export function SortableMobileCard<T extends BaseEntity>({ item, columns, onRowClick, enableSorting }: SortableMobileCardProps<T>) {
+export function SortableMobileCard<T extends BaseEntity>({
+  item,
+  columns,
+  onRowClick,
+  enableSorting,
+}: SortableMobileCardProps<T>) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: String(item.id || Math.random()),
   });

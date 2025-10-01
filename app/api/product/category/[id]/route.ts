@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { parseNumericId } from "@/lib/utils";
+import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
+    }
+
     const supabase = await createClient();
 
     const {
@@ -18,6 +26,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     const { id } = await params;
 
     let categoryId: number;
+
     try {
       categoryId = parseNumericId(id);
     } catch (_error) {

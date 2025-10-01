@@ -10,7 +10,8 @@ const features = [
     icon: QrCode,
     key: "qrGeneration",
     label: "QR Code Generation",
-    description: "Generate QR codes for each cafe with preview and PDF export capabilities. Share your digital menu instantly.",
+    description:
+      "Generate QR codes for each cafe with preview and PDF export capabilities. Share your digital menu instantly.",
     comingSoon: false,
   },
   {
@@ -33,14 +34,16 @@ const features = [
     icon: Image,
     key: "mediaManagement",
     label: "Media Management",
-    description: "Upload and manage cafe logos and product images with secure cloud storage. Show off your dishes with high-quality visuals.",
+    description:
+      "Upload and manage cafe logos and product images with secure cloud storage. Show off your dishes with high-quality visuals.",
     comingSoon: false,
   },
   {
     icon: Smartphone,
     key: "mobileFirst",
     label: "Mobile-First Experience",
-    description: "Responsive design optimized for mobile devices. Your customers get a seamless experience on any screen size.",
+    description:
+      "Responsive design optimized for mobile devices. Your customers get a seamless experience on any screen size.",
     comingSoon: false,
   },
   {
@@ -61,8 +64,8 @@ const Features: FC = () => {
             Powerful Features for Modern Cafes
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Transform your cafe with our all-in-one platform. Generate QR codes instantly, manage your entire menu effortlessly, and push updates in
-            real-time. Everything you need to go digital, <strong>simplified</strong>.
+            Transform your cafe with our all-in-one platform. Generate QR codes instantly, manage your entire menu
+            effortlessly, and push updates in real-time. Everything you need to go digital, <strong>simplified</strong>.
           </p>
         </header>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

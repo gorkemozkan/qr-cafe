@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
-import { publicRateLimiter } from "@/lib/rate-limiter";
+import { checkPublicRateLimit } from "@/lib/rate-limiter-redis";
 import { getCacheKeys, redis } from "@/lib/redis";
 import { createClient } from "@/lib/supabase/server";
+import { isDevelopment } from "@/lib/env";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const rateLimitResult = publicRateLimiter.check(request);
+    const rateLimitResult = await checkPublicRateLimit(request);
 
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
@@ -48,8 +49,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (cafeError) {
       return NextResponse.json(
         {
-          error: "Database error while fetching cafe",
-          details: cafeError.message,
+          error: "Unable to fetch cafe information",
+          ...(isDevelopment && { details: cafeError.message }),
         },
         { status: http.INTERNAL_SERVER_ERROR.status },
       );
@@ -78,8 +79,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (categoriesResult.error) {
       return NextResponse.json(
         {
-          error: "Database error while fetching categories",
-          details: categoriesResult.error.message,
+          error: "Unable to fetch menu categories",
+          ...(isDevelopment && { details: categoriesResult.error.message }),
         },
         { status: http.INTERNAL_SERVER_ERROR.status },
       );
@@ -88,8 +89,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (productsResult.error) {
       return NextResponse.json(
         {
-          error: "Database error while fetching products",
-          details: productsResult.error.message,
+          error: "Unable to fetch menu products",
+          ...(isDevelopment && { details: productsResult.error.message }),
         },
         { status: http.INTERNAL_SERVER_ERROR.status },
       );
@@ -133,7 +134,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json(
           {
             error: "Configuration error",
-            details: "Environment variables not properly configured",
+            ...(isDevelopment && { details: "Environment variables not properly configured" }),
           },
           { status: http.INTERNAL_SERVER_ERROR.status },
         );
@@ -142,8 +143,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       if (error.message.includes("Redis")) {
         return NextResponse.json(
           {
-            error: "Cache service unavailable",
-            details: "Menu data may load slower than usual",
+            error: "Cache service temporarily unavailable",
+            ...(isDevelopment && { details: "Redis connection failed" }),
           },
           { status: http.INTERNAL_SERVER_ERROR.status },
         );
@@ -152,8 +153,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       if (error.message.includes("Supabase")) {
         return NextResponse.json(
           {
-            error: "Database connection error",
-            details: "Unable to fetch menu data",
+            error: "Unable to fetch menu data",
+            ...(isDevelopment && { details: "Database connection failed" }),
           },
           { status: http.INTERNAL_SERVER_ERROR.status },
         );
@@ -163,7 +164,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json(
       {
         error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error occurred",
+        ...(isDevelopment && { details: error instanceof Error ? error.message : "Unknown error occurred" }),
       },
       { status: http.INTERNAL_SERVER_ERROR.status },
     );

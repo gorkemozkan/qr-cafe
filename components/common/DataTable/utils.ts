@@ -25,7 +25,11 @@ export function isActivationKey(key: string): boolean {
 /**
  * Handles row click with keyboard support
  */
-export function handleRowInteraction<T>(event: React.KeyboardEvent | React.MouseEvent, callback: () => void, preventDefault = true): void {
+export function handleRowInteraction<T>(
+  event: React.KeyboardEvent | React.MouseEvent,
+  callback: () => void,
+  preventDefault = true,
+): void {
   if ("key" in event) {
     // Keyboard event
     if (isActivationKey(event.key)) {

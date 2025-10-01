@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useRequest } from "@/hooks/useRequest";
 import { authRepository } from "@/lib/repositories/auth-repository";
 
@@ -44,7 +49,12 @@ const UserDropdown = () => {
             {t("settings")}
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleLogout} disabled={logoutLoading} variant="destructive" className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={handleLogout}
+          disabled={logoutLoading}
+          variant="destructive"
+          className="cursor-pointer"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           {logoutLoading ? t("loggingOut") : t("logout")}
         </DropdownMenuItem>

@@ -2,7 +2,7 @@ import { http } from "@/lib/http";
 import { isNextDevelopment } from "@/lib/env";
 import { getCacheKeys, redis } from "@/lib/redis";
 import { verifyCsrfToken } from "@/lib/security";
-import { apiRateLimiter } from "@/lib/rate-limiter";
+import { checkApiRateLimit } from "@/lib/rate-limiter-redis";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!apiRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkApiRateLimit(request);
+
+    if (!rateLimitResult.allowed) {
       return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message }, { status: http.TOO_MANY_REQUESTS.status });
     }
 

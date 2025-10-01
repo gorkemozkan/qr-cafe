@@ -84,7 +84,10 @@ export function OptimizedImage({
   return (
     <div className="relative" style={{ width: width || 100, height: height || 100 }}>
       {showSkeleton && isLoading && (
-        <Skeleton className={cn("absolute inset-0", className)} style={fill ? undefined : { width: width || 100, height: height || 100 }} />
+        <Skeleton
+          className={cn("absolute inset-0", className)}
+          style={fill ? undefined : { width: width || 100, height: height || 100 }}
+        />
       )}
 
       <Image

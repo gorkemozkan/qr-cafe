@@ -36,7 +36,9 @@ class ApiClient {
         try {
           data = await response.json();
         } catch (jsonError) {
-          throw new Error(`Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error while parsing response"}`);
+          throw new Error(
+            `Failed to parse response: ${jsonError instanceof Error ? jsonError.message : "Unknown error while parsing response"}`,
+          );
         }
       } else {
         const text = await response.text();
@@ -49,7 +51,8 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        const errorMessage = data?.error || data?.message || data?.details || `HTTP ${response.status}: ${response.statusText}`;
+        const errorMessage =
+          data?.error || data?.message || data?.details || `HTTP ${response.status}: ${response.statusText}`;
         throw new Error(errorMessage);
       }
 

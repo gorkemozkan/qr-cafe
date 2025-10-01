@@ -11,12 +11,37 @@ export const getCacheKeys = {
   publicCafeSlugs: () => `public:cafe:slugs`,
 };
 
+/**
+ * Logs Redis errors with sanitized information
+ * Avoids logging sensitive data while providing useful debugging info
+ */
+function logRedisError(operation: string, error: unknown) {
+  const errorMessage = error instanceof Error ? error.message : "Unknown error";
+  const timestamp = new Date().toISOString();
+
+  // Log to console with structured format for better monitoring
+  console.error(
+    JSON.stringify({
+      timestamp,
+      service: "redis",
+      operation,
+      error: errorMessage,
+      // Add any additional context that would be helpful for monitoring
+      // but avoid logging sensitive data
+    }),
+  );
+
+  // In production, you could also send this to your monitoring service
+  // Example: Sentry, DataDog, CloudWatch, etc.
+}
+
 export async function invalidateUserCafesCache(userId: string) {
   try {
     const cacheKey = getCacheKeys.cafes(userId);
     await redis.del(cacheKey);
   } catch (error) {
-    console.warn("Failed to invalidate cafes cache:", error);
+    logRedisError("invalidateUserCafesCache", error);
+    // Fail gracefully - cache invalidation failure shouldn't break the app
   }
 }
 
@@ -25,6 +50,7 @@ export async function invalidatePublicCafeCache(slug: string) {
     const cacheKey = getCacheKeys.publicCafe(slug);
     await redis.del(cacheKey);
   } catch (error) {
-    console.warn("Failed to invalidate public cafe cache:", error);
+    logRedisError("invalidatePublicCafeCache", error);
+    // Fail gracefully - cache invalidation failure shouldn't break the app
   }
 }

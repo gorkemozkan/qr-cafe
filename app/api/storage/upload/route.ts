@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { checkUploadRateLimit } from "@/lib/rate-limiter-redis";
 import { NextRequest, NextResponse } from "next/server";
 import { validatePayloadSize } from "@/lib/payload-validation";
 import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
@@ -14,12 +14,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: payloadValidation.error }, { status: http.PAYLOAD_TOO_LARGE.status });
     }
 
-    if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 60000) }, { status: http.TOO_MANY_REQUESTS.status });
+    const rateLimitResult = await checkUploadRateLimit(request);
+
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: errorMessages.RATE_LIMIT_EXCEEDED(rateLimitResult.resetTime) },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -37,19 +45,30 @@ export async function POST(request: NextRequest) {
     try {
       formData = await request.formData();
     } catch (_error) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("form data") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("form data") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const file = formData.get("file") as File;
+
     const cafeSlug = formData.get("cafeSlug") as string;
+
     const bucketName = formData.get("bucketName") as string;
 
     if (!file || !cafeSlug || !bucketName) {
-      return NextResponse.json({ error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     if (!validateBucketName(bucketName)) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("bucket name") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("bucket name") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const fileValidation = validateFileType(file);
@@ -69,7 +88,9 @@ export async function POST(request: NextRequest) {
 
     const filePath = `${user.id}/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
       return NextResponse.json({ error: errorMessages.STORAGE_ERROR }, { status: http.INTERNAL_SERVER_ERROR.status });

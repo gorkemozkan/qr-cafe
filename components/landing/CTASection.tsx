@@ -51,7 +51,10 @@ const CTASection: FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <Rocket className="mr-2 h-5 w-5" aria-hidden="true" />
                 Get Started
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                <ArrowRight
+                  className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300"
+                  aria-hidden="true"
+                />
               </NextLink>
             </Button>
           </div>

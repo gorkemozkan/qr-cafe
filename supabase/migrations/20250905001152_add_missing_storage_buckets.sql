@@ -1,22 +1,30 @@
 -- Create storage bucket for product images
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'product-images',
-  'product-images',
-  true,
-  5242880, -- 5MB in bytes
-  ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-) ON CONFLICT (id) DO NOTHING;
+DO $$
+BEGIN
+  PERFORM storage.create_bucket(
+    bucket_id => 'product-images',
+    name => 'product-images',
+    public => true,
+    file_size_limit => 5242880,
+    allowed_mime_types => ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+  );
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END $$;
 
 -- Create storage bucket for category images
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'category-images',
-  'category-images',
-  true,
-  5242880, -- 5MB in bytes
-  ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-) ON CONFLICT (id) DO NOTHING;
+DO $$
+BEGIN
+  PERFORM storage.create_bucket(
+    bucket_id => 'category-images',
+    name => 'category-images',
+    public => true,
+    file_size_limit => 5242880,
+    allowed_mime_types => ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+  );
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END $$;
 
 -- Create storage policy for authenticated users to upload product images
 CREATE POLICY "Allow authenticated users to upload product images"

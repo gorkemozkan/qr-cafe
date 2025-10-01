@@ -1,12 +1,13 @@
 import { http } from "@/lib/http";
 import { getCacheKeys, redis } from "@/lib/redis";
 import { createClient } from "@/lib/supabase/server";
-import { publicRateLimiter } from "@/lib/rate-limiter";
+import { checkPublicRateLimit } from "@/lib/rate-limiter-redis";
 import { NextRequest, NextResponse } from "next/server";
+import { isDevelopment } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateLimitResult = publicRateLimiter.check(request);
+    const rateLimitResult = await checkPublicRateLimit(request);
 
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
@@ -32,13 +33,17 @@ export async function GET(request: NextRequest) {
       }
     } catch (_error) {}
 
-    const { data: cafes, error } = await supabase.from("cafes").select("slug").eq("is_active", true).order("created_at", { ascending: false });
+    const { data: cafes, error } = await supabase
+      .from("cafes")
+      .select("slug")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
 
     if (error) {
       return NextResponse.json(
         {
-          error: "Database error while fetching cafe slugs",
-          details: error.message,
+          error: "Unable to fetch cafe list",
+          ...(isDevelopment && { details: error.message }),
         },
         { status: 500 },
       );
@@ -53,11 +58,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(slugs);
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message.includes("NEXT_PUBLIC") || error.message.includes("Supabase") || error.message.includes("Redis")) {
+      if (
+        error.message.includes("NEXT_PUBLIC") ||
+        error.message.includes("Supabase") ||
+        error.message.includes("Redis")
+      ) {
         return NextResponse.json(
           {
             error: "Configuration error",
-            details: "Environment variables not properly configured",
+            ...(isDevelopment && { details: "Environment variables not properly configured" }),
           },
           { status: 500 },
         );
@@ -67,7 +76,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Internal server error",
-        details: error instanceof Error ? error.message : "Unknown error occurred",
+        ...(isDevelopment && { details: error instanceof Error ? error.message : "Unknown error occurred" }),
       },
       { status: 500 },
     );

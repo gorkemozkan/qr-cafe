@@ -60,7 +60,9 @@ export function useRequest<TData, TVariables = void, TError = Error>({
   const execute = async (variables: TVariables): Promise<TData | undefined> => {
     try {
       if (optimisticUpdate) {
-        queryClient.setQueryData(optimisticUpdate.queryKey, (oldData: any) => optimisticUpdate.updateFn(oldData, variables));
+        queryClient.setQueryData(optimisticUpdate.queryKey, (oldData: any) =>
+          optimisticUpdate.updateFn(oldData, variables),
+        );
       }
 
       const result = await mutation.mutateAsync(variables);

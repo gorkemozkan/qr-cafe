@@ -39,7 +39,9 @@ const SimpleMenuSections: FC<Props> = (props = { categories: [], currency: null 
           const visibleEntries = entries.filter((entry) => entry.isIntersecting);
           if (visibleEntries.length === 0) return;
 
-          const mostVisible = visibleEntries.reduce((prev, current) => (prev.intersectionRatio > current.intersectionRatio ? prev : current));
+          const mostVisible = visibleEntries.reduce((prev, current) =>
+            prev.intersectionRatio > current.intersectionRatio ? prev : current,
+          );
 
           const categoryId = parseInt(mostVisible.target.getAttribute("data-category-id") || "0");
 

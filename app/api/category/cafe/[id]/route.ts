@@ -1,12 +1,24 @@
 import { http } from "@/lib/http";
 import { NextRequest, NextResponse } from "next/server";
-import { apiRateLimiter } from "@/lib/rate-limiter";
+import { checkApiRateLimit } from "@/lib/rate-limiter-redis";
+import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!apiRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: http.TOO_MANY_REQUESTS.status });
+    if (!verifyCsrfToken(request)) {
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
+    }
+
+    const rateLimitResult = await checkApiRateLimit(request);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     const { id } = await params;
@@ -27,7 +39,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: http.BAD_REQUEST.message }, { status: http.BAD_REQUEST.status });
     }
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id").eq("id", cafeId).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id")
+      .eq("id", cafeId)
+      .eq("user_id", user.id)
+      .single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
@@ -46,6 +63,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     return NextResponse.json(categories || []);
   } catch (_error) {
-    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

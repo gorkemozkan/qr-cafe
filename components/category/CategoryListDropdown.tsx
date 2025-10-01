@@ -60,7 +60,11 @@ const CategoryListDropdown = ({
 
   const isDisabled = disabled || !cafeId || isLoading;
 
-  const displayPlaceholder = !cafeId ? "Select a cafe first" : isLoading ? "Loading categories..." : placeholder || "Select a category";
+  const displayPlaceholder = !cafeId
+    ? "Select a cafe first"
+    : isLoading
+      ? "Loading categories..."
+      : placeholder || "Select a category";
 
   return (
     <div className="space-y-2">
@@ -70,7 +74,11 @@ const CategoryListDropdown = ({
           {required && <span className="text-red-500 ml-1">*</span>}
         </Label>
       )}
-      <Select value={value?.toString()} onValueChange={(selectedValue) => onValueChange(Number(selectedValue))} disabled={isDisabled}>
+      <Select
+        value={value?.toString()}
+        onValueChange={(selectedValue) => onValueChange(Number(selectedValue))}
+        disabled={isDisabled}
+      >
         <SelectTrigger id={id} className={`${error ? "border-red-500" : ""} ${className || ""}`}>
           <SelectValue placeholder={displayPlaceholder} />
         </SelectTrigger>

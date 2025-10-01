@@ -125,7 +125,12 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
       const processedData = {
         ...data,
         image_url: imageUrl,
-        sort_order: data.sort_order === "" ? undefined : typeof data.sort_order === "string" ? Number(data.sort_order) : data.sort_order,
+        sort_order:
+          data.sort_order === ""
+            ? undefined
+            : typeof data.sort_order === "string"
+              ? Number(data.sort_order)
+              : data.sort_order,
       };
       await props.onSubmit(processedData);
     } catch (error) {
@@ -140,7 +145,12 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
     <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">{t("name")} *</Label>
-        <Input id="name" placeholder={t("namePlaceholder")} {...register("name")} className={errors.name ? "border-red-500" : ""} />
+        <Input
+          id="name"
+          placeholder={t("namePlaceholder")}
+          {...register("name")}
+          className={errors.name ? "border-red-500" : ""}
+        />
         <InputErrorMessage id="name-error">{errors.name?.message}</InputErrorMessage>
       </div>
       <div className="space-y-2">
@@ -156,7 +166,13 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
       </div>
       <div className="space-y-2">
         <Label htmlFor="sort_order">{t("sortOrder")}</Label>
-        <Input id="sort_order" type="number" placeholder="0" {...register("sort_order")} className={errors.sort_order ? "border-red-500" : ""} />
+        <Input
+          id="sort_order"
+          type="number"
+          placeholder="0"
+          {...register("sort_order")}
+          className={errors.sort_order ? "border-red-500" : ""}
+        />
         <InputErrorMessage id="sort_order-error">{errors.sort_order?.message}</InputErrorMessage>
         <p className="text-xs text-muted-foreground">{t("optional")}</p>
       </div>
@@ -193,9 +209,15 @@ const CategoryForm = forwardRef<CategoryFormRef, Props>((props, ref) => {
         )}
       </div>
       <div className="flex items-center space-x-2">
-        <Switch id="is_active" checked={isActive} onCheckedChange={(checked: boolean) => setValue("is_active", checked)} />
+        <Switch
+          id="is_active"
+          checked={isActive}
+          onCheckedChange={(checked: boolean) => setValue("is_active", checked)}
+        />
         <Label htmlFor="is_active">{watch("is_active") ? t("isActive") : t("isInactive")}</Label>
-        <p className="text-xs text-muted-foreground ml-2">{isActive ? t("activeDescription") : t("inactiveDescription")}</p>
+        <p className="text-xs text-muted-foreground ml-2">
+          {isActive ? t("activeDescription") : t("inactiveDescription")}
+        </p>
       </div>
     </form>
   );

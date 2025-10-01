@@ -7,7 +7,9 @@ export const SortingService = {
     }
 
     try {
-      const ids = sortConfig.getIdsFromItems ? sortConfig.getIdsFromItems(items) : items.map((item) => item.id).filter(Boolean);
+      const ids = sortConfig.getIdsFromItems
+        ? sortConfig.getIdsFromItems(items)
+        : items.map((item) => item.id).filter(Boolean);
 
       const payload = {
         ...sortConfig.additionalParams,

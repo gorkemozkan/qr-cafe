@@ -10,13 +10,24 @@ interface MobileDataViewProps<T extends { id?: number | string }> {
   enableSorting?: boolean;
 }
 
-export function MobileDataView<T extends { id?: number | string }>({ data, columns, onRowClick, enableSorting }: MobileDataViewProps<T>) {
+export function MobileDataView<T extends { id?: number | string }>({
+  data,
+  columns,
+  onRowClick,
+  enableSorting,
+}: MobileDataViewProps<T>) {
   if (enableSorting) {
     return (
       <SortableContext items={data.map((item) => String(item.id))} strategy={verticalListSortingStrategy}>
         <div className="grid gap-4">
           {data.map((row) => (
-            <SortableMobileCard key={String(row.id)} item={row} columns={columns} onRowClick={onRowClick} enableSorting={enableSorting} />
+            <SortableMobileCard
+              key={String(row.id)}
+              item={row}
+              columns={columns}
+              onRowClick={onRowClick}
+              enableSorting={enableSorting}
+            />
           ))}
         </div>
       </SortableContext>

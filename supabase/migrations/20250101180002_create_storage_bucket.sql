@@ -1,12 +1,17 @@
--- Create storage bucket for cafe logos
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'cafe-logos',
-  'cafe-logos',
-  true,
-  5242880, -- 5MB in bytes
-  ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-) ON CONFLICT (id) DO NOTHING;
+-- Use storage.create_bucket to be compatible with latest schema
+DO $$
+BEGIN
+  PERFORM storage.create_bucket(
+    bucket_id => 'cafe-logos',
+    name => 'cafe-logos',
+    public => true,
+    file_size_limit => 5242880,
+    allowed_mime_types => ARRAY['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+  );
+EXCEPTION WHEN OTHERS THEN
+  -- Ignore if bucket already exists
+  NULL;
+END $$;
 
 -- Create storage policy for authenticated users to upload
 CREATE POLICY "Allow authenticated users to upload cafe logos"

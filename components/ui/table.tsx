@@ -10,7 +10,11 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
       data-slot="table-container"
       className="relative w-full overflow-x-auto rounded-lg border border-border/50 bg-gradient-to-br from-card/50 to-card/80 backdrop-blur-sm shadow-lg shadow-black/5"
     >
-      <table data-slot="table" className={cn("w-full caption-bottom text-sm min-w-[600px] md:min-w-0", className)} {...props} />
+      <table
+        data-slot="table"
+        className={cn("w-full caption-bottom text-sm min-w-[600px] md:min-w-0", className)}
+        {...props}
+      />
     </div>
   );
 }
@@ -19,7 +23,10 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b border-border/60 bg-gradient-to-r from-primary/5 via-transparent to-primary/5", className)}
+      className={cn(
+        "[&_tr]:border-b border-border/60 bg-gradient-to-r from-primary/5 via-transparent to-primary/5",
+        className,
+      )}
       {...props}
     />
   );
@@ -82,7 +89,9 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
 }
 
 function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
-  return <caption data-slot="table-caption" className={cn("text-muted-foreground mt-4 text-sm", className)} {...props} />;
+  return (
+    <caption data-slot="table-caption" className={cn("text-muted-foreground mt-4 text-sm", className)} {...props} />
+  );
 }
 
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };

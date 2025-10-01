@@ -11,7 +11,12 @@ interface SortableRowProps<T extends { id?: number | string }> {
   enableSorting?: boolean;
 }
 
-export function SortableRow<T extends { id?: number | string }>({ item, columns, onRowClick, enableSorting }: SortableRowProps<T>) {
+export function SortableRow<T extends { id?: number | string }>({
+  item,
+  columns,
+  onRowClick,
+  enableSorting,
+}: SortableRowProps<T>) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: String(item.id || Math.random()),
   });
