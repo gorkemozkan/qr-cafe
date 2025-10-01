@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { uploadRateLimiter } from "@/lib/rate-limiter";
+import { checkUploadRateLimit } from "@/lib/rate-limiter-redis";
 import { NextRequest, NextResponse } from "next/server";
 import { validatePayloadSize } from "@/lib/payload-validation";
 import { createSafeErrorResponse, errorMessages, http } from "@/lib/http";
@@ -14,9 +14,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: payloadValidation.error }, { status: http.PAYLOAD_TOO_LARGE.status });
     }
 
-    if (!uploadRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkUploadRateLimit(request);
+
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
-        { error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 60000) },
+        { error: errorMessages.RATE_LIMIT_EXCEEDED(rateLimitResult.resetTime) },
         { status: http.TOO_MANY_REQUESTS.status },
       );
     }
@@ -50,7 +52,9 @@ export async function POST(request: NextRequest) {
     }
 
     const file = formData.get("file") as File;
+
     const cafeSlug = formData.get("cafeSlug") as string;
+
     const bucketName = formData.get("bucketName") as string;
 
     if (!file || !cafeSlug || !bucketName) {

@@ -1,6 +1,6 @@
 import { loginSchema } from "@/lib/schema";
 import { verifyCsrfToken } from "@/lib/security";
-import { authRateLimiter } from "@/lib/rate-limiter";
+import { checkAuthRateLimit } from "@/lib/rate-limiter-redis";
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { validatePayloadSize } from "@/lib/payload-validation";
@@ -24,7 +24,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    if (!authRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkAuthRateLimit(request);
+
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
         { error: http.TOO_MANY_REQUESTS.message, success: false },
         { status: http.TOO_MANY_REQUESTS.status },

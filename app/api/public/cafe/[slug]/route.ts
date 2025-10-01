@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { http } from "@/lib/http";
-import { publicRateLimiter } from "@/lib/rate-limiter";
+import { checkPublicRateLimit } from "@/lib/rate-limiter-redis";
 import { getCacheKeys, redis } from "@/lib/redis";
 import { createClient } from "@/lib/supabase/server";
 import { isDevelopment } from "@/lib/env";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const rateLimitResult = publicRateLimiter.check(request);
+    const rateLimitResult = await checkPublicRateLimit(request);
 
     if (!rateLimitResult.allowed) {
       return NextResponse.json(

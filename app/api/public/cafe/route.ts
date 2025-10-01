@@ -1,13 +1,13 @@
 import { http } from "@/lib/http";
 import { getCacheKeys, redis } from "@/lib/redis";
 import { createClient } from "@/lib/supabase/server";
-import { publicRateLimiter } from "@/lib/rate-limiter";
+import { checkPublicRateLimit } from "@/lib/rate-limiter-redis";
 import { NextRequest, NextResponse } from "next/server";
 import { isDevelopment } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   try {
-    const rateLimitResult = publicRateLimiter.check(request);
+    const rateLimitResult = await checkPublicRateLimit(request);
 
     if (!rateLimitResult.allowed) {
       return NextResponse.json(

@@ -1,9 +1,9 @@
 import { http } from "@/lib/http";
-import { apiRateLimiter } from "@/lib/rate-limiter";
+import { checkApiRateLimit } from "@/lib/rate-limiter-redis";
 import { NextRequest, NextResponse } from "next/server";
 
 const handleApiRequest = async (request: NextRequest) => {
-  const rateLimitResult = apiRateLimiter.check(request);
+  const rateLimitResult = await checkApiRateLimit(request);
 
   if (!rateLimitResult.allowed) {
     return NextResponse.json(

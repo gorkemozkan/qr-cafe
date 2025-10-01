@@ -1,6 +1,6 @@
 import { http } from "@/lib/http";
 import { NextRequest, NextResponse } from "next/server";
-import { apiRateLimiter } from "@/lib/rate-limiter";
+import { checkApiRateLimit } from "@/lib/rate-limiter-redis";
 import { verifyCsrfToken } from "@/lib/security";
 import { createClient } from "@/lib/supabase/server";
 
@@ -13,7 +13,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       );
     }
 
-    if (!apiRateLimiter.check(request).allowed) {
+    const rateLimitResult = await checkApiRateLimit(request);
+    if (!rateLimitResult.allowed) {
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
         { status: http.TOO_MANY_REQUESTS.status },
