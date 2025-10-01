@@ -38,8 +38,22 @@ export function DataTableContent<T extends { id?: number | string }>({
   }
 
   if (isMobile) {
-    return <MobileDataView data={displayData} columns={visibleColumns} onRowClick={onRowClick} enableSorting={enableSorting} />;
+    return (
+      <MobileDataView
+        data={displayData}
+        columns={visibleColumns}
+        onRowClick={onRowClick}
+        enableSorting={enableSorting}
+      />
+    );
   }
 
-  return <DesktopDataView data={displayData} columns={visibleColumns} onRowClick={onRowClick} enableSorting={enableSorting} />;
+  return (
+    <DesktopDataView
+      data={displayData}
+      columns={visibleColumns}
+      onRowClick={onRowClick}
+      enableSorting={enableSorting}
+    />
+  );
 }

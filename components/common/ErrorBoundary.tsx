@@ -40,12 +40,17 @@ class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-background" role="alert" aria-live="assertive">
+        <div
+          className="min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-background"
+          role="alert"
+          aria-live="assertive"
+        >
           <div className="mb-4">
             <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" aria-hidden="true" />
             <h2 className="text-2xl font-semibold text-foreground mb-2">Something went wrong</h2>
             <p className="text-muted-foreground mb-4 max-w-md">
-              We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
+              We encountered an unexpected error. Please try refreshing the page or contact support if the problem
+              persists.
             </p>
           </div>
 
@@ -60,7 +65,9 @@ class ErrorBoundary extends Component<Props, State> {
           </div>
           {isDevelopment && this.state.error && (
             <details className="mt-8 text-left max-w-2xl w-full">
-              <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">Error Details (Development Only)</summary>
+              <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
+                Error Details (Development Only)
+              </summary>
               <pre className="mt-2 p-4 bg-muted rounded text-xs overflow-auto">{this.state.error.stack}</pre>
             </details>
           )}

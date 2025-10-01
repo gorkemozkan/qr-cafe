@@ -58,7 +58,13 @@ const LoginForm = () => {
           <CardDescription id="login-description">{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form id="login-form" onSubmit={handleSubmit(execute)} aria-labelledby="login-title" aria-describedby="login-description" noValidate>
+          <form
+            id="login-form"
+            onSubmit={handleSubmit(execute)}
+            aria-labelledby="login-title"
+            aria-describedby="login-description"
+            noValidate
+          >
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">{t("email")}</Label>

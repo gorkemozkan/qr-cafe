@@ -71,7 +71,10 @@ export function GdprDataDeletionDialog({ open, onOpenChange, onConfirm, isLoadin
               onCheckedChange={(checked: boolean) => setIsConfirmed(checked === true)}
               disabled={isLoading}
             />
-            <label htmlFor="confirm-deletion" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label
+              htmlFor="confirm-deletion"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
               {t("confirmationText")}
             </label>
           </div>

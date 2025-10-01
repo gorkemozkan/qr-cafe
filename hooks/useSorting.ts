@@ -17,7 +17,12 @@ interface UseSortingReturn<T> {
   handleDragEnd: (event: DragEndEvent) => void;
 }
 
-export function useSorting<T extends BaseEntity>({ data, sortConfig, onSortOrderChange, enableSorting }: UseSortingOptions<T>): UseSortingReturn<T> {
+export function useSorting<T extends BaseEntity>({
+  data,
+  sortConfig,
+  onSortOrderChange,
+  enableSorting,
+}: UseSortingOptions<T>): UseSortingReturn<T> {
   const [sortedData, setSortedData] = useState<T[]>([]);
   const lastDragRef = useRef<string>("");
 

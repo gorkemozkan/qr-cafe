@@ -12,7 +12,12 @@ interface DesktopDataViewProps<T extends { id?: number | string }> {
   enableSorting?: boolean;
 }
 
-export function DesktopDataView<T extends { id?: number | string }>({ data, columns, onRowClick, enableSorting }: DesktopDataViewProps<T>) {
+export function DesktopDataView<T extends { id?: number | string }>({
+  data,
+  columns,
+  onRowClick,
+  enableSorting,
+}: DesktopDataViewProps<T>) {
   if (enableSorting) {
     return (
       <Table>
@@ -20,7 +25,13 @@ export function DesktopDataView<T extends { id?: number | string }>({ data, colu
         <TableBody>
           <SortableContext items={data.map((item) => String(item.id))} strategy={verticalListSortingStrategy}>
             {data.map((row) => (
-              <SortableRow key={String(row.id)} item={row} columns={columns} onRowClick={onRowClick} enableSorting={enableSorting} />
+              <SortableRow
+                key={String(row.id)}
+                item={row}
+                columns={columns}
+                onRowClick={onRowClick}
+                enableSorting={enableSorting}
+              />
             ))}
           </SortableContext>
         </TableBody>

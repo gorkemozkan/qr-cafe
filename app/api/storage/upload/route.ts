@@ -15,11 +15,17 @@ export async function POST(request: NextRequest) {
     }
 
     if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 60000) }, { status: http.TOO_MANY_REQUESTS.status });
+      return NextResponse.json(
+        { error: errorMessages.RATE_LIMIT_EXCEEDED(Date.now() + 60000) },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -37,7 +43,10 @@ export async function POST(request: NextRequest) {
     try {
       formData = await request.formData();
     } catch (_error) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("form data") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("form data") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const file = formData.get("file") as File;
@@ -45,11 +54,17 @@ export async function POST(request: NextRequest) {
     const bucketName = formData.get("bucketName") as string;
 
     if (!file || !cafeSlug || !bucketName) {
-      return NextResponse.json({ error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.REQUIRED_FIELD("file, cafe slug, and bucket name") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     if (!validateBucketName(bucketName)) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("bucket name") }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("bucket name") },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const fileValidation = validateFileType(file);
@@ -69,7 +84,9 @@ export async function POST(request: NextRequest) {
 
     const filePath = `${user.id}/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucketName).upload(filePath, file, { cacheControl: "3600", upsert: false });
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
     if (uploadError) {
       return NextResponse.json({ error: errorMessages.STORAGE_ERROR }, { status: http.INTERNAL_SERVER_ERROR.status });

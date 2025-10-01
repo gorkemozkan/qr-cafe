@@ -9,7 +9,12 @@ interface TableBodyComponentProps<T extends { id?: number | string }> {
   enableSorting?: boolean;
 }
 
-export function TableBodyComponent<T extends { id?: number | string }>({ data, columns, onRowClick, enableSorting }: TableBodyComponentProps<T>) {
+export function TableBodyComponent<T extends { id?: number | string }>({
+  data,
+  columns,
+  onRowClick,
+  enableSorting,
+}: TableBodyComponentProps<T>) {
   return (
     <TableBody>
       {data.map((row, index) => {
@@ -22,7 +27,15 @@ export function TableBodyComponent<T extends { id?: number | string }>({ data, c
         };
 
         if (enableSorting) {
-          return <SortableRow key={String(row.id)} item={row} columns={columns} onRowClick={onRowClick} enableSorting={enableSorting} />;
+          return (
+            <SortableRow
+              key={String(row.id)}
+              item={row}
+              columns={columns}
+              onRowClick={onRowClick}
+              enableSorting={enableSorting}
+            />
+          );
         }
 
         return (

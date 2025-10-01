@@ -75,7 +75,8 @@ const generateSEODescription = (menu: PublicMenuData) => {
     return `Explore ${menu.cafe.name}'s menu featuring ${categoryNames}${menu.categories.length > 2 ? " and more" : ""}. ${productCount} delicious items to choose from.`;
   }
 
-  const truncatedDesc = menu.cafe.description.length > 120 ? `${menu.cafe.description.substring(0, 120)}...` : menu.cafe.description;
+  const truncatedDesc =
+    menu.cafe.description.length > 120 ? `${menu.cafe.description.substring(0, 120)}...` : menu.cafe.description;
 
   return `${truncatedDesc} | ${menu.cafe.name} Menu`;
 };

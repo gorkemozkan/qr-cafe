@@ -132,8 +132,18 @@ export function GdprCompliance() {
           </CardContent>
         </Card>
       </div>
-      <GdprDataExportDialog open={showExportDialog} onOpenChange={setShowExportDialog} onConfirm={handleDataExport} isLoading={isExporting} />
-      <GdprDataDeletionDialog open={showDeletionDialog} onOpenChange={setShowDeletionDialog} onConfirm={handleDataDeletion} isLoading={isDeleting} />
+      <GdprDataExportDialog
+        open={showExportDialog}
+        onOpenChange={setShowExportDialog}
+        onConfirm={handleDataExport}
+        isLoading={isExporting}
+      />
+      <GdprDataDeletionDialog
+        open={showDeletionDialog}
+        onOpenChange={setShowDeletionDialog}
+        onConfirm={handleDataDeletion}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

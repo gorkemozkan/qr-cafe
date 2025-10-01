@@ -167,7 +167,12 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
             {tForm("name")}
             <span className="text-red-500 ml-1">*</span>
           </Label>
-          <Input id="name" {...register("name")} placeholder={tForm("namePlaceholder")} className={errors.name ? "border-red-500" : ""} />
+          <Input
+            id="name"
+            {...register("name")}
+            placeholder={tForm("namePlaceholder")}
+            className={errors.name ? "border-red-500" : ""}
+          />
           <InputErrorMessage>{errors.name?.message}</InputErrorMessage>
         </div>
         <div className="space-y-2">
@@ -212,9 +217,15 @@ const QuickProductCreateSheet = ({ open, onOpenChange }: QuickProductCreateSheet
           <InputErrorMessage>{uploadError}</InputErrorMessage>
         </div>
         <div className="flex items-center space-x-2">
-          <Switch id="is_available" checked={isAvailable} onCheckedChange={(checked: boolean) => setValue("is_available", checked)} />
+          <Switch
+            id="is_available"
+            checked={isAvailable}
+            onCheckedChange={(checked: boolean) => setValue("is_available", checked)}
+          />
           <Label htmlFor="is_available">{isAvailable ? tForm("isAvailable") : tForm("isUnavailable")}</Label>
-          <p className="text-xs text-muted-foreground ml-2">{isAvailable ? tForm("availableDescription") : tForm("unavailableDescription")}</p>
+          <p className="text-xs text-muted-foreground ml-2">
+            {isAvailable ? tForm("availableDescription") : tForm("unavailableDescription")}
+          </p>
         </div>
       </form>
     </FormSheet>

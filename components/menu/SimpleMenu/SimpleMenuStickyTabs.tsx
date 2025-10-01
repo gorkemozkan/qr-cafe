@@ -68,7 +68,9 @@ const SimpleMenuStickyTabs: FC<Props> = ({
               type="button"
               onClick={() => handleTabChange("all")}
               className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
-                externalSelectedCategoryId === null ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                externalSelectedCategoryId === null
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
               Tümü
@@ -82,7 +84,9 @@ const SimpleMenuStickyTabs: FC<Props> = ({
                 type="button"
                 onClick={() => handleTabChange(category.id.toString())}
                 className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
-                  externalSelectedCategoryId === category.id ? "bg-gray-900 text-white" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  externalSelectedCategoryId === category.id
+                    ? "bg-gray-900 text-white"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
                 {category.name}

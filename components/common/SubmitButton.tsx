@@ -14,7 +14,12 @@ interface Props {
 
 const SubmitButton: FC<Props> = (props) => {
   return (
-    <Button type={props.type || "button"} form={props.form} onClick={props.onClick} disabled={props.isLoading || props.disabled}>
+    <Button
+      type={props.type || "button"}
+      form={props.form}
+      onClick={props.onClick}
+      disabled={props.isLoading || props.disabled}
+    >
       {props.isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

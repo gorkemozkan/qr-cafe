@@ -8,7 +8,10 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(request: NextRequest) {
   try {
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     const supabase = await createClient();
@@ -32,7 +35,10 @@ export async function POST(request: NextRequest) {
     const validationResult = categorySchema.safeParse(categoryData);
 
     if (!validationResult.success) {
-      return NextResponse.json({ error: "Invalid data", details: validationResult.error.issues }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: "Invalid data", details: validationResult.error.issues },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const processedData = {
@@ -45,7 +51,12 @@ export async function POST(request: NextRequest) {
             : validationResult.data.sort_order,
     };
 
-    const { data: cafe, error: cafeError } = await supabase.from("cafes").select("id, slug").eq("id", cafe_id).eq("user_id", user.id).single();
+    const { data: cafe, error: cafeError } = await supabase
+      .from("cafes")
+      .select("id, slug")
+      .eq("id", cafe_id)
+      .eq("user_id", user.id)
+      .single();
 
     if (cafeError || !cafe) {
       return NextResponse.json({ error: "Cafe not found or access denied" }, { status: http.NOT_FOUND.status });
@@ -69,6 +80,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(category);
   } catch (_error) {
-    return NextResponse.json({ error: http.INTERNAL_SERVER_ERROR.message }, { status: http.INTERNAL_SERVER_ERROR.status });
+    return NextResponse.json(
+      { error: http.INTERNAL_SERVER_ERROR.message },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

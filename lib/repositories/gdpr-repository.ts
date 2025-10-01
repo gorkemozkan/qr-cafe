@@ -21,7 +21,9 @@ export class GdprRepository extends BaseRepository {
     return await this.get("/export");
   }
 
-  async deleteUserData(confirmDeletion: boolean = false): Promise<{ success: boolean; message: string; deleted_at?: string }> {
+  async deleteUserData(
+    confirmDeletion: boolean = false,
+  ): Promise<{ success: boolean; message: string; deleted_at?: string }> {
     return await this.post("/delete", { confirm_deletion: confirmDeletion });
   }
 }

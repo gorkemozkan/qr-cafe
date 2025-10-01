@@ -11,7 +11,10 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (!uploadRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: "Too many delete attempts. Please try again later." }, { status: http.TOO_MANY_REQUESTS.status });
+      return NextResponse.json(
+        { error: "Too many delete attempts. Please try again later." },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     const supabase = await createClient();

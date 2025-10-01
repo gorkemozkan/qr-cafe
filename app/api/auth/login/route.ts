@@ -11,15 +11,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const payloadValidation = validatePayloadSize(request);
 
     if (!payloadValidation.isValid) {
-      return NextResponse.json({ error: payloadValidation.error, success: false }, { status: http.PAYLOAD_TOO_LARGE.status });
+      return NextResponse.json(
+        { error: payloadValidation.error, success: false },
+        { status: http.PAYLOAD_TOO_LARGE.status },
+      );
     }
 
     if (!verifyCsrfToken(request)) {
-      return NextResponse.json({ error: http.INVALID_REQUEST_ORIGIN.message, success: false }, { status: http.INVALID_REQUEST_ORIGIN.status });
+      return NextResponse.json(
+        { error: http.INVALID_REQUEST_ORIGIN.message, success: false },
+        { status: http.INVALID_REQUEST_ORIGIN.status },
+      );
     }
 
     if (!authRateLimiter.check(request).allowed) {
-      return NextResponse.json({ error: http.TOO_MANY_REQUESTS.message, success: false }, { status: http.TOO_MANY_REQUESTS.status });
+      return NextResponse.json(
+        { error: http.TOO_MANY_REQUESTS.message, success: false },
+        { status: http.TOO_MANY_REQUESTS.status },
+      );
     }
 
     let body: unknown;
@@ -27,13 +36,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       body = await request.json();
     } catch (_error) {
-      return NextResponse.json({ error: errorMessages.INVALID_FORMAT("request body"), success: false }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_FORMAT("request body"), success: false },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const validationResult = loginSchema.safeParse(body);
 
     if (!validationResult.success) {
-      return NextResponse.json({ error: http.BAD_REQUEST.message, details: validationResult.error.issues }, { status: http.BAD_REQUEST.status });
+      return NextResponse.json(
+        { error: http.BAD_REQUEST.message, details: validationResult.error.issues },
+        { status: http.BAD_REQUEST.status },
+      );
     }
 
     const { email, password } = validationResult.data;
@@ -43,7 +58,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      return NextResponse.json({ error: errorMessages.INVALID_CREDENTIALS, success: false }, { status: http.UNAUTHORIZED.status });
+      return NextResponse.json(
+        { error: errorMessages.INVALID_CREDENTIALS, success: false },
+        { status: http.UNAUTHORIZED.status },
+      );
     }
 
     if (data.user) {
@@ -59,9 +77,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    return NextResponse.json({ error: http.UNAUTHORIZED.message, success: false }, { status: http.UNAUTHORIZED.status });
+    return NextResponse.json(
+      { error: http.UNAUTHORIZED.message, success: false },
+      { status: http.UNAUTHORIZED.status },
+    );
   } catch (error) {
     const safeError = createSafeErrorResponse(error);
-    return NextResponse.json({ error: safeError.message, success: false }, { status: http.INTERNAL_SERVER_ERROR.status });
+    return NextResponse.json(
+      { error: safeError.message, success: false },
+      { status: http.INTERNAL_SERVER_ERROR.status },
+    );
   }
 }

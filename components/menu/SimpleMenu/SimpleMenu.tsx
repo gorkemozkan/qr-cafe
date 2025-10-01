@@ -108,7 +108,11 @@ const SimpleMenu: FC<Params> = (props) => {
           isAutoActivation={isAutoActivation}
           onCategoryChange={handleCategoryChange}
         />
-        <SimpleMenuSections categories={orderedCategories} currency={props.menu.cafe.currency} onCategoryInView={handleCategoryInView} />
+        <SimpleMenuSections
+          categories={orderedCategories}
+          currency={props.menu.cafe.currency}
+          onCategoryInView={handleCategoryInView}
+        />
       </div>
       <ScrollToTop />
     </div>

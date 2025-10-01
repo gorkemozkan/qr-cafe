@@ -20,9 +20,14 @@ const Hero: FC = () => {
             <span className="text-sm font-medium text-orange-700 dark:text-orange-300">Transform Your Cafe Today</span>
           </div>
           <div className="mb-8 animate-fade-in-up">
-            <h1 id="hero-heading" className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3">
+            <h1
+              id="hero-heading"
+              className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] mb-6 tracking-tight space-y-3"
+            >
               <span className="inline-block">
-                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">Digital QR Menu</span>
+                <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-yellow-500 bg-clip-text text-transparent">
+                  Digital QR Menu
+                </span>
               </span>
               <br />
               <span className="inline-block">for Modern Cafes</span>
@@ -30,8 +35,8 @@ const Hero: FC = () => {
           </div>
           <div className="animate-fade-in-up">
             <p className="text-xl lg:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
-              Create stunning digital menus with QR codes, organize products by categories, and deliver an exceptional mobile dining experience that
-              your customers will love.
+              Create stunning digital menus with QR codes, organize products by categories, and deliver an exceptional
+              mobile dining experience that your customers will love.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-fade-in-up">

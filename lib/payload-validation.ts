@@ -52,7 +52,10 @@ export const PAYLOAD_LIMITS: ContentTypeLimits = {
   },
 };
 
-export const validatePayloadSize = (request: NextRequest, customLimits?: Partial<ContentTypeLimits>): ValidatePayloadSizeResult => {
+export const validatePayloadSize = (
+  request: NextRequest,
+  customLimits?: Partial<ContentTypeLimits>,
+): ValidatePayloadSizeResult => {
   const contentLength = request.headers.get("content-length");
 
   const contentType = request.headers.get("content-type")?.split(";")[0]?.toLowerCase();
