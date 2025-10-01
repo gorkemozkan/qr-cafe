@@ -122,6 +122,7 @@ export type Database = {
           preparation_time: number | null;
           price: number | null;
           tags: string[] | null;
+          allergens: string[] | null;
           user_id: string;
         };
         Insert: {
@@ -137,6 +138,7 @@ export type Database = {
           preparation_time?: number | null;
           price?: number | null;
           tags?: string[] | null;
+          allergens?: string[] | null;
           user_id: string;
         };
         Update: {
@@ -152,6 +154,7 @@ export type Database = {
           preparation_time?: number | null;
           price?: number | null;
           tags?: string[] | null;
+          allergens?: string[] | null;
           user_id?: string;
         };
         Relationships: [

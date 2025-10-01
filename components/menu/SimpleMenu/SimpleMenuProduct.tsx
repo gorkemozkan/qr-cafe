@@ -4,7 +4,7 @@ import { FC } from "react";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Clock, Flame } from "lucide-react";
+import { Clock, Flame, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface PublicProduct {
@@ -17,6 +17,7 @@ interface PublicProduct {
   calory: number | null;
   preparation_time: number | null;
   tags: string[] | null;
+  allergens: string[] | null;
 }
 
 interface Props {
@@ -85,6 +86,23 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                   )}
                 </div>
               ) : null}
+              {product.allergens && product.allergens.length > 0 && (
+                <div className="mt-3">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-red-700 dark:text-red-400 mb-1">Contains allergens:</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {product.allergens.map((allergen) => (
+                          <Badge key={allergen} variant="destructive" className="text-xs px-2 py-0.5 rounded-full">
+                            {allergen}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             {product.image_url && (
               <div className="h-32 w-32 bg-gray-100 rounded-lg my-6 overflow-hidden relative flex-shrink-0">
