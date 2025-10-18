@@ -289,7 +289,14 @@
     "view": "Görüntüle",
     "tooManyRefreshAttempts": "Çok fazla yenileme denemesi. {remainingTime}s sonra tekrar deneyin",
     "refreshing": "Yenileniyor...",
-    "refresh": "Yenile ({attempt}/{maxAttempt})"
+    "refresh": "Yenile ({attempt}/{maxAttempt})",
+    "lastUpdated": "Son güncelleme",
+    "productImage": "Ürün resmi",
+    "containsAllergens": "Alerjen içerir",
+    "calories": "Kalori",
+    "preparationTime": "Hazırlama süresi",
+    "minutes": "dakika",
+    "kilocalories": "kilokalori"
   },
   "components": {
     "questionDialog": {

@@ -12,6 +12,7 @@ export interface PublicProduct {
   preparation_time: number | null;
   tags: string[] | null;
   allergens: string[] | null;
+  updated_at: string | null;
 }
 
 export interface PublicCategory {
