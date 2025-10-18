@@ -44,14 +44,7 @@
     "view": "View",
     "tooManyRefreshAttempts": "Too many refresh attempts. Try again in {remainingTime}s",
     "refreshing": "Refreshing...",
-    "refresh": "Refresh ({attempt}/{maxAttempt})",
-    "lastUpdated": "Last updated",
-    "productImage": "Product image",
-    "containsAllergens": "Contains allergens",
-    "calories": "Calories",
-    "preparationTime": "Preparation time",
-    "minutes": "minutes",
-    "kilocalories": "kilocalories"
+    "refresh": "Refresh ({attempt}/{maxAttempt})"
   },
   "language": {
     "selectLanguage": "Select Language"

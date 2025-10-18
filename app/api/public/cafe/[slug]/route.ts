@@ -71,7 +71,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       supabase
         .from("products")
         .select(
-          "id, name, description, price, image_url, is_available, category_id, calory, preparation_time, tags, allergens, updated_at",
+          "id, name, description, price, image_url, is_available, category_id, calory, preparation_time, tags, allergens",
         )
         .eq("cafe_id", cafe.id)
         .eq("is_available", true)
