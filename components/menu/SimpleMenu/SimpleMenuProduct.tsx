@@ -109,7 +109,7 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                 <div className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-gray-200/60 dark:border-gray-700/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-gray-300/70 dark:hover:border-gray-600/60">
                   <Calendar className="w-3 h-3 text-gray-500 dark:text-gray-400 transition-colors duration-200" />
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors duration-200">
-                    Updated: <DateView date={product.updated_at} format="short" />
+                    Son Güncelleme Tarihi: <DateView date={product.updated_at} format="short" />
                   </span>
                 </div>
               </div>
