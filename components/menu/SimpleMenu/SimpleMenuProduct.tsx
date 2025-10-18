@@ -4,7 +4,7 @@ import { FC } from "react";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Clock, Flame, AlertTriangle, Calendar } from "lucide-react";
+import { Clock, Flame, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import DateView from "@/components/common/DateView";
 
@@ -70,16 +70,15 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
               {(product.calory && product.calory > 0) || (product.preparation_time && product.preparation_time > 0) ? (
                 <div className="flex items-center gap-2.5 mt-3">
                   {product.calory && product.calory > 0 && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5  rounded-full border border-orange-200/60 dark:border-orange-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-orange-300/70 dark:hover:border-orange-700/60">
+                    <div className="flex items-center gap-1.5   w-max">
                       <Flame className="w-3.5 h-3.5 text-orange-500 dark:text-orange-400 transition-colors duration-200" />
                       <span className="text-xs font-semibold text-orange-700 dark:text-orange-300 transition-colors duration-200">
                         {product.calory} kcal
                       </span>
                     </div>
                   )}
-
                   {product.preparation_time && product.preparation_time > 0 && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-blue-200/60 dark:border-blue-800/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-blue-300/70 dark:hover:border-blue-700/60">
+                    <div className="flex items-center gap-1.5  ">
                       <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 transition-colors duration-200" />
                       <span className="text-xs font-semibold text-blue-700 dark:text-blue-300 transition-colors duration-200">
                         {product.preparation_time} dk
@@ -88,28 +87,11 @@ const SimpleMenuProduct: FC<Props> = ({ product, currency }) => {
                   )}
                 </div>
               ) : null}
-              {product.allergens && product.allergens.length > 0 && (
-                <div className="mt-3">
-                  <div className="flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-red-700 dark:text-red-400 mb-1">Contains allergens:</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {product.allergens.map((allergen) => (
-                          <Badge key={allergen} variant="destructive" className="text-xs px-2 py-0.5 rounded-full">
-                            {allergen}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
               <div className="mt-3">
-                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-gray-200/60 dark:border-gray-700/40 shadow-sm transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md hover:border-gray-300/70 dark:hover:border-gray-600/60">
+                <div className="flex items-center gap-1.5 py-1  w-max">
                   <Calendar className="w-3 h-3 text-gray-500 dark:text-gray-400 transition-colors duration-200" />
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors duration-200">
-                    Son Güncelleme Tarihi: <DateView date={product.updated_at} format="short" />
+                    Son Güncelleme: <DateView date={product.updated_at} format="short" />
                   </span>
                 </div>
               </div>
