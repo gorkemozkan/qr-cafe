@@ -124,6 +124,7 @@ export type Database = {
           tags: string[] | null;
           allergens: string[] | null;
           user_id: string;
+          updated_at: string;
         };
         Insert: {
           cafe_id: number;
@@ -140,6 +141,7 @@ export type Database = {
           tags?: string[] | null;
           allergens?: string[] | null;
           user_id: string;
+          updated_at?: string;
         };
         Update: {
           cafe_id?: number;
@@ -156,6 +158,7 @@ export type Database = {
           tags?: string[] | null;
           allergens?: string[] | null;
           user_id?: string;
+          updated_at?: string;
         };
         Relationships: [
           {
