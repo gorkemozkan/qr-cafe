@@ -101,6 +101,11 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
+      // 23505 = unique_violation (cafes_slug_unique). See create/route.ts
+      if (error.code === "23505") {
+        return NextResponse.json({ error: http.CONFLICT.message }, { status: http.CONFLICT.status });
+      }
+
       return NextResponse.json(
         { error: http.INTERNAL_SERVER_ERROR.message },
         { status: http.INTERNAL_SERVER_ERROR.status },

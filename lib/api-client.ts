@@ -53,7 +53,8 @@ class ApiClient {
       if (!response.ok) {
         const errorMessage =
           data?.error || data?.message || data?.details || `HTTP ${response.status}: ${response.statusText}`;
-        throw new Error(errorMessage);
+        // Carry the status so callers can tell "not found" from "broken".
+        throw Object.assign(new Error(errorMessage), { status: response.status });
       }
 
       return data;

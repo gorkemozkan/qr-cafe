@@ -19,6 +19,10 @@ export default async function Image(props: Params) {
 
   const menu = await publicMenuRepository.getMenuBySlug(slug);
 
+  if (!menu) {
+    return new Response("Not found", { status: 404 });
+  }
+
   return new ImageResponse(
     <div
       style={{
