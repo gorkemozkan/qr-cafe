@@ -44,7 +44,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       .select("id, name, description, logo_url, currency, slug")
       .eq("slug", slug)
       .eq("is_active", true)
-      .single();
+      // maybeSingle, not single: single() reports "no rows" as PGRST116, which
+      // turned every unknown slug into a 500 and made the !cafe branch below
+      // dead code. It still errors on multiple rows - see cafes_slug_unique.
+      .maybeSingle();
 
     if (cafeError) {
       return NextResponse.json(

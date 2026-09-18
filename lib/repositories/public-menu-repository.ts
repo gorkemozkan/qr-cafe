@@ -42,8 +42,18 @@ export interface PublicMenuData {
 export class PublicMenuRepository extends BaseRepository {
   protected readonly baseUrl = `${nextPublicBaseUrl}/api/public/cafe`;
 
-  async getMenuBySlug(slug: string) {
-    return await this.get<PublicMenuData>(`/${slug}`);
+  // Returns null for an unknown slug so callers can render a 404. Any other
+  // failure keeps bubbling up - a broken database must not look like an empty
+  // menu.
+  async getMenuBySlug(slug: string): Promise<PublicMenuData | null> {
+    try {
+      return await this.get<PublicMenuData>(`/${slug}`);
+    } catch (error) {
+      if ((error as { status?: number }).status === 404) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   async getAllMenuSlugs() {
