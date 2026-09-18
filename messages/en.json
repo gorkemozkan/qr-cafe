@@ -375,5 +375,17 @@
       "deleteFailed": "Failed to delete data. Please try again.",
       "deleteError": "Failed to delete data"
     }
+  },
+  "menu": {
+    "allergens": {
+      "trigger": "Allergens",
+      "title": "Filter by allergens",
+      "description": "Products containing the allergens you select will be hidden.",
+      "clear": "Clear",
+      "hiding": "Hiding: {list}",
+      "emptyTitle": "Nothing matches your filter",
+      "emptyDescription": "Every product contains at least one of the allergens you excluded.",
+      "emptyAction": "Clear filters"
+    }
   }
 }

@@ -420,5 +420,17 @@
     "description": "Yeni bir kafe oluşturmak için aşağıdaki bilgileri doldurun.",
     "createButton": "Kafe Oluştur",
     "creating": "Oluşturuluyor..."
+  },
+  "menu": {
+    "allergens": {
+      "trigger": "Alerjenler",
+      "title": "Alerjene göre filtrele",
+      "description": "Seçtiğiniz alerjenleri içeren ürünler gizlenir.",
+      "clear": "Temizle",
+      "hiding": "Gizlenen: {list}",
+      "emptyTitle": "Filtrenize uyan ürün yok",
+      "emptyDescription": "Tüm ürünler, hariç tuttuğunuz alerjenlerden en az birini içeriyor.",
+      "emptyAction": "Filtreleri temizle"
+    }
   }
 }
