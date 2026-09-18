@@ -76,6 +76,12 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.from("cafes").insert([cafeData]).select().single();
 
     if (error) {
+      // 23505 = unique_violation. The check above runs under RLS and cannot
+      // see another user's slug, so the DB constraint is what catches it.
+      if (error.code === "23505") {
+        return NextResponse.json({ error: http.CONFLICT.message }, { status: http.CONFLICT.status });
+      }
+
       const safeError = createSafeErrorResponse(error);
       return NextResponse.json({ error: safeError.message }, { status: http.INTERNAL_SERVER_ERROR.status });
     }
