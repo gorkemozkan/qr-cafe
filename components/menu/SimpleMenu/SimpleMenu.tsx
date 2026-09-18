@@ -2,6 +2,7 @@
 
 import ScrollToTop from "@/components/common/ScrollToTop";
 import { FC, useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import SimpleMenuHeader from "@/components/menu/SimpleMenu/SimpleMenuHeader";
 import SimpleMenuSections from "@/components/menu/SimpleMenu/SimpleMenuSections";
 import SimpleMenuStickyTabs from "@/components/menu/SimpleMenu/SimpleMenuStickyTabs";
@@ -13,6 +14,8 @@ interface Params {
 }
 
 const SimpleMenu: FC<Params> = (props) => {
+  const t = useTranslations("menu.allergens");
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
 
@@ -70,6 +73,8 @@ const SimpleMenu: FC<Params> = (props) => {
   const clearAllAllergens = useCallback(() => {
     setSelectedAllergens([]);
   }, []);
+
+  const hasFilteredEverythingOut = selectedAllergens.length > 0 && filteredCategories.length === 0;
 
   const scrollToCategory = useCallback((categoryId: number | null) => {
     if (categoryId === null) {
@@ -149,25 +154,46 @@ const SimpleMenu: FC<Params> = (props) => {
     <div className="min-h-screen bg-white text-foreground">
       <div className="max-w-2xl mx-auto px-2 py-6">
         <SimpleMenuHeader logoUrl={props.menu.cafe.logo_url} />
-        <div className="flex justify-end mb-2">
-          <AllergenFilter
-            availableAllergens={availableAllergens}
-            selectedAllergens={selectedAllergens}
-            onToggleAllergen={toggleAllergen}
-            onClearAll={clearAllAllergens}
-          />
-        </div>
-        <SimpleMenuStickyTabs
-          categories={filteredCategories}
-          selectedCategoryId={selectedCategoryId}
-          isAutoActivation={isAutoActivation}
-          onCategoryChange={handleCategoryChange}
-        />
-        <SimpleMenuSections
-          categories={filteredCategories}
-          currency={props.menu.cafe.currency}
-          onCategoryInView={handleCategoryInView}
-        />
+        {/* No allergens anywhere on the menu means nothing to filter by. */}
+        {availableAllergens.length > 0 && (
+          <div className="mb-2 flex justify-end">
+            <AllergenFilter
+              availableAllergens={availableAllergens}
+              selectedAllergens={selectedAllergens}
+              onToggleAllergen={toggleAllergen}
+              onClearAll={clearAllAllergens}
+            />
+          </div>
+        )}
+        {hasFilteredEverythingOut ? (
+          /* Without this the menu falls through to SimpleMenuNullCase, which says
+             "Menu Coming Soon" - misleading when the viewer's own filter hid it. */
+          <div className="py-16 text-center">
+            <h3 className="mb-2 text-xl font-light text-[#8B1538] dark:text-[#A61E4D]">{t("emptyTitle")}</h3>
+            <p className="mb-6 text-muted-foreground">{t("emptyDescription")}</p>
+            <button
+              type="button"
+              onClick={clearAllAllergens}
+              className="rounded-full bg-[#8B1538] px-4 py-2 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90"
+            >
+              {t("emptyAction")}
+            </button>
+          </div>
+        ) : (
+          <>
+            <SimpleMenuStickyTabs
+              categories={filteredCategories}
+              selectedCategoryId={selectedCategoryId}
+              isAutoActivation={isAutoActivation}
+              onCategoryChange={handleCategoryChange}
+            />
+            <SimpleMenuSections
+              categories={filteredCategories}
+              currency={props.menu.cafe.currency}
+              onCategoryInView={handleCategoryInView}
+            />
+          </>
+        )}
       </div>
       <ScrollToTop />
     </div>
